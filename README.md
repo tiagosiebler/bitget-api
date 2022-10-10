@@ -1,7 +1,7 @@
 # bitget-api
 [![Build & Test](https://github.com/tiagosiebler/bitget-api/actions/workflows/integrationtest.yml/badge.svg?branch=master)](https://github.com/tiagosiebler/bitget-api/actions/workflows/integrationtest.yml) [![npm version](https://img.shields.io/npm/v/bitget-api)][1] [![npm size](https://img.shields.io/bundlephobia/min/bitget-api/latest)][1] [![npm downloads](https://img.shields.io/npm/dt/bitget-api)][1]
 [![last commit](https://img.shields.io/github/last-commit/tiagosiebler/bitget-api)][1]
-[![CodeFactor](https://www.codefactor.io/repository/github/tiagosiebler/bitget-api/badge)](https://www.codefactor.io/repository/github/tiagosiebler/bitget-api)
+[![CodeFactor](https://www.codefactor.io/repository/github/tiagosiebler/bitget-api/badge)](https://www.codefactor.io/repository/github/tiagosiebler/bitget-api) [![Telegram](https://img.shields.io/badge/chat-on%20telegram-blue.svg)](https://t.me/nodetraders)
 
 
 [![connector logo](https://github.com/tiagosiebler/bitget-api/blob/master/docs/images/logo1.png?raw=true)][1]

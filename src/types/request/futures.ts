@@ -1,3 +1,5 @@
+import { OrderTimeInForce } from './shared';
+
 export type FuturesProductType =
   | 'umcbl'
   | 'dmcbl'
@@ -39,7 +41,7 @@ export interface NewFuturesOrder {
   price?: string;
   side: FuturesOrderSide;
   orderType: FuturesOrderType;
-  timeInForceValue?: string;
+  timeInForceValue?: OrderTimeInForce;
   clientOid?: string;
   presetTakeProfitPrice?: string;
   presetStopLossPrice?: string;

@@ -5,6 +5,8 @@ import {
   Pagination,
   APIResponse,
   KlineInterval,
+  CoinBalance,
+  SymbolRules,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -39,7 +41,7 @@ export class SpotClient extends BaseRestClient {
   }
 
   /** Get Symbols : Get basic configuration information of all trading pairs (including rules) */
-  getSymbols(): Promise<APIResponse<any[]>> {
+  getSymbols(): Promise<APIResponse<SymbolRules[]>> {
     return this.get('/api/spot/v1/public/products');
   }
 
@@ -184,7 +186,7 @@ export class SpotClient extends BaseRestClient {
   }
 
   /** Get Account : get account assets */
-  getBalance(coin?: string): Promise<APIResponse<any>> {
+  getBalance(coin?: string): Promise<APIResponse<CoinBalance[]>> {
     return this.getPrivate('/api/spot/v1/account/assets', { coin });
   }
 

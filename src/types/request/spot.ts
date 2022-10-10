@@ -1,7 +1,4 @@
-import { numberInString, OrderSide } from '../shared';
-
-export type OrderTypeSpot = 'LIMIT' | 'MARKET' | 'LIMIT_MAKER';
-export type OrderTimeInForce = 'GTC' | 'FOK' | 'IOC';
+import { OrderTimeInForce } from './shared';
 
 export type WalletType = 'spot' | 'mix_usdt' | 'mix_usd';
 
@@ -15,9 +12,9 @@ export interface NewWalletTransfer {
 
 export interface NewSpotOrder {
   symbol: string;
-  side: string;
-  orderType: string;
-  force: string;
+  side: 'buy' | 'sell';
+  orderType: 'limit' | 'market';
+  force: OrderTimeInForce;
   price?: string;
   quantity: string;
   clientOrderId?: string;

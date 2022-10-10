@@ -15,6 +15,8 @@ import {
   CancelFuturesPlanTPSL,
   HistoricPlanOrderTPSLRequest,
   NewFuturesPlanStopOrder,
+  FuturesAccount,
+  FuturesSymbolRule,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -34,7 +36,9 @@ export class FuturesClient extends BaseRestClient {
    */
 
   /** Get Symbols : Get basic configuration information of all trading pairs (including rules) */
-  getSymbols(productType: FuturesProductType): Promise<APIResponse<any[]>> {
+  getSymbols(
+    productType: FuturesProductType
+  ): Promise<APIResponse<FuturesSymbolRule[]>> {
     return this.get('/api/mix/v1/market/contracts', { productType });
   }
 
@@ -125,7 +129,10 @@ export class FuturesClient extends BaseRestClient {
    */
 
   /** Get Single Account */
-  getAccount(symbol: string, marginCoin: string): Promise<APIResponse<any>> {
+  getAccount(
+    symbol: string,
+    marginCoin: string
+  ): Promise<APIResponse<FuturesAccount>> {
     return this.getPrivate('/api/mix/v1/account/account', {
       symbol,
       marginCoin,
