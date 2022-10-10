@@ -1,4 +1,6 @@
 # bitget-api
+[![Actions Status](https://github.com/tiagosiebler/bitget-api/actions/workflows/integrationtest.yml/badge.svg)](https://github.com/tiagosiebler/bitget-api/actions)
+
 [![Tests](https://circleci.com/gh/tiagosiebler/bitget-api.svg?style=shield)](https://circleci.com/gh/tiagosiebler/bitget-api)
 [![npm version](https://img.shields.io/npm/v/bitget-api)][1] [![npm size](https://img.shields.io/bundlephobia/min/bitget-api/latest)][1] [![npm downloads](https://img.shields.io/npm/dt/bitget-api)][1]
 [![last commit](https://img.shields.io/github/last-commit/tiagosiebler/bitget-api)][1]
@@ -51,6 +53,7 @@ The version on npm is the output from the `build` command and can be used in pro
 - [examples](./examples) - some implementation examples & demonstrations. Contributions are welcome!
 
 ---
+
 ## REST API Clients
 Each REST API group has a dedicated REST client. To avoid confusion, here are the available REST clients and the corresponding API groups:
 |                         Class           |                                                                 Description                    |
