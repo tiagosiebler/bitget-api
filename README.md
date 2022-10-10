@@ -1,8 +1,5 @@
 # bitget-api
-[![Actions Status](https://github.com/tiagosiebler/bitget-api/actions/workflows/integrationtest.yml/badge.svg)](https://github.com/tiagosiebler/bitget-api/actions)
-
-[![Tests](https://circleci.com/gh/tiagosiebler/bitget-api.svg?style=shield)](https://circleci.com/gh/tiagosiebler/bitget-api)
-[![npm version](https://img.shields.io/npm/v/bitget-api)][1] [![npm size](https://img.shields.io/bundlephobia/min/bitget-api/latest)][1] [![npm downloads](https://img.shields.io/npm/dt/bitget-api)][1]
+[![Actions Status](https://github.com/tiagosiebler/bitget-api/actions/workflows/integrationtest.yml/badge.svg)](https://github.com/tiagosiebler/bitget-api/actions)[![npm version](https://img.shields.io/npm/v/bitget-api)][1] [![npm size](https://img.shields.io/bundlephobia/min/bitget-api/latest)][1] [![npm downloads](https://img.shields.io/npm/dt/bitget-api)][1]
 [![last commit](https://img.shields.io/github/last-commit/tiagosiebler/bitget-api)][1]
 [![CodeFactor](https://www.codefactor.io/repository/github/tiagosiebler/bitget-api/badge)](https://www.codefactor.io/repository/github/tiagosiebler/bitget-api)
 
