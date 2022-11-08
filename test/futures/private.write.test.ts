@@ -154,9 +154,9 @@ describe('Private Futures REST API POST Endpoints', () => {
           marginCoin,
           orderType: 'market',
           side: 'open_long',
-          size: '1',
+          size: '0.1',
           symbol,
-          triggerPrice: '100',
+          triggerPrice: '1000',
           triggerType: 'market_price',
         })
       ).toMatchObject({
@@ -164,6 +164,8 @@ describe('Private Futures REST API POST Endpoints', () => {
         data: {},
       });
     } catch (e) {
+      // {"code": "40889", "data": null, "msg": "The plan order of this contract has reached the upper limit"
+      // if the above error is seen, you need to cancel trigger orders on the test account (in futures)
       console.error('submitPlanOrder: ', e);
       expect(e).toBeNull();
     }

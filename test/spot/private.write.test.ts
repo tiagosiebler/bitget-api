@@ -34,16 +34,11 @@ describe('Private Spot REST API POST Endpoints', () => {
           toType: 'mix_usdt',
         })
       ).toStrictEqual('');
-
-      // .toMatchObject({
-      //   // not sure what this error means, probably no balance
-      //   code: '42013',
-      // });
     } catch (e) {
       // console.error('transfer: ', e);
       expect(e.body).toMatchObject({
-        // not sure what this error means, probably no balance
-        code: '42013',
+        // not sure what this error means, probably no balance. Seems to change?
+        code: expect.stringMatching(/42013|43117/gim),
       });
     }
   });
@@ -115,12 +110,13 @@ describe('Private Spot REST API POST Endpoints', () => {
         ])
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
-        data: expect.any(Array),
+        data: {
+          resultList: expect.any(Array),
+          failure: [{ errorCode: API_ERROR_CODE.QTY_LESS_THAN_MINIMUM }],
+        },
       });
     } catch (e) {
-      expect(e.body).toMatchObject({
-        code: API_ERROR_CODE.QTY_LESS_THAN_MINIMUM,
-      });
+      expect(e).toBeNull();
     }
   });
 
