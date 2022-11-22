@@ -17,6 +17,8 @@ import {
   NewFuturesPlanStopOrder,
   FuturesAccount,
   FuturesSymbolRule,
+  FuturesMarginMode,
+  FuturesPosition,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -198,7 +200,7 @@ export class FuturesClient extends BaseRestClient {
   setMarginMode(
     symbol: string,
     marginCoin: string,
-    marginMode: 'fixed' | 'crossed'
+    marginMode: FuturesMarginMode
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/account/setMarginMode', {
       symbol,
@@ -208,7 +210,10 @@ export class FuturesClient extends BaseRestClient {
   }
 
   /** Get Symbol Position */
-  getPosition(symbol: string, marginCoin?: string): Promise<APIResponse<any>> {
+  getPosition(
+    symbol: string,
+    marginCoin?: string
+  ): Promise<APIResponse<FuturesPosition[]>> {
     return this.getPrivate('/api/mix/v1/position/singlePosition', {
       symbol,
       marginCoin,
@@ -219,7 +224,7 @@ export class FuturesClient extends BaseRestClient {
   getPositions(
     productType: FuturesProductType,
     marginCoin?: string
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesPosition[]>> {
     return this.getPrivate('/api/mix/v1/position/allPosition', {
       productType,
       marginCoin,

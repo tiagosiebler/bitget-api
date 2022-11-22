@@ -1,4 +1,4 @@
-import { WS_KEY_MAP } from '../util';
+import { WS_KEY_MAP } from '../../util';
 
 export type WsPublicSpotTopic =
   | 'ticker'

@@ -1,7 +1,19 @@
-import { FuturesClient, WebsocketClient } from '../src/index';
+import {
+  FuturesClient,
+  isWsFuturesAccountSnapshotEvent,
+  isWsFuturesPositionsSnapshotEvent,
+  NewFuturesOrder,
+  WebsocketClient,
+} from '../src';
 
 // or
-// import { SpotClient } from 'bitget-api';
+// import {
+//   FuturesClient,
+//   isWsFuturesAccountSnapshotEvent,
+//   isWsFuturesPositionsSnapshotEvent,
+//   NewFuturesOrder,
+//   WebsocketClient,
+// } from 'bitget-api';
 
 // read from environmental variables
 const API_KEY = process.env.API_KEY_COM;
@@ -39,11 +51,39 @@ function roundDown(value, decimals) {
   );
 }
 
-/** This is a simple script wrapped in a immediately invoked function expression, designed to check for any available BTC balance and immediately sell the full amount for USDT */
+/** WS event handler that uses type guards to narrow down event type */
+async function handleWsUpdate(event) {
+  if (isWsFuturesAccountSnapshotEvent(event)) {
+    console.log(new Date(), 'ws update (account balance):', event);
+    return;
+  }
+
+  if (isWsFuturesPositionsSnapshotEvent(event)) {
+    console.log(new Date(), 'ws update (positions):', event);
+    return;
+  }
+
+  logWSEvent('update (unhandled)', event);
+}
+
+/**
+ * This is a simple script wrapped in a immediately invoked function expression (to execute the below workflow immediately).
+ *
+ * It is designed to:
+ * - open a private websocket channel to log account events
+ * - check for any available USDT balance in the futures account
+ * - immediately open a minimum sized long position on BTCUSDT
+ * - check active positions
+ * - immediately send closing orders for any active futures positions
+ * - check positions again
+ *
+ * The corresponding UI for this is at https://www.bitget.com/en/mix/usdt/BTCUSDT_UMCBL
+ */
 (async () => {
   try {
     // Add event listeners to log websocket events on account
-    wsClient.on('update', (data) => logWSEvent('update', data));
+    wsClient.on('update', (data) => handleWsUpdate(data));
+
     wsClient.on('open', (data) => logWSEvent('open', data));
     wsClient.on('response', (data) => logWSEvent('response', data));
     wsClient.on('reconnect', (data) => logWSEvent('reconnect', data));
@@ -79,13 +119,14 @@ function roundDown(value, decimals) {
     const bitcoinUSDFuturesRule = symbolRulesResult.data.find(
       (row) => row.symbol === symbol
     );
+
     console.log('symbol rules: ', bitcoinUSDFuturesRule);
     if (!bitcoinUSDFuturesRule) {
       console.error('Failed to get trading rules for ' + symbol);
       return;
     }
 
-    const order = {
+    const order: NewFuturesOrder = {
       marginCoin,
       orderType: 'market',
       side: 'open_long',
@@ -98,6 +139,36 @@ function roundDown(value, decimals) {
     const result = await client.submitOrder(order);
 
     console.log('order result: ', result);
+
+    const positionsResult = await client.getPositions('umcbl');
+    const positionsToClose = positionsResult.data.filter(
+      (pos) => pos.total !== '0'
+    );
+
+    console.log('open positions to close: ', positionsToClose);
+
+    // Loop through any active positions and send a closing market order on each position
+    for (const position of positionsToClose) {
+      const closingSide =
+        position.holdSide === 'long' ? 'close_long' : 'close_short';
+      const closingOrder: NewFuturesOrder = {
+        marginCoin: position.marginCoin,
+        orderType: 'market',
+        side: closingSide,
+        size: position.available,
+        symbol: position.symbol,
+      };
+
+      console.log('closing position with market order: ', closingOrder);
+
+      const result = await client.submitOrder(closingOrder);
+      console.log('position closing order result: ', result);
+    }
+
+    console.log(
+      'positions after closing all: ',
+      await client.getPositions('umcbl')
+    );
   } catch (e) {
     console.error('request failed: ', e);
   }

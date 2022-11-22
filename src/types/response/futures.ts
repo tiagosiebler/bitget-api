@@ -1,3 +1,9 @@
+import {
+  FuturesHoldMode,
+  FuturesHoldSide,
+  FuturesMarginMode,
+} from '../request';
+
 export interface FuturesAccount {
   marginCoin: string;
   locked: number;
@@ -32,4 +38,25 @@ export interface FuturesSymbolRule {
   symbol: string;
   takerFeeRate: string;
   volumePlace: string;
+}
+
+export interface FuturesPosition {
+  marginCoin: string;
+  symbol: string;
+  holdSide: FuturesHoldSide;
+  openDelegateCount: string;
+  margin: string;
+  available: string;
+  locked: string;
+  total: string;
+  leverage: number;
+  achievedProfits: string;
+  averageOpenPrice: string;
+  marginMode: FuturesMarginMode;
+  holdMode: FuturesHoldMode;
+  unrealizedPL: string;
+  liquidationPrice: string;
+  keepMarginRate: string;
+  marketPrice: string;
+  cTime: string;
 }

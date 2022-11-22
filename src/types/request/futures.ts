@@ -8,6 +8,12 @@ export type FuturesProductType =
   | 'sdmcbl'
   | 'scmcbl';
 
+export type FuturesHoldSide = 'long' | 'short';
+
+export type FuturesMarginMode = 'fixed' | 'crossed';
+
+export type FuturesHoldMode = 'double_hold' | 'single_hold';
+
 export interface FuturesAccountBillRequest {
   symbol: string;
   marginCoin: string;
@@ -95,7 +101,6 @@ export interface ModifyFuturesPlanOrderTPSL {
 }
 
 export type FuturesPlanType = 'profit_plan' | 'loss_plan';
-export type FuturesHoldSide = 'long' | 'short';
 
 export interface NewFuturesPlanStopOrder {
   symbol: string;
