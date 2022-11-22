@@ -39,7 +39,7 @@ Check out my related projects:
 
 ## Documentation
 Most methods pass values as-is into HTTP requests. These can be populated using parameters specified by Bitget's API documentation, or check the type definition in each class within this repository (see table below for convenient links to each class).
-- [bitget API Documentation](https://www.bitget.com/docs-v5/en/#rest-api).
+- [Bitget API Documentation](https://www.bitget.com/docs-v5/en/#rest-api).
 
 ## Structure
 This connector is fully compatible with both TypeScript and pure JavaScript projects, while the connector is written in TypeScript. A pure JavaScript version can be built using `npm run build`, which is also the version published to [npm](https://www.npmjs.com/package/bitget-api).

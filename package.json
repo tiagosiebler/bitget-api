@@ -1,7 +1,7 @@
 {
   "name": "bitget-api",
-  "version": "1.0.0",
-  "description": "Node.js connector for Bitget REST APIs and WebSockets, with TypeScript & integration tests.",
+  "version": "1.0.1",
+  "description": "Node.js connector for Bitget REST APIs and WebSockets, with TypeScript & end-to-end tests.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
