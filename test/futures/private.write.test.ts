@@ -209,7 +209,7 @@ describe('Private Futures REST API POST Endpoints', () => {
     } catch (e) {
       // expect(e).toBeNull();
       expect(e.body).toMatchObject({
-        code: API_ERROR_CODE.SERVICE_RETURNED_ERROR,
+        code: API_ERROR_CODE.PLAN_ORDER_NOT_FOUND,
       });
     }
   });

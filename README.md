@@ -27,11 +27,11 @@ Node.js connector for the Bitget APIs and WebSockets:
 ## Related projects
 Check out my related projects:
 - Try my connectors:
-  - [ftx-api](https://www.npmjs.com/package/ftx-api)
-  - [bybit-api](https://www.npmjs.com/package/bybit-api)
   - [binance](https://www.npmjs.com/package/binance)
-  - [bitget-api](https://www.npmjs.com/package/bitget-api)
+  - [bybit-api](https://www.npmjs.com/package/bybit-api)
   - [okx-api](https://www.npmjs.com/package/okx-api)
+  - [bitget-api](https://www.npmjs.com/package/bitget-api)
+  - [ftx-api](https://www.npmjs.com/package/ftx-api)
 - Try my misc utilities:
   - [orderbooks](https://www.npmjs.com/package/orderbooks)
 - Check out my examples:
@@ -166,3 +166,7 @@ Or buy me a coffee using any of these:
 
 ### Contributions & Pull Requests
 Contributions are encouraged, I will review any incoming pull requests. See the issues tab for todo items.
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=tiagosiebler/bitget-api,tiagosiebler/bybit-api,tiagosiebler/binance,tiagosiebler/orderbooks,tiagosiebler/okx-api,tiagosiebler/awesome-crypto-examples,tiagosiebler/ftx-api&type=Date)](https://star-history.com/#tiagosiebler/bitget-api&tiagosiebler/bybit-api&tiagosiebler/binance&tiagosiebler/orderbooks&tiagosiebler/okx-api&tiagosiebler/awesome-crypto-examples&tiagosiebler/ftx-api&Date)
