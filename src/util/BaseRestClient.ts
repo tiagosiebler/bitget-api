@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
-import { API_ERROR_CODE } from '../constants/enum';
 import { RestClientType } from '../types';
 
 import { signMessage } from './node-support';
@@ -8,30 +7,7 @@ import {
   serializeParams,
   getRestBaseUrl,
 } from './requestUtils';
-
-// axios.interceptors.request.use((request) => {
-//   console.log(
-//     new Date(),
-//     'Starting Request',
-//     JSON.stringify(
-//       {
-//         headers: request.headers,
-//         url: request.url,
-//         method: request.method,
-//         params: request.params,
-//         data: request.data,
-//       },
-//       null,
-//       2
-//     )
-//   );
-//   return request;
-// });
-
-// axios.interceptors.response.use((response) => {
-//   console.log(new Date(), 'Response:', JSON.stringify(response, null, 2));
-//   return response;
-// });
+import { neverGuard } from './websocket-util';
 
 interface SignedRequest<T extends object | undefined = {}> {
   originalParams: T;
@@ -48,7 +24,7 @@ interface UnsignedRequest<T extends object | undefined = {}> {
   paramsWithSign: T;
 }
 
-type SignMethod = 'keyInBody' | 'usdc' | 'bitget';
+type SignMethod = 'bitget';
 
 export default abstract class BaseRestClient {
   private options: RestClientOptions;
@@ -56,7 +32,6 @@ export default abstract class BaseRestClient {
   private globalRequestOptions: AxiosRequestConfig;
   private apiKey: string | undefined;
   private apiSecret: string | undefined;
-  private clientType: RestClientType;
   private apiPass: string | undefined;
 
   /** Defines the client type (affecting how requests & signatures behave) */
@@ -71,8 +46,6 @@ export default abstract class BaseRestClient {
     restOptions: RestClientOptions = {},
     networkOptions: AxiosRequestConfig = {}
   ) {
-    this.clientType = this.getClientType();
-
     this.options = {
       recvWindow: 5000,
       /** Throw errors if any request params are empty */
@@ -86,7 +59,7 @@ export default abstract class BaseRestClient {
       // custom request options based on axios specs - see: https://github.com/axios/axios#request-config
       ...networkOptions,
       headers: {
-        'X-CHANNEL-CODE': '3tem',
+        'X-CHANNEL-API-CODE': '3tem',
         'Content-Type': 'application/json',
         locale: 'en-US',
       },
@@ -256,6 +229,11 @@ export default abstract class BaseRestClient {
       res.queryParamsWithSign = signRequestParams;
       return res;
     }
+
+    console.error(
+      new Date(),
+      neverGuard(signMethod, `Unhandled sign method: "${signMessage}"`)
+    );
 
     return res;
   }
