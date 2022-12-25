@@ -22,10 +22,10 @@ const API_PASS = process.env.API_PASS_COM;
 
 const client = new FuturesClient({
   apiKey: API_KEY,
-  // apiKey: 'apiKeyHere',
   apiSecret: API_SECRET,
-  // apiSecret: 'apiSecretHere',
   apiPass: API_PASS,
+  // apiKey: 'apiKeyHere',
+  // apiSecret: 'apiSecretHere',
   // apiPass: 'apiPassHere',
 });
 
