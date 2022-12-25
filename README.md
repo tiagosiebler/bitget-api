@@ -9,12 +9,12 @@
 
 [1]: https://www.npmjs.com/package/bitget-api
 
-
 Node.js connector for the Bitget APIs and WebSockets:
 - Complete integration with all Bitget APIs.
 - TypeScript support (with type declarations for most API requests & responses).
 - Over 100 integration tests making real API calls & WebSocket connections, validating any changes before they reach npm.
 - Robust WebSocket integration with configurable connection heartbeats & automatic reconnect then resubscribe workflows.
+- Officially listed Node.js SDK in [Bitget API docs](https://bitgetlimited.github.io/apidoc/en/spot/#sdk-code-example).
 - Browser support (via webpack bundle - see "Browser Usage" below).
 
 ## Installation
@@ -157,7 +157,8 @@ The bundle can be found in `dist/`. Altough usage should be largely consistent, 
 Support my efforts to make algo trading accessible to all - register with my referral links:
 - [Bybit](https://www.bybit.com/en-US/register?affiliate_id=9410&language=en-US&group_id=0&group_type=1)
 - [Binance](https://www.binance.com/en/register?ref=20983262)
-- [Bitget](https://www.bitget.com/join/18504944)
+- [Bitget](https://partner.bitget.com/bg/ZNM295)
+- [OKX](https://www.okx.com/join/18504944)
 - [FTX](https://ftx.com/referrals#a=ftxapigithub)
 
 Or buy me a coffee using any of these:

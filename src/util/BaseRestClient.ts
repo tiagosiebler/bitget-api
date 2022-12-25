@@ -54,12 +54,12 @@ export default abstract class BaseRestClient {
     };
 
     this.globalRequestOptions = {
-      // in ms == 5 minutes by default
+      /** in ms == 5 minutes by default */
       timeout: 1000 * 60 * 5,
-      // custom request options based on axios specs - see: https://github.com/axios/axios#request-config
+      /** inject custom rquest options based on axios specs - see axios docs for more guidance on AxiosRequestConfig: https://github.com/axios/axios#request-config */
       ...networkOptions,
       headers: {
-        'X-CHANNEL-API-CODE': '3tem',
+        'X-CHANNEL-API-CODE': 'hbnni',
         'Content-Type': 'application/json',
         locale: 'en-US',
       },
@@ -103,7 +103,7 @@ export default abstract class BaseRestClient {
   }
 
   /**
-   * @private Make a HTTP request to a specific endpoint. Private endpoints are automatically signed.
+   * @private Make a HTTP request to a specific endpoint. Private endpoint API calls are automatically signed.
    */
   private async _call(
     method: Method,
@@ -130,11 +130,6 @@ export default abstract class BaseRestClient {
     // Dispatch request
     return axios(options)
       .then((response) => {
-        // console.log('response: ', response.data);
-        // console.error('res: ', response);
-        // if (response.data && response.data?.code !== API_ERROR_CODE.SUCCESS) {
-        //   throw response.data;
-        // }
         if (response.status == 200) {
           if (
             typeof response.data?.code === 'string' &&
@@ -157,7 +152,7 @@ export default abstract class BaseRestClient {
       throw e;
     }
 
-    // Something happened in setting up the request that triggered an Error
+    // Something happened in setting up the request that triggered an error
     if (!e.response) {
       if (!e.request) {
         throw e.message;
@@ -179,6 +174,7 @@ export default abstract class BaseRestClient {
       headers: response.headers,
       requestOptions: {
         ...this.options,
+        // Prevent credentials from leaking into error messages
         apiPass: 'omittedFromError',
         apiSecret: 'omittedFromError',
       },
