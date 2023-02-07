@@ -65,6 +65,9 @@ describe('Private Futures REST API POST Endpoints', () => {
   });
 
   it('submitOrder()', async () => {
+    const symbol = 'BTCUSDT_UMCBL';
+    const marginCoin = 'USDT';
+
     try {
       expect(
         await api.submitOrder({
@@ -79,8 +82,11 @@ describe('Private Futures REST API POST Endpoints', () => {
         data: {},
       });
     } catch (e) {
+      console.log(`submitOrder() exception: `, e.body);
       expect(e.body).toMatchObject({
-        code: API_ERROR_CODE.INSUFFICIENT_BALANCE,
+        // seems to be the new "insufficient balance" error, informed bitget on 7th feb
+        code: API_ERROR_CODE.QTY_GREATER_THAN_MAX_OPEN,
+        // code: API_ERROR_CODE.INSUFFICIENT_BALANCE,
       });
     }
   });
