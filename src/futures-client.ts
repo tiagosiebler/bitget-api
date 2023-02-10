@@ -19,6 +19,7 @@ import {
   FuturesSymbolRule,
   FuturesMarginMode,
   FuturesPosition,
+  NewFuturesPlanTrailingStopOrder,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -415,6 +416,13 @@ export class FuturesClient extends BaseRestClient {
   /** Place Stop order */
   submitStopOrder(params: NewFuturesPlanStopOrder): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/plan/placeTPSL', params);
+  }
+
+  /** Place Trailing Stop order */
+  submitTrailingStopOrder(
+    params: NewFuturesPlanTrailingStopOrder
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/mix/v1/plan/placeTrailStop', params);
   }
 
   /** Place Position TPSL */

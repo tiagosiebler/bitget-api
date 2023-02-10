@@ -227,6 +227,7 @@ describe('Private Futures REST API POST Endpoints', () => {
           marginCoin,
           symbol,
           planType: 'profit_plan',
+          holdSide: 'long',
           triggerPrice: '100',
         })
       ).toMatchObject({
