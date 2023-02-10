@@ -38,7 +38,9 @@ export type FuturesOrderSide =
   | 'open_long'
   | 'open_short'
   | 'close_long'
-  | 'close_short';
+  | 'close_short'
+  | 'buy_single'
+  | 'sell_single';
 
 export interface NewFuturesOrder {
   symbol: string;
@@ -100,15 +102,27 @@ export interface ModifyFuturesPlanOrderTPSL {
   presetStopLossPrice?: string;
 }
 
-export type FuturesPlanType = 'profit_plan' | 'loss_plan';
+export type FuturesPlanType = 'profit_plan' | 'loss_plan' | 'moving_plan';
 
 export interface NewFuturesPlanStopOrder {
   symbol: string;
   marginCoin: string;
   planType: FuturesPlanType;
   triggerPrice: string;
-  holdSide?: FuturesHoldSide;
+  triggerType?: 'fill_price' | 'market_price';
+  holdSide: FuturesHoldSide;
   size?: string;
+  rangeRate?: string;
+}
+
+export interface NewFuturesPlanTrailingStopOrder {
+  symbol: string;
+  marginCoin: string;
+  triggerPrice: string;
+  triggerType?: 'fill_price' | 'market_price';
+  size?: string;
+  side: FuturesOrderSide;
+  rangeRate?: string;
 }
 
 export interface NewFuturesPlanPositionTPSL {
