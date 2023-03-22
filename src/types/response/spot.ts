@@ -21,6 +21,16 @@ export interface SymbolRules {
   status: string;
 }
 
+export interface SpotVIPFeeRate {
+  level: number;
+  dealAmount: string;
+  assetAmount: string;
+  takerFeeRate?: string;
+  makerFeeRate?: number;
+  withdrawAmount: string;
+  withdrawAmountUSDT: string;
+}
+
 export interface SpotOrderResult {
   orderId: string;
   clientOrderId: string;
@@ -39,4 +49,13 @@ export interface SpotPlanOrder {
   triggerType: string;
   enterPointSource: string;
   cTime: number;
+}
+
+export interface SpotMarketTrade {
+  symbol: string;
+  tradeId: string;
+  side: 'buy' | 'sell';
+  fillPrice: string;
+  fillQuantity: string;
+  fillTime: string;
 }

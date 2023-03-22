@@ -18,6 +18,9 @@ import {
   GetSpotPlanOrdersParams,
   SpotPlanOrder,
   GetHistoricPlanOrdersParams,
+  SpotMarketTrade,
+  GetHistoricTradesParams,
+  SpotVIPFeeRate,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -77,8 +80,28 @@ export class SpotClient extends BaseRestClient {
     return this.get('/api/spot/v1/market/tickers');
   }
 
-  /** Get Market Trades */
-  getMarketTrades(symbol: string, limit?: string): Promise<APIResponse<any>> {
+  /** Get most recent trades (up to 500, 100 by default) */
+  getRecentTrades(
+    symbol: string,
+    limit?: string
+  ): Promise<APIResponse<SpotMarketTrade[]>> {
+    return this.get('/api/spot/v1/market/fills', { symbol, limit });
+  }
+
+  /** Get historic trades, up to 30 days at a time. Same-parameter responses are cached for 10 minutes. */
+  getHistoricTrades(
+    params: GetHistoricTradesParams
+  ): Promise<APIResponse<SpotMarketTrade[]>> {
+    return this.get('/api/spot/v1/market/fills-history', params);
+  }
+
+  /**
+   * @deprecated use getRecentTrades() instead. This method will be removed soon.
+   */
+  getMarketTrades(
+    symbol: string,
+    limit?: string
+  ): Promise<APIResponse<SpotMarketTrade[]>> {
     return this.get('/api/spot/v1/market/fills', { symbol, limit });
   }
 
@@ -102,6 +125,11 @@ export class SpotClient extends BaseRestClient {
     limit?: string
   ): Promise<APIResponse<any>> {
     return this.get('/api/spot/v1/market/depth', { symbol, type, limit });
+  }
+
+  /** Get VIP fee rates */
+  getVIPFeeRates(): Promise<APIResponse<SpotVIPFeeRate[]>> {
+    return this.get('/api/spot/v1/market/spot-vip-level');
   }
 
   /**
@@ -181,7 +209,8 @@ export class SpotClient extends BaseRestClient {
     startTime: string,
     endTime: string,
     pageSize?: string,
-    pageNo?: string
+    pageNo?: string,
+    clientOid?: string
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/spot/v1/wallet/withdrawal-list', {
       coin,
@@ -189,6 +218,7 @@ export class SpotClient extends BaseRestClient {
       endTime,
       pageSize,
       pageNo,
+      clientOid,
     });
   }
 
@@ -225,6 +255,11 @@ export class SpotClient extends BaseRestClient {
     return this.getPrivate('/api/spot/v1/account/assets', { coin });
   }
 
+  /** Get sub Account Spot Asset */
+  getSubAccountSpotAssets(): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/account/sub-account-spot-assets');
+  }
+
   /** Get Bills : get transaction detail flow */
   getTransactionHistory(params?: {
     coinId?: number;
@@ -244,6 +279,7 @@ export class SpotClient extends BaseRestClient {
     after?: string;
     before?: string;
     limit?: number;
+    clientOid?: string;
   }): Promise<APIResponse<any>> {
     return this.getPrivate('/api/spot/v1/account/transferRecords', params);
   }
