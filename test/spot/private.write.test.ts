@@ -43,6 +43,47 @@ describe('Private Spot REST API POST Endpoints', () => {
     }
   });
 
+  it('transferV2()', async () => {
+    try {
+      expect(
+        await api.transferV2({
+          amount: '100',
+          coin,
+          fromType: 'spot',
+          toType: 'mix_usdt',
+        })
+      ).toStrictEqual('');
+    } catch (e) {
+      // console.error('transferV2: ', e);
+      expect(e.body).toMatchObject({
+        // not sure what this error means, probably no balance. Seems to change?
+        code: expect.stringMatching(/42013|43117/gim),
+      });
+    }
+  });
+
+  it('subTransfer()', async () => {
+    try {
+      expect(
+        await api.subTransfer({
+          fromUserId: '123',
+          toUserId: '456',
+          amount: '100',
+          clientOid: '123456',
+          coin,
+          fromType: 'spot',
+          toType: 'mix_usdt',
+        })
+      ).toStrictEqual('');
+    } catch (e) {
+      // console.error('transferV2: ', e);
+      expect(e.body).toMatchObject({
+        // not sure what this error means, probably no balance. Seems to change?
+        code: expect.stringMatching(/42013|43117/gim),
+      });
+    }
+  });
+
   it('withdraw()', async () => {
     try {
       expect(
@@ -63,9 +104,42 @@ describe('Private Spot REST API POST Endpoints', () => {
     }
   });
 
+  it('withdrawV2()', async () => {
+    try {
+      expect(
+        await api.withdrawV2({
+          amount: '100',
+          coin,
+          chain: 'TRC20',
+          address: `123456`,
+        })
+      ).toMatchObject({
+        ...sucessEmptyResponseObject(),
+        data: expect.any(Array),
+      });
+    } catch (e) {
+      expect(e.body).toMatchObject({
+        code: API_ERROR_CODE.INCORRECT_PERMISSIONS,
+      });
+    }
+  });
+
   it('innerWithdraw()', async () => {
     try {
       expect(await api.innerWithdraw(coin, '12345', '1')).toMatchObject({
+        ...sucessEmptyResponseObject(),
+        data: expect.any(Array),
+      });
+    } catch (e) {
+      expect(e.body).toMatchObject({
+        code: API_ERROR_CODE.INCORRECT_PERMISSIONS,
+      });
+    }
+  });
+
+  it('innerWithdrawV2()', async () => {
+    try {
+      expect(await api.innerWithdrawV2(coin, '12345', '1')).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });

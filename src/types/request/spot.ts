@@ -21,3 +21,23 @@ export interface NewSpotOrder {
 }
 
 export type NewBatchSpotOrder = Omit<NewSpotOrder, 'symbol'>;
+
+export interface NewSpotSubTransfer {
+  fromType: WalletType;
+  toType: WalletType;
+  amount: string;
+  coin: string;
+  clientOid: string;
+  fromUserId: string;
+  toUserId: string;
+}
+
+export interface NewSpotWithdraw {
+  coin: string;
+  address: string;
+  chain: string;
+  tag?: string;
+  amount: string;
+  remark?: string;
+  clientOid?: string;
+}

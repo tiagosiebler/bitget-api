@@ -7,6 +7,8 @@ import {
   KlineInterval,
   CoinBalance,
   SymbolRules,
+  NewSpotSubTransfer,
+  NewSpotWithdraw,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -104,6 +106,18 @@ export class SpotClient extends BaseRestClient {
     return this.postPrivate('/api/spot/v1/wallet/transfer', params);
   }
 
+  /** Initiate wallet transfer (v2 endpoint) */
+  transferV2(params: NewWalletTransfer): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/wallet/transfer-v2', params);
+  }
+
+  /**
+   * Transfer main-sub, sub-sub or sub-main
+   */
+  subTransfer(params: NewSpotSubTransfer): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/wallet/subTransfer', params);
+  }
+
   /** Get Coin Address */
   getDepositAddress(coin: string, chain?: string): Promise<APIResponse<any>> {
     return this.getPrivate('/api/spot/v1/wallet/deposit-address', {
@@ -112,17 +126,14 @@ export class SpotClient extends BaseRestClient {
     });
   }
 
-  /** Withdraw Coins On Chain*/
-  withdraw(params: {
-    coin: string;
-    address: string;
-    chain: string;
-    tag?: string;
-    amount: string;
-    remark?: string;
-    clientOid?: string;
-  }): Promise<APIResponse<any>> {
+  /** Withdraw Coins On Chain */
+  withdraw(params: NewSpotWithdraw): Promise<APIResponse<any>> {
     return this.postPrivate('/api/spot/v1/wallet/withdrawal', params);
+  }
+
+  /** Withdraw Coins On Chain (v2 endpoint) */
+  withdrawV2(params: NewSpotWithdraw): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/wallet/withdrawal-v2', params);
   }
 
   /** Inner Withdraw : Internal withdrawal means that both users are on the Bitget platform */
@@ -133,6 +144,21 @@ export class SpotClient extends BaseRestClient {
     clientOid?: string
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/spot/v1/wallet/withdrawal-inner', {
+      coin,
+      toUid,
+      amount,
+      clientOid,
+    });
+  }
+
+  /** Inner Withdraw (v2 endpoint) : Internal withdrawal means that both users are on the Bitget platform */
+  innerWithdrawV2(
+    coin: string,
+    toUid: string,
+    amount: string,
+    clientOid?: string
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/wallet/withdrawal-inner-v2', {
       coin,
       toUid,
       amount,
