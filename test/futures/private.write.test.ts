@@ -279,8 +279,7 @@ describe('Private Futures REST API POST Endpoints', () => {
     } catch (e) {
       // expect(e).toBeNull();
       expect(e.body).toMatchObject({
-        // code: API_ERROR_CODE.FUTURES_ORDER_TPSL_NOT_FOUND,
-        code: API_ERROR_CODE.FUTURES_POSITION_DIRECTION_EMPTY,
+        code: API_ERROR_CODE.FUTURES_ORDER_TPSL_NOT_FOUND,
       });
     }
   });
