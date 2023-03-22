@@ -53,7 +53,7 @@ describe('Private Futures REST API POST Endpoints', () => {
   it('setMarginMode()', async () => {
     try {
       expect(
-        await api.setMarginMode(symbol, marginCoin, 'crossed')
+        await api.setMarginMode(symbol, marginCoin, 'crossed'),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -76,7 +76,7 @@ describe('Private Futures REST API POST Endpoints', () => {
           symbol,
           size: '1',
           side: 'open_long',
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -100,7 +100,7 @@ describe('Private Futures REST API POST Endpoints', () => {
             size: '1',
             side: 'open_long',
           },
-        ])
+        ]),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -115,7 +115,7 @@ describe('Private Futures REST API POST Endpoints', () => {
   it('cancelOrder()', async () => {
     try {
       expect(
-        await api.cancelOrder(symbol, marginCoin, '1234656')
+        await api.cancelOrder(symbol, marginCoin, '1234656'),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -130,7 +130,7 @@ describe('Private Futures REST API POST Endpoints', () => {
   it('batchCancelOrder()', async () => {
     try {
       expect(
-        await api.batchCancelOrder(symbol, marginCoin, ['1234656'])
+        await api.batchCancelOrder(symbol, marginCoin, ['1234656']),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -164,7 +164,7 @@ describe('Private Futures REST API POST Endpoints', () => {
           symbol,
           triggerPrice: '1000',
           triggerType: 'market_price',
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -187,7 +187,7 @@ describe('Private Futures REST API POST Endpoints', () => {
           symbol,
           triggerPrice: '100',
           triggerType: 'market_price',
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -207,7 +207,7 @@ describe('Private Futures REST API POST Endpoints', () => {
           marginCoin,
           symbol,
           presetTakeProfitPrice: '100',
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -229,7 +229,7 @@ describe('Private Futures REST API POST Endpoints', () => {
           planType: 'profit_plan',
           holdSide: 'long',
           triggerPrice: '100',
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -251,7 +251,7 @@ describe('Private Futures REST API POST Endpoints', () => {
           holdSide: 'long',
           planType: 'profit_plan',
           triggerPrice: '50',
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -270,7 +270,8 @@ describe('Private Futures REST API POST Endpoints', () => {
           marginCoin,
           symbol,
           orderId: '123456',
-        })
+          planType: 'profit_plan',
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -292,7 +293,7 @@ describe('Private Futures REST API POST Endpoints', () => {
           symbol,
           orderId: '123456',
           planType: 'profit_plan',
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},
@@ -310,7 +311,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         {
           ...sucessEmptyResponseObject(),
           data: {},
-        }
+        },
       );
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -324,7 +325,7 @@ describe('Private Futures REST API POST Endpoints', () => {
       expect(
         await api.modifyCopyTraderTPSL(symbol, '123456', {
           stopLossPrice: 1234,
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {},

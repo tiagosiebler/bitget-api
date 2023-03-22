@@ -35,7 +35,7 @@ function promiseSleep(milliseconds) {
 // WARNING: for sensitive math you should be using a library such as decimal.js!
 function roundDown(value, decimals) {
   return Number(
-    Math.floor(parseFloat(value + 'e' + decimals)) + 'e-' + decimals
+    Math.floor(parseFloat(value + 'e' + decimals)) + 'e-' + decimals,
   );
 }
 

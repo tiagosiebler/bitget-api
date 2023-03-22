@@ -27,7 +27,7 @@ describe('Private Broker REST API POST Endpoints', () => {
   it('createSubAccount()', async () => {
     try {
       expect(await api.createSubAccount('test1')).toMatchObject(
-        sucessEmptyResponseObject()
+        sucessEmptyResponseObject(),
       );
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -39,7 +39,7 @@ describe('Private Broker REST API POST Endpoints', () => {
   it('modifySubAccount()', async () => {
     try {
       expect(
-        await api.modifySubAccount('test1', 'spot_trade,transfer', 'normal')
+        await api.modifySubAccount('test1', 'spot_trade,transfer', 'normal'),
       ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -51,7 +51,7 @@ describe('Private Broker REST API POST Endpoints', () => {
   it('modifySubEmail()', async () => {
     try {
       expect(
-        await api.modifySubEmail('test1', 'ASDFASDF@LKMASDF.COM')
+        await api.modifySubEmail('test1', 'ASDFASDF@LKMASDF.COM'),
       ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -69,7 +69,7 @@ describe('Private Broker REST API POST Endpoints', () => {
           chain: 'TRC20',
           coin: 'USDT',
           subUid,
-        })
+        }),
       ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -81,7 +81,7 @@ describe('Private Broker REST API POST Endpoints', () => {
   it('setSubDepositAutoTransfer()', async () => {
     try {
       expect(
-        await api.setSubDepositAutoTransfer(subUid, 'USDT', 'spot')
+        await api.setSubDepositAutoTransfer(subUid, 'USDT', 'spot'),
       ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -97,8 +97,8 @@ describe('Private Broker REST API POST Endpoints', () => {
           subUid,
           'passphrase12345',
           'remark',
-          '10.0.0.1'
-        )
+          '10.0.0.1',
+        ),
       ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -114,7 +114,7 @@ describe('Private Broker REST API POST Endpoints', () => {
           apikey: '12345',
           subUid,
           remark: 'test',
-        })
+        }),
       ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({

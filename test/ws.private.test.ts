@@ -26,7 +26,7 @@ describe('Private Spot Websocket Client', () => {
           apiSecret: 'bad',
           apiPass: 'bad',
         },
-        getSilentLogger('expect401')
+        getSilentLogger('expect401'),
       );
 
       // const wsOpenPromise = waitForSocketEvent(badClient, 'open');
@@ -62,7 +62,7 @@ describe('Private Spot Websocket Client', () => {
     beforeAll(() => {
       wsClient = new WebsocketClient(
         wsClientOptions,
-        getSilentLogger('expectSuccess')
+        getSilentLogger('expectSuccess'),
       );
       wsClient.connectAll();
       // logAllEvents(wsClient);

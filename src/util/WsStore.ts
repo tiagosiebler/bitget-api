@@ -82,7 +82,7 @@ export default class WsStore<WsKey extends string> {
     if (this.hasExistingActiveConnection(key)) {
       this.logger.warning(
         'WsStore setConnection() overwriting existing open connection: ',
-        this.getWs(key)
+        this.getWs(key),
       );
     }
     this.wsState[key] = {
@@ -98,7 +98,7 @@ export default class WsStore<WsKey extends string> {
       const ws = this.getWs(key);
       this.logger.warning(
         'WsStore deleting state for connection still open: ',
-        ws
+        ws,
       );
       ws?.close();
     }
@@ -119,7 +119,7 @@ export default class WsStore<WsKey extends string> {
     if (this.isWsOpen(key)) {
       this.logger.warning(
         'WsStore setConnection() overwriting existing open connection: ',
-        this.getWs(key)
+        this.getWs(key),
       );
     }
 

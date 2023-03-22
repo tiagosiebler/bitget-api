@@ -22,7 +22,7 @@ import { WebsocketClient, DefaultLogger } from '../src';
       // optionally provide rest options, e.g. to pass through a proxy
       // },
     },
-    logger
+    logger,
   );
 
   wsClient.on('update', (data) => {

@@ -57,7 +57,7 @@ describe('Private Futures REST API GET Endpoints', () => {
   it('getOpenCount()', async () => {
     try {
       expect(
-        await api.getOpenCount(symbol, marginCoin, 20000, 1)
+        await api.getOpenCount(symbol, marginCoin, 20000, 1),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {
@@ -102,7 +102,7 @@ describe('Private Futures REST API GET Endpoints', () => {
           endTime: to,
           marginCoin,
           symbol,
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {
@@ -125,7 +125,7 @@ describe('Private Futures REST API GET Endpoints', () => {
           startTime: from,
           endTime: to,
           productType: 'umcbl',
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {
@@ -180,7 +180,7 @@ describe('Private Futures REST API GET Endpoints', () => {
   it('getProductTypeOrderHistory()', async () => {
     try {
       expect(
-        await api.getProductTypeOrderHistory('umcbl', from, to, '10')
+        await api.getProductTypeOrderHistory('umcbl', from, to, '10'),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
@@ -223,7 +223,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         await api.getProductTypeOrderFills('umcbl', {
           startTime: from,
           endTime: to,
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
@@ -253,7 +253,7 @@ describe('Private Futures REST API GET Endpoints', () => {
           startTime: from,
           endTime: to,
           symbol,
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
@@ -267,7 +267,7 @@ describe('Private Futures REST API GET Endpoints', () => {
   it('getCopyTraderOpenOrder()', async () => {
     try {
       expect(
-        await api.getCopyTraderOpenOrder(symbol, 'umcbl', 1, 0)
+        await api.getCopyTraderOpenOrder(symbol, 'umcbl', 1, 0),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
@@ -282,7 +282,7 @@ describe('Private Futures REST API GET Endpoints', () => {
   it('getCopyFollowersOpenOrder()', async () => {
     try {
       expect(
-        await api.getCopyFollowersOpenOrder(symbol, 'umcbl', 1, 0)
+        await api.getCopyFollowersOpenOrder(symbol, 'umcbl', 1, 0),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
@@ -300,7 +300,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         {
           ...sucessEmptyResponseObject(),
           data: expect.any(Object),
-        }
+        },
       );
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -342,8 +342,8 @@ describe('Private Futures REST API GET Endpoints', () => {
           marginCoin,
           from,
           1,
-          1
-        )
+          1,
+        ),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
@@ -358,7 +358,7 @@ describe('Private Futures REST API GET Endpoints', () => {
   it('getCopyTraderHistoricProfitDetail()', async () => {
     try {
       expect(
-        await api.getCopyTraderHistoricProfitDetail(marginCoin, from, 1, 1)
+        await api.getCopyTraderHistoricProfitDetail(marginCoin, from, 1, 1),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),

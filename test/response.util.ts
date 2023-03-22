@@ -19,7 +19,7 @@ export function sucessEmptyResponseObject() {
 export function errorResponseObject(
   result: null | any = null,
   ret_code: number,
-  ret_msg: string
+  ret_msg: string,
 ) {
   return {
     result,
@@ -30,7 +30,7 @@ export function errorResponseObject(
 
 export function errorResponseObjectV3(
   result: null | any = null,
-  retCode: number
+  retCode: number,
 ) {
   return {
     result,
