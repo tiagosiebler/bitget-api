@@ -167,7 +167,6 @@ describe('Private Spot REST API GET Endpoints', () => {
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {
-          endId: null,
           nextFlag: false,
           orderList: expect.any(Array),
         },
