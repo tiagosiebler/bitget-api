@@ -20,3 +20,23 @@ export interface SymbolRules {
   quantityScale: string;
   status: string;
 }
+
+export interface SpotOrderResult {
+  orderId: string;
+  clientOrderId: string;
+}
+
+export interface SpotPlanOrder {
+  orderId: string;
+  clientOid: string;
+  symbol: string;
+  size: string;
+  executePrice: string;
+  triggerPrice: string;
+  status: string;
+  orderType: string;
+  side: string;
+  triggerType: string;
+  enterPointSource: string;
+  cTime: number;
+}

@@ -9,6 +9,15 @@ import {
   SymbolRules,
   NewSpotSubTransfer,
   NewSpotWithdraw,
+  CancelSpotOrderV2,
+  BatchCancelSpotOrderV2,
+  SpotOrderResult,
+  NewSpotPlanOrder,
+  ModifySpotPlanOrder,
+  CancelSpotPlanOrderParams,
+  GetSpotPlanOrdersParams,
+  SpotPlanOrder,
+  GetHistoricPlanOrdersParams,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -246,7 +255,7 @@ export class SpotClient extends BaseRestClient {
    */
 
   /** Place order */
-  submitOrder(params: NewSpotOrder): Promise<APIResponse<any>> {
+  submitOrder(params: NewSpotOrder): Promise<APIResponse<SpotOrderResult>> {
     return this.postPrivate('/api/spot/v1/trade/orders', params);
   }
 
@@ -269,6 +278,20 @@ export class SpotClient extends BaseRestClient {
     });
   }
 
+  /** Cancel order (v2 endpoint - supports orderId or clientOid) */
+  cancelOrderV2(params?: CancelSpotOrderV2): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/trade/cancel-order-v2', params);
+  }
+
+  /**
+   * Cancel all spot orders for a symbol
+   */
+  cancelSymbolOrders(symbol: string): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/trade/cancel-symbol-order', {
+      symbol,
+    });
+  }
+
   /** Cancel order in batch (per symbol) */
   batchCancelOrder(
     symbol: string,
@@ -278,6 +301,16 @@ export class SpotClient extends BaseRestClient {
       symbol,
       orderIds,
     });
+  }
+
+  /** Cancel order in batch (per symbol). V2 endpoint, supports orderIds or clientOids. */
+  batchCancelOrderV2(
+    params: BatchCancelSpotOrderV2
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      '/api/spot/v1/trade/cancel-batch-orders-v2',
+      params
+    );
   }
 
   /** Get order details */
@@ -321,4 +354,49 @@ export class SpotClient extends BaseRestClient {
       ...pagination,
     });
   }
+
+  /** Place plan order */
+  submitPlanOrder(
+    params: NewSpotPlanOrder
+  ): Promise<APIResponse<SpotOrderResult>> {
+    return this.postPrivate('/api/spot/v1/plan/placePlan', params);
+  }
+
+  /** Modify plan order */
+  modifyPlanOrder(
+    params: ModifySpotPlanOrder
+  ): Promise<APIResponse<SpotOrderResult>> {
+    return this.postPrivate('/api/spot/v1/plan/modifyPlan', params);
+  }
+
+  /** Cancel plan order */
+  cancelPlanOrder(
+    params: CancelSpotPlanOrderParams
+  ): Promise<APIResponse<string>> {
+    return this.postPrivate('/api/spot/v1/plan/cancelPlan', params);
+  }
+
+  /** Get current plan orders */
+  getCurrentPlanOrders(params: GetSpotPlanOrdersParams): Promise<
+    APIResponse<{
+      nextFlag: boolean;
+      endId: number;
+      orderList: SpotPlanOrder[];
+    }>
+  > {
+    return this.postPrivate('/api/spot/v1/plan/currentPlan', params);
+  }
+
+  /** Get history plan orders */
+  getHistoricPlanOrders(params: GetHistoricPlanOrdersParams): Promise<
+    APIResponse<{
+      nextFlag: boolean;
+      endId: number;
+      orderList: SpotPlanOrder[];
+    }>
+  > {
+    return this.postPrivate('/api/spot/v1/plan/historyPlan', params);
+  }
+
+  //
 }

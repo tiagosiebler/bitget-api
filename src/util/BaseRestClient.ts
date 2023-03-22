@@ -309,7 +309,6 @@ export default abstract class BaseRestClient {
       'ACCESS-PASSPHRASE': this.apiPass,
       'ACCESS-TIMESTAMP': signResult.timestamp,
       'ACCESS-SIGN': signResult.sign,
-      'Content-Type': 'application/json',
     };
 
     if (method === 'GET') {
