@@ -1,13 +1,5 @@
 import { OrderTimeInForce } from './shared';
 
-export interface GetHistoricTradesParams {
-  symbol: string;
-  limit?: string;
-  tradeId?: string;
-  startTime?: string;
-  endTime?: string;
-}
-
 export type WalletType = 'spot' | 'mix_usdt' | 'mix_usd';
 
 export interface NewWalletTransfer {

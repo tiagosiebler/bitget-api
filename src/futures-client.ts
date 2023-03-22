@@ -20,6 +20,11 @@ import {
   FuturesMarginMode,
   FuturesPosition,
   NewFuturesPlanTrailingStopOrder,
+  VIPFeeRate,
+  SpotMarketTrade,
+  GetHistoricTradesParams,
+  FuturesMarketTrade,
+  FuturesPlanType,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -40,7 +45,7 @@ export class FuturesClient extends BaseRestClient {
 
   /** Get Symbols : Get basic configuration information of all trading pairs (including rules) */
   getSymbols(
-    productType: FuturesProductType
+    productType: FuturesProductType,
   ): Promise<APIResponse<FuturesSymbolRule[]>> {
     return this.get('/api/mix/v1/market/contracts', { productType });
   }
@@ -60,8 +65,33 @@ export class FuturesClient extends BaseRestClient {
     return this.get('/api/mix/v1/market/tickers', { productType });
   }
 
-  /** Get Market Trades */
-  getMarketTrades(symbol: string, limit?: string): Promise<APIResponse<any>> {
+  /** Get VIP fee rates */
+  getVIPFeeRates(): Promise<APIResponse<VIPFeeRate[]>> {
+    return this.get('/api/spot/v1/market/spot-vip-level');
+  }
+
+  /** Get most recent trades (up to 500, 100 by default) */
+  getRecentTrades(
+    symbol: string,
+    limit?: string,
+  ): Promise<APIResponse<FuturesMarketTrade[]>> {
+    return this.get('/api/mix/v1/market/fills', { symbol, limit });
+  }
+
+  /** Get historic trades, up to 30 days at a time. Same-parameter responses are cached for 10 minutes. */
+  getHistoricTrades(
+    params: GetHistoricTradesParams,
+  ): Promise<APIResponse<FuturesMarketTrade[]>> {
+    return this.get('/api/mix/v1/market/fills-history', params);
+  }
+
+  /**
+   * @deprecated use getRecentTrades() instead. This method will be removed soon.
+   */
+  getMarketTrades(
+    symbol: string,
+    limit?: string,
+  ): Promise<APIResponse<FuturesMarketTrade[]>> {
     return this.get('/api/mix/v1/market/fills', { symbol, limit });
   }
 
@@ -70,13 +100,15 @@ export class FuturesClient extends BaseRestClient {
     symbol: string,
     granularity: KlineInterval,
     startTime: string,
-    endTime: string
+    endTime: string,
+    limit?: string,
   ): Promise<any> {
     return this.get('/api/mix/v1/market/candles', {
       symbol,
       granularity,
       startTime,
       endTime,
+      limit,
     });
   }
 
@@ -95,7 +127,7 @@ export class FuturesClient extends BaseRestClient {
     symbol: string,
     pageSize?: string,
     pageNo?: string,
-    nextPage?: boolean
+    nextPage?: boolean,
   ): Promise<APIResponse<any>> {
     return this.get('/api/mix/v1/market/history-fundRate', {
       symbol,
@@ -134,7 +166,7 @@ export class FuturesClient extends BaseRestClient {
   /** Get Single Account */
   getAccount(
     symbol: string,
-    marginCoin: string
+    marginCoin: string,
   ): Promise<APIResponse<FuturesAccount>> {
     return this.getPrivate('/api/mix/v1/account/account', {
       symbol,
@@ -147,6 +179,15 @@ export class FuturesClient extends BaseRestClient {
     return this.getPrivate('/api/mix/v1/account/accounts', { productType });
   }
 
+  /** Get Sub Account Contract Assets */
+  getSubAccountContractAssets(
+    productType: FuturesProductType,
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/mix/v1/account/sub-account-contract-assets', {
+      productType,
+    });
+  }
+
   /**
    * This interface is only used to calculate the maximum number of positions that can be opened when the user does not hold a position by default.
    * The result does not represent the actual number of positions opened.
@@ -156,7 +197,7 @@ export class FuturesClient extends BaseRestClient {
     marginCoin: string,
     openPrice: number,
     openAmount: number,
-    leverage?: number
+    leverage?: number,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/account/open-count', {
       symbol,
@@ -172,7 +213,7 @@ export class FuturesClient extends BaseRestClient {
     symbol: string,
     marginCoin: string,
     leverage: string,
-    holdSide?: string
+    holdSide?: string,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/account/setLeverage', {
       symbol,
@@ -187,7 +228,7 @@ export class FuturesClient extends BaseRestClient {
     symbol: string,
     marginCoin: string,
     amount: string,
-    holdSide?: string
+    holdSide?: string,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/account/setMargin', {
       symbol,
@@ -201,7 +242,7 @@ export class FuturesClient extends BaseRestClient {
   setMarginMode(
     symbol: string,
     marginCoin: string,
-    marginMode: FuturesMarginMode
+    marginMode: FuturesMarginMode,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/account/setMarginMode', {
       symbol,
@@ -210,10 +251,21 @@ export class FuturesClient extends BaseRestClient {
     });
   }
 
+  /** Change Hold Mode */
+  setHoldMode(
+    productType: FuturesProductType,
+    holdMode: 'single_hold' | 'double_hold',
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/mix/v1/account/setPositionMode', {
+      productType,
+      holdMode,
+    });
+  }
+
   /** Get Symbol Position */
   getPosition(
     symbol: string,
-    marginCoin?: string
+    marginCoin?: string,
   ): Promise<APIResponse<FuturesPosition[]>> {
     return this.getPrivate('/api/mix/v1/position/singlePosition', {
       symbol,
@@ -224,7 +276,7 @@ export class FuturesClient extends BaseRestClient {
   /** Get All Position */
   getPositions(
     productType: FuturesProductType,
-    marginCoin?: string
+    marginCoin?: string,
   ): Promise<APIResponse<FuturesPosition[]>> {
     return this.getPrivate('/api/mix/v1/position/allPosition', {
       productType,
@@ -239,7 +291,7 @@ export class FuturesClient extends BaseRestClient {
 
   /** Get Business Account Bill */
   getBusinessBill(
-    params: FuturesBusinessBillRequest
+    params: FuturesBusinessBillRequest,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/account/accountBusinessBill', params);
   }
@@ -259,7 +311,7 @@ export class FuturesClient extends BaseRestClient {
   batchSubmitOrder(
     symbol: string,
     marginCoin: string,
-    orders: NewBatchFuturesOrder[]
+    orders: NewBatchFuturesOrder[],
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/order/batch-orders', {
       symbol,
@@ -272,12 +324,14 @@ export class FuturesClient extends BaseRestClient {
   cancelOrder(
     symbol: string,
     marginCoin: string,
-    orderId: string
+    orderId?: string,
+    clientOid?: string,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/order/cancel-order', {
       symbol,
       marginCoin,
       orderId,
+      clientOid,
     });
   }
 
@@ -285,7 +339,7 @@ export class FuturesClient extends BaseRestClient {
   batchCancelOrder(
     symbol: string,
     marginCoin: string,
-    orderIds: string[]
+    orderIds: string[],
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/order/cancel-batch-orders', {
       symbol,
@@ -294,10 +348,23 @@ export class FuturesClient extends BaseRestClient {
     });
   }
 
+  /**
+   * Cancel all futures orders for a symbol
+   */
+  cancelSymbolOrders(
+    symbol: string,
+    marginCoin: string,
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/mix/v1/order/cancel-symbol-orders', {
+      symbol,
+      marginCoin,
+    });
+  }
+
   /** Cancel All Order */
   cancelAllOrders(
     productType: FuturesProductType,
-    marginCoin: string
+    marginCoin: string,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/order/cancel-all-orders', {
       productType,
@@ -313,7 +380,7 @@ export class FuturesClient extends BaseRestClient {
   /** Get All Open Order */
   getOpenOrders(
     productType: FuturesProductType,
-    marginCoin: string
+    marginCoin: string,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/order/marginCoinCurrent', {
       productType,
@@ -328,7 +395,8 @@ export class FuturesClient extends BaseRestClient {
     endTime: string,
     pageSize: string,
     lastEndId?: string,
-    isPre?: boolean
+    isPre?: boolean,
+    clientOid?: string,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/order/history', {
       symbol,
@@ -337,6 +405,7 @@ export class FuturesClient extends BaseRestClient {
       pageSize,
       lastEndId,
       isPre,
+      clientOid,
     });
   }
 
@@ -347,7 +416,8 @@ export class FuturesClient extends BaseRestClient {
     endTime: string,
     pageSize: string,
     lastEndId?: string,
-    isPre?: boolean
+    isPre?: boolean,
+    clientOid?: string,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/order/historyProductType', {
       productType,
@@ -356,6 +426,7 @@ export class FuturesClient extends BaseRestClient {
       pageSize,
       lastEndId,
       isPre,
+      clientOid,
     });
   }
 
@@ -363,7 +434,7 @@ export class FuturesClient extends BaseRestClient {
   getOrder(
     symbol: string,
     orderId?: string,
-    clientOid?: string
+    clientOid?: string,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/order/detail', {
       symbol,
@@ -376,7 +447,7 @@ export class FuturesClient extends BaseRestClient {
   getOrderFills(
     symbol: string,
     orderId?: string,
-    pagination?: FuturesPagination
+    pagination?: FuturesPagination,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/order/fills', {
       symbol,
@@ -388,7 +459,7 @@ export class FuturesClient extends BaseRestClient {
   /** Get ProductType Order fill detail */
   getProductTypeOrderFills(
     productType: FuturesProductType,
-    pagination?: FuturesPagination
+    pagination?: FuturesPagination,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/order/allFills', {
       productType: productType.toUpperCase(),
@@ -408,7 +479,7 @@ export class FuturesClient extends BaseRestClient {
 
   /** Modify Plan Order TPSL */
   modifyPlanOrderTPSL(
-    params: ModifyFuturesPlanOrderTPSL
+    params: ModifyFuturesPlanOrderTPSL,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/plan/modifyPlanPreset', params);
   }
@@ -420,37 +491,48 @@ export class FuturesClient extends BaseRestClient {
 
   /** Place Trailing Stop order */
   submitTrailingStopOrder(
-    params: NewFuturesPlanTrailingStopOrder
+    params: NewFuturesPlanTrailingStopOrder,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/plan/placeTrailStop', params);
   }
 
   /** Place Position TPSL */
   submitPositionTPSL(
-    params: NewFuturesPlanPositionTPSL
+    params: NewFuturesPlanPositionTPSL,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/plan/placePositionsTPSL', params);
   }
 
   /** Modify Stop Order */
   modifyStopOrder(
-    params: ModifyFuturesPlanStopOrder
+    params: ModifyFuturesPlanStopOrder,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/plan/modifyTPSLPlan', params);
   }
 
   /** Cancel Plan Order TPSL */
   cancelPlanOrderTPSL(
-    params: CancelFuturesPlanTPSL
+    params: CancelFuturesPlanTPSL,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/plan/cancelPlan', params);
+  }
+
+  /** Cancel All Trigger Order (TPSL) */
+  cancelAllPlanOrders(
+    productType: FuturesProductType,
+    planType: FuturesPlanType,
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/mix/v1/plan/cancelAllPlan', {
+      productType,
+      planType,
+    });
   }
 
   /** Get Plan Order (TPSL) List */
   getPlanOrderTPSLs(
     symbol: string,
     isPlan?: string,
-    productType?: FuturesProductType
+    productType?: FuturesProductType,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/plan/currentPlan', {
       symbol,
@@ -461,14 +543,14 @@ export class FuturesClient extends BaseRestClient {
 
   /** Get History Plan Orders (TPSL) */
   getHistoricPlanOrdersTPSL(
-    params: HistoricPlanOrderTPSLRequest
+    params: HistoricPlanOrderTPSLRequest,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/plan/historyPlan', params);
   }
 
   /**
    *
-   * Trade Endpoints
+   * Copy Trade Endpoints
    *
    */
 
@@ -477,7 +559,7 @@ export class FuturesClient extends BaseRestClient {
     symbol: string,
     productType: FuturesProductType,
     pageSize: number,
-    pageNo: number
+    pageNo: number,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/trace/currentTrack', {
       symbol,
@@ -492,7 +574,7 @@ export class FuturesClient extends BaseRestClient {
     symbol: string,
     productType: FuturesProductType,
     pageSize: number,
-    pageNo: number
+    pageNo: number,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/trace/followerOrder', {
       symbol,
@@ -505,7 +587,7 @@ export class FuturesClient extends BaseRestClient {
   /** Trader Close Position */
   closeCopyTraderPosition(
     symbol: string,
-    trackingNo: string
+    trackingNo: string,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/trace/closeTrackOrder', {
       symbol,
@@ -520,7 +602,7 @@ export class FuturesClient extends BaseRestClient {
     changes?: {
       stopProfitPrice?: number;
       stopLossPrice?: number;
-    }
+    },
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/trace/modifyTPSL', {
       symbol,
@@ -534,7 +616,7 @@ export class FuturesClient extends BaseRestClient {
     startTime: string,
     endTime: string,
     pageSize: number,
-    pageNo: number
+    pageNo: number,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/trace/historyTrack', {
       startTime,
@@ -559,7 +641,7 @@ export class FuturesClient extends BaseRestClient {
     marginCoin: string,
     dateMs: string,
     pageSize: number,
-    pageNo: number
+    pageNo: number,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/trace/profitDateGroupList', {
       marginCoin,
@@ -574,7 +656,7 @@ export class FuturesClient extends BaseRestClient {
     marginCoin: string,
     dateMs: string,
     pageSize: number,
-    pageNo: number
+    pageNo: number,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/trace/profitDateList', {
       marginCoin,
@@ -587,7 +669,7 @@ export class FuturesClient extends BaseRestClient {
   /** Get Trader Profits Details */
   getCopyTraderProfitDetails(
     pageSize: number,
-    pageNo: number
+    pageNo: number,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/trace/waitProfitDateList', {
       pageSize,
@@ -603,7 +685,7 @@ export class FuturesClient extends BaseRestClient {
   /** Trader Change CopyTrade symbol */
   setCopyTraderSymbols(
     symbol: string,
-    operation: 'add' | 'delete'
+    operation: 'add' | 'delete',
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/mix/v1/trace/setUpCopySymbols', {
       symbol,

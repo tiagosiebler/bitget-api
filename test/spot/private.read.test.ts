@@ -163,7 +163,7 @@ describe('Private Spot REST API GET Endpoints', () => {
   it('getCurrentPlanOrders()', async () => {
     try {
       expect(
-        await api.getCurrentPlanOrders({ symbol, pageSize: '20' })
+        await api.getCurrentPlanOrders({ symbol, pageSize: '20' }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {
@@ -185,7 +185,7 @@ describe('Private Spot REST API GET Endpoints', () => {
           pageSize: '20',
           startTime: '1667889483000',
           endTime: '1668134732000',
-        })
+        }),
       ).toMatchObject({
         ...sucessEmptyResponseObject(),
         data: {

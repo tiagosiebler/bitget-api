@@ -61,7 +61,7 @@ interface WebsocketClientEvents {
 export declare interface WebsocketClient {
   on<U extends keyof WebsocketClientEvents>(
     event: U,
-    listener: WebsocketClientEvents[U]
+    listener: WebsocketClientEvents[U],
   ): this;
 
   emit<U extends keyof WebsocketClientEvents>(
@@ -77,7 +77,7 @@ export class WebsocketClient extends EventEmitter {
 
   constructor(
     options: WSClientConfigurableOptions,
-    logger?: typeof DefaultLogger
+    logger?: typeof DefaultLogger,
   ) {
     super();
 
@@ -100,7 +100,7 @@ export class WebsocketClient extends EventEmitter {
    */
   public subscribe(
     wsTopics: WsTopicSubscribeEventArgs[] | WsTopicSubscribeEventArgs,
-    isPrivateTopic?: boolean
+    isPrivateTopic?: boolean,
   ) {
     const topics = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
 
@@ -122,7 +122,7 @@ export class WebsocketClient extends EventEmitter {
         if (!isAuthenticated) {
           return this.requestSubscribeTopics(
             wsKey,
-            topics.filter((topic) => !isPrivateChannel(topic.channel))
+            topics.filter((topic) => !isPrivateChannel(topic.channel)),
           );
         }
         return this.requestSubscribeTopics(wsKey, topics);
@@ -132,11 +132,11 @@ export class WebsocketClient extends EventEmitter {
       if (
         !this.wsStore.isConnectionState(
           wsKey,
-          WsConnectionStateEnum.CONNECTING
+          WsConnectionStateEnum.CONNECTING,
         ) &&
         !this.wsStore.isConnectionState(
           wsKey,
-          WsConnectionStateEnum.RECONNECTING
+          WsConnectionStateEnum.RECONNECTING,
         )
       ) {
         return this.connect(wsKey);
@@ -151,11 +151,11 @@ export class WebsocketClient extends EventEmitter {
    */
   public unsubscribe(
     wsTopics: WsTopicSubscribeEventArgs[] | WsTopicSubscribeEventArgs,
-    isPrivateTopic?: boolean
+    isPrivateTopic?: boolean,
   ) {
     const topics = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
     topics.forEach((topic) =>
-      this.wsStore.deleteTopic(getWsKeyForTopic(topic, isPrivateTopic), topic)
+      this.wsStore.deleteTopic(getWsKeyForTopic(topic, isPrivateTopic), topic),
     );
 
     // TODO: should this really happen on each wsKey?? seems weird
@@ -207,7 +207,7 @@ export class WebsocketClient extends EventEmitter {
       if (this.wsStore.isWsOpen(wsKey)) {
         this.logger.error(
           'Refused to connect to ws with existing active connection',
-          { ...LOGGER_CATEGORY, wsKey }
+          { ...LOGGER_CATEGORY, wsKey },
         );
         return this.wsStore.getWs(wsKey);
       }
@@ -217,7 +217,7 @@ export class WebsocketClient extends EventEmitter {
       ) {
         this.logger.error(
           'Refused to connect to ws, connection attempt already active',
-          { ...LOGGER_CATEGORY, wsKey }
+          { ...LOGGER_CATEGORY, wsKey },
         );
         return;
       }
@@ -260,7 +260,7 @@ export class WebsocketClient extends EventEmitter {
           `${context} due to unexpected response error: "${
             error?.msg || error?.message || error
           }"`,
-          { ...LOGGER_CATEGORY, wsKey, error }
+          { ...LOGGER_CATEGORY, wsKey, error },
         );
         break;
     }
@@ -278,7 +278,7 @@ export class WebsocketClient extends EventEmitter {
         apiKey,
         apiSecret,
         apiPass,
-        recvWindow
+        recvWindow,
       );
 
       this.logger.info(`Sending auth request...`, {
@@ -375,7 +375,7 @@ export class WebsocketClient extends EventEmitter {
    */
   private requestSubscribeTopics(
     wsKey: WsKey,
-    topics: WsTopicSubscribeEventArgs[]
+    topics: WsTopicSubscribeEventArgs[],
   ) {
     if (!topics.length) {
       return;
@@ -384,7 +384,7 @@ export class WebsocketClient extends EventEmitter {
     const maxTopicsPerEvent = getMaxTopicsPerSubscribeEvent(wsKey);
     if (maxTopicsPerEvent && topics.length > maxTopicsPerEvent) {
       this.logger.silly(
-        `Subscribing to topics in batches of ${maxTopicsPerEvent}`
+        `Subscribing to topics in batches of ${maxTopicsPerEvent}`,
       );
       for (var i = 0; i < topics.length; i += maxTopicsPerEvent) {
         const batch = topics.slice(i, i + maxTopicsPerEvent);
@@ -392,7 +392,7 @@ export class WebsocketClient extends EventEmitter {
         this.requestSubscribeTopics(wsKey, batch);
       }
       this.logger.silly(
-        `Finished batch subscribing to ${topics.length} topics`
+        `Finished batch subscribing to ${topics.length} topics`,
       );
       return;
     }
@@ -410,7 +410,7 @@ export class WebsocketClient extends EventEmitter {
    */
   private requestUnsubscribeTopics(
     wsKey: WsKey,
-    topics: WsTopicSubscribeEventArgs[]
+    topics: WsTopicSubscribeEventArgs[],
   ) {
     if (!topics.length) {
       return;
@@ -419,7 +419,7 @@ export class WebsocketClient extends EventEmitter {
     const maxTopicsPerEvent = getMaxTopicsPerSubscribeEvent(wsKey);
     if (maxTopicsPerEvent && topics.length > maxTopicsPerEvent) {
       this.logger.silly(
-        `Unsubscribing to topics in batches of ${maxTopicsPerEvent}`
+        `Unsubscribing to topics in batches of ${maxTopicsPerEvent}`,
       );
       for (var i = 0; i < topics.length; i += maxTopicsPerEvent) {
         const batch = topics.slice(i, i + maxTopicsPerEvent);
@@ -427,7 +427,7 @@ export class WebsocketClient extends EventEmitter {
         this.requestUnsubscribeTopics(wsKey, batch);
       }
       this.logger.silly(
-        `Finished batch unsubscribing to ${topics.length} topics`
+        `Finished batch unsubscribing to ${topics.length} topics`,
       );
       return;
     }
@@ -449,13 +449,13 @@ export class WebsocketClient extends EventEmitter {
       });
       if (!wsKey) {
         throw new Error(
-          'Cannot send message due to no known websocket for this wsKey'
+          'Cannot send message due to no known websocket for this wsKey',
         );
       }
       const ws = this.getWs(wsKey);
       if (!ws) {
         throw new Error(
-          `${wsKey} socket not connected yet, call "connectAll()" first then try again when the "open" event arrives`
+          `${wsKey} socket not connected yet, call "connectAll()" first then try again when the "open" event arrives`,
         );
       }
       ws.send(wsMessage);
@@ -512,13 +512,13 @@ export class WebsocketClient extends EventEmitter {
     // Private topics will be resubscribed to once reconnected
     const topics = [...this.wsStore.getTopics(wsKey)];
     const publicTopics = topics.filter(
-      (topic) => !isPrivateChannel(topic.channel)
+      (topic) => !isPrivateChannel(topic.channel),
     );
     this.requestSubscribeTopics(wsKey, publicTopics);
 
     this.wsStore.get(wsKey, true)!.activePingTimer = setInterval(
       () => this.ping(wsKey),
-      this.options.pingInterval
+      this.options.pingInterval,
     );
   }
 
@@ -529,7 +529,7 @@ export class WebsocketClient extends EventEmitter {
 
     const topics = [...this.wsStore.getTopics(wsKey)];
     const privateTopics = topics.filter((topic) =>
-      isPrivateChannel(topic.channel)
+      isPrivateChannel(topic.channel),
     );
 
     if (privateTopics.length) {
@@ -665,7 +665,7 @@ export class WebsocketClient extends EventEmitter {
   public subscribeTopic(
     instType: BitgetInstType,
     topic: WsTopic,
-    instId: string = 'default'
+    instId: string = 'default',
   ) {
     return this.subscribe({
       instType,
@@ -683,7 +683,7 @@ export class WebsocketClient extends EventEmitter {
   public unsubscribeTopic(
     instType: BitgetInstType,
     topic: WsTopic,
-    instId: string = 'default'
+    instId: string = 'default',
   ) {
     return this.unsubscribe({
       instType,

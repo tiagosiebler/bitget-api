@@ -20,17 +20,6 @@ export interface SymbolRules {
   quantityScale: string;
   status: string;
 }
-
-export interface SpotVIPFeeRate {
-  level: number;
-  dealAmount: string;
-  assetAmount: string;
-  takerFeeRate?: string;
-  makerFeeRate?: number;
-  withdrawAmount: string;
-  withdrawAmountUSDT: string;
-}
-
 export interface SpotOrderResult {
   orderId: string;
   clientOrderId: string;

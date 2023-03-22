@@ -4,6 +4,15 @@ import {
   FuturesMarginMode,
 } from '../request';
 
+export interface FuturesMarketTrade {
+  tradeId: string;
+  price: string;
+  size: string;
+  side: 'buy' | 'sell';
+  timestamp: string;
+  symbol: string;
+}
+
 export interface FuturesAccount {
   marginCoin: string;
   locked: number;

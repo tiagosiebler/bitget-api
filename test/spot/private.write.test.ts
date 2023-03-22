@@ -30,7 +30,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             coin,
             fromType: 'spot',
             toType: 'mix_usdt',
-          })
+          }),
         ).toStrictEqual('');
       } catch (e) {
         // console.error('transfer: ', e);
@@ -49,7 +49,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             coin,
             fromType: 'spot',
             toType: 'mix_usdt',
-          })
+          }),
         ).toStrictEqual('');
       } catch (e) {
         // console.error('transferV2: ', e);
@@ -71,7 +71,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             coin,
             fromType: 'spot',
             toType: 'mix_usdt',
-          })
+          }),
         ).toStrictEqual('');
       } catch (e) {
         // console.error('transferV2: ', e);
@@ -90,7 +90,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             coin,
             chain: 'TRC20',
             address: `123456`,
-          })
+          }),
         ).toMatchObject({
           ...sucessEmptyResponseObject(),
           data: expect.any(Array),
@@ -110,7 +110,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             coin,
             chain: 'TRC20',
             address: `123456`,
-          })
+          }),
         ).toMatchObject({
           ...sucessEmptyResponseObject(),
           data: expect.any(Array),
@@ -158,7 +158,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             orderType: 'market',
             quantity: '1',
             force: 'normal',
-          })
+          }),
         ).toMatchObject({
           ...sucessEmptyResponseObject(),
           data: expect.any(Array),
@@ -180,7 +180,7 @@ describe('Private Spot REST API POST Endpoints', () => {
               quantity: '1',
               force: 'normal',
             },
-          ])
+          ]),
         ).toMatchObject({
           ...sucessEmptyResponseObject(),
           data: {
@@ -251,7 +251,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             orderType: 'market',
             triggerPrice: 100,
             orderId: '123456',
-          })
+          }),
         ).toMatchObject({
           ...sucessEmptyResponseObject(),
           data: expect.any(Array),
@@ -268,7 +268,7 @@ describe('Private Spot REST API POST Endpoints', () => {
         expect(
           await api.cancelPlanOrder({
             orderId: planOrderId || '123456',
-          })
+          }),
         ).toMatchObject({
           ...sucessEmptyResponseObject(),
           data: expect.any(String),
