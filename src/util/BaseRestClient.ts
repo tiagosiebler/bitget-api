@@ -304,24 +304,31 @@ export default abstract class BaseRestClient {
       isPublicApi
     );
 
-    if (!options.headers) {
-      options.headers = {};
-    }
-    options.headers['ACCESS-KEY'] = this.apiKey;
-    options.headers['ACCESS-PASSPHRASE'] = this.apiPass;
-    options.headers['ACCESS-TIMESTAMP'] = signResult.timestamp;
-    options.headers['ACCESS-SIGN'] = signResult.sign;
-    options.headers['Content-Type'] = 'application/json';
+    const authHeaders = {
+      'ACCESS-KEY': this.apiKey,
+      'ACCESS-PASSPHRASE': this.apiPass,
+      'ACCESS-TIMESTAMP': signResult.timestamp,
+      'ACCESS-SIGN': signResult.sign,
+      'Content-Type': 'application/json',
+    };
 
     if (method === 'GET') {
       return {
         ...options,
+        headers: {
+          ...authHeaders,
+          ...options.headers,
+        },
         url: options.url + signResult.queryParamsWithSign,
       };
     }
 
     return {
       ...options,
+      headers: {
+        ...authHeaders,
+        ...options.headers,
+      },
       data: params,
     };
   }
