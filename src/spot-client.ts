@@ -433,6 +433,4 @@ export class SpotClient extends BaseRestClient {
   > {
     return this.postPrivate('/api/spot/v1/plan/historyPlan', params);
   }
-
-  //
 }
