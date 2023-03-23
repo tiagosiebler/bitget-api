@@ -21,7 +21,6 @@ import {
   FuturesPosition,
   NewFuturesPlanTrailingStopOrder,
   VIPFeeRate,
-  SpotMarketTrade,
   GetHistoricTradesParams,
   FuturesMarketTrade,
   FuturesPlanType,
@@ -67,7 +66,7 @@ export class FuturesClient extends BaseRestClient {
 
   /** Get VIP fee rates */
   getVIPFeeRates(): Promise<APIResponse<VIPFeeRate[]>> {
-    return this.get('/api/spot/v1/market/spot-vip-level');
+    return this.get('/api/mix/v1/market/contract-vip-level');
   }
 
   /** Get most recent trades (up to 500, 100 by default) */
