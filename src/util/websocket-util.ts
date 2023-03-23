@@ -11,7 +11,7 @@ import { BitgetInstType, WsTopicSubscribeEventArgs } from './WsStore';
  */
 type NetworkMap<
   TRequiredKeys extends string,
-  TOptionalKeys extends string | undefined = undefined
+  TOptionalKeys extends string | undefined = undefined,
 > = Record<TRequiredKeys, string> &
   (TOptionalKeys extends string
     ? Record<TOptionalKeys, string | undefined>
@@ -55,14 +55,14 @@ export const PUBLIC_WS_KEYS = [] as WsKey[];
 export const PRIVATE_TOPICS = ['account', 'orders', 'positions', 'ordersAlgo'];
 
 export function isPrivateChannel<TChannel extends string>(
-  channel: TChannel
+  channel: TChannel,
 ): boolean {
   return PRIVATE_TOPICS.includes(channel);
 }
 
 export function getWsKeyForTopic(
   subscribeEvent: WsTopicSubscribeEventArgs,
-  isPrivate?: boolean
+  isPrivate?: boolean,
 ): WsKey {
   const instType = subscribeEvent.instType.toUpperCase() as BitgetInstType;
   switch (instType) {
@@ -78,7 +78,7 @@ export function getWsKeyForTopic(
     default: {
       throw neverGuard(
         instType,
-        `getWsKeyForTopic(): Unhandled market ${'instrumentId'}`
+        `getWsKeyForTopic(): Unhandled market ${'instrumentId'}`,
       );
     }
   }
@@ -110,14 +110,14 @@ export async function getWsAuthSignature(
   apiKey: string | undefined,
   apiSecret: string | undefined,
   apiPass: string | undefined,
-  recvWindow: number = 0
+  recvWindow: number = 0,
 ): Promise<{
   expiresAt: number;
   signature: string;
 }> {
   if (!apiKey || !apiSecret || !apiPass) {
     throw new Error(
-      `Cannot auth - missing api key, secret or passcode in config`
+      `Cannot auth - missing api key, secret or passcode in config`,
     );
   }
   const signatureExpiresAt = ((Date.now() + recvWindow) / 1000).toFixed(0);
@@ -125,7 +125,7 @@ export async function getWsAuthSignature(
   const signature = await signMessage(
     signatureExpiresAt + 'GET' + '/user/verify',
     apiSecret,
-    'base64'
+    'base64',
   );
 
   return {

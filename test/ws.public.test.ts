@@ -13,7 +13,7 @@ describe('Public Spot Websocket Client', () => {
   beforeAll(() => {
     wsClient = new WebsocketClient(
       wsClientOptions,
-      getSilentLogger('expectSuccess')
+      getSilentLogger('expectSuccess'),
     );
     wsClient.connectAll();
     logAllEvents(wsClient);

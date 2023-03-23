@@ -4,7 +4,7 @@ import { createHmac } from 'crypto';
 export async function signMessage(
   message: string,
   secret: string,
-  method: 'hex' | 'base64'
+  method: 'hex' | 'base64',
 ): Promise<string> {
   const hmac = createHmac('sha256', secret).update(message);
 

@@ -30,7 +30,7 @@ export class BrokerClient extends BaseRestClient {
   /** Create Sub Account */
   createSubAccount(
     subName: string,
-    remark?: string
+    remark?: string,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/broker/v1/account/sub-create', {
       subName,
@@ -47,7 +47,7 @@ export class BrokerClient extends BaseRestClient {
   modifySubAccount(
     subUid: string,
     perm: string,
-    status: 'normal' | 'freeze' | 'del'
+    status: 'normal' | 'freeze' | 'del',
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/broker/v1/account/sub-modify', {
       subUid,
@@ -79,7 +79,7 @@ export class BrokerClient extends BaseRestClient {
   /** Get Sub Future Assets */
   getSubFutureAssets(
     subUid: string,
-    productType: BrokerProductType
+    productType: BrokerProductType,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/broker/v1/account/sub-future-assets', {
       subUid,
@@ -91,7 +91,7 @@ export class BrokerClient extends BaseRestClient {
   getSubDepositAddress(
     subUid: string,
     coin: string,
-    chain?: string
+    chain?: string,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/broker/v1/account/sub-address', {
       subUid,
@@ -109,7 +109,7 @@ export class BrokerClient extends BaseRestClient {
   setSubDepositAutoTransfer(
     subUid: string,
     coin: string,
-    toAccountType: 'spot' | 'mix_usdt' | 'mix_usd' | 'mix_usdc'
+    toAccountType: 'spot' | 'mix_usdt' | 'mix_usd' | 'mix_usdc',
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/broker/v1/account/sub-auto-transfer', {
       subUid,
@@ -130,7 +130,7 @@ export class BrokerClient extends BaseRestClient {
     passphrase: string,
     remark: string,
     ip: string,
-    perm?: string
+    perm?: string,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/broker/v1/manage/sub-api-create', {
       subUid,
@@ -148,7 +148,7 @@ export class BrokerClient extends BaseRestClient {
 
   /** Modify Sub ApiKey (Only Broker) */
   modifySubAPIKey(
-    params: BrokerSubAPIKeyModifyRequest
+    params: BrokerSubAPIKeyModifyRequest,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/broker/v1/manage/sub-api-modify', params);
   }

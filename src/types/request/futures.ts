@@ -51,6 +51,8 @@ export interface NewFuturesOrder {
   orderType: FuturesOrderType;
   timeInForceValue?: OrderTimeInForce;
   clientOid?: string;
+  reduceOnly?: boolean;
+  reverse?: boolean;
   presetTakeProfitPrice?: string;
   presetStopLossPrice?: string;
 }
@@ -82,6 +84,7 @@ export interface NewFuturesPlanOrder {
   clientOid?: string;
   presetTakeProfitPrice?: string;
   presetStopLossPrice?: string;
+  reduceOnly?: string;
 }
 
 export interface ModifyFuturesPlanOrder {
@@ -90,12 +93,13 @@ export interface ModifyFuturesPlanOrder {
   symbol: string;
   executePrice?: string;
   triggerPrice: string;
-  triggerType: string;
+  triggerType: 'fill_price' | 'market_price';
   orderType: FuturesOrderType;
 }
 
 export interface ModifyFuturesPlanOrderTPSL {
-  orderId: string;
+  orderId?: string;
+  clientOid?: string;
   marginCoin: string;
   symbol: string;
   presetTakeProfitPrice?: string;
@@ -113,6 +117,7 @@ export interface NewFuturesPlanStopOrder {
   holdSide: FuturesHoldSide;
   size?: string;
   rangeRate?: string;
+  clientOid?: string;
 }
 
 export interface NewFuturesPlanTrailingStopOrder {
@@ -123,6 +128,7 @@ export interface NewFuturesPlanTrailingStopOrder {
   size?: string;
   side: FuturesOrderSide;
   rangeRate?: string;
+  clientOid?: string;
 }
 
 export interface NewFuturesPlanPositionTPSL {
@@ -130,18 +136,23 @@ export interface NewFuturesPlanPositionTPSL {
   marginCoin: string;
   planType: FuturesPlanType;
   triggerPrice: string;
+  triggerType?: 'fill_price' | 'market_price';
   holdSide: FuturesHoldSide;
+  clientOid?: string;
 }
 
 export interface ModifyFuturesPlanStopOrder {
-  orderId: string;
+  orderId?: string;
+  clientOid?: string;
   marginCoin: string;
   symbol: string;
   triggerPrice?: string;
+  planType: FuturesPlanType;
 }
 
 export interface CancelFuturesPlanTPSL {
-  orderId: string;
+  orderId?: string;
+  clientOid?: string;
   symbol: string;
   marginCoin: string;
   planType: FuturesPlanType;

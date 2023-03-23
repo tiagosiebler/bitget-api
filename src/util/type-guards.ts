@@ -36,7 +36,7 @@ function isWsChannelEvent(event: WsBaseEvent): event is WsSnapshotChannelEvent {
 
 /** TypeGuard: event is an account update (balance) */
 export function isWsAccountSnapshotEvent(
-  event: unknown
+  event: unknown,
 ): event is WsSnapshotAccountEvent {
   return (
     isWsSnapshotEvent(event) &&
@@ -48,7 +48,7 @@ export function isWsAccountSnapshotEvent(
 
 /** TypeGuard: event is a positions update */
 export function isWsPositionsSnapshotEvent(
-  event: unknown
+  event: unknown,
 ): event is WsSnapshotPositionsEvent {
   return (
     isWsSnapshotEvent(event) &&
@@ -60,14 +60,14 @@ export function isWsPositionsSnapshotEvent(
 
 /** TypeGuard: event is a UMCBL account update (balance) */
 export function isWsFuturesAccountSnapshotEvent(
-  event: unknown
+  event: unknown,
 ): event is WsAccountSnapshotUMCBL {
   return isWsAccountSnapshotEvent(event) && event.arg.instType === 'umcbl';
 }
 
 /** TypeGuard: event is a UMCBL positions update */
 export function isWsFuturesPositionsSnapshotEvent(
-  event: unknown
+  event: unknown,
 ): event is WSPositionSnapshotUMCBL {
   return isWsPositionsSnapshotEvent(event) && event.arg.instType === 'umcbl';
 }

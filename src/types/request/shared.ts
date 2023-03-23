@@ -9,3 +9,11 @@ export interface Pagination {
 }
 
 export type OrderTimeInForce = 'normal' | 'post_only' | 'fok' | 'ioc';
+
+export interface GetHistoricTradesParams {
+  symbol: string;
+  limit?: string;
+  tradeId?: string;
+  startTime?: string;
+  endTime?: string;
+}

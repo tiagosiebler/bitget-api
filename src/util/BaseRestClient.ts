@@ -44,7 +44,7 @@ export default abstract class BaseRestClient {
    */
   constructor(
     restOptions: RestClientOptions = {},
-    networkOptions: AxiosRequestConfig = {}
+    networkOptions: AxiosRequestConfig = {},
   ) {
     this.options = {
       recvWindow: 5000,
@@ -77,7 +77,7 @@ export default abstract class BaseRestClient {
       credentials.some((v) => typeof v === 'string')
     ) {
       throw new Error(
-        'API Key, Secret & Passphrase are ALL required to use the authenticated REST client'
+        'API Key, Secret & Passphrase are ALL required to use the authenticated REST client',
       );
     }
   }
@@ -109,11 +109,11 @@ export default abstract class BaseRestClient {
     method: Method,
     endpoint: string,
     params?: any,
-    isPublicApi?: boolean
+    isPublicApi?: boolean,
   ): Promise<any> {
     // Sanity check to make sure it's only ever prefixed by one forward slash
     const requestUrl = [this.baseUrl, endpoint].join(
-      endpoint.startsWith('/') ? '' : '/'
+      endpoint.startsWith('/') ? '' : '/',
     );
 
     // Build a request and handle signature process
@@ -122,7 +122,7 @@ export default abstract class BaseRestClient {
       endpoint,
       requestUrl,
       params,
-      isPublicApi
+      isPublicApi,
     );
 
     // console.log('full request: ', options);
@@ -188,7 +188,7 @@ export default abstract class BaseRestClient {
     data: T,
     endpoint: string,
     method: Method,
-    signMethod: SignMethod
+    signMethod: SignMethod,
   ): Promise<SignedRequest<T>> {
     const timestamp = Date.now();
 
@@ -228,7 +228,7 @@ export default abstract class BaseRestClient {
 
     console.error(
       new Date(),
-      neverGuard(signMethod, `Unhandled sign method: "${signMessage}"`)
+      neverGuard(signMethod, `Unhandled sign method: "${signMessage}"`),
     );
 
     return res;
@@ -239,21 +239,21 @@ export default abstract class BaseRestClient {
     endpoint: string,
     signMethod: SignMethod,
     params?: TParams,
-    isPublicApi?: true
+    isPublicApi?: true,
   ): Promise<UnsignedRequest<TParams>>;
   private async prepareSignParams<TParams extends object | undefined>(
     method: Method,
     endpoint: string,
     signMethod: SignMethod,
     params?: TParams,
-    isPublicApi?: false | undefined
+    isPublicApi?: false | undefined,
   ): Promise<SignedRequest<TParams>>;
   private async prepareSignParams<TParams extends object | undefined>(
     method: Method,
     endpoint: string,
     signMethod: SignMethod,
     params?: TParams,
-    isPublicApi?: boolean
+    isPublicApi?: boolean,
   ) {
     if (isPublicApi) {
       return {
@@ -275,7 +275,7 @@ export default abstract class BaseRestClient {
     endpoint: string,
     url: string,
     params?: any,
-    isPublicApi?: boolean
+    isPublicApi?: boolean,
   ): Promise<AxiosRequestConfig> {
     const options: AxiosRequestConfig = {
       ...this.globalRequestOptions,
@@ -301,27 +301,33 @@ export default abstract class BaseRestClient {
       endpoint,
       'bitget',
       params,
-      isPublicApi
+      isPublicApi,
     );
 
-    if (!options.headers) {
-      options.headers = {};
-    }
-    options.headers['ACCESS-KEY'] = this.apiKey;
-    options.headers['ACCESS-PASSPHRASE'] = this.apiPass;
-    options.headers['ACCESS-TIMESTAMP'] = signResult.timestamp;
-    options.headers['ACCESS-SIGN'] = signResult.sign;
-    options.headers['Content-Type'] = 'application/json';
+    const authHeaders = {
+      'ACCESS-KEY': this.apiKey,
+      'ACCESS-PASSPHRASE': this.apiPass,
+      'ACCESS-TIMESTAMP': signResult.timestamp,
+      'ACCESS-SIGN': signResult.sign,
+    };
 
     if (method === 'GET') {
       return {
         ...options,
+        headers: {
+          ...authHeaders,
+          ...options.headers,
+        },
         url: options.url + signResult.queryParamsWithSign,
       };
     }
 
     return {
       ...options,
+      headers: {
+        ...authHeaders,
+        ...options.headers,
+      },
       data: params,
     };
   }

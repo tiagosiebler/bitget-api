@@ -30,7 +30,7 @@ export interface RestClientOptions {
 export function serializeParams<T extends object | undefined = {}>(
   params: T,
   strict_validation = false,
-  prefixWith: string = ''
+  prefixWith: string = '',
 ): string {
   if (!params) {
     return '';
@@ -42,7 +42,7 @@ export function serializeParams<T extends object | undefined = {}>(
       const value = params[key];
       if (strict_validation === true && typeof value === 'undefined') {
         throw new Error(
-          'Failed to sign API request due to undefined parameter'
+          'Failed to sign API request due to undefined parameter',
         );
       }
       return `${key}=${value}`;
@@ -55,7 +55,7 @@ export function serializeParams<T extends object | undefined = {}>(
 
 export function getRestBaseUrl(
   useTestnet: boolean,
-  restInverseOptions: RestClientOptions
+  restInverseOptions: RestClientOptions,
 ): string {
   const exchangeBaseUrls = {
     livenet: 'https://api.bitget.com',

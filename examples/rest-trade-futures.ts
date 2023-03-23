@@ -47,7 +47,7 @@ function promiseSleep(milliseconds) {
 // WARNING: for sensitive math you should be using a library such as decimal.js!
 function roundDown(value, decimals) {
   return Number(
-    Math.floor(parseFloat(value + 'e' + decimals)) + 'e-' + decimals
+    Math.floor(parseFloat(value + 'e' + decimals)) + 'e-' + decimals,
   );
 }
 
@@ -117,7 +117,7 @@ async function handleWsUpdate(event) {
 
     const symbolRulesResult = await client.getSymbols('umcbl');
     const bitcoinUSDFuturesRule = symbolRulesResult.data.find(
-      (row) => row.symbol === symbol
+      (row) => row.symbol === symbol,
     );
 
     console.log('symbol rules: ', bitcoinUSDFuturesRule);
@@ -142,7 +142,7 @@ async function handleWsUpdate(event) {
 
     const positionsResult = await client.getPositions('umcbl');
     const positionsToClose = positionsResult.data.filter(
-      (pos) => pos.total !== '0'
+      (pos) => pos.total !== '0',
     );
 
     console.log('open positions to close: ', positionsToClose);
@@ -167,7 +167,7 @@ async function handleWsUpdate(event) {
 
     console.log(
       'positions after closing all: ',
-      await client.getPositions('umcbl')
+      await client.getPositions('umcbl'),
     );
   } catch (e) {
     console.error('request failed: ', e);

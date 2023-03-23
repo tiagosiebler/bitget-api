@@ -27,7 +27,7 @@ describe('Private Broker REST API GET Endpoints', () => {
   it('getBrokerInfo()', async () => {
     try {
       expect(await api.getBrokerInfo()).toMatchObject(
-        sucessEmptyResponseObject()
+        sucessEmptyResponseObject(),
       );
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -39,7 +39,7 @@ describe('Private Broker REST API GET Endpoints', () => {
   it('getSubAccounts()', async () => {
     try {
       expect(await api.getSubAccounts()).toMatchObject(
-        sucessEmptyResponseObject()
+        sucessEmptyResponseObject(),
       );
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -51,7 +51,7 @@ describe('Private Broker REST API GET Endpoints', () => {
   it('getSubEmail()', async () => {
     try {
       expect(await api.getSubEmail(subUid)).toMatchObject(
-        sucessEmptyResponseObject()
+        sucessEmptyResponseObject(),
       );
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -63,7 +63,7 @@ describe('Private Broker REST API GET Endpoints', () => {
   it('getSubSpotAssets()', async () => {
     try {
       expect(await api.getSubSpotAssets(subUid)).toMatchObject(
-        sucessEmptyResponseObject()
+        sucessEmptyResponseObject(),
       );
     } catch (e) {
       // expect(e.body).toBeNull();
@@ -76,7 +76,7 @@ describe('Private Broker REST API GET Endpoints', () => {
   it('getSubFutureAssets()', async () => {
     try {
       expect(await api.getSubFutureAssets(subUid, 'usdt')).toMatchObject(
-        sucessEmptyResponseObject()
+        sucessEmptyResponseObject(),
       );
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -88,7 +88,7 @@ describe('Private Broker REST API GET Endpoints', () => {
   it('getSubDepositAddress()', async () => {
     try {
       expect(await api.getSubDepositAddress(subUid, coin)).toMatchObject(
-        sucessEmptyResponseObject()
+        sucessEmptyResponseObject(),
       );
     } catch (e) {
       expect(e.body).toMatchObject({
@@ -100,7 +100,7 @@ describe('Private Broker REST API GET Endpoints', () => {
   it('getSubAPIKeys()', async () => {
     try {
       expect(await api.getSubAPIKeys(subUid)).toMatchObject(
-        sucessEmptyResponseObject()
+        sucessEmptyResponseObject(),
       );
     } catch (e) {
       expect(e.body).toMatchObject({

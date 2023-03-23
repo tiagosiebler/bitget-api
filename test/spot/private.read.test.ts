@@ -159,4 +159,44 @@ describe('Private Spot REST API GET Endpoints', () => {
       expect(e).toBeNull();
     }
   });
+
+  it('getCurrentPlanOrders()', async () => {
+    try {
+      expect(
+        await api.getCurrentPlanOrders({ symbol, pageSize: '20' }),
+      ).toMatchObject({
+        ...sucessEmptyResponseObject(),
+        data: {
+          nextFlag: false,
+          orderList: expect.any(Array),
+        },
+      });
+    } catch (e) {
+      console.error('getCurrentPlanOrders: ', e);
+      expect(e).toBeNull();
+    }
+  });
+
+  it('getHistoricPlanOrders()', async () => {
+    try {
+      expect(
+        await api.getHistoricPlanOrders({
+          symbol,
+          pageSize: '20',
+          startTime: '1667889483000',
+          endTime: '1668134732000',
+        }),
+      ).toMatchObject({
+        ...sucessEmptyResponseObject(),
+        data: {
+          endId: null,
+          nextFlag: false,
+          orderList: expect.any(Array),
+        },
+      });
+    } catch (e) {
+      console.error('getHistoricPlanOrders: ', e);
+      expect(e).toBeNull();
+    }
+  });
 });

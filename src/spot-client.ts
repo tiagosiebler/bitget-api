@@ -7,6 +7,20 @@ import {
   KlineInterval,
   CoinBalance,
   SymbolRules,
+  NewSpotSubTransfer,
+  NewSpotWithdraw,
+  CancelSpotOrderV2,
+  BatchCancelSpotOrderV2,
+  SpotOrderResult,
+  NewSpotPlanOrder,
+  ModifySpotPlanOrder,
+  CancelSpotPlanOrderParams,
+  GetSpotPlanOrdersParams,
+  SpotPlanOrder,
+  GetHistoricPlanOrdersParams,
+  SpotMarketTrade,
+  GetHistoricTradesParams,
+  VIPFeeRate,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -66,8 +80,28 @@ export class SpotClient extends BaseRestClient {
     return this.get('/api/spot/v1/market/tickers');
   }
 
-  /** Get Market Trades */
-  getMarketTrades(symbol: string, limit?: string): Promise<APIResponse<any>> {
+  /** Get most recent trades (up to 500, 100 by default) */
+  getRecentTrades(
+    symbol: string,
+    limit?: string,
+  ): Promise<APIResponse<SpotMarketTrade[]>> {
+    return this.get('/api/spot/v1/market/fills', { symbol, limit });
+  }
+
+  /** Get historic trades, up to 30 days at a time. Same-parameter responses are cached for 10 minutes. */
+  getHistoricTrades(
+    params: GetHistoricTradesParams,
+  ): Promise<APIResponse<SpotMarketTrade[]>> {
+    return this.get('/api/spot/v1/market/fills-history', params);
+  }
+
+  /**
+   * @deprecated use getRecentTrades() instead. This method will be removed soon.
+   */
+  getMarketTrades(
+    symbol: string,
+    limit?: string,
+  ): Promise<APIResponse<SpotMarketTrade[]>> {
     return this.get('/api/spot/v1/market/fills', { symbol, limit });
   }
 
@@ -75,7 +109,7 @@ export class SpotClient extends BaseRestClient {
   getCandles(
     symbol: string,
     period: KlineInterval,
-    pagination?: Pagination
+    pagination?: Pagination,
   ): Promise<APIResponse<any>> {
     return this.get('/api/spot/v1/market/candles', {
       symbol,
@@ -88,9 +122,14 @@ export class SpotClient extends BaseRestClient {
   getDepth(
     symbol: string,
     type: 'step0' | 'step1' | 'step2' | 'step3' | 'step4' | 'step5',
-    limit?: string
+    limit?: string,
   ): Promise<APIResponse<any>> {
     return this.get('/api/spot/v1/market/depth', { symbol, type, limit });
+  }
+
+  /** Get VIP fee rates */
+  getVIPFeeRates(): Promise<APIResponse<VIPFeeRate[]>> {
+    return this.get('/api/spot/v1/market/spot-vip-level');
   }
 
   /**
@@ -104,6 +143,18 @@ export class SpotClient extends BaseRestClient {
     return this.postPrivate('/api/spot/v1/wallet/transfer', params);
   }
 
+  /** Initiate wallet transfer (v2 endpoint) */
+  transferV2(params: NewWalletTransfer): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/wallet/transfer-v2', params);
+  }
+
+  /**
+   * Transfer main-sub, sub-sub or sub-main
+   */
+  subTransfer(params: NewSpotSubTransfer): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/wallet/subTransfer', params);
+  }
+
   /** Get Coin Address */
   getDepositAddress(coin: string, chain?: string): Promise<APIResponse<any>> {
     return this.getPrivate('/api/spot/v1/wallet/deposit-address', {
@@ -112,17 +163,14 @@ export class SpotClient extends BaseRestClient {
     });
   }
 
-  /** Withdraw Coins On Chain*/
-  withdraw(params: {
-    coin: string;
-    address: string;
-    chain: string;
-    tag?: string;
-    amount: string;
-    remark?: string;
-    clientOid?: string;
-  }): Promise<APIResponse<any>> {
+  /** Withdraw Coins On Chain */
+  withdraw(params: NewSpotWithdraw): Promise<APIResponse<any>> {
     return this.postPrivate('/api/spot/v1/wallet/withdrawal', params);
+  }
+
+  /** Withdraw Coins On Chain (v2 endpoint) */
+  withdrawV2(params: NewSpotWithdraw): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/wallet/withdrawal-v2', params);
   }
 
   /** Inner Withdraw : Internal withdrawal means that both users are on the Bitget platform */
@@ -130,9 +178,24 @@ export class SpotClient extends BaseRestClient {
     coin: string,
     toUid: string,
     amount: string,
-    clientOid?: string
+    clientOid?: string,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/spot/v1/wallet/withdrawal-inner', {
+      coin,
+      toUid,
+      amount,
+      clientOid,
+    });
+  }
+
+  /** Inner Withdraw (v2 endpoint) : Internal withdrawal means that both users are on the Bitget platform */
+  innerWithdrawV2(
+    coin: string,
+    toUid: string,
+    amount: string,
+    clientOid?: string,
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/wallet/withdrawal-inner-v2', {
       coin,
       toUid,
       amount,
@@ -146,7 +209,8 @@ export class SpotClient extends BaseRestClient {
     startTime: string,
     endTime: string,
     pageSize?: string,
-    pageNo?: string
+    pageNo?: string,
+    clientOid?: string,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/spot/v1/wallet/withdrawal-list', {
       coin,
@@ -154,6 +218,7 @@ export class SpotClient extends BaseRestClient {
       endTime,
       pageSize,
       pageNo,
+      clientOid,
     });
   }
 
@@ -163,7 +228,7 @@ export class SpotClient extends BaseRestClient {
     startTime: string,
     endTime: string,
     pageSize?: string,
-    pageNo?: string
+    pageNo?: string,
   ): Promise<APIResponse<any>> {
     return this.getPrivate('/api/spot/v1/wallet/deposit-list', {
       coin,
@@ -190,6 +255,11 @@ export class SpotClient extends BaseRestClient {
     return this.getPrivate('/api/spot/v1/account/assets', { coin });
   }
 
+  /** Get sub Account Spot Asset */
+  getSubAccountSpotAssets(): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/account/sub-account-spot-assets');
+  }
+
   /** Get Bills : get transaction detail flow */
   getTransactionHistory(params?: {
     coinId?: number;
@@ -209,6 +279,7 @@ export class SpotClient extends BaseRestClient {
     after?: string;
     before?: string;
     limit?: number;
+    clientOid?: string;
   }): Promise<APIResponse<any>> {
     return this.getPrivate('/api/spot/v1/account/transferRecords', params);
   }
@@ -220,14 +291,14 @@ export class SpotClient extends BaseRestClient {
    */
 
   /** Place order */
-  submitOrder(params: NewSpotOrder): Promise<APIResponse<any>> {
+  submitOrder(params: NewSpotOrder): Promise<APIResponse<SpotOrderResult>> {
     return this.postPrivate('/api/spot/v1/trade/orders', params);
   }
 
   /** Place orders in batches, up to 50 at a time */
   batchSubmitOrder(
     symbol: string,
-    orderList: NewBatchSpotOrder[]
+    orderList: NewBatchSpotOrder[],
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/spot/v1/trade/batch-orders', {
       symbol,
@@ -243,10 +314,24 @@ export class SpotClient extends BaseRestClient {
     });
   }
 
+  /** Cancel order (v2 endpoint - supports orderId or clientOid) */
+  cancelOrderV2(params?: CancelSpotOrderV2): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/trade/cancel-order-v2', params);
+  }
+
+  /**
+   * Cancel all spot orders for a symbol
+   */
+  cancelSymbolOrders(symbol: string): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/spot/v1/trade/cancel-symbol-order', {
+      symbol,
+    });
+  }
+
   /** Cancel order in batch (per symbol) */
   batchCancelOrder(
     symbol: string,
-    orderIds: string[]
+    orderIds: string[],
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/spot/v1/trade/cancel-batch-orders', {
       symbol,
@@ -254,11 +339,21 @@ export class SpotClient extends BaseRestClient {
     });
   }
 
+  /** Cancel order in batch (per symbol). V2 endpoint, supports orderIds or clientOids. */
+  batchCancelOrderV2(
+    params: BatchCancelSpotOrderV2,
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      '/api/spot/v1/trade/cancel-batch-orders-v2',
+      params,
+    );
+  }
+
   /** Get order details */
   getOrder(
     symbol: string,
     orderId: string,
-    clientOrderId?: string
+    clientOrderId?: string,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/spot/v1/trade/orderInfo', {
       symbol,
@@ -275,7 +370,7 @@ export class SpotClient extends BaseRestClient {
   /** Get order history for a symbol */
   getOrderHistory(
     symbol: string,
-    pagination?: Pagination
+    pagination?: Pagination,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/spot/v1/trade/history', {
       symbol,
@@ -287,12 +382,55 @@ export class SpotClient extends BaseRestClient {
   getOrderFills(
     symbol: string,
     orderId: string,
-    pagination?: Pagination
+    pagination?: Pagination,
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/spot/v1/trade/fills', {
       symbol,
       orderId,
       ...pagination,
     });
+  }
+
+  /** Place plan order */
+  submitPlanOrder(
+    params: NewSpotPlanOrder,
+  ): Promise<APIResponse<SpotOrderResult>> {
+    return this.postPrivate('/api/spot/v1/plan/placePlan', params);
+  }
+
+  /** Modify plan order */
+  modifyPlanOrder(
+    params: ModifySpotPlanOrder,
+  ): Promise<APIResponse<SpotOrderResult>> {
+    return this.postPrivate('/api/spot/v1/plan/modifyPlan', params);
+  }
+
+  /** Cancel plan order */
+  cancelPlanOrder(
+    params: CancelSpotPlanOrderParams,
+  ): Promise<APIResponse<string>> {
+    return this.postPrivate('/api/spot/v1/plan/cancelPlan', params);
+  }
+
+  /** Get current plan orders */
+  getCurrentPlanOrders(params: GetSpotPlanOrdersParams): Promise<
+    APIResponse<{
+      nextFlag: boolean;
+      endId: number;
+      orderList: SpotPlanOrder[];
+    }>
+  > {
+    return this.postPrivate('/api/spot/v1/plan/currentPlan', params);
+  }
+
+  /** Get history plan orders */
+  getHistoricPlanOrders(params: GetHistoricPlanOrdersParams): Promise<
+    APIResponse<{
+      nextFlag: boolean;
+      endId: number;
+      orderList: SpotPlanOrder[];
+    }>
+  > {
+    return this.postPrivate('/api/spot/v1/plan/historyPlan', params);
   }
 }
