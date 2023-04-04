@@ -1,6 +1,8 @@
 import { API_ERROR_CODE, FuturesClient } from '../../src';
 import { sucessEmptyResponseObject } from '../response.util';
 
+jest.setTimeout(10000);
+
 describe('Private Futures REST API POST Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM;
   const API_SECRET = process.env.API_SECRET_COM;
