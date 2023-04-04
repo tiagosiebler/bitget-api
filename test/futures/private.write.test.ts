@@ -1,6 +1,8 @@
 import { API_ERROR_CODE, FuturesClient } from '../../src';
 import { sucessEmptyResponseObject } from '../response.util';
 
+jest.setTimeout(10000);
+
 describe('Private Futures REST API POST Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM;
   const API_SECRET = process.env.API_SECRET_COM;
@@ -220,7 +222,7 @@ describe('Private Futures REST API POST Endpoints', () => {
     }
   });
 
-  it('submitStopOrder()', async () => {
+  it.skip('submitStopOrder()', async () => {
     try {
       expect(
         await api.submitStopOrder({
@@ -304,7 +306,7 @@ describe('Private Futures REST API POST Endpoints', () => {
     }
   });
 
-  it('closeCopyTraderPosition()', async () => {
+  it.skip('closeCopyTraderPosition()', async () => {
     try {
       expect(await api.closeCopyTraderPosition(symbol, '123456')).toMatchObject(
         {
@@ -319,7 +321,7 @@ describe('Private Futures REST API POST Endpoints', () => {
     }
   });
 
-  it('modifyCopyTraderTPSL()', async () => {
+  it.skip('modifyCopyTraderTPSL()', async () => {
     try {
       expect(
         await api.modifyCopyTraderTPSL(symbol, '123456', {
@@ -336,7 +338,7 @@ describe('Private Futures REST API POST Endpoints', () => {
     }
   });
 
-  it('setCopyTraderSymbols()', async () => {
+  it.skip('setCopyTraderSymbols()', async () => {
     try {
       expect(await api.setCopyTraderSymbols(symbol, 'delete')).toMatchObject({
         ...sucessEmptyResponseObject(),

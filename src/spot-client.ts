@@ -4,7 +4,6 @@ import {
   NewWalletTransfer,
   Pagination,
   APIResponse,
-  KlineInterval,
   CoinBalance,
   SymbolRules,
   NewSpotSubTransfer,
@@ -21,6 +20,7 @@ import {
   SpotMarketTrade,
   GetHistoricTradesParams,
   VIPFeeRate,
+  SpotKlineInterval,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -108,7 +108,7 @@ export class SpotClient extends BaseRestClient {
   /** Get Candle Data */
   getCandles(
     symbol: string,
-    period: KlineInterval,
+    period: SpotKlineInterval,
     pagination?: Pagination,
   ): Promise<APIResponse<any>> {
     return this.get('/api/spot/v1/market/candles', {

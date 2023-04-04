@@ -4,6 +4,9 @@ export type numberInString = string;
 
 export type OrderSide = 'Buy' | 'Sell';
 
+/**
+ * @deprecated use SpotKlineInterval or FuturesKlineInterval, depending on which API group you're using
+ */
 export type KlineInterval =
   | '1min'
   | '5min'

@@ -26,6 +26,47 @@ interface UnsignedRequest<T extends object | undefined = {}> {
 
 type SignMethod = 'bitget';
 
+if (
+  typeof process === 'object' &&
+  typeof process.env === 'object' &&
+  process.env.BITGETTRACE
+) {
+  axios.interceptors.request.use((request) => {
+    console.log(
+      new Date(),
+      'Starting Request',
+      JSON.stringify(
+        {
+          url: request.url,
+          method: request.method,
+          params: request.params,
+          data: request.data,
+        },
+        null,
+        2,
+      ),
+    );
+    return request;
+  });
+  axios.interceptors.response.use((response) => {
+    console.log(new Date(), 'Response:', {
+      // request: {
+      //   url: response.config.url,
+      //   method: response.config.method,
+      //   data: response.config.data,
+      //   headers: response.config.headers,
+      // },
+      response: {
+        status: response.status,
+        statusText: response.statusText,
+        headers: response.headers,
+        data: response.data,
+      },
+    });
+    return response;
+  });
+}
+
 export default abstract class BaseRestClient {
   private options: RestClientOptions;
   private baseUrl: string;

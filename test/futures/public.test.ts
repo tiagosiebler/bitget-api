@@ -70,7 +70,7 @@ describe('Public Spot REST API Endpoints', () => {
 
   it('getCandles()', async () => {
     expect(
-      await api.getCandles(symbol, '1min', `${from}`, `${to}`),
+      await api.getCandles(symbol, '1m', `${from}`, `${to}`),
     ).toMatchObject(expect.any(Array));
   });
 
