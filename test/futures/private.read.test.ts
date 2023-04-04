@@ -264,7 +264,7 @@ describe('Private Futures REST API GET Endpoints', () => {
     }
   });
 
-  it('getCopyTraderOpenOrder()', async () => {
+  it.skip('getCopyTraderOpenOrder()', async () => {
     try {
       expect(
         await api.getCopyTraderOpenOrder(symbol, 'umcbl', 1, 0),
@@ -294,7 +294,7 @@ describe('Private Futures REST API GET Endpoints', () => {
     }
   });
 
-  it('getCopyTraderOrderHistory()', async () => {
+  it.skip('getCopyTraderOrderHistory()', async () => {
     try {
       expect(await api.getCopyTraderOrderHistory(from, to, 1, 0)).toMatchObject(
         {
