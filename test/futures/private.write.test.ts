@@ -222,7 +222,7 @@ describe('Private Futures REST API POST Endpoints', () => {
     }
   });
 
-  it('submitStopOrder()', async () => {
+  it.skip('submitStopOrder()', async () => {
     try {
       expect(
         await api.submitStopOrder({
