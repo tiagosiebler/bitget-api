@@ -1,6 +1,5 @@
 import {
   APIResponse,
-  KlineInterval,
   FuturesProductType,
   FuturesAccountBillRequest,
   FuturesBusinessBillRequest,
@@ -24,6 +23,7 @@ import {
   GetHistoricTradesParams,
   FuturesMarketTrade,
   FuturesPlanType,
+  FuturesKlineInterval,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -97,7 +97,7 @@ export class FuturesClient extends BaseRestClient {
   /** Get Candle Data */
   getCandles(
     symbol: string,
-    granularity: KlineInterval,
+    granularity: FuturesKlineInterval,
     startTime: string,
     endTime: string,
     limit?: string,

@@ -274,8 +274,11 @@ describe('Private Spot REST API POST Endpoints', () => {
           data: expect.any(String),
         });
       } catch (e) {
-        console.error('cancelPlanOrder(): ', e);
-        expect(e).toBeNull();
+        // console.error('cancelPlanOrder(): ', e);
+        // expect(e).toBeNull();
+        expect(e.body).toMatchObject({
+          code: API_ERROR_CODE.PLAN_ORDER_NOT_FOUND,
+        });
       }
     });
   });

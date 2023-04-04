@@ -2,6 +2,25 @@ import { OrderTimeInForce } from './shared';
 
 export type WalletType = 'spot' | 'mix_usdt' | 'mix_usd';
 
+export type SpotKlineInterval =
+  | '1min'
+  | '5min'
+  | '15min'
+  | '30min'
+  | '1h'
+  | '4h'
+  | '6h'
+  | '12h'
+  | '1M'
+  | '1W'
+  | '1week'
+  | '6Hutc'
+  | '12Hutc'
+  | '1Dutc'
+  | '3Dutc'
+  | '1Wutc'
+  | '1Mutc';
+
 export interface NewWalletTransfer {
   fromType: WalletType;
   toType: WalletType;
