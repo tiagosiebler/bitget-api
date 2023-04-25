@@ -156,6 +156,17 @@ export class FuturesClient extends BaseRestClient {
     return this.get('/api/mix/v1/market/symbol-leverage', { symbol });
   }
 
+  /** Get Position Tier */
+  getPositionTier(
+    symbol: string,
+    productType: FuturesProductType,
+  ): Promise<APIResponse<any>> {
+    return this.get('/api/mix/v1/market/queryPositionLever', {
+      symbol,
+      productType,
+    });
+  }
+
   /**
    *
    * Account Endpoints
@@ -272,12 +283,34 @@ export class FuturesClient extends BaseRestClient {
     });
   }
 
+  /** Get Symbol Position V2 */
+  getPositionV2(
+    symbol: string,
+    marginCoin: string,
+  ): Promise<APIResponse<FuturesPosition[]>> {
+    return this.getPrivate('/api/mix/v1/position/singlePosition-v2', {
+      symbol,
+      marginCoin,
+    });
+  }
+
   /** Get All Position */
   getPositions(
     productType: FuturesProductType,
     marginCoin?: string,
   ): Promise<APIResponse<FuturesPosition[]>> {
     return this.getPrivate('/api/mix/v1/position/allPosition', {
+      productType,
+      marginCoin,
+    });
+  }
+
+  /** Get All Position V2 */
+  getPositionsV2(
+    productType: FuturesProductType,
+    marginCoin?: string,
+  ): Promise<APIResponse<FuturesPosition[]>> {
+    return this.getPrivate('/api/mix/v1/position/allPosition-v2', {
       productType,
       marginCoin,
     });
