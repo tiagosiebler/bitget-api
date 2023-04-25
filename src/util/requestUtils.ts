@@ -18,6 +18,13 @@ export interface RestClientOptions {
   strictParamValidation?: boolean;
 
   /**
+   * Default: true.
+   * If true, query string values will be URI Encoded (encodeURIComponent).
+   * This prevents sign errors with GET requests containing unusual parameters (spaces, symbols, etc).
+   */
+  encodeQueryStringValues?: boolean;
+
+  /**
    * Optionally override API protocol + domain
    * e.g baseUrl: 'https://api.bitget.com'
    **/
@@ -30,6 +37,7 @@ export interface RestClientOptions {
 export function serializeParams<T extends object | undefined = {}>(
   params: T,
   strict_validation = false,
+  encodeValues: boolean = true,
   prefixWith: string = '',
 ): string {
   if (!params) {
@@ -45,7 +53,8 @@ export function serializeParams<T extends object | undefined = {}>(
           'Failed to sign API request due to undefined parameter',
         );
       }
-      return `${key}=${value}`;
+      const encodedValue = encodeValues ? encodeURIComponent(value) : value;
+      return `${key}=${encodedValue}`;
     })
     .join('&');
 

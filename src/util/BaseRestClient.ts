@@ -26,11 +26,12 @@ interface UnsignedRequest<T extends object | undefined = {}> {
 
 type SignMethod = 'bitget';
 
-if (
+const ENABLE_HTTP_TRACE =
   typeof process === 'object' &&
   typeof process.env === 'object' &&
-  process.env.BITGETTRACE
-) {
+  process.env.BITGETTRACE;
+
+if (ENABLE_HTTP_TRACE) {
   axios.interceptors.request.use((request) => {
     console.log(
       new Date(),
@@ -91,6 +92,7 @@ export default abstract class BaseRestClient {
       recvWindow: 5000,
       /** Throw errors if any request params are empty */
       strictParamValidation: false,
+      encodeQueryStringValues: true,
       ...restOptions,
     };
 
@@ -166,7 +168,9 @@ export default abstract class BaseRestClient {
       isPublicApi,
     );
 
-    // console.log('full request: ', options);
+    if (ENABLE_HTTP_TRACE) {
+      console.log('full request: ', options);
+    }
 
     // Dispatch request
     return axios(options)
@@ -250,11 +254,17 @@ export default abstract class BaseRestClient {
 
     // It's possible to override the recv window on a per rquest level
     const strictParamValidation = this.options.strictParamValidation;
+    const encodeQueryStringValues = this.options.encodeQueryStringValues;
 
     if (signMethod === 'bitget') {
       const signRequestParams =
         method === 'GET'
-          ? serializeParams(data, strictParamValidation, '?')
+          ? serializeParams(
+              data,
+              strictParamValidation,
+              encodeQueryStringValues,
+              '?',
+            )
           : JSON.stringify(data) || '';
 
       const paramsStr =
