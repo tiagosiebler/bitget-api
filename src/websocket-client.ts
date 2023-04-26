@@ -331,7 +331,7 @@ export class WebsocketClient extends EventEmitter {
     this.clearPongTimer(wsKey);
 
     this.logger.silly('Sending ping', { ...LOGGER_CATEGORY, wsKey });
-    this.tryWsSend(wsKey, JSON.stringify({ op: 'ping' }));
+    this.tryWsSend(wsKey, 'ping');
 
     this.wsStore.get(wsKey, true).activePongTimer = setTimeout(() => {
       this.logger.info('Pong timeout - closing socket to reconnect', {
