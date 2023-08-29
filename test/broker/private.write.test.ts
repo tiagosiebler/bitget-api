@@ -118,7 +118,7 @@ describe('Private Broker REST API POST Endpoints', () => {
       ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({
-        code: '40017',
+        code: API_ERROR_CODE.PASSPHRASE_CANNOT_BE_EMPTY,
       });
     }
   });

@@ -165,7 +165,7 @@ describe('Private Spot REST API POST Endpoints', () => {
         });
       } catch (e) {
         expect(e.body).toMatchObject({
-          code: API_ERROR_CODE.QTY_LESS_THAN_MINIMUM,
+          code: API_ERROR_CODE.QTY_LESS_THAN_MINIMUM_SPOT,
         });
       }
     });
@@ -185,10 +185,12 @@ describe('Private Spot REST API POST Endpoints', () => {
           ...sucessEmptyResponseObject(),
           data: {
             resultList: expect.any(Array),
-            failure: [{ errorCode: API_ERROR_CODE.QTY_LESS_THAN_MINIMUM }],
+            failure: [{ errorCode: API_ERROR_CODE.QTY_LESS_THAN_MINIMUM_SPOT }],
           },
         });
       } catch (e) {
+        // console.log(`fn() exception: `, e.body);
+
         expect(e).toBeNull();
       }
     });

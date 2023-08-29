@@ -160,13 +160,43 @@ In rare situations, you may want to see the raw HTTP requets being built as well
 
 ## Browser Usage
 
+### Import
+
+This is the "modern" way, allowing the package to be directly imported into frontend projects with full typescript support.
+
+1. Install these dependencies
+   ```sh
+   npm install crypto-browserify stream-browserify
+   ```
+2. Add this to your `tsconfig.json`
+   ```json
+   {
+     "compilerOptions": {
+       "paths": {
+         "crypto": [
+           "./node_modules/crypto-browserify"
+         ],
+         "stream": [
+           "./node_modules/stream-browserify"
+         ]
+   }
+   ```
+3. Declare this in the global context of your application (ex: in polyfills for angular)
+   ```js
+   (window as any).global = window;
+   ```
+
+### Webpack
+
+This is the "old" way of using this package on webpages. This will build a minified js bundle that can be pulled in using a script tag on a website.
+
 Build a bundle using webpack:
 
 - `npm install`
 - `npm build`
 - `npm pack`
 
-The bundle can be found in `dist/`. Altough usage should be largely consistent, smaller differences will exist. Documentation is still TODO.
+The bundle can be found in `dist/`. Altough usage should be largely consistent, smaller differences will exist. Documentation is still TODO - contributions welcome.
 
 ---
 
@@ -183,11 +213,6 @@ Support my efforts to make algo trading accessible to all - register with my ref
 - [Bitget](https://partner.bitget.com/bg/ZNM295)
 - [OKX](https://www.okx.com/join/18504944)
 - [FTX](https://ftx.com/referrals#a=ftxapigithub)
-
-Or buy me a coffee using any of these:
-
-- BTC: `1C6GWZL1XW3jrjpPTS863XtZiXL1aTK7Jk`
-- ETH (ERC20): `0xd773d8e6a50758e1ada699bb6c4f98bb4abf82da`
 
 ### Contributions & Pull Requests
 

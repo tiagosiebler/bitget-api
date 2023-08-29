@@ -1,6 +1,6 @@
 {
   "name": "bitget-api",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Node.js connector for Bitget REST APIs and WebSockets, with TypeScript & end-to-end tests.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -42,8 +42,6 @@
   "keywords": [
     "bitget",
     "bitget api",
-    "okex",
-    "okex api",
     "api",
     "websocket",
     "rest",
