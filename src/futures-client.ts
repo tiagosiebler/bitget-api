@@ -316,6 +316,25 @@ export class FuturesClient extends BaseRestClient {
     });
   }
 
+  /** Get All historic positions, only supports Query within 3 monthso  */
+  getHistoryPositions(
+    startTime: string,
+    endTime: string,
+    productType?: FuturesProductType,
+    symbol?: string,
+    pageSize?: number,
+    lastEndId?: string,
+  ): Promise<APIResponse<FuturesPosition[]>> {
+    return this.getPrivate('/api/mix/v1/position/history-position', {
+      startTime,
+      endTime,
+      productType,
+      symbol,
+      pageSize,
+      lastEndId,
+    });
+  }
+
   /** Get Account Bill */
   getAccountBill(params: FuturesAccountBillRequest): Promise<APIResponse<any>> {
     return this.getPrivate('/api/mix/v1/account/accountBill', params);
