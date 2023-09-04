@@ -24,6 +24,7 @@ import {
   FuturesMarketTrade,
   FuturesPlanType,
   FuturesKlineInterval,
+  FuturesHistoricPositions,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -316,23 +317,11 @@ export class FuturesClient extends BaseRestClient {
     });
   }
 
-  /** Get All historic positions, only supports Query within 3 monthso  */
+  /** Get All historic positions, only supports Query within 3 months  */
   getHistoryPositions(
-    startTime: string,
-    endTime: string,
-    productType?: FuturesProductType,
-    symbol?: string,
-    pageSize?: number,
-    lastEndId?: string,
+    params: FuturesHistoricPositions,
   ): Promise<APIResponse<FuturesPosition[]>> {
-    return this.getPrivate('/api/mix/v1/position/history-position', {
-      startTime,
-      endTime,
-      productType,
-      symbol,
-      pageSize,
-      lastEndId,
-    });
+    return this.getPrivate('/api/mix/v1/position/history-position', params);
   }
 
   /** Get Account Bill */

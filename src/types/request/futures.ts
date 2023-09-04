@@ -88,6 +88,15 @@ export interface NewBatchFuturesOrder {
   clientOid?: string;
 }
 
+export interface FuturesHistoricPositions {
+  startTime: string;
+  endTime: string;
+  productType?: FuturesProductType;
+  symbol?: string;
+  pageSize?: number;
+  lastEndId?: string;
+}
+
 export interface FuturesPagination {
   startTime?: string;
   endTime?: string;
