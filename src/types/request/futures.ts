@@ -88,6 +88,17 @@ export interface NewBatchFuturesOrder {
   clientOid?: string;
 }
 
+export interface ModifyFuturesOrder {
+  symbol: string;
+  orderId?: string;
+  clientOid?: string;
+  newClientOid?: string;
+  size?: string;
+  price?: string;
+  presetTakeProfitPrice?: string;
+  presetStopLossPrice?: string;
+}
+
 export interface FuturesHistoricPositions {
   startTime: string;
   endTime: string;

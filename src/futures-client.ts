@@ -25,6 +25,7 @@ import {
   FuturesPlanType,
   FuturesKlineInterval,
   FuturesHistoricPositions,
+  ModifyFuturesOrder,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -386,6 +387,11 @@ export class FuturesClient extends BaseRestClient {
       marginCoin,
       orderIds,
     });
+  }
+
+  /** Modify Order */
+  modifyOrder(params: ModifyFuturesOrder): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/mix/v1/order/modifyOrder', params);
   }
 
   /**
