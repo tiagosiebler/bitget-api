@@ -98,4 +98,5 @@ export const REST_CLIENT_TYPE_ENUM = {
   spot: 'spot',
   futures: 'futures',
   broker: 'broker',
+  v2: 'v2',
 } as const;

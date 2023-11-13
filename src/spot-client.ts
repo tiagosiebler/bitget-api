@@ -27,6 +27,8 @@ import BaseRestClient from './util/BaseRestClient';
 
 /**
  * REST API client
+ *
+ * @deprecated use RestClientV2 instead
  */
 export class SpotClient extends BaseRestClient {
   getClientType() {
@@ -43,7 +45,6 @@ export class SpotClient extends BaseRestClient {
    * Public
    *
    */
-
   /** Get Server Time */
   getServerTime(): Promise<APIResponse<string>> {
     return this.get('/api/spot/v1/public/time');

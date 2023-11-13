@@ -17,3 +17,8 @@ export interface GetHistoricTradesParams {
   startTime?: string;
   endTime?: string;
 }
+
+/**
+ * The margin type, used directly in building the endpoint URL
+ */
+export type MarginType = 'crossed' | 'isolated';
