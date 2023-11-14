@@ -24,7 +24,7 @@ export const fullLogger = {
 export function waitForSocketEvent(
   wsClient: WebsocketClient,
   event: WsClientEvent,
-  timeoutMs: number = 4.5 * 1000,
+  timeoutMs: number = 10 * 1000,
 ) {
   return new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {

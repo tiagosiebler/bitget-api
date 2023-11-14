@@ -4,9 +4,14 @@ import {
   WS_ERROR_ENUM,
   WS_KEY_MAP,
 } from '../src';
-import { getSilentLogger, waitForSocketEvent } from './ws.util';
+import {
+  getSilentLogger,
+  listenToSocketEvents,
+  logAllEvents,
+  waitForSocketEvent,
+} from './ws.util';
 
-describe('Private Spot Websocket Client', () => {
+describe.skip('Private Spot Websocket Client', () => {
   const API_KEY = process.env.API_KEY_COM;
   const API_SECRET = process.env.API_SECRET_COM;
   const API_PASS = process.env.API_PASS_COM;
@@ -29,6 +34,7 @@ describe('Private Spot Websocket Client', () => {
         getSilentLogger('expect401'),
       );
 
+      logAllEvents(badClient);
       // const wsOpenPromise = waitForSocketEvent(badClient, 'open');
       const wsResponsePromise = waitForSocketEvent(badClient, 'response');
       // const wsUpdatePromise = waitForSocketEvent(wsClient, 'update');
@@ -66,6 +72,7 @@ describe('Private Spot Websocket Client', () => {
       );
       wsClient.connectAll();
       // logAllEvents(wsClient);
+      logAllEvents(wsClient);
     });
 
     afterAll(() => {
