@@ -1,6 +1,11 @@
-import { WsKey } from '../types';
+import {
+  BitgetInstType,
+  WsKey,
+  WsPrivateTopicV2,
+  WsTopicSubscribeEventArgs,
+  WsTopicSubscribePublicArgsV2,
+} from '../types';
 import { signMessage } from './node-support';
-import { BitgetInstType, WsTopicSubscribeEventArgs } from './WsStore';
 
 /**
  * Some exchanges have two livenet environments, some have test environments, some dont. This allows easy flexibility for different exchanges.
@@ -67,10 +72,21 @@ export const PUBLIC_WS_KEYS = [] as WsKey[];
  */
 export const PRIVATE_TOPICS = ['account', 'orders', 'positions', 'ordersAlgo'];
 
+export const PRIVATE_TOPICS_V2: WsPrivateTopicV2[] = [
+  'account',
+  'orders',
+  'orders-algo',
+  'positions',
+  'positions-history',
+];
+
 export function isPrivateChannel<TChannel extends string>(
   channel: TChannel,
 ): boolean {
-  return PRIVATE_TOPICS.includes(channel);
+  return (
+    PRIVATE_TOPICS.includes(channel) ||
+    PRIVATE_TOPICS_V2.includes(channel as any)
+  );
 }
 
 export function getWsKeyForTopic(
@@ -95,6 +111,15 @@ export function getWsKeyForTopic(
       );
     }
   }
+}
+
+export function getWsKeyForTopicV2(
+  subscribeEvent: WsTopicSubscribePublicArgsV2,
+  isPrivate?: boolean,
+): WsKey {
+  return isPrivate || isPrivateChannel(subscribeEvent.channel)
+    ? WS_KEY_MAP.v2Private
+    : WS_KEY_MAP.v2Public;
 }
 
 /** Force subscription requests to be sent in smaller batches, if a number is returned */

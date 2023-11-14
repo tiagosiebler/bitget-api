@@ -1,50 +1,8 @@
 import WebSocket from 'isomorphic-ws';
-import { WsPrivateTopic, WsTopic } from '../types';
 import { DefaultLogger } from './logger';
+import { WsConnectionStateEnum, WsStoredState } from './WsStore.types';
 
-export enum WsConnectionStateEnum {
-  INITIAL = 0,
-  CONNECTING = 1,
-  CONNECTED = 2,
-  CLOSING = 3,
-  RECONNECTING = 4,
-  // ERROR = 5,
-}
-/** A "topic" is always a string */
-
-export type BitgetInstType = 'SP' | 'SPBL' | 'MC' | 'UMCBL' | 'DMCBL';
-
-// TODO: generalise so this can be made a reusable module for other clients
-export interface WsTopicSubscribeEventArgs {
-  instType: BitgetInstType;
-  channel: WsTopic;
-  /** The symbol, e.g. "BTCUSDT" */
-  instId: string;
-}
-
-type WsTopicList = Set<WsTopicSubscribeEventArgs>;
-
-interface WsStoredState {
-  /** The currently active websocket connection */
-  ws?: WebSocket;
-  /** The current lifecycle state of the connection (enum) */
-  connectionState?: WsConnectionStateEnum;
-  /** A timer that will send an upstream heartbeat (ping) when it expires */
-  activePingTimer?: ReturnType<typeof setTimeout> | undefined;
-  /** A timer tracking that an upstream heartbeat was sent, expecting a reply before it expires */
-  activePongTimer?: ReturnType<typeof setTimeout> | undefined;
-  /** If a reconnection is in progress, this will have the timer for the delayed reconnect */
-  activeReconnectTimer?: ReturnType<typeof setTimeout> | undefined;
-  /**
-   * All the topics we are expected to be subscribed to (and we automatically resubscribe to if the connection drops)
-   *
-   * A "Set" and a deep object match are used to ensure we only subscribe to a topic once (tracking a list of unique topics we're expected to be connected to)
-   */
-  subscribedTopics: WsTopicList;
-  isAuthenticated?: boolean;
-}
-
-function isDeepObjectMatch(object1: any, object2: any) {
+function isDeepObjectMatch(object1: object, object2: object) {
   for (const key in object1) {
     if (object1[key] !== object2[key]) {
       return false;
@@ -53,8 +11,12 @@ function isDeepObjectMatch(object1: any, object2: any) {
   return true;
 }
 
-export default class WsStore<WsKey extends string> {
-  private wsState: Record<string, WsStoredState> = {};
+export default class WsStore<
+  WsKey extends string,
+  TWSTopicSubscribeEventArgs extends object,
+> {
+  private wsState: Record<string, WsStoredState<TWSTopicSubscribeEventArgs>> =
+    {};
   private logger: typeof DefaultLogger;
 
   constructor(logger: typeof DefaultLogger) {
@@ -62,9 +24,18 @@ export default class WsStore<WsKey extends string> {
   }
 
   /** Get WS stored state for key, optionally create if missing */
-  get(key: WsKey, createIfMissing?: true): WsStoredState;
-  get(key: WsKey, createIfMissing?: false): WsStoredState | undefined;
-  get(key: WsKey, createIfMissing?: boolean): WsStoredState | undefined {
+  get(
+    key: WsKey,
+    createIfMissing?: true,
+  ): WsStoredState<TWSTopicSubscribeEventArgs>;
+  get(
+    key: WsKey,
+    createIfMissing?: false,
+  ): WsStoredState<TWSTopicSubscribeEventArgs> | undefined;
+  get(
+    key: WsKey,
+    createIfMissing?: boolean,
+  ): WsStoredState<TWSTopicSubscribeEventArgs> | undefined {
     if (this.wsState[key]) {
       return this.wsState[key];
     }
@@ -78,7 +49,7 @@ export default class WsStore<WsKey extends string> {
     return Object.keys(this.wsState) as WsKey[];
   }
 
-  create(key: WsKey): WsStoredState | undefined {
+  create(key: WsKey): WsStoredState<TWSTopicSubscribeEventArgs> | undefined {
     if (this.hasExistingActiveConnection(key)) {
       this.logger.warning(
         'WsStore setConnection() overwriting existing open connection: ',
@@ -86,7 +57,7 @@ export default class WsStore<WsKey extends string> {
       );
     }
     this.wsState[key] = {
-      subscribedTopics: new Set(),
+      subscribedTopics: new Set<TWSTopicSubscribeEventArgs>(),
       connectionState: WsConnectionStateEnum.INITIAL,
     };
     return this.get(key);
@@ -151,11 +122,11 @@ export default class WsStore<WsKey extends string> {
 
   /* subscribed topics */
 
-  getTopics(key: WsKey): WsTopicList {
+  getTopics(key: WsKey): Set<TWSTopicSubscribeEventArgs> {
     return this.get(key, true).subscribedTopics;
   }
 
-  getTopicsByKey(): Record<string, WsTopicList> {
+  getTopicsByKey(): Record<string, Set<TWSTopicSubscribeEventArgs>> {
     const result = {};
     for (const refKey in this.wsState) {
       result[refKey] = this.getTopics(refKey as WsKey);
@@ -164,7 +135,7 @@ export default class WsStore<WsKey extends string> {
   }
 
   // Since topics are objects we can't rely on the set to detect duplicates
-  getMatchingTopic(key: WsKey, topic: WsTopicSubscribeEventArgs) {
+  getMatchingTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs) {
     // if (typeof topic === 'string') {
     //   return this.getMatchingTopic(key, { channel: topic });
     // }
@@ -177,7 +148,7 @@ export default class WsStore<WsKey extends string> {
     }
   }
 
-  addTopic(key: WsKey, topic: WsTopicSubscribeEventArgs) {
+  addTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs) {
     // if (typeof topic === 'string') {
     //   return this.addTopic(key, {
     //     instType: 'sp',
@@ -193,7 +164,7 @@ export default class WsStore<WsKey extends string> {
     return this.getTopics(key).add(topic);
   }
 
-  deleteTopic(key: WsKey, topic: WsTopicSubscribeEventArgs) {
+  deleteTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs) {
     // Check if we're subscribed to a topic like this
     const storedTopic = this.getMatchingTopic(key, topic);
     if (storedTopic) {
