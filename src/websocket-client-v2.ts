@@ -3,8 +3,13 @@ import WebSocket from 'isomorphic-ws';
 import {
   BitgetInstTypeV2,
   WebsocketClientOptions,
+  WsCoinChannelsV2,
+  WsInstIdChannelsV2,
   WsKey,
+  WsPublicTopicV2,
   WsTopicSubscribeEventArgsV2,
+  WsTopicSubscribePrivateCoinArgsV2,
+  WsTopicSubscribePrivateInstIdArgsV2,
   WsTopicV2,
 } from './types';
 
@@ -21,6 +26,12 @@ import {
 import { BaseWebsocketClient } from './util/BaseWSClient';
 
 const LOGGER_CATEGORY = { category: 'bitget-ws' };
+
+const COIN_CHANNELS: WsTopicV2[] = [
+  'account',
+  'account-crossed',
+  'account-isolated',
+];
 
 export class WebsocketClientV2 extends BaseWebsocketClient<
   WsKey,
@@ -92,6 +103,38 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
     ];
   }
 
+  /** Some private channels use `coin` instead of `instId`. This method handles building the sub/unsub request */
+  private getSubRequest(
+    instType: BitgetInstTypeV2,
+    topic: WsTopicV2,
+    coin: string = 'default',
+  ): WsTopicSubscribeEventArgsV2 {
+    if (isPrivateChannel(topic)) {
+      if (COIN_CHANNELS.includes(topic)) {
+        const subscribeRequest: WsTopicSubscribePrivateCoinArgsV2 = {
+          instType,
+          channel: topic as WsCoinChannelsV2,
+          coin,
+        };
+        return subscribeRequest;
+      }
+
+      const subscribeRequest: WsTopicSubscribePrivateInstIdArgsV2 = {
+        instType,
+        channel: topic as WsInstIdChannelsV2,
+        instId: coin,
+      };
+
+      return subscribeRequest;
+    }
+
+    return {
+      instType,
+      channel: topic as WsPublicTopicV2,
+      instId: coin,
+    };
+  }
+
   /**
    * Subscribe to a PUBLIC topic
    * @param instType instrument type (refer to API docs).
@@ -101,41 +144,24 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
   public subscribeTopic(
     instType: BitgetInstTypeV2,
     topic: WsTopicV2,
-    instId: string = 'default',
+    coin: string = 'default',
   ) {
-    return this.subscribe({
-      instType,
-      instId,
-      channel: topic,
-    });
+    const subRequest = this.getSubRequest(instType, topic, coin);
+    return this.subscribe(subRequest);
   }
-
-  // public subscribeTopicV2(
-  //   instType: BitgetInstTypeV2,
-  //   topic: WsTopicV2,
-  //   instId: string = 'default',
-  // ) {
-  //   if (isPrivateChannel(topic)) {
-  //   }
-  // }
 
   /**
    * Unsubscribe from a topic
    * @param instType instrument type (refer to API docs).
    * @param topic topic name (e.g. "ticker").
    * @param instId instrument ID (e.g. "BTCUSDT"). Use "default" for private topics to get all symbols.
-   *
-   * @deprecated, use `subscribe(topics, isPrivate) instead
    */
   public unsubscribeTopic(
     instType: BitgetInstTypeV2,
     topic: WsTopicV2,
-    instId: string = 'default',
+    coin: string = 'default',
   ) {
-    return this.unsubscribe({
-      instType,
-      instId,
-      channel: topic,
-    });
+    const subRequest = this.getSubRequest(instType, topic, coin);
+    return this.unsubscribe(subRequest);
   }
 }

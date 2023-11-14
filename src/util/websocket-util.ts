@@ -75,9 +75,13 @@ export const PRIVATE_TOPICS = ['account', 'orders', 'positions', 'ordersAlgo'];
 export const PRIVATE_TOPICS_V2: WsPrivateTopicV2[] = [
   'account',
   'orders',
-  'orders-algo',
   'positions',
+  'orders-algo',
   'positions-history',
+  'orders-crossed',
+  'account-crossed',
+  'account-isolated',
+  'orders-isolated',
 ];
 
 export function isPrivateChannel<TChannel extends string>(

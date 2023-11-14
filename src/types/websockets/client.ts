@@ -66,9 +66,19 @@ export type WSPrivateTopicFuturesV2 =
   | 'orders-algo'
   | 'positions-history';
 
-export type WsPrivateTopicV2 = 'account' | 'orders' | WSPrivateTopicFuturesV2;
+export type WSPrivateTopicMarginV2 =
+  | 'orders-crossed'
+  | 'account-crossed'
+  | 'account-isolated'
+  | 'orders-isolated';
 
-export type WsTopicV2 = WsPublicTopicV2;
+export type WsPrivateTopicV2 =
+  | 'account'
+  | 'orders'
+  | WSPrivateTopicFuturesV2
+  | WSPrivateTopicMarginV2;
+
+export type WsTopicV2 = WsPublicTopicV2 | WsPrivateTopicV2;
 
 /** This is used to differentiate between each of the available websocket streams */
 export type WsKey = (typeof WS_KEY_MAP)[keyof typeof WS_KEY_MAP];
@@ -77,25 +87,50 @@ export type WsKey = (typeof WS_KEY_MAP)[keyof typeof WS_KEY_MAP];
  * Event args for subscribing/unsubscribing
  */
 
-// TODO: generalise so this can be made a reusable module for other clients
 export interface WsTopicSubscribeEventArgs {
   instType: BitgetInstType;
   channel: WsTopic;
-  /** The symbol, e.g. "BTCUSDT" */
-  instId: string;
+  instId?: string;
 }
 
-export type WsTopicSubscribeCommonArgsV2 = {
+export type WsTopicSubscribePublicArgsV2 = {
   instType: BitgetInstTypeV2;
-  channel: WsTopicV2;
-};
-
-export type WsTopicSubscribePublicArgsV2 = WsTopicSubscribeCommonArgsV2 & {
   channel: WsPublicTopicV2;
+  /** The symbol, e.g. "BTCUSDT" */
   instId: string;
 };
 
-export type WsTopicSubscribeEventArgsV2 = WsTopicSubscribePublicArgsV2;
+export type WsInstIdChannelsV2 =
+  | 'orders'
+  | WSPrivateTopicFuturesV2
+  | 'orders-crossed'
+  | 'orders-isolated';
+
+export type WsTopicSubscribePrivateInstIdArgsV2 = {
+  instType: BitgetInstTypeV2;
+  channel: WsInstIdChannelsV2;
+  /** The symbol, e.g. "BTCUSDT" */
+  instId?: string;
+};
+
+export type WsCoinChannelsV2 =
+  | 'account'
+  | 'account-crossed'
+  | 'account-isolated';
+
+export type WsTopicSubscribePrivateCoinArgsV2 = {
+  instType: BitgetInstTypeV2;
+  channel: WsCoinChannelsV2;
+  coin: 'default' | string;
+};
+
+export type WsTopicSubscribePrivateArgsV2 =
+  | WsTopicSubscribePrivateInstIdArgsV2
+  | WsTopicSubscribePrivateCoinArgsV2;
+
+export type WsTopicSubscribeEventArgsV2 =
+  | WsTopicSubscribePublicArgsV2
+  | WsTopicSubscribePrivateArgsV2;
 
 /** General configuration for the WebsocketClient */
 export interface WSClientConfigurableOptions {
