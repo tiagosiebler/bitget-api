@@ -1,4 +1,4 @@
-import { OrderTimeInForce } from './shared';
+import { OrderTimeInForce } from '../shared';
 
 export type FuturesProductType =
   | 'umcbl'

@@ -1,27 +1,9 @@
 import {
-  NewBatchSpotOrder,
-  NewSpotOrder,
-  NewWalletTransfer,
-  Pagination,
   APIResponse,
-  CoinBalance,
-  SymbolRules,
-  NewSpotSubTransfer,
-  NewSpotWithdraw,
-  CancelSpotOrderV2,
-  BatchCancelSpotOrderV2,
-  SpotOrderResult,
-  NewSpotPlanOrder,
-  ModifySpotPlanOrder,
-  CancelSpotPlanOrderParams,
-  GetSpotPlanOrdersParams,
-  SpotPlanOrder,
-  GetHistoricPlanOrdersParams,
-  SpotMarketTrade,
-  GetHistoricTradesParams,
-  VIPFeeRate,
-  SpotKlineInterval,
   MarginType,
+  FuturesAccountBillRequestV2,
+  FuturesCandlesRequestV2,
+  SpotCandlesRequestV2,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM, assertMarginType } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -223,11 +205,11 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/spot/market/orderbook`, params);
   }
 
-  getSpotCandlestickData(params: object): Promise<APIResponse<any>> {
+  getSpotCandles(params: SpotCandlesRequestV2): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/market/candles`, params);
   }
 
-  getSpotHistoricCandlestickData(params: object): Promise<APIResponse<any>> {
+  getSpotHistoricCandles(params: object): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/market/history-candles`, params);
   }
 
@@ -394,21 +376,23 @@ export class RestClientV2 extends BaseRestClient {
     return this.get(`/api/v2/mix/market/merge-depth`, params);
   }
 
-  getFuturesCandlestickData(params: object): Promise<APIResponse<any>> {
+  getFuturesCandles(
+    params: FuturesCandlesRequestV2,
+  ): Promise<APIResponse<any>> {
     return this.get(`/api/v2/mix/market/candles`, params);
   }
 
-  getFuturesHistoricCandlestickData(params: object): Promise<APIResponse<any>> {
+  getFuturesHistoricCandles(params: object): Promise<APIResponse<any>> {
     return this.get(`/api/v2/mix/market/history-candles`, params);
   }
 
-  getFuturesHistoricIndexPriceCandlestick(
+  getFuturesHistoricIndexPriceCandles(
     params: object,
   ): Promise<APIResponse<any>> {
     return this.get(`/api/v2/mix/market/history-index-candles`, params);
   }
 
-  getFuturesHistoricMarkPriceCandlestick(
+  getFuturesHistoricMarkPriceCandles(
     params: object,
   ): Promise<APIResponse<any>> {
     return this.get(`/api/v2/mix/market/history-mark-candles`, params);
@@ -484,7 +468,9 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate(`/api/v2/mix/account/set-position-mode`, params);
   }
 
-  getFuturesAccountBills(params: object): Promise<APIResponse<any>> {
+  getFuturesAccountBills(
+    params: FuturesAccountBillRequestV2,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/mix/account/bill`, params);
   }
 
