@@ -6,7 +6,7 @@ module.exports = {
     __PROD__: false
   },
   testEnvironment: 'node',
-  preset: "ts-jest",
+  preset: 'ts-jest',
   verbose: true, // report individual test
   bail: false, // enable to stop test when an error occur,
   detectOpenHandles: false,
@@ -16,6 +16,7 @@ module.exports = {
   collectCoverageFrom: [
     'src/**/*.ts'
   ],
+  testTimeout: 10000,
   coverageThreshold: {
     // coverage strategy
     global: {

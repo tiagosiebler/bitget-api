@@ -26,7 +26,10 @@ import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
 
 /**
- * REST API client
+ * REST API client for the V1 bitget Spot APIs. These are the previous generation of Bitget's APIs and should be considered deprecated.
+ * These will be removed in a future release, once Bitget formally deprecates them.
+ *
+ * @deprecated use RestClientV2 instead
  */
 export class SpotClient extends BaseRestClient {
   getClientType() {
@@ -43,7 +46,6 @@ export class SpotClient extends BaseRestClient {
    * Public
    *
    */
-
   /** Get Server Time */
   getServerTime(): Promise<APIResponse<string>> {
     return this.get('/api/spot/v1/public/time');

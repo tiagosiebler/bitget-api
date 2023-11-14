@@ -1,6 +1,11 @@
-import { WsKey } from '../types';
+import {
+  BitgetInstType,
+  WsKey,
+  WsPrivateTopicV2,
+  WsTopicSubscribeEventArgs,
+  WsTopicSubscribePublicArgsV2,
+} from '../types';
 import { signMessage } from './node-support';
-import { BitgetInstType, WsTopicSubscribeEventArgs } from './WsStore';
 
 /**
  * Some exchanges have two livenet environments, some have test environments, some dont. This allows easy flexibility for different exchanges.
@@ -31,18 +36,31 @@ export const WS_BASE_URL_MAP: Record<
       livenet: 'wss://ws.bitget.com/spot/v1/stream',
     },
   },
+  v2Public: {
+    all: {
+      livenet: 'wss://ws.bitget.com/v2/ws/public',
+    },
+  },
+  v2Private: {
+    all: {
+      livenet: 'wss://ws.bitget.com/v2/ws/private',
+    },
+  },
 };
 
 /** Should be one WS key per unique URL */
 export const WS_KEY_MAP = {
   spotv1: 'spotv1',
   mixv1: 'mixv1',
+  v2Public: 'v2Public',
+  v2Private: 'v2Private',
 } as const;
 
 /** Any WS keys in this list will trigger auth on connect, if credentials are available */
 export const WS_AUTH_ON_CONNECT_KEYS: WsKey[] = [
   WS_KEY_MAP.spotv1,
   WS_KEY_MAP.mixv1,
+  WS_KEY_MAP.v2Private,
 ];
 
 /** Any WS keys in this list will ALWAYS skip the authentication process, even if credentials are available */
@@ -54,10 +72,25 @@ export const PUBLIC_WS_KEYS = [] as WsKey[];
  */
 export const PRIVATE_TOPICS = ['account', 'orders', 'positions', 'ordersAlgo'];
 
+export const PRIVATE_TOPICS_V2: WsPrivateTopicV2[] = [
+  'account',
+  'orders',
+  'positions',
+  'orders-algo',
+  'positions-history',
+  'orders-crossed',
+  'account-crossed',
+  'account-isolated',
+  'orders-isolated',
+];
+
 export function isPrivateChannel<TChannel extends string>(
   channel: TChannel,
 ): boolean {
-  return PRIVATE_TOPICS.includes(channel);
+  return (
+    PRIVATE_TOPICS.includes(channel) ||
+    PRIVATE_TOPICS_V2.includes(channel as any)
+  );
 }
 
 export function getWsKeyForTopic(
@@ -84,11 +117,22 @@ export function getWsKeyForTopic(
   }
 }
 
+export function getWsKeyForTopicV2(
+  subscribeEvent: WsTopicSubscribePublicArgsV2,
+  isPrivate?: boolean,
+): WsKey {
+  return isPrivate || isPrivateChannel(subscribeEvent.channel)
+    ? WS_KEY_MAP.v2Private
+    : WS_KEY_MAP.v2Public;
+}
+
 /** Force subscription requests to be sent in smaller batches, if a number is returned */
 export function getMaxTopicsPerSubscribeEvent(wsKey: WsKey): number | null {
   switch (wsKey) {
     case 'mixv1':
-    case 'spotv1': {
+    case 'spotv1':
+    case 'v2Public':
+    case 'v2Private': {
       // Technically there doesn't seem to be a documented cap, but there is a size limit per request. Doesn't hurt to batch requests.
       return 15;
     }

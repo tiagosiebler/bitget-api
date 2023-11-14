@@ -1,4 +1,4 @@
-import { WebsocketClient, WsClientEvent } from '../src';
+import { WebsocketClient } from '../src';
 
 export function getSilentLogger(logHint?: string) {
   return {
@@ -20,11 +20,20 @@ export const fullLogger = {
   error: (...params) => console.error('error', ...params),
 };
 
+type WsClientEvent =
+  | 'open'
+  | 'update'
+  | 'close'
+  | 'exception'
+  | 'reconnect'
+  | 'reconnected'
+  | 'response';
+
 /** Resolves a promise if an event is seen before a timeout (defaults to 4.5 seconds) */
 export function waitForSocketEvent(
   wsClient: WebsocketClient,
   event: WsClientEvent,
-  timeoutMs: number = 4.5 * 1000,
+  timeoutMs: number = 10 * 1000,
 ) {
   return new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {

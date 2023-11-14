@@ -1,7 +1,7 @@
-import { DefaultLogger, WS_KEY_MAP, WebsocketClientV2 } from '../src';
+import { DefaultLogger, WS_KEY_MAP, WebsocketClient } from '../../src';
 
 // or
-// import { DefaultLogger, WS_KEY_MAP, WebsocketClientV2 } from 'bitget-api';
+// import { DefaultLogger, WS_KEY_MAP, WebsocketClient } from 'bitget-api';
 
 (async () => {
   const logger = {
@@ -9,7 +9,7 @@ import { DefaultLogger, WS_KEY_MAP, WebsocketClientV2 } from '../src';
     silly: (...params) => console.log('silly', ...params),
   };
 
-  const wsClient = new WebsocketClientV2(
+  const wsClient = new WebsocketClient(
     {
       // restOptions: {
       // optionally provide rest options, e.g. to pass through a proxy
@@ -46,38 +46,31 @@ import { DefaultLogger, WS_KEY_MAP, WebsocketClientV2 } from '../src';
   const symbol = 'BTCUSDT';
 
   // Spot public
-
   // tickers
-  wsClient.subscribeTopic('SPOT', 'ticker', symbol);
+  // wsClient.subscribeTopic('SP', 'ticker', symbol);
+  // // candles
+  // wsClient.subscribeTopic('SP', 'candle1m', symbol);
+  // // orderbook updates
+  wsClient.subscribeTopic('SP', 'books', symbol);
+  // // trades
+  // wsClient.subscribeTopic('SP', 'trade', symbol);
 
-  // candles
-  // wsClient.subscribeTopic('SPOT', 'candle1m', symbol);
+  // // Futures public
 
-  // orderbook updates
-  // wsClient.subscribeTopic('SPOT', 'books', symbol);
-
-  // trades
-  // wsClient.subscribeTopic('SPOT', 'trade', symbol);
-
-  // Futures public
-
-  // tickers
-  // wsClient.subscribeTopic('USDT-FUTURES', 'ticker', symbol);
-
-  // candles
-  // wsClient.subscribeTopic('USDT-FUTURES', 'candle1m', symbol);
-
-  // orderbook updates
-  // wsClient.subscribeTopic('USDT-FUTURES', 'books', symbol);
-
-  // trades
-  // wsClient.subscribeTopic('USDT-FUTURES', 'trade', symbol);
+  // // tickers
+  // wsClient.subscribeTopic('MC', 'ticker', symbol);
+  // // candles
+  // wsClient.subscribeTopic('MC', 'candle1m', symbol);
+  // // orderbook updates
+  // wsClient.subscribeTopic('MC', 'books', symbol);
+  // // trades
+  // wsClient.subscribeTopic('MC', 'trade', symbol);
 
   // Topics are tracked per websocket type
-  // Get a list of subscribed topics (e.g. all  public topics) (after a 5 second delay)
+  // Get a list of subscribed topics (e.g. for spot topics) (after a 5 second delay)
   setTimeout(() => {
-    const publicTopics = wsClient.getWsStore().getTopics(WS_KEY_MAP.v2Public);
+    const publicSpotTopics = wsClient.getWsStore().getTopics(WS_KEY_MAP.spotv1);
 
-    console.log('public  topics: ', publicTopics);
+    console.log('public spot topics: ', publicSpotTopics);
   }, 5 * 1000);
 })();

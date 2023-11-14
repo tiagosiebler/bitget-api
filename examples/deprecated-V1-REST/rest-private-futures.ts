@@ -1,14 +1,14 @@
-import { RestClientV2, WebsocketClient } from '../src/index';
+import { FuturesClient, WebsocketClient } from '../../src/index';
 
 // or
-// import { RestClientV2 } from 'bitget-api';
+// import { SpotClient } from 'bitget-api';
 
 // read from environmental variables
 const API_KEY = process.env.API_KEY_COM;
 const API_SECRET = process.env.API_SECRET_COM;
 const API_PASS = process.env.API_PASS_COM;
 
-const client = new RestClientV2({
+const client = new FuturesClient({
   apiKey: API_KEY,
   apiSecret: API_SECRET,
   apiPass: API_PASS,
@@ -21,14 +21,15 @@ const client = new RestClientV2({
 (async () => {
   try {
     const now = new Date();
-    const fromTime = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const toTime = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
     console.log(
-      await client.getFuturesAccountBills({
-        productType: 'USDT-FUTURES',
-        startTime: fromTime.getTime() + '', // should be sent as a string
-        endTime: now.getTime() + '', // should be sent as a string
-        limit: '100',
+      await client.getAccountBill({
+        symbol: 'BTCUSDT_UMCBL',
+        marginCoin: 'USDT',
+        startTime: now.getTime() + '', // should be sent as a string
+        endTime: toTime.getTime() + '', // should be sent as a string
+        pageSize: 100,
       }),
     );
   } catch (e) {

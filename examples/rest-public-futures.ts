@@ -1,11 +1,11 @@
-import { FuturesClient, SpotClient } from '../src/index';
+import { RestClientV2, SpotClient } from '../src/index';
 
 // or
 // import { SpotClient } from 'bitget-api';
 
-const futuresClient = new FuturesClient();
+const restClient = new RestClientV2();
 
-const symbol = 'BTCUSDT_UMCBL';
+const symbol = 'BTCUSDT';
 
 (async () => {
   try {
@@ -16,14 +16,18 @@ const symbol = 'BTCUSDT_UMCBL';
     const msFor1kCandles = candlesToFetch * msPerCandle;
     const startTime = timestampNow - msFor1kCandles;
 
-    const response = await futuresClient.getCandles(
+    const response = await restClient.getFuturesCandles({
       symbol,
-      '1m',
-      startTime.toString(),
-      timestampNow.toString(),
-      candlesToFetch.toString(),
-    );
-    console.log('getCandles returned ' + response.length + ' candles');
+      productType: 'USDT-FUTURES',
+      granularity: '1m',
+      startTime: startTime.toString(),
+      endTime: timestampNow.toString(),
+      limit: candlesToFetch.toString(),
+    });
+
+    console.table(response.data);
+
+    console.log('getCandles returned ' + response.data.length + ' candles');
   } catch (e) {
     console.error('request failed: ', e);
   }

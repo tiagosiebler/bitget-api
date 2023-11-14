@@ -1,4 +1,5 @@
 import {
+  MarginType,
   WsAccountSnapshotUMCBL,
   WsBaseEvent,
   WSPositionSnapshotUMCBL,
@@ -70,4 +71,14 @@ export function isWsFuturesPositionsSnapshotEvent(
   event: unknown,
 ): event is WSPositionSnapshotUMCBL {
   return isWsPositionsSnapshotEvent(event) && event.arg.instType === 'umcbl';
+}
+
+/**
+ * Simple guard for non-TypeScript users, throw a runtime error if value doesn't match type
+ */
+export function assertMarginType(marginType: string): marginType is MarginType {
+  if (marginType !== 'isolated' && marginType !== 'crossed') {
+    throw new Error(`MarginType should be one of: crossed | isolated`);
+  }
+  return true;
 }

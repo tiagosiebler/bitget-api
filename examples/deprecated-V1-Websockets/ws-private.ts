@@ -1,7 +1,7 @@
-import { WebsocketClientV2, DefaultLogger } from '../src';
+import { WebsocketClient, DefaultLogger } from '../../src';
 
 // or
-// import { DefaultLogger, WS_KEY_MAP, WebsocketClientV2 } from 'bitget-api';
+// import { DefaultLogger, WS_KEY_MAP, WebsocketClient } from 'bitget-api';
 
 (async () => {
   const logger = {
@@ -9,11 +9,13 @@ import { WebsocketClientV2, DefaultLogger } from '../src';
     silly: (...params) => console.log('silly', ...params),
   };
 
+  logger.info(`Starting private V1 websocket`);
+
   const API_KEY = process.env.API_KEY_COM;
   const API_SECRET = process.env.API_SECRET_COM;
   const API_PASS = process.env.API_PASS_COM;
 
-  const wsClient = new WebsocketClientV2(
+  const wsClient = new WebsocketClient(
     {
       apiKey: API_KEY,
       apiSecret: API_SECRET,
@@ -57,21 +59,17 @@ import { WebsocketClientV2, DefaultLogger } from '../src';
 
   // spot private
   // : account updates
-  // wsClient.subscribeTopic('SPOT', 'account');
-
-  // : order updates (note: symbol is required)
-  // wsClient.subscribeTopic('SPOT', 'orders', 'BTCUSDT');
+  wsClient.subscribeTopic('SPBL', 'account');
+  // : order updates
+  // wsClient.subscribeTopic('SPBL', 'orders');
 
   // futures private
   // : account updates
-  // wsClient.subscribeTopic('USDT-FUTURES', 'account');
-
-  // : position updates
-  // wsClient.subscribeTopic('USDT-FUTURES', 'positions');
-
-  // : order updates
-  // wsClient.subscribeTopic('USDT-FUTURES', 'orders');
-
-  // : plan order updates
-  wsClient.subscribeTopic('USDT-FUTURES', 'orders-algo');
+  // wsClient.subscribeTopic('UMCBL', 'account');
+  // // : position updates
+  // wsClient.subscribeTopic('UMCBL', 'positions');
+  // // : order updates
+  // wsClient.subscribeTopic('UMCBL', 'orders');
+  // // : plan order updates
+  // wsClient.subscribeTopic('UMCBL', 'ordersAlgo');
 })();

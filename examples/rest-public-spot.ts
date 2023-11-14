@@ -1,17 +1,19 @@
-import { SpotClient } from '../src/index';
+import { RestClientV2 } from '../src/index';
 
 // or
-// import { SpotClient } from 'bitget-api';
+// import { RestClientV2 } from 'bitget-api';
 
-const spotClient = new SpotClient();
-
-const symbol = 'BTCUSDT_SPBL';
+const restClient = new RestClientV2();
 
 (async () => {
   try {
-    const response = await spotClient.getCandles(symbol, '1min', {
+    const response = await restClient.getSpotCandles({
+      symbol: 'BTCUSDT',
+      granularity: '1min',
       limit: '1000',
     });
+
+    console.table(response.data);
     console.log('getCandles: ', response.data.length);
   } catch (e) {
     console.error('request failed: ', e);

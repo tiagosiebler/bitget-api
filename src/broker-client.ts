@@ -9,7 +9,10 @@ import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
 
 /**
- * REST API client for broker APIs
+ * REST API client for the V1 bitget Broker APIs. These are the previous generation of Bitget's APIs and should be considered deprecated.
+ * These will be removed in a future release, once Bitget formally deprecates them.
+ *
+ * @deprecated use RestClientV2 instead
  */
 export class BrokerClient extends BaseRestClient {
   getClientType() {
