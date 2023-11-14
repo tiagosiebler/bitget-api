@@ -382,10 +382,6 @@ export class RestClientV2 extends BaseRestClient {
     return this.get(`/api/v2/mix/market/vip-fee-rate`);
   }
 
-  getFuturesMergeDepth(params: object): Promise<APIResponse<any>> {
-    return this.get(`/api/v2/mix/market/merge-depth`, params);
-  }
-
   getFuturesTicker(params: object): Promise<APIResponse<any>> {
     return this.get(`/api/v2/mix/market/ticker`, params);
   }
@@ -394,12 +390,8 @@ export class RestClientV2 extends BaseRestClient {
     return this.get(`/api/v2/mix/market/tickers`, params);
   }
 
-  getFuturesRecentTrades(params: object): Promise<APIResponse<any>> {
-    return this.get(`/api/v2/mix/market/fills`, params);
-  }
-
-  getFuturesHistoricTrades(params: object): Promise<APIResponse<any>> {
-    return this.get(`/api/v2/mix/market/fills-history`, params);
+  getFuturesMergeDepth(params: object): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/mix/market/merge-depth`, params);
   }
 
   getFuturesCandlestickData(params: object): Promise<APIResponse<any>> {
@@ -420,6 +412,14 @@ export class RestClientV2 extends BaseRestClient {
     params: object,
   ): Promise<APIResponse<any>> {
     return this.get(`/api/v2/mix/market/history-mark-candles`, params);
+  }
+
+  getFuturesRecentTrades(params: object): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/mix/market/fills`, params);
+  }
+
+  getFuturesHistoricTrades(params: object): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/mix/market/fills-history`, params);
   }
 
   getFuturesOpenInterest(params: object): Promise<APIResponse<any>> {
@@ -472,7 +472,7 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate(`/api/v2/mix/account/set-leverage`, params);
   }
 
-  adjustFuturesPositionMargin(params: object): Promise<APIResponse<any>> {
+  setFuturesPositionMargin(params: object): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/mix/account/set-margin`, params);
   }
 
@@ -520,7 +520,11 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate(`/api/v2/mix/order/place-order`, params);
   }
 
-  futuresSubmitReverseal(params: object): Promise<APIResponse<any>> {
+  futuresCancelOrder(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/mix/order/cancel-order`, params);
+  }
+
+  futuresSubmitReversal(params: object): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/mix/order/click-backhand`, params);
   }
 
@@ -532,10 +536,6 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate(`/api/v2/mix/order/modify-order`, params);
   }
 
-  futuresCancelOrder(params: object): Promise<APIResponse<any>> {
-    return this.postPrivate(`/api/v2/mix/order/cancel-order`, params);
-  }
-
   futuresBatchCancelOrders(params: object): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/mix/order/batch-cancel-orders`, params);
   }
@@ -544,11 +544,11 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate(`/api/v2/mix/order/close-positions`, params);
   }
 
-  getFuturesOrderDetail(params: object): Promise<APIResponse<any>> {
+  getFuturesOrder(params: object): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/mix/order/detail`, params);
   }
 
-  getFuturesOrderFillDetails(params: object): Promise<APIResponse<any>> {
+  getFuturesFills(params: object): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/mix/order/fills`, params);
   }
 

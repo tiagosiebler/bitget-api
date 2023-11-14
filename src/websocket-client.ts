@@ -646,6 +646,12 @@ export class WebsocketClient extends EventEmitter {
       case WS_KEY_MAP.mixv1: {
         return WS_BASE_URL_MAP.mixv1.all[networkKey];
       }
+      case WS_KEY_MAP.v2Private: {
+        return WS_BASE_URL_MAP.v2Private.all[networkKey];
+      }
+      case WS_KEY_MAP.v2Public: {
+        return WS_BASE_URL_MAP.v2Public.all[networkKey];
+      }
       default: {
         this.logger.error('getWsUrl(): Unhandled wsKey: ', {
           ...LOGGER_CATEGORY,

@@ -19,38 +19,25 @@ type NetworkMap<
 
 export const WS_BASE_URL_MAP: Record<
   WsKey,
-  Record<'all' | 'public' | 'private', NetworkMap<'livenet'>>
+  Record<'all', NetworkMap<'livenet'>>
 > = {
   mixv1: {
     all: {
       livenet: 'wss://ws.bitget.com/mix/v1/stream',
-    },
-    public: {
-      livenet: 'N/A',
-    },
-    private: {
-      livenet: 'N/A',
     },
   },
   spotv1: {
     all: {
       livenet: 'wss://ws.bitget.com/spot/v1/stream',
     },
-    public: {
-      livenet: 'N/A',
-    },
-    private: {
-      livenet: 'N/A',
-    },
   },
-  v2: {
+  v2Public: {
     all: {
-      livenet: 'N/A',
-    },
-    public: {
       livenet: 'wss://ws.bitget.com/v2/ws/public',
     },
-    private: {
+  },
+  v2Private: {
+    all: {
       livenet: 'wss://ws.bitget.com/v2/ws/private',
     },
   },
@@ -60,13 +47,15 @@ export const WS_BASE_URL_MAP: Record<
 export const WS_KEY_MAP = {
   spotv1: 'spotv1',
   mixv1: 'mixv1',
-  v2: 'v2',
+  v2Public: 'v2Public',
+  v2Private: 'v2Private',
 } as const;
 
 /** Any WS keys in this list will trigger auth on connect, if credentials are available */
 export const WS_AUTH_ON_CONNECT_KEYS: WsKey[] = [
   WS_KEY_MAP.spotv1,
   WS_KEY_MAP.mixv1,
+  WS_KEY_MAP.v2Private,
 ];
 
 /** Any WS keys in this list will ALWAYS skip the authentication process, even if credentials are available */
@@ -113,7 +102,8 @@ export function getMaxTopicsPerSubscribeEvent(wsKey: WsKey): number | null {
   switch (wsKey) {
     case 'mixv1':
     case 'spotv1':
-    case 'v2': {
+    case 'v2Public':
+    case 'v2Private': {
       // Technically there doesn't seem to be a documented cap, but there is a size limit per request. Doesn't hurt to batch requests.
       return 15;
     }
