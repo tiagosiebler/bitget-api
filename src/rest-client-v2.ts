@@ -346,6 +346,10 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/spot/wallet/withdrawal-records`, params);
   }
 
+  getSpotMainSubTransferRecord(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/spot/account/sub-main-trans-record`,params,);
+  }
+
   /**
    *
    *
