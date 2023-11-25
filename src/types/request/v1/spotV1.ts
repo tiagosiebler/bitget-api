@@ -127,12 +127,12 @@ export interface GetHistoricPlanOrdersParams {
 }
 
 export interface SpotCandleData {
-  open: string
-  high: string
-  low: string
-  close: string
-  quoteVol: string
-  baseVol: string
-  usdtVol: string
-  ts: string
+  open: string;
+  high: string;
+  low: string;
+  close: string;
+  quoteVol: string;
+  baseVol: string;
+  usdtVol: string;
+  ts: string;
 }
