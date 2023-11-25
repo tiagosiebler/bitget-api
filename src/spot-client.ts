@@ -21,6 +21,7 @@ import {
   GetHistoricTradesParams,
   VIPFeeRate,
   SpotKlineInterval,
+  SpotCandleData,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -111,12 +112,16 @@ export class SpotClient extends BaseRestClient {
   getCandles(
     symbol: string,
     period: SpotKlineInterval,
-    pagination?: Pagination,
-  ): Promise<APIResponse<any>> {
+    limit?: string,
+    after?: string,
+    before?: string,
+  ): Promise<APIResponse<SpotCandleData[]>> {
     return this.get('/api/spot/v1/market/candles', {
       symbol,
       period,
-      ...pagination,
+      limit,
+      after,
+      before
     });
   }
 

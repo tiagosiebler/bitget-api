@@ -215,3 +215,5 @@ export interface HistoricPlanOrderTPSLRequest {
   isPre?: boolean;
   isPlan?: string;
 }
+
+export type FuturesCandleData = string[6];
