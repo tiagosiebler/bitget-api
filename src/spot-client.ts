@@ -112,16 +112,12 @@ export class SpotClient extends BaseRestClient {
   getCandles(
     symbol: string,
     period: SpotKlineInterval,
-    limit?: string,
-    after?: string,
-    before?: string,
+    pagination?: Pagination, 
   ): Promise<APIResponse<SpotCandleData[]>> {
     return this.get('/api/spot/v1/market/candles', {
       symbol,
       period,
-      limit,
-      after,
-      before
+      ...pagination,
     });
   }
 

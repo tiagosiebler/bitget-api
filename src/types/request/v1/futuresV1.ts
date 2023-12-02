@@ -216,4 +216,14 @@ export interface HistoricPlanOrderTPSLRequest {
   isPlan?: string;
 }
 
+/**
+ * @typedef  {string[6]} FuturesCandleData
+ * @property {Array[0]} Timestamp in milliseconds
+ * @property {Array[1]} Opening price
+ * @property {Array[2]} Highest price
+ * @property {Array[3]} Lowest price
+ * @property {Array[4]} Closing price - Value of the latest candle stick might change
+ * @property {Array[5]} Base currency trading volume
+ * @property {Array[6]} Quote currency trading volume
+ */
 export type FuturesCandleData = string[6];
