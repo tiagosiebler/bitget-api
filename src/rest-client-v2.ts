@@ -347,8 +347,14 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotMainSubTransferRecord(params: object): Promise<APIResponse<any>> {
-    return this.getPrivate(`/api/v2/spot/account/sub-main-trans-record`,params,);
+    return this.getPrivate(`/api/v2/spot/account/sub-main-trans-record`,params);
   }
+
+  getSubAccountDepositRecords(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/spot/wallet/subaccount-deposit-records`,params);
+  }
+
+
 
   /**
    *
