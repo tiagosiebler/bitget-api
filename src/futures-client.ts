@@ -108,7 +108,7 @@ export class FuturesClient extends BaseRestClient {
     endTime: string, 
     limit?: string,
     kLineType?: 'market' | 'mark' | 'index'
-  ): Promise<FuturesCandleData[]> {
+  ): Promise<APIResponse<FuturesCandleData[]>> {
     return this.get('/api/mix/v1/market/candles', {
       symbol,
       granularity,
