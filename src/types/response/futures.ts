@@ -35,8 +35,14 @@ export interface FuturesSymbolRule {
   baseCoin: string;
   buyLimitPriceRatio: string;
   feeRateUpRatio: string;
+  limitOpenTime: string;
+  maintainTime: string;
   makerFeeRate: string;
+  maxOrderNum: string;
+  maxPositionNum: string;
   minTradeNum: string;
+  minTradeUSDT: string;
+  offTime: string;
   openCostUpRatio: string;
   priceEndStep: string;
   pricePlace: string;
@@ -45,6 +51,9 @@ export interface FuturesSymbolRule {
   sizeMultiplier: string;
   supportMarginCoins: string[];
   symbol: string;
+  symbolName: string;
+  symbolStatus: string;
+  symbolType: string;
   takerFeeRate: string;
   volumePlace: string;
 }
