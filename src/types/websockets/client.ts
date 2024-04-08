@@ -39,7 +39,7 @@ export type WsPublicTopicV2 =
   | 'ticker'
   | 'candle1m'
   | 'candle5m'
-  | 'candle15'
+  | 'candle15m'
   | 'candle30m'
   | 'candle1H'
   | 'candle4H'
