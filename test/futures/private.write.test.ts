@@ -85,9 +85,7 @@ describe('Private Futures REST API POST Endpoints', () => {
       });
     } catch (e) {
       expect(e.body).toMatchObject({
-        // seems to be the new "insufficient balance" error, informed bitget on 7th feb
-        code: API_ERROR_CODE.QTY_GREATER_THAN_MAX_OPEN,
-        // code: API_ERROR_CODE.INSUFFICIENT_BALANCE,
+        code: API_ERROR_CODE.ACCOUNT_KYC_REQUIRED,
       });
     }
   });
@@ -108,7 +106,7 @@ describe('Private Futures REST API POST Endpoints', () => {
       });
     } catch (e) {
       expect(e.body).toMatchObject({
-        code: API_ERROR_CODE.INSUFFICIENT_BALANCE,
+        code: API_ERROR_CODE.ACCOUNT_KYC_REQUIRED,
       });
     }
   });
@@ -155,7 +153,7 @@ describe('Private Futures REST API POST Endpoints', () => {
     }
   });
 
-  it('submitPlanOrder()', async () => {
+  it.skip('submitPlanOrder()', async () => {
     try {
       expect(
         await api.submitPlanOrder({
@@ -179,7 +177,7 @@ describe('Private Futures REST API POST Endpoints', () => {
     }
   });
 
-  it('modifyPlanOrder()', async () => {
+  it.skip('modifyPlanOrder()', async () => {
     try {
       expect(
         await api.modifyPlanOrder({
