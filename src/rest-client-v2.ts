@@ -173,7 +173,7 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getBGBConvertCoins(): Promise<APIResponse<any>> {
+  getConvertBGBCoins(): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/convert/bgb-convert-coin-list`);
   }
 
@@ -181,7 +181,7 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate(`/api/v2/convert/bgb-convert`, params);
   }
 
-  getBGBConvertHistory(params: object): Promise<APIResponse<any>> {
+  getConvertBGBHistory(params: object): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/convert/bgb-convert-records`, params);
   }
 
