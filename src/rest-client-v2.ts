@@ -158,7 +158,8 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/account/bot-assets`, params);
   }
 
-  getAssetsOverview(): Promise<APIResponse<any>> {
+  /** Get assets overview */
+  getBalances(): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/account/all-account-balance`);
   }
 
