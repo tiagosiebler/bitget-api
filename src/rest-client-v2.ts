@@ -146,6 +146,24 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   /**
+*
+* * Common | Assets
+*
+*/
+  getFundingAssets(params?: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/account/funding-assets`, params);
+  }
+
+  getBotAccount(params?: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/account/bot-assets`, params);
+  }
+
+  /** Get assets overview */
+  getBalances(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/account/all-account-balance`);
+  }
+
+  /**
    *
    * * Common | Convert
    *
