@@ -201,9 +201,10 @@ describe('Private Spot REST API POST Endpoints', () => {
       try {
         expect(await api.cancelOrder(symbol, '123456')).toMatchObject({
           ...sucessEmptyResponseObject(),
-          data: expect.any(Array),
+          data: '123456', //expect.any(Array),
         });
       } catch (e) {
+        console.log('cancelorder err', e);
         expect(e.body).toMatchObject({
           code: API_ERROR_CODE.ORDER_NOT_FOUND,
         });
