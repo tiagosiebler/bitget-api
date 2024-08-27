@@ -99,6 +99,62 @@ export class RestClientV2 extends BaseRestClient {
 
   /**
    *
+   * * Common | Trading insights
+   *
+   */
+
+  getSpotWhaleNetFlowData(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/spot/market/whale-net-flow`, params);
+  }
+
+  getFuturesActiveTakerBuySellVolumeData(
+    params: object,
+  ): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/mix/market/taker-buy-sell`, params);
+  }
+
+  getFuturesActiveLongShortPositionData(
+    params: object,
+  ): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/mix/market/position-long-short`, params);
+  }
+
+  getFuturesLongShortRatio(params: object): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/mix/market/long-short-ratio`, params);
+  }
+
+  getMarginLoanGrowthRate(params: object): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/mix/market/loan-growth`, params);
+  }
+
+  getIsolatedMarginBorrowingRatio(params: object): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/mix/market/isolated-borrow-rate`, params);
+  }
+
+  getFuturesActiveBuySellVolumeData(params: object): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/mix/market/long-short`, params);
+  }
+
+  getSpotFundFlow(): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/spot/market/fund-flow`);
+  }
+
+  getTradeDataSupportSymbols(): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/spot/market/support-symbols`);
+  }
+
+  getSpotFundNetFlowData(params: object): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/spot/market/fund-net-flow`, params);
+  }
+
+  getFuturesActiveLongShortAccountData(
+    params: object,
+  ): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/mix/market/account-long-short`, params);
+  }
+
+  /**
+   *
    * * Common | Virtual Subaccount
    *
    */
@@ -146,10 +202,10 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   /**
-*
-* * Common | Assets
-*
-*/
+   *
+   * * Common | Assets
+   *
+   */
   getFundingAssets(params?: object): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/account/funding-assets`, params);
   }
@@ -321,6 +377,10 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/spot/trade/current-plan-order`, params);
   }
 
+  getSpotPlanSubOrder(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/spot/trade/plan-sub-order`, params);
+  }
+
   getSpotHistoricPlanOrders(params: object): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/history-plan-order`, params);
   }
@@ -350,12 +410,23 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/spot/account/subaccount-assets`);
   }
 
+  spotModifyDepositAccount(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/spot/wallet/modify-deposit-account`,
+      params,
+    );
+  }
+
   getSpotAccountBills(params?: object): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/account/bills`, params);
   }
 
   spotTransfer(params: object): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/wallet/transfer`, params);
+  }
+
+  getSpotTransferableCoins(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/spot/wallet/transfer-coin-info`, params);
   }
 
   spotSubTransfer(params: object): Promise<APIResponse<any>> {
@@ -366,6 +437,10 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/spot/account/transferRecords`, params);
   }
 
+  spotSwitchBGBDeduct(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/spot/account/switch-deduct`, params);
+  }
+
   spotWithdraw(params: object): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/wallet/withdrawal`, params);
   }
@@ -374,8 +449,23 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/spot/wallet/deposit-address`, params);
   }
 
+  getSpotSubDepositAddress(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/spot/wallet/subaccount-deposit-address`,
+      params,
+    );
+  }
+
   getSpotDepositHistory(params: object): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/wallet/deposit-records`, params);
+  }
+
+  getSpotBGBDeductInfo(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/spot/account/deduct-info`);
+  }
+
+  spotCancelWithdrawal(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/spot/wallet/cancel-withdrawal`, params);
   }
 
   getSpotWithdrawalHistory(params: object): Promise<APIResponse<any>> {
@@ -506,6 +596,10 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate(`/api/v2/mix/account/set-leverage`, params);
   }
 
+  setFuturesPositionAutoMargin(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/mix/account/set-auto-margin`, params);
+  }
+
   setFuturesPositionMargin(params: object): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/mix/account/set-margin`, params);
   }
@@ -600,11 +694,19 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/mix/order/orders-history`, params);
   }
 
+  futuresCancelAllOrders(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/mix/order/cancel-all-orders`, params);
+  }
+
   /**
    *
    * * Futures | Trigger Orders
    *
    */
+
+  futuresSubmitPlanSubOrder(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/mix/order/plan-sub-order`, params);
+  }
 
   futuresSubmitTPSLOrder(params: object): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/mix/order/place-tpsl-order`, params);
@@ -642,7 +744,108 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  // TODO: not yet implemented
+  /**
+   *
+   * * Broker | Subaccount
+   *
+   */
+
+  modifySubaccountEmail(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/broker/account/modify-subaccount-email`,
+      params,
+    );
+  }
+
+  getBrokerInfo(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/broker/account/info`);
+  }
+
+  createSubaccount(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/broker/account/create-subaccount`, params);
+  }
+
+  getSubaccounts(params?: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/broker/account/subaccount-list`, params);
+  }
+
+  modifySubaccount(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/broker/account/modify-subaccount`, params);
+  }
+
+  getSubaccountEmail(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/broker/account/subaccount-email`, params);
+  }
+
+  getSubaccountSpotAssets(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/broker/account/subaccount-spot-assets`,
+      params,
+    );
+  }
+
+  getSubaccountFuturesAssets(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/broker/account/subaccount-future-assets`,
+      params,
+    );
+  }
+
+  createSubaccountDepositAddress(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/broker/account/subaccount-address`,
+      params,
+    );
+  }
+
+  subaccountWithdrawal(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/broker/account/subaccount-withdrawal`,
+      params,
+    );
+  }
+
+  subaccountSetAutoTransfer(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/broker/account/set-subaccount-autotransfer`,
+      params,
+    );
+  }
+
+  subaccountDepositRecords(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/broker/subaccount-deposit`, params);
+  }
+
+  subaccountWithdrawalRecords(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/broker/subaccount-withdrawal`, params);
+  }
+
+  /**
+   *
+   * * Broker | Subaccount
+   *
+   */
+
+  createSubaccountApiKey(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/broker/manage/create-subaccount-apikey`,
+      params,
+    );
+  }
+
+  getSubaccountApiKey(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/broker/manage/subaccount-apikey-list`,
+      params,
+    );
+  }
+
+  modifySubaccountApiKey(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/broker/manage/modify-subaccount-apikey`,
+      params,
+    );
+  }
 
   /**
    *
@@ -904,6 +1107,17 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/margin/${marginType}/fills`, params);
   }
 
+  getMarginLiquidationOrders(
+    marginType: MarginType,
+    params: object,
+  ): Promise<APIResponse<any>> {
+    assertMarginType(marginType);
+    return this.getPrivate(
+      `/api/v2/margin/${marginType}/liquidation-order`,
+      params,
+    );
+  }
+
   /**
    *
    *
@@ -912,15 +1126,466 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  // TODO: not yet implemented
-
   /**
    *
    *
-   * Earn
+   * Copy Trading | Future copy trading | Trader Api
    *
    *
    */
 
-  // TODO: not yet implemented
+  getFuturesTraderCurrentOrder(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/mix-trader/order-current-track`,
+      params,
+    );
+  }
+
+  getFuturesTraderHistoryOrders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/mix-trader/order-history-track`,
+      params,
+    );
+  }
+
+  modifyFuturesTraderOrderTPSL(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/copy/mix-trader/order-modify-tpsl`,
+      params,
+    );
+  }
+
+  getFuturesTraderOrder(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/mix-trader/order-total-detail`);
+  }
+
+  getFuturesTraderProfitHistory(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/mix-trader/profit-history-summarys`);
+  }
+
+  getFuturesTraderProfitShareHistory(
+    params: object,
+  ): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/mix-trader/profit-history-details`,
+      params,
+    );
+  }
+
+  closeFuturesTraderOrder(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/copy/mix-trader/order-close-positions`,
+      params,
+    );
+  }
+
+  getFuturesTraderProfitShare(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/mix-trader/profit-details`, params);
+  }
+
+  getFuturesTraderProfitShareGroup(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/mix-trader/profits-group-coin-date`,
+      params,
+    );
+  }
+
+  getFuturesTraderSymbolSettings(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/mix-trader/config-query-symbols`,
+      params,
+    );
+  }
+
+  updateFuturesTraderSymbolSettings(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/copy/mix-trader/config-setting-symbols`,
+      params,
+    );
+  }
+
+  updateFuturesTraderGlobalSettings(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/copy/mix-trader/config-settings-base`,
+      params,
+    );
+  }
+
+  getFuturesTraderFollowers(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/mix-trader/config-query-followers`,
+      params,
+    );
+  }
+
+  removeFuturesTraderFollower(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/copy/mix-trader/config-remove-follower`,
+      params,
+    );
+  }
+
+  /**
+   *
+   *
+   * Copy Trading | Future copy trading | Follower Api
+   *
+   *
+   */
+
+  getFuturesFollowerCurrentOrders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/mix-follower/query-current-orders`,
+      params,
+    );
+  }
+
+  getFuturesFollowerHistoryOrders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/mix-follower/query-history-orders`,
+      params,
+    );
+  }
+
+  updateFuturesFollowerTPSL(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/copy/mix-follower/setting-tpsl`, params);
+  }
+
+  updateFuturesFollowerSettings(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/copy/mix-follower/settings`, params);
+  }
+
+  getFuturesFollowerSettings(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/mix-follower/query-settings`, params);
+  }
+
+  closeFuturesFollowerPositions(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/copy/mix-follower/close-positions`,
+      params,
+    );
+  }
+
+  getFuturesFollowerTraders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/mix-follower/query-traders`, params);
+  }
+
+  getFuturesFollowerFollowLimit(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/mix-follower/query-quantity-limit`,
+      params,
+    );
+  }
+
+  unfollowFuturesTrader(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/copy/mix-follower/cancel-trader`, params);
+  }
+
+  /**
+   *
+   *
+   * Copy Trading | Future copy trading | Broker api
+   *
+   *
+   */
+
+  getBrokerTraders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/mix-broker/query-traders`, params);
+  }
+
+  getBrokerTradersHistoricalOrders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/mix-broker/query-history-traces`,
+      params,
+    );
+  }
+
+  getBrokerTradersPendingOrders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/mix-broker/query-current-traces`,
+      params,
+    );
+  }
+
+  /**
+   *
+   *
+   * Copy Trading | Spot copy trading | Trader api
+   *
+   *
+   */
+
+  getSpotTraderProfit(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/spot-trader/profit-summarys`);
+  }
+
+  getSpotTraderHistoryProfit(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/spot-trader/profit-history-details`,
+      params,
+    );
+  }
+
+  getSpotTraderUnrealizedProfit(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/spot-trader/profit-details`, params);
+  }
+
+  getSpotTraderOrder(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/spot-trader/order-total-detail`);
+  }
+
+  modifySpotTraderOrderTPSL(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/copy/spot-trader/order-modify-tpsl`,
+      params,
+    );
+  }
+
+  getSpotTraderHistoryOrders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/spot-trader/order-history-track`,
+      params,
+    );
+  }
+
+  getSpotTraderCurrentOrders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/spot-trader/order-current-track`,
+      params,
+    );
+  }
+
+  sellSpotTrader(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/copy/spot-trader/order-close-tracking`,
+      params,
+    );
+  }
+
+  getSpotTraderSymbolSettings(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/copy/spot-trader/config-setting-symbols`,
+      params,
+    );
+  }
+
+  removeSpotTraderFollowers(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/copy/spot-trader/config-remove-follower`,
+      params,
+    );
+  }
+
+  getSpotTraderConfiguration(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/spot-trader/config-query-settings`);
+  }
+
+  getSpotTraderFollowers(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/spot-trader/config-query-followers`,
+      params,
+    );
+  }
+
+  /**
+   *
+   *
+   * Copy Trading | Spot copy trading | Trader api
+   *
+   *
+   */
+
+  cancelSpotFollowerOrder(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/copy/spot-follower/stop-order`, params);
+  }
+
+  updateSpotFollowerSettings(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/copy/spot-follower/settings`, params);
+  }
+
+  updateSpotFollowerTPSL(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/copy/spot-follower/setting-tpsl`, params);
+  }
+
+  getSpotFollowerTraders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/spot-follower/query-traders`, params);
+  }
+
+  getSpotFollowerCurrentTraderSymbols(
+    params: object,
+  ): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/spot-follower/query-trader-symbols`,
+      params,
+    );
+  }
+
+  getSpotFollowerSettings(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/copy/spot-follower/query-settings`, params);
+  }
+
+  getSpotFollowerHistoryOrders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/spot-follower/query-history-orders`,
+      params,
+    );
+  }
+
+  getSpotFollowerOpenOrders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/copy/spot-follower/query-current-orders`,
+      params,
+    );
+  }
+
+  sellSpotFollower(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/copy/spot-follower/order-close-tracking`,
+      params,
+    );
+  }
+
+  unfollowSpotTrader(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/copy/spot-follower/cancel-trader`, params);
+  }
+
+  /**
+   *
+   *
+   * Earn | Savings
+   *
+   *
+   */
+
+  getEarnSavingsProducts(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/savings/product`, params);
+  }
+
+  getEarnSavingsAccount(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/savings/account`);
+  }
+
+  getEarnSavingsAssets(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/savings/assets`, params);
+  }
+
+  getEarnSavingsRecords(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/savings/records`, params);
+  }
+
+  getEarnSavingsSubscription(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/savings/subscribe-info`, params);
+  }
+
+  earnSubscribeSavings(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/earn/savings/subscribe`, params);
+  }
+
+  getEarnSavingsSubscriptionResult(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/savings/subscribe-result`, params);
+  }
+
+  getEarnSavingsRedemptionResult(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/savings/redeem-result`, params);
+  }
+
+  /**
+   *
+   *
+   * Earn | Earn Account
+   *
+   *
+   */
+
+  getEarnAccount(params?: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/account/assets`, params);
+  }
+
+  /**
+   *
+   *
+   * Earn | Shark Fin
+   *
+   *
+   */
+
+  getSharkfinProducts(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/sharkfin/product`, params);
+  }
+
+  getSharkfinAccount(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/sharkfin/account`);
+  }
+
+  getSharkfinAssets(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/sharkfin/assets`, params);
+  }
+
+  getSharkfinRecords(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/sharkfin/records`, params);
+  }
+
+  getSharkfinSubscription(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/sharkfin/subscribe-info`, params);
+  }
+
+  subscribeSharkfin(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/earn/sharkfin/subscribe`, params);
+  }
+
+  getSharkfinSubscriptionResult(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/sharkfin/subscribe-result`, params);
+  }
+
+  /**
+   *
+   *
+   * Earn | Loan
+   *
+   *
+   */
+
+  getLoanCurrencies(params?: object): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/earn/loan/public/coinInfos`, params);
+  }
+
+  getLoanEstInterestAndBorrowable(params: object): Promise<APIResponse<any>> {
+    return this.get(`/api/v2/earn/loan/public/hour-interest`, params);
+  }
+
+  borrowLoan(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/earn/loan/borrow`, params);
+  }
+
+  getOngoingLoanOrders(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/loan/ongoing-orders`, params);
+  }
+
+  repayLoan(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/earn/loan/repay`, params);
+  }
+
+  getRepayHistory(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/loan/repay-history`, params);
+  }
+
+  updateLoanPledgeRate(params: object): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/earn/loan/revise-pledge`, params);
+  }
+
+  getLoanPledgeRateHistory(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/loan/revise-history`, params);
+  }
+
+  getLoanHistory(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/loan/borrow-history`, params);
+  }
+
+  getLoanDebts(params?: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/loan/debts`, params);
+  }
+
+  getLoanLiquidationRecords(params: object): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/loan/reduces`, params);
+  }
 }
