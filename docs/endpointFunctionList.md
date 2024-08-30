@@ -41,7 +41,6 @@ This table includes all endpoints from the official Exchange API docs and corres
 
 | Function | AUTH | HTTP Method | Endpoint |
 | -------- | :------: | :------: | -------- |
-| `fetchServerTime()` |  | GET | `/api/v2/public/annoucements` |
 | `getAnnouncements()` |  | GET | `/api/v2/public/annoucements` |
 | `getServerTime()` |  | GET | `/api/v2/public/time` |
 | `getTradeRate()` | :closed_lock_with_key:  | GET | `/api/v2/common/trade-rate` |
