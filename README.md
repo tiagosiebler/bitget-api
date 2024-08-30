@@ -46,6 +46,7 @@ Check out my related projects:
 Most methods pass values as-is into HTTP requests. These can be populated using parameters specified by Bitget's API documentation, or check the type definition in each class within this repository (see table below for convenient links to each class).
 
 - [Bitget API Documentation](https://www.bitget.com/api-doc/common/intro).
+- [REST Endpoint Function List](./docs/endpointFunctionList.md)
 
 ## Structure
 
