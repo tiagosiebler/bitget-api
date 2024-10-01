@@ -116,6 +116,11 @@ describe('Private Spot REST API POST Endpoints', () => {
           data: expect.any(Array),
         });
       } catch (e) {
+        console.log(
+          `"${expect.getState().currentTestName}"`,
+          JSON.stringify(e.body),
+        );
+
         expect(e.body).toMatchObject({
           code: API_ERROR_CODE.INCORRECT_PERMISSIONS,
         });
@@ -142,6 +147,11 @@ describe('Private Spot REST API POST Endpoints', () => {
           data: expect.any(Array),
         });
       } catch (e) {
+        console.log(
+          `"${expect.getState().currentTestName}"`,
+          JSON.stringify(e.body),
+        );
+
         expect(e.body).toMatchObject({
           code: API_ERROR_CODE.INCORRECT_PERMISSIONS,
         });
