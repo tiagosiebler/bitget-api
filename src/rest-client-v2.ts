@@ -4,6 +4,7 @@ import {
   FuturesAccountBillRequestV2,
   FuturesCandlesRequestV2,
   SpotCandlesRequestV2,
+  SpotAccountBill,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM, assertMarginType } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -417,7 +418,15 @@ export class RestClientV2 extends BaseRestClient {
     );
   }
 
-  getSpotAccountBills(params?: object): Promise<APIResponse<any>> {
+  getSpotAccountBills(params?: {
+    coin?: string;
+    groupType?: string;
+    businessType?: string;
+    startTime?: string;
+    endTime?: string;
+    limit?: string;
+    idLessThan?: string;
+  }): Promise<APIResponse<SpotAccountBill[]>> {
     return this.getPrivate(`/api/v2/spot/account/bills`, params);
   }
 
