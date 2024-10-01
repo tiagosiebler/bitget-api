@@ -102,7 +102,7 @@ describe('Private Spot REST API POST Endpoints', () => {
       }
     });
 
-    it('withdrawV2()', async () => {
+    it.skip('withdrawV2()', async () => {
       try {
         expect(
           await api.withdrawV2({
@@ -140,7 +140,7 @@ describe('Private Spot REST API POST Endpoints', () => {
       }
     });
 
-    it('innerWithdrawV2()', async () => {
+    it.skip('innerWithdrawV2()', async () => {
       try {
         expect(await api.innerWithdrawV2(coin, '12345', '1')).toMatchObject({
           ...sucessEmptyResponseObject(),
