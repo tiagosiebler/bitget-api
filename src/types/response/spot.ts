@@ -48,3 +48,28 @@ export interface SpotMarketTrade {
   fillQuantity: string;
   fillTime: string;
 }
+
+export interface SpotAccountAsset {
+  coin: string;
+  available: string;
+  frozen: string;
+  locked: string;
+  limitAvailable: string;
+  uTime: string;
+}
+
+export interface SpotAccountBill {
+  cTime: string;
+  coino: string;
+  groupType: string;
+  businessType:
+    | 'SMALL_EXCHANGE_USER_IN'
+    | 'SMALL_EXCHANGE_USER_OUT'
+    | 'AIRDROP_REWARD'
+    | 'WITHDRAW'
+    | string; // TODO: complete list of possible values here?
+  size: string;
+  balance: string;
+  fees: string;
+  billd: string;
+}

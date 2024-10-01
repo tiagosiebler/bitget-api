@@ -1,12 +1,24 @@
 # Node.js & Typescript Bitget API SDK
 
-[![Build & Test](https://github.com/tiagosiebler/bitget-api/actions/workflows/e2etests.yml/badge.svg?branch=master)](https://github.com/tiagosiebler/bitget-api/actions/workflows/e2etests.yml) [![npm version](https://img.shields.io/npm/v/bitget-api)][1] [![npm size](https://img.shields.io/bundlephobia/min/bitget-api/latest)][1] [![npm downloads](https://img.shields.io/npm/dt/bitget-api)][1]
+[![Build & Test](https://github.com/tiagosiebler/bitget-api/actions/workflows/e2etests.yml/badge.svg?branch=master)](https://github.com/tiagosiebler/bitget-api/actions/workflows/e2etests.yml)
+[![npm version](https://img.shields.io/npm/v/bitget-api)][1]
+[![npm size](https://img.shields.io/bundlephobia/min/bitget-api/latest)][1]
+[![npm downloads](https://img.shields.io/npm/dt/bitget-api)][1]
 [![last commit](https://img.shields.io/github/last-commit/tiagosiebler/bitget-api)][1]
-[![CodeFactor](https://www.codefactor.io/repository/github/tiagosiebler/bitget-api/badge)](https://www.codefactor.io/repository/github/tiagosiebler/bitget-api) [![Telegram](https://img.shields.io/badge/chat-on%20telegram-blue.svg)](https://t.me/nodetraders)
+[![CodeFactor](https://www.codefactor.io/repository/github/tiagosiebler/bitget-api/badge)](https://www.codefactor.io/repository/github/tiagosiebler/bitget-api)
+[![Telegram](https://img.shields.io/badge/chat-on%20telegram-blue.svg)](https://t.me/nodetraders)
 
-[![connector logo](https://github.com/tiagosiebler/bitget-api/blob/master/docs/images/logo1.png?raw=true)][1]
+<p align="center">
+  <a href="https://www.npmjs.com/package/bitget-api">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/tiagosiebler/bitget-api/blob/master/docs/images/logoDarkMode2.svg?raw=true#gh-dark-mode-only">
+      <img alt="SDK Logo" src="https://github.com/tiagosiebler/bitget-api/blob/master/docs/images/logoBrightMode2.svg?raw=true#gh-light-mode-only">
+    </picture>
+  </a>
+</p>
 
 [1]: https://www.npmjs.com/package/bitget-api
+
 
 Updated & performant JavaScript & Node.js SDK for the Bitget V2 REST APIs and WebSockets:
 
