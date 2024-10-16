@@ -19,7 +19,6 @@
 
 [1]: https://www.npmjs.com/package/bitget-api
 
-
 Updated & performant JavaScript & Node.js SDK for the Bitget V2 REST APIs and WebSockets:
 
 - Complete integration with all Bitget APIs.
@@ -37,6 +36,7 @@ Updated & performant JavaScript & Node.js SDK for the Bitget V2 REST APIs and We
 
 - Issues? Check the [issues tab](https://github.com/tiagosiebler/bitget-api/issues).
 - Discuss & collaborate with other node devs? Join our [Node.js Algo Traders](https://t.me/nodetraders) engineering community on telegram.
+- Follow our announcement channel for real-time updates on [X/Twitter](https://x.com/QuantSDKs)
 
 <!-- template_related_projects -->
 

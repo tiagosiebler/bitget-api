@@ -11,9 +11,9 @@ const client = new RestClientV2({
 });
 
 client.getAnnouncements(params)
-  .then(response => {
+  .then((response) => {
     console.log(response);
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
   });
