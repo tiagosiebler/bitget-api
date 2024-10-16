@@ -1,5 +1,8 @@
 const { RestClientV2 } = require('bitget-api');
 
+
+  // This example shows how to call this Bitget API endpoint with either node.js, javascript (js) or typescript (ts) with the npm module "bitget-api" for Bitget exchange
+  // This Bitget API SDK is available on npm via "npm install bitget-api"
   // ENDPOINT: /api/v2/copy/spot-trader/order-total-detail
   // METHOD: GET
   // PUBLIC: NO
