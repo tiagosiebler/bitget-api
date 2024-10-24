@@ -6,7 +6,6 @@ const { RestClientV2 } = require('bitget-api');
   // ENDPOINT: /api/v2/margin/${marginType}/history-orders
   // METHOD: GET
   // PUBLIC: NO
-  // Link to function: https://github.com/tiagosiebler/bitget-api/blob/master/src/rest-client-v2.ts#L1100
 
 const client = new RestClientV2({
   apiKey: 'insert_api_key_here',
