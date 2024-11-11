@@ -10,6 +10,7 @@ const { RestClientV2 } = require('bitget-api');
 const client = new RestClientV2({
   apiKey: 'insert_api_key_here',
   apiSecret: 'insert_api_secret_here',
+  apiPass: 'insert_api_pass_here',
 });
 
 client.getMarginRiskRate(params)
