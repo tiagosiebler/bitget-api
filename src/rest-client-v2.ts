@@ -23,6 +23,7 @@ import {
   GetTradeRateRequest,
   ModifyVirtualSubRequest,
   ModifyVirtualSubApiKeyRequest,
+  GetConvertBGBHistoryRequest,
 } from './types/request/v2/common';
 import { REST_CLIENT_TYPE_ENUM, assertMarginType } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -397,11 +398,13 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/convert/bgb-convert-coin-list`);
   }
 
-  convertBGB(params: object): Promise<APIResponse<any>> {
+  convertBGB(params: { coinList: string }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/convert/bgb-convert`, params);
   }
 
-  getConvertBGBHistory(params: object): Promise<APIResponse<any>> {
+  getConvertBGBHistory(
+    params: GetConvertBGBHistoryRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/convert/bgb-convert-records`, params);
   }
 

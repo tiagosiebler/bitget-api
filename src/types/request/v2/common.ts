@@ -171,3 +171,17 @@ export interface GetConvertHistoryRequest {
   limit?: string;
   idLessThan?: string;
 }
+
+/**
+ *
+ * * Common | BGB Convert
+ *
+ */
+
+export interface GetConvertBGBHistoryRequest {
+    orderId?: string;
+    startTime: string;
+    endTime: string;
+    limit?: string;
+    idLessThan?: string;
+  }
