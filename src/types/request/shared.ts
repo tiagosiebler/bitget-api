@@ -22,3 +22,11 @@ export interface GetHistoricTradesParams {
  * The margin type, used directly in building the endpoint URL
  */
 export type MarginType = 'crossed' | 'isolated';
+
+export type FuturesProductTypeV2 =
+  | 'USDT-FUTURES'
+  | 'COIN-FUTURES'
+  | 'USDC-FUTURES'
+  | 'SUSDT-FUTURES'
+  | 'SCOIN-FUTURES'
+  | 'SUSDC-FUTURES';
