@@ -5,6 +5,31 @@ import {
   FuturesCandlesRequestV2,
   SpotCandlesRequestV2,
   SpotAccountBill,
+  SpotHistoricCandlesRequestV2,
+  SpotHistoricTradesRequest,
+  SpotOrderRequest,
+  SpotCancelandSubmitOrderRequest,
+  SpotCancelOrderRequest,
+  SpotBatchOrderRequest,
+  SpotBatchCancelOrderRequest,
+  GetSpotOrderInfoRequest,
+  GetSpotOpenOrdersRequest,
+  GetSpotHistoryOrdersRequest,
+  GetSpotFillsRequest,
+  SpotPlanOrderRequest,
+  SpotModifyPlanOrderRequest,
+  GetSpotCurrentPlanOrdersRequest,
+  GetSpotHistoryPlanOrdersRequest,
+  GetSpotAccountBillsRequest,
+  SpotTransferRequest,
+  SpotAccountType,
+  SpotSubAccountTransferRequest,
+  SpotWithdrawalRequest,
+  SpotMainSubTransferRecordRequest,
+  GetSpotTransferRecordRequest,
+  GetSpotSubAccountDepositRecordRequest,
+  GetSpotWithdrawalRecordRequest,
+  GetSpotDepositRecordRequest,
 } from './types';
 import {
   ConvertQuoteRequest,
@@ -422,11 +447,11 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getSpotCoinInfo(params?: object): Promise<APIResponse<any>> {
+  getSpotCoinInfo(params?: { coin?: string }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/public/coins`, params);
   }
 
-  getSpotSymbolInfo(params?: object): Promise<APIResponse<any>> {
+  getSpotSymbolInfo(params?: { symbol?: string }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/public/symbols`, params);
   }
 
@@ -434,15 +459,23 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/spot/market/vip-fee-rate`);
   }
 
-  getSpotTicker(params?: object): Promise<APIResponse<any>> {
+  getSpotTicker(params?: { symbol?: string }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/market/tickers`, params);
   }
 
-  getSpotMergeDepth(params: object): Promise<APIResponse<any>> {
+  getSpotMergeDepth(params: {
+    symbol: string;
+    precision?: string;
+    limit?: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/market/merge-depth`, params);
   }
 
-  getSpotOrderBookDepth(params: object): Promise<APIResponse<any>> {
+  getSpotOrderBookDepth(params: {
+    symbol: string;
+    type?: string;
+    limit?: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/market/orderbook`, params);
   }
 
@@ -450,15 +483,22 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/spot/market/candles`, params);
   }
 
-  getSpotHistoricCandles(params: object): Promise<APIResponse<any>> {
+  getSpotHistoricCandles(
+    params: SpotHistoricCandlesRequestV2,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/market/history-candles`, params);
   }
 
-  getSpotRecentTrades(params: object): Promise<APIResponse<any>> {
+  getSpotRecentTrades(params: {
+    symbol: string;
+    limit?: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/market/fills`, params);
   }
 
-  getSpotHistoricTrades(params: object): Promise<APIResponse<any>> {
+  getSpotHistoricTrades(
+    params: SpotHistoricTradesRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/market/fills-history`, params);
   }
 
@@ -468,39 +508,62 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  spotSubmitOrder(params: object): Promise<APIResponse<any>> {
+  spotSubmitOrder(params: SpotOrderRequest): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/place-order`, params);
   }
 
-  spotCancelOrder(params: object): Promise<APIResponse<any>> {
+  spotCancelandSubmitOrder(
+    params: SpotCancelandSubmitOrderRequest,
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/spot/trade/cancel-replace-order`, params);
+  }
+
+  spotBatchCancelandSubmitOrder(params: {
+    orderList: SpotCancelandSubmitOrderRequest[];
+  }): Promise<APIResponse<any>> {
+    return this.postPrivate(
+      `/api/v2/spot/trade/batch-cancel-replace-order`,
+      params,
+    );
+  }
+
+  spotCancelOrder(params: SpotCancelOrderRequest): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/cancel-order`, params);
   }
 
-  spotBatchSubmitOrders(params: object): Promise<APIResponse<any>> {
+  spotBatchSubmitOrders(
+    params: SpotBatchOrderRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/batch-orders`, params);
   }
 
-  spotBatchCancelOrders(params: object): Promise<APIResponse<any>> {
+  spotBatchCancelOrders(
+    params: SpotBatchCancelOrderRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/batch-cancel-order`, params);
   }
 
-  spotCancelSymbolOrder(params: object): Promise<APIResponse<any>> {
+  spotCancelSymbolOrder(params: { symbol: string }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/cancel-symbol-order`, params);
   }
 
-  getSpotOrder(params: object): Promise<APIResponse<any>> {
+  getSpotOrder(params?: GetSpotOrderInfoRequest): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/orderInfo`, params);
   }
 
-  getSpotOpenOrders(params?: object): Promise<APIResponse<any>> {
+  getSpotOpenOrders(
+    params?: GetSpotOpenOrdersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/unfilled-orders`, params);
   }
 
-  getSpotHistoricOrders(params?: object): Promise<APIResponse<any>> {
+  getSpotHistoricOrders(
+    params?: GetSpotHistoryOrdersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/history-orders`, params);
   }
 
-  getSpotFills(params: object): Promise<APIResponse<any>> {
+  getSpotFills(params: GetSpotFillsRequest): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/fills`, params);
   }
 
@@ -510,31 +573,44 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  spotSubmitPlanOrder(params: object): Promise<APIResponse<any>> {
+  spotSubmitPlanOrder(params: SpotPlanOrderRequest): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/place-plan-order`, params);
   }
 
-  spotModifyPlanOrder(params: object): Promise<APIResponse<any>> {
+  spotModifyPlanOrder(
+    params: SpotModifyPlanOrderRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/modify-plan-order`, params);
   }
 
-  spotCancelPlanOrder(params: object): Promise<APIResponse<any>> {
+  spotCancelPlanOrder(params: {
+    clientOid?: string;
+    orderId?: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/cancel-plan-order`, params);
   }
 
-  getSpotCurrentPlanOrders(params: object): Promise<APIResponse<any>> {
+  getSpotCurrentPlanOrders(
+    params: GetSpotCurrentPlanOrdersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/current-plan-order`, params);
   }
 
-  getSpotPlanSubOrder(params: object): Promise<APIResponse<any>> {
+  getSpotPlanSubOrder(params: {
+    planOrderId: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/plan-sub-order`, params);
   }
 
-  getSpotHistoricPlanOrders(params: object): Promise<APIResponse<any>> {
+  getSpotHistoricPlanOrders(
+    params: GetSpotHistoryPlanOrdersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/history-plan-order`, params);
   }
 
-  spotCancelPlanOrders(params?: object): Promise<APIResponse<any>> {
+  spotCancelPlanOrders(params?: {
+    symbolList?: string[];
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       '/api/v2/spot/trade/batch-cancel-plan-order',
       params,
@@ -551,7 +627,10 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/spot/account/info`);
   }
 
-  getSpotAccountAssets(params?: object): Promise<APIResponse<any>> {
+  getSpotAccountAssets(params?: {
+    coin?: string;
+    assetType?: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/account/assets`, params);
   }
 
@@ -559,88 +638,108 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/spot/account/subaccount-assets`);
   }
 
-  spotModifyDepositAccount(params: object): Promise<APIResponse<any>> {
+  spotModifyDepositAccount(params: {
+    accountType: string;
+    coin: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/spot/wallet/modify-deposit-account`,
       params,
     );
   }
 
-  getSpotAccountBills(params?: {
-    coin?: string;
-    groupType?: string;
-    businessType?: string;
-    startTime?: string;
-    endTime?: string;
-    limit?: string;
-    idLessThan?: string;
-  }): Promise<APIResponse<SpotAccountBill[]>> {
+  getSpotAccountBills(
+    params?: GetSpotAccountBillsRequest,
+  ): Promise<APIResponse<SpotAccountBill[]>> {
     return this.getPrivate(`/api/v2/spot/account/bills`, params);
   }
 
-  spotTransfer(params: object): Promise<APIResponse<any>> {
+  spotTransfer(params: SpotTransferRequest): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/wallet/transfer`, params);
   }
 
-  getSpotTransferableCoins(params: object): Promise<APIResponse<any>> {
+  getSpotTransferableCoins(params: {
+    fromType: SpotAccountType;
+    toType: SpotAccountType;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/wallet/transfer-coin-info`, params);
   }
 
-  spotSubTransfer(params: object): Promise<APIResponse<any>> {
+  spotSubTransfer(
+    params: SpotSubAccountTransferRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/wallet/subaccount-transfer`, params);
   }
 
-  getSpotTransferHistory(params: object): Promise<APIResponse<any>> {
-    return this.getPrivate(`/api/v2/spot/account/transferRecords`, params);
-  }
-
-  spotSwitchBGBDeduct(params: object): Promise<APIResponse<any>> {
-    return this.postPrivate(`/api/v2/spot/account/switch-deduct`, params);
-  }
-
-  spotWithdraw(params: object): Promise<APIResponse<any>> {
+  spotWithdraw(params: SpotWithdrawalRequest): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/wallet/withdrawal`, params);
   }
 
-  getSpotDepositAddress(params: object): Promise<APIResponse<any>> {
-    return this.getPrivate(`/api/v2/spot/wallet/deposit-address`, params);
-  }
-
-  getSpotSubDepositAddress(params: object): Promise<APIResponse<any>> {
-    return this.getPrivate(
-      `/api/v2/spot/wallet/subaccount-deposit-address`,
-      params,
-    );
-  }
-
-  getSpotDepositHistory(params: object): Promise<APIResponse<any>> {
-    return this.getPrivate(`/api/v2/spot/wallet/deposit-records`, params);
-  }
-
-  getSpotBGBDeductInfo(): Promise<APIResponse<any>> {
-    return this.getPrivate(`/api/v2/spot/account/deduct-info`);
-  }
-
-  spotCancelWithdrawal(params: object): Promise<APIResponse<any>> {
-    return this.postPrivate(`/api/v2/spot/wallet/cancel-withdrawal`, params);
-  }
-
-  getSpotWithdrawalHistory(params: object): Promise<APIResponse<any>> {
-    return this.getPrivate(`/api/v2/spot/wallet/withdrawal-records`, params);
-  }
-
-  getSpotMainSubTransferRecord(params: object): Promise<APIResponse<any>> {
+  getSpotMainSubTransferRecord(
+    params: SpotMainSubTransferRecordRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/spot/account/sub-main-trans-record`,
       params,
     );
   }
 
-  getSubAccountDepositRecords(params: object): Promise<APIResponse<any>> {
+  getSpotTransferHistory(
+    params: GetSpotTransferRecordRequest,
+  ): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/spot/account/transferRecords`, params);
+  }
+
+  spotSwitchBGBDeduct(params: { deduct: boolean }): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/spot/account/switch-deduct`, params);
+  }
+
+  getSpotDepositAddress(params: {
+    coin: string;
+    chain?: string;
+    size: string;
+  }): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/spot/wallet/deposit-address`, params);
+  }
+
+  getSpotSubDepositAddress(params: {
+    subUid: string;
+    coin: string;
+    chain?: string;
+    size: string;
+  }): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      `/api/v2/spot/wallet/subaccount-deposit-address`,
+      params,
+    );
+  }
+  getSpotBGBDeductInfo(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/spot/account/deduct-info`);
+  }
+
+  spotCancelWithdrawal(params: { orderId: string }): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/spot/wallet/cancel-withdrawal`, params);
+  }
+
+  getSubAccountDepositRecords(
+    params: GetSpotSubAccountDepositRecordRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/spot/wallet/subaccount-deposit-records`,
       params,
     );
+  }
+
+  getSpotDepositHistory(
+    params: GetSpotDepositRecordRequest,
+  ): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/spot/wallet/deposit-records`, params);
+  }
+
+  getSpotWithdrawalHistory(
+    params: GetSpotWithdrawalRecordRequest,
+  ): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/spot/wallet/withdrawal-records`, params);
   }
 
   /**
