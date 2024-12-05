@@ -64,6 +64,15 @@ import {
   FuturesGetHistoryPlanOrdersRequestV2,
 } from './types';
 import {
+  CreateSubaccountApiKeyRequest,
+  GetSubaccountsRequest,
+  ModifySubaccountApiKeyRequest,
+  ModifySubRequest,
+  SubDepositRecordsRequest,
+  SubWithdrawalRecordsRequest,
+  SubWithdrawalRequest,
+} from './types/request/v2/broker';
+import {
   ConvertQuoteRequest,
   ConvertRequest,
   CreateVirtualSubApiKeyRequest,
@@ -1171,7 +1180,10 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  modifySubaccountEmail(params: object): Promise<APIResponse<any>> {
+  modifySubaccountEmail(params: {
+    subUid: string;
+    subaccountEmail: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/broker/account/modify-subaccount-email`,
       params,
@@ -1182,62 +1194,86 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/broker/account/info`);
   }
 
-  createSubaccount(params: object): Promise<APIResponse<any>> {
+  createSubaccount(params: {
+    subaccountName: string;
+    label: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/broker/account/create-subaccount`, params);
   }
 
-  getSubaccounts(params?: object): Promise<APIResponse<any>> {
+  getSubaccounts(params?: GetSubaccountsRequest): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/broker/account/subaccount-list`, params);
   }
 
-  modifySubaccount(params: object): Promise<APIResponse<any>> {
+  modifySubaccount(params: ModifySubRequest): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/broker/account/modify-subaccount`, params);
   }
 
-  getSubaccountEmail(params: object): Promise<APIResponse<any>> {
+  getSubaccountEmail(params: { subUid: string }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/broker/account/subaccount-email`, params);
   }
 
-  getSubaccountSpotAssets(params: object): Promise<APIResponse<any>> {
+  getSubaccountSpotAssets(params: {
+    subUid: string;
+    coin?: string;
+    assetType?: 'hold_only' | 'all';
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/broker/account/subaccount-spot-assets`,
       params,
     );
   }
 
-  getSubaccountFuturesAssets(params: object): Promise<APIResponse<any>> {
+  getSubaccountFuturesAssets(params: {
+    subUid: string;
+    productType: FuturesProductTypeV2;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/broker/account/subaccount-future-assets`,
       params,
     );
   }
 
-  createSubaccountDepositAddress(params: object): Promise<APIResponse<any>> {
+  createSubaccountDepositAddress(params: {
+    subUid: string;
+    coin: string;
+    chain?: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/broker/account/subaccount-address`,
       params,
     );
   }
 
-  subaccountWithdrawal(params: object): Promise<APIResponse<any>> {
+  subaccountWithdrawal(
+    params: SubWithdrawalRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/broker/account/subaccount-withdrawal`,
       params,
     );
   }
 
-  subaccountSetAutoTransfer(params: object): Promise<APIResponse<any>> {
+  subaccountSetAutoTransfer(params: {
+    subUid: string;
+    coin: string;
+    toAccountType: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/broker/account/set-subaccount-autotransfer`,
       params,
     );
   }
 
-  subaccountDepositRecords(params: object): Promise<APIResponse<any>> {
+  subaccountDepositRecords(
+    params: SubDepositRecordsRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/broker/subaccount-deposit`, params);
   }
 
-  subaccountWithdrawalRecords(params: object): Promise<APIResponse<any>> {
+  subaccountWithdrawalRecords(
+    params: SubWithdrawalRecordsRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/broker/subaccount-withdrawal`, params);
   }
 
@@ -1247,21 +1283,25 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  createSubaccountApiKey(params: object): Promise<APIResponse<any>> {
+  createSubaccountApiKey(
+    params: CreateSubaccountApiKeyRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/broker/manage/create-subaccount-apikey`,
       params,
     );
   }
 
-  getSubaccountApiKey(params: object): Promise<APIResponse<any>> {
+  getSubaccountApiKey(params: { subUid: string }): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/broker/manage/subaccount-apikey-list`,
       params,
     );
   }
 
-  modifySubaccountApiKey(params: object): Promise<APIResponse<any>> {
+  modifySubaccountApiKey(
+    params: ModifySubaccountApiKeyRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/broker/manage/modify-subaccount-apikey`,
       params,
