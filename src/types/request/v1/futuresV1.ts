@@ -1,4 +1,4 @@
-import { OrderTimeInForce } from '../shared';
+import { FuturesPlanType, OrderTimeInForce } from '../shared';
 
 export type FuturesProductType =
   | 'umcbl'
@@ -147,15 +147,6 @@ export interface ModifyFuturesPlanOrderTPSL {
   presetTakeProfitPrice?: string;
   presetStopLossPrice?: string;
 }
-
-export type FuturesPlanType =
-  | 'profit_plan'
-  | 'loss_plan'
-  | 'normal_plan'
-  | 'pos_profit'
-  | 'pos_loss'
-  | 'moving_plan'
-  | 'track_plan';
 
 export interface NewFuturesPlanStopOrder {
   symbol: string;

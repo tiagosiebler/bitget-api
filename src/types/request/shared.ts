@@ -30,3 +30,10 @@ export type FuturesProductTypeV2 =
   | 'SUSDT-FUTURES'
   | 'SCOIN-FUTURES'
   | 'SUSDC-FUTURES';
+
+export type FuturesPlanType =
+  | 'profit_plan'
+  | 'loss_plan'
+  | 'moving_plan'
+  | 'pos_profit'
+  | 'pos_loss';

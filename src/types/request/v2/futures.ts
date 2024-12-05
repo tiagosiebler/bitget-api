@@ -1,4 +1,4 @@
-import { FuturesProductTypeV2 } from '../shared';
+import { FuturesPlanType, FuturesProductTypeV2 } from '../shared';
 import { FuturesKlineInterval } from '../v1/futuresV1';
 
 export type FuturesKlineTypeV2 = 'MARKET' | 'MARK' | 'INDEX';
@@ -306,13 +306,6 @@ export interface FuturesCancelAllOrdersRequestV2 {
  * * Futures | Trigger Orders
  *
  */
-
-export type FuturesPlanType =
-  | 'profit_plan'
-  | 'loss_plan'
-  | 'moving_plan'
-  | 'pos_profit'
-  | 'pos_loss';
 
 export type FuturesTriggerType = 'fill_price' | 'mark_price';
 
