@@ -73,6 +73,26 @@ import {
   GetHistoryOrdersRequest,
   GetMarginOrderFillsRequest,
   GetMarginLiquidationOrdersRequest,
+  GetFuturesTraderCurrentOrdersRequest,
+  GetFuturesTraderHistoryOrdersRequest,
+  ModifyFuturesTraderOrderTPSLRequest,
+  GetFuturesTraderProfitShareDetailRequest,
+  CopyTradingProductType,
+  FuturesTraderSymbolSettingReq,
+  GetFuturesTraderFollowers,
+  GetFollowerFuturesCurrentTrackingOrdersRequest,
+  GetFollowerFuturesHistoryTrackingOrdersRequest,
+  UpdateFuturesFollowerTPSLRequest,
+  UpdateFuturesFollowerSettingsRequest,
+  GetFuturesFollowerTradersRequest,
+  CloseFuturesFollowerPositionsRequest,
+  getSpotTraderHistoryProfitReq,
+  GetSpotTraderHistoryOrdersReq,
+  GetSpotTraderCurrentOrdersReq,
+  GetSpotTraderFollowersRequest,
+  SpotFollowerCopyTradeSetting,
+  GetSpotFollowerHistoryOrdersRequest,
+  GetSpotFollowerOpenOrdersRequest,
 } from './types';
 import {
   CreateSubaccountApiKeyRequest,
@@ -1620,21 +1640,27 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getFuturesTraderCurrentOrder(params: object): Promise<APIResponse<any>> {
+  getFuturesTraderCurrentOrder(
+    params: GetFuturesTraderCurrentOrdersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-trader/order-current-track`,
       params,
     );
   }
 
-  getFuturesTraderHistoryOrders(params: object): Promise<APIResponse<any>> {
+  getFuturesTraderHistoryOrders(
+    params: GetFuturesTraderHistoryOrdersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-trader/order-history-track`,
       params,
     );
   }
 
-  modifyFuturesTraderOrderTPSL(params: object): Promise<APIResponse<any>> {
+  modifyFuturesTraderOrderTPSL(
+    params: ModifyFuturesTraderOrderTPSLRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/mix-trader/order-modify-tpsl`,
       params,
@@ -1650,7 +1676,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getFuturesTraderProfitShareHistory(
-    params: object,
+    params: GetFuturesTraderProfitShareDetailRequest,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-trader/profit-history-details`,
@@ -1658,53 +1684,76 @@ export class RestClientV2 extends BaseRestClient {
     );
   }
 
-  closeFuturesTraderOrder(params: object): Promise<APIResponse<any>> {
+  closeFuturesTraderOrder(params: {
+    trackingNo: string;
+    symbol: string;
+    productType: CopyTradingProductType;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/mix-trader/order-close-positions`,
       params,
     );
   }
 
-  getFuturesTraderProfitShare(params: object): Promise<APIResponse<any>> {
+  getFuturesTraderProfitShare(params?: {
+    coin?: string;
+    pageSize?: string;
+    pageNo?: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/copy/mix-trader/profit-details`, params);
   }
 
-  getFuturesTraderProfitShareGroup(params: object): Promise<APIResponse<any>> {
+  getFuturesTraderProfitShareGroup(params?: {
+    pageSize?: string;
+    pageNo?: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-trader/profits-group-coin-date`,
       params,
     );
   }
 
-  getFuturesTraderSymbolSettings(params: object): Promise<APIResponse<any>> {
+  getFuturesTraderSymbolSettings(params: {
+    productType: CopyTradingProductType;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-trader/config-query-symbols`,
       params,
     );
   }
 
-  updateFuturesTraderSymbolSettings(params: object): Promise<APIResponse<any>> {
+  updateFuturesTraderSymbolSettings(params: {
+    settingList: FuturesTraderSymbolSettingReq[];
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/mix-trader/config-setting-symbols`,
       params,
     );
   }
 
-  updateFuturesTraderGlobalSettings(params: object): Promise<APIResponse<any>> {
+  updateFuturesTraderGlobalSettings(params?: {
+    enable?: 'YES' | 'NO';
+    showTotalEquity?: 'YES' | 'NO';
+    showTpsl?: 'YES' | 'NO';
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/mix-trader/config-settings-base`,
       params,
     );
   }
 
-  getFuturesTraderFollowers(params: object): Promise<APIResponse<any>> {
+  getFuturesTraderFollowers(
+    params?: GetFuturesTraderFollowers,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-trader/config-query-followers`,
       params,
     );
   }
 
-  removeFuturesTraderFollower(params: object): Promise<APIResponse<any>> {
+  removeFuturesTraderFollower(params: {
+    followerUid: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/mix-trader/config-remove-follower`,
       params,
@@ -1719,51 +1768,70 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getFuturesFollowerCurrentOrders(params: object): Promise<APIResponse<any>> {
+  getFuturesFollowerCurrentOrders(
+    params: GetFollowerFuturesCurrentTrackingOrdersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-follower/query-current-orders`,
       params,
     );
   }
 
-  getFuturesFollowerHistoryOrders(params: object): Promise<APIResponse<any>> {
+  getFuturesFollowerHistoryOrders(
+    params: GetFollowerFuturesHistoryTrackingOrdersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-follower/query-history-orders`,
       params,
     );
   }
 
-  updateFuturesFollowerTPSL(params: object): Promise<APIResponse<any>> {
+  updateFuturesFollowerTPSL(
+    params: UpdateFuturesFollowerTPSLRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/copy/mix-follower/setting-tpsl`, params);
   }
 
-  updateFuturesFollowerSettings(params: object): Promise<APIResponse<any>> {
+  updateFuturesFollowerSettings(
+    params: UpdateFuturesFollowerSettingsRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/copy/mix-follower/settings`, params);
   }
 
-  getFuturesFollowerSettings(params: object): Promise<APIResponse<any>> {
+  getFuturesFollowerSettings(params: {
+    traderId: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/copy/mix-follower/query-settings`, params);
   }
 
-  closeFuturesFollowerPositions(params: object): Promise<APIResponse<any>> {
+  closeFuturesFollowerPositions(
+    params: CloseFuturesFollowerPositionsRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/mix-follower/close-positions`,
       params,
     );
   }
 
-  getFuturesFollowerTraders(params: object): Promise<APIResponse<any>> {
+  getFuturesFollowerTraders(
+    params: GetFuturesFollowerTradersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/copy/mix-follower/query-traders`, params);
   }
 
-  getFuturesFollowerFollowLimit(params: object): Promise<APIResponse<any>> {
+  getFuturesFollowerFollowLimit(params: {
+    symbol: string;
+    productType: CopyTradingProductType;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-follower/query-quantity-limit`,
       params,
     );
   }
 
-  unfollowFuturesTrader(params: object): Promise<APIResponse<any>> {
+  unfollowFuturesTrader(params: {
+    traderId: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/copy/mix-follower/cancel-trader`, params);
   }
 
@@ -1805,14 +1873,20 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/copy/spot-trader/profit-summarys`);
   }
 
-  getSpotTraderHistoryProfit(params: object): Promise<APIResponse<any>> {
+  getSpotTraderHistoryProfit(
+    params: getSpotTraderHistoryProfitReq,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-trader/profit-history-details`,
       params,
     );
   }
 
-  getSpotTraderUnrealizedProfit(params: object): Promise<APIResponse<any>> {
+  getSpotTraderUnrealizedProfit(params?: {
+    coin?: string;
+    pageNo?: string;
+    pageSize?: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/copy/spot-trader/profit-details`, params);
   }
 
@@ -1820,42 +1894,58 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/copy/spot-trader/order-total-detail`);
   }
 
-  modifySpotTraderOrderTPSL(params: object): Promise<APIResponse<any>> {
+  modifySpotTraderOrderTPSL(params: {
+    trackingNo: string;
+    stopSurplusPrice?: string;
+    stopLossPrice?: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/spot-trader/order-modify-tpsl`,
       params,
     );
   }
 
-  getSpotTraderHistoryOrders(params: object): Promise<APIResponse<any>> {
+  getSpotTraderHistoryOrders(
+    params: GetSpotTraderHistoryOrdersReq,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-trader/order-history-track`,
       params,
     );
   }
 
-  getSpotTraderCurrentOrders(params: object): Promise<APIResponse<any>> {
+  getSpotTraderCurrentOrders(
+    params: GetSpotTraderCurrentOrdersReq,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-trader/order-current-track`,
       params,
     );
   }
 
-  sellSpotTrader(params: object): Promise<APIResponse<any>> {
+  sellSpotTrader(params: {
+    trackingNoList: string[];
+    symbol: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/spot-trader/order-close-tracking`,
       params,
     );
   }
 
-  getSpotTraderSymbolSettings(params: object): Promise<APIResponse<any>> {
+  getSpotTraderSymbolSettings(params: {
+    symbolList: string[];
+    settingType: 'add' | 'delete';
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/spot-trader/config-setting-symbols`,
       params,
     );
   }
 
-  removeSpotTraderFollowers(params: object): Promise<APIResponse<any>> {
+  removeSpotTraderFollowers(params: {
+    followerUid: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/spot-trader/config-remove-follower`,
       params,
@@ -1866,7 +1956,9 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/copy/spot-trader/config-query-settings`);
   }
 
-  getSpotTraderFollowers(params: object): Promise<APIResponse<any>> {
+  getSpotTraderFollowers(
+    params: GetSpotTraderFollowersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-trader/config-query-followers`,
       params,
@@ -1876,62 +1968,87 @@ export class RestClientV2 extends BaseRestClient {
   /**
    *
    *
-   * Copy Trading | Spot copy trading | Trader api
+   * Copy Trading | Spot copy trading | Follower api
    *
    *
    */
 
-  cancelSpotFollowerOrder(params: object): Promise<APIResponse<any>> {
+  cancelSpotFollowerOrder(params: {
+    trackingNoList: string[];
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/copy/spot-follower/stop-order`, params);
   }
 
-  updateSpotFollowerSettings(params: object): Promise<APIResponse<any>> {
+  updateSpotFollowerSettings(params: {
+    traderId: string;
+    autoCopy?: 'on' | 'off';
+    mode?: 'basic' | 'advanced';
+    settings: SpotFollowerCopyTradeSetting[];
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/copy/spot-follower/settings`, params);
   }
 
-  updateSpotFollowerTPSL(params: object): Promise<APIResponse<any>> {
+  updateSpotFollowerTPSL(params: {
+    trackingNo: string;
+    stopSurplusPrice?: string;
+    stopLossPrice?: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/copy/spot-follower/setting-tpsl`, params);
   }
 
-  getSpotFollowerTraders(params: object): Promise<APIResponse<any>> {
+  getSpotFollowerTraders(params?: {
+    pageNo?: string;
+    pageSize?: string;
+    startTime?: string;
+    endTime?: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/copy/spot-follower/query-traders`, params);
   }
 
-  getSpotFollowerCurrentTraderSymbols(
-    params: object,
-  ): Promise<APIResponse<any>> {
+  getSpotFollowerCurrentTraderSymbols(params: {
+    traderId: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-follower/query-trader-symbols`,
       params,
     );
   }
 
-  getSpotFollowerSettings(params: object): Promise<APIResponse<any>> {
+  getSpotFollowerSettings(params: {
+    traderId: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/copy/spot-follower/query-settings`, params);
   }
 
-  getSpotFollowerHistoryOrders(params: object): Promise<APIResponse<any>> {
+  getSpotFollowerHistoryOrders(
+    params: GetSpotFollowerHistoryOrdersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-follower/query-history-orders`,
       params,
     );
   }
 
-  getSpotFollowerOpenOrders(params: object): Promise<APIResponse<any>> {
+  getSpotFollowerOpenOrders(
+    params: GetSpotFollowerOpenOrdersRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-follower/query-current-orders`,
       params,
     );
   }
 
-  sellSpotFollower(params: object): Promise<APIResponse<any>> {
+  sellSpotFollower(params: {
+    trackingNoList: string[];
+    symbol: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/spot-follower/order-close-tracking`,
       params,
     );
   }
 
-  unfollowSpotTrader(params: object): Promise<APIResponse<any>> {
+  unfollowSpotTrader(params: { traderId: string }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/copy/spot-follower/cancel-trader`, params);
   }
 
