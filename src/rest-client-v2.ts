@@ -93,6 +93,19 @@ import {
   SpotFollowerCopyTradeSetting,
   GetSpotFollowerHistoryOrdersRequest,
   GetSpotFollowerOpenOrdersRequest,
+  GetEarnSavingsAssetsRequest,
+  GetEarnSavingsRecordsRequest,
+  RedeemSavingsRequest,
+  GetSharkfinAssetsRequest,
+  GetSharkfinRecordsRequest,
+  GetLoanEstInterestAndBorrowableRequest,
+  BorrowLoanRequest,
+  RepayLoanRequest,
+  GetLoanRepayHistoryRequest,
+  ModifyLoanPledgeRateRequest,
+  GetLoanPledgeRateHistoryRequest,
+  GetLoanHistoryRequest,
+  GetLiquidationRecordsRequest,
 } from './types';
 import {
   CreateSubaccountApiKeyRequest,
@@ -2060,7 +2073,10 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getEarnSavingsProducts(params: object): Promise<APIResponse<any>> {
+  getEarnSavingsProducts(params?: {
+    coin?: string;
+    filter?: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/savings/product`, params);
   }
 
@@ -2068,27 +2084,48 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/earn/savings/account`);
   }
 
-  getEarnSavingsAssets(params: object): Promise<APIResponse<any>> {
+  getEarnSavingsAssets(
+    params: GetEarnSavingsAssetsRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/savings/assets`, params);
   }
 
-  getEarnSavingsRecords(params: object): Promise<APIResponse<any>> {
+  getEarnSavingsRecords(
+    params: GetEarnSavingsRecordsRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/savings/records`, params);
   }
 
-  getEarnSavingsSubscription(params: object): Promise<APIResponse<any>> {
+  getEarnSavingsSubscription(params: {
+    productId: string;
+    periodType: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/savings/subscribe-info`, params);
   }
 
-  earnSubscribeSavings(params: object): Promise<APIResponse<any>> {
+  earnSubscribeSavings(params: {
+    productId: string;
+    periodType: string;
+    amount: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/earn/savings/subscribe`, params);
   }
 
-  getEarnSavingsSubscriptionResult(params: object): Promise<APIResponse<any>> {
+  getEarnSavingsSubscriptionResult(params: {
+    productId: string;
+    periodType: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/savings/subscribe-result`, params);
   }
 
-  getEarnSavingsRedemptionResult(params: object): Promise<APIResponse<any>> {
+  earnRedeemSavings(params: RedeemSavingsRequest): Promise<APIResponse<any>> {
+    return this.postPrivate(`/api/v2/earn/savings/redeem`, params);
+  }
+
+  getEarnSavingsRedemptionResult(params: {
+    orderId: string;
+    periodType: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/savings/redeem-result`, params);
   }
 
@@ -2100,7 +2137,7 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getEarnAccount(params?: object): Promise<APIResponse<any>> {
+  getEarnAccount(params?: { coin?: string }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/account/assets`, params);
   }
 
@@ -2112,7 +2149,11 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getSharkfinProducts(params: object): Promise<APIResponse<any>> {
+  getSharkfinProducts(params: {
+    coin: string;
+    limit?: string;
+    idLessThan?: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/sharkfin/product`, params);
   }
 
@@ -2120,23 +2161,34 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/earn/sharkfin/account`);
   }
 
-  getSharkfinAssets(params: object): Promise<APIResponse<any>> {
+  getSharkfinAssets(
+    params: GetSharkfinAssetsRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/sharkfin/assets`, params);
   }
 
-  getSharkfinRecords(params: object): Promise<APIResponse<any>> {
+  getSharkfinRecords(
+    params: GetSharkfinRecordsRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/sharkfin/records`, params);
   }
 
-  getSharkfinSubscription(params: object): Promise<APIResponse<any>> {
+  getSharkfinSubscription(params: {
+    productId: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/sharkfin/subscribe-info`, params);
   }
 
-  subscribeSharkfin(params: object): Promise<APIResponse<any>> {
+  subscribeSharkfin(params: {
+    productId: string;
+    amount: string;
+  }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/earn/sharkfin/subscribe`, params);
   }
 
-  getSharkfinSubscriptionResult(params: object): Promise<APIResponse<any>> {
+  getSharkfinSubscriptionResult(params: {
+    orderId: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/sharkfin/subscribe-result`, params);
   }
 
@@ -2148,47 +2200,61 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getLoanCurrencies(params?: object): Promise<APIResponse<any>> {
+  getLoanCurrencies(params?: { coin?: string }): Promise<APIResponse<any>> {
     return this.get(`/api/v2/earn/loan/public/coinInfos`, params);
   }
 
-  getLoanEstInterestAndBorrowable(params: object): Promise<APIResponse<any>> {
+  getLoanEstInterestAndBorrowable(
+    params: GetLoanEstInterestAndBorrowableRequest,
+  ): Promise<APIResponse<any>> {
     return this.get(`/api/v2/earn/loan/public/hour-interest`, params);
   }
 
-  borrowLoan(params: object): Promise<APIResponse<any>> {
+  borrowLoan(params: BorrowLoanRequest): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/earn/loan/borrow`, params);
   }
 
-  getOngoingLoanOrders(params: object): Promise<APIResponse<any>> {
+  getOngoingLoanOrders(params?: {
+    orderId?: string;
+    loanCoin?: string;
+    pledgeCoin?: string;
+  }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/loan/ongoing-orders`, params);
   }
 
-  repayLoan(params: object): Promise<APIResponse<any>> {
+  repayLoan(params: RepayLoanRequest): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/earn/loan/repay`, params);
   }
 
-  getRepayHistory(params: object): Promise<APIResponse<any>> {
+  getRepayHistory(
+    params: GetLoanRepayHistoryRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/loan/repay-history`, params);
   }
 
-  updateLoanPledgeRate(params: object): Promise<APIResponse<any>> {
+  updateLoanPledgeRate(
+    params: ModifyLoanPledgeRateRequest,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/earn/loan/revise-pledge`, params);
   }
 
-  getLoanPledgeRateHistory(params: object): Promise<APIResponse<any>> {
+  getLoanPledgeRateHistory(
+    params: GetLoanPledgeRateHistoryRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/loan/revise-history`, params);
   }
 
-  getLoanHistory(params: object): Promise<APIResponse<any>> {
+  getLoanHistory(params: GetLoanHistoryRequest): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/loan/borrow-history`, params);
   }
 
-  getLoanDebts(params?: object): Promise<APIResponse<any>> {
-    return this.getPrivate(`/api/v2/earn/loan/debts`, params);
+  getLoanDebts(): Promise<APIResponse<any>> {
+    return this.getPrivate(`/api/v2/earn/loan/debts`);
   }
 
-  getLoanLiquidationRecords(params: object): Promise<APIResponse<any>> {
+  getLoanLiquidationRecords(
+    params: GetLiquidationRecordsRequest,
+  ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/loan/reduces`, params);
   }
 }

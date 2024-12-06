@@ -103,14 +103,13 @@ export interface UpdateFuturesFollowerTPSLRequest {
 
 export type AutoCopyOption = 'on' | 'off';
 export type FollowMode = 'basic' | 'advanced';
-export type MarginType = 'trader' | 'specify';
 export type LeverageType = 'position' | 'specify' | 'trader';
 export type TraceType = 'percent' | 'amount' | 'count';
 
 export interface FollowerCopyTradeSetting {
   symbol: string;
   productType: CopyTradingProductType;
-  marginType: MarginType;
+  marginType: 'trader' | 'specify';
   marginCoin?: string;
   leverType: LeverageType;
   longLeverage?: string;

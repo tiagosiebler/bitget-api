@@ -6,5 +6,6 @@ export * from './v2/spot';
 export * from './v2/broker';
 export * from './v2/margin';
 export * from './v2/copytrading';
+export * from './v2/earn';
 export * from './shared';
 export * from './v2/common';
