@@ -22,7 +22,7 @@ import {
   GetSpotHistoryPlanOrdersRequestV2,
   GetSpotAccountBillsRequestV2,
   SpotTransferRequestV2,
-  SpotAccountType,
+  SpotAccountTypeV2,
   SpotSubAccountTransferRequestV2,
   SpotWithdrawalRequestV2,
   SpotMainSubTransferRecordRequestV2,
@@ -77,7 +77,7 @@ import {
   GetFuturesTraderHistoryOrdersRequestV2,
   ModifyFuturesTraderOrderTPSLRequestV2,
   GetFuturesTraderProfitShareDetailRequestV2,
-  CopyTradingProductType,
+  CopyTradingProductTypeV2,
   FuturesTraderSymbolSettingRequestV2,
   GetFuturesTraderFollowersRequestV2,
   GetFollowerFuturesCurrentTrackingOrdersRequestV2,
@@ -746,8 +746,8 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotTransferableCoins(params: {
-    fromType: SpotAccountType;
-    toType: SpotAccountType;
+    fromType: SpotAccountTypeV2;
+    toType: SpotAccountTypeV2;
   }): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/wallet/transfer-coin-info`, params);
   }
@@ -1702,7 +1702,7 @@ export class RestClientV2 extends BaseRestClient {
   closeFuturesTraderOrder(params: {
     trackingNo: string;
     symbol: string;
-    productType: CopyTradingProductType;
+    productType: CopyTradingProductTypeV2;
   }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/mix-trader/order-close-positions`,
@@ -1729,7 +1729,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getFuturesTraderSymbolSettings(params: {
-    productType: CopyTradingProductType;
+    productType: CopyTradingProductTypeV2;
   }): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-trader/config-query-symbols`,
@@ -1836,7 +1836,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getFuturesFollowerFollowLimit(params: {
     symbol: string;
-    productType: CopyTradingProductType;
+    productType: CopyTradingProductTypeV2;
   }): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-follower/query-quantity-limit`,

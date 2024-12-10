@@ -47,35 +47,35 @@ export interface SpotHistoricTradesRequestV2 {
  *
  */
 
-export type SpotOrderSide = 'buy' | 'sell';
+export type SpotOrderSideV2 = 'buy' | 'sell';
 
-export type SpotOrderType = 'limit' | 'market';
+export type SpotOrderTypeV2 = 'limit' | 'market';
 
-export type SpotOrderForce = 'gtc' | 'post_only' | 'fok' | 'ioc';
+export type SpotOrderForceV2 = 'gtc' | 'post_only' | 'fok' | 'ioc';
 
-export type SpotTPSLType = 'normal' | 'tpsl';
+export type SpotTPSLTypeV2 = 'normal' | 'tpsl';
 
-export type SpotSTPMode =
+export type SpotSTPModeV2 =
   | 'none'
   | 'cancel_taker'
   | 'cancel_maker'
   | 'cancel_both';
 
-export type SpotBatchMode = 'single' | 'multiple';
+export type SpotBatchModeV2 = 'single' | 'multiple';
 
 export interface SpotOrderRequestV2 {
   symbol: string;
-  side: SpotOrderSide;
-  orderType: SpotOrderType;
-  force: SpotOrderForce;
+  side: SpotOrderSideV2;
+  orderType: SpotOrderTypeV2;
+  force: SpotOrderForceV2;
   price?: string;
   size: string;
   clientOid?: string;
   triggerPrice?: string;
-  tpslType?: SpotTPSLType;
+  tpslType?: SpotTPSLTypeV2;
   requestTime?: string;
   receiveWindow?: string;
-  stpMode?: SpotSTPMode;
+  stpMode?: SpotSTPModeV2;
   presetTakeProfitPrice?: string;
   executeTakeProfitPrice?: string;
   presetStopLossPrice?: string;
@@ -97,20 +97,20 @@ export interface SpotCancelandSubmitOrderRequestV2 {
 
 export interface SpotCancelOrderRequestV2 {
   symbol: string;
-  tpslType?: SpotTPSLType;
+  tpslType?: SpotTPSLTypeV2;
   orderId?: string;
   clientOid?: string;
 }
 
 export interface SpotBatchOrderRequestItemV2 {
   symbol?: string;
-  side: SpotOrderSide;
-  orderType: SpotOrderType;
-  force: SpotOrderForce;
+  side: SpotOrderSideV2;
+  orderType: SpotOrderTypeV2;
+  force: SpotOrderForceV2;
   price?: string;
   size: string;
   clientOid?: string;
-  stpMode?: SpotSTPMode;
+  stpMode?: SpotSTPModeV2;
   presetTakeProfitPrice?: string;
   executeTakeProfitPrice?: string;
   presetStopLossPrice?: string;
@@ -119,13 +119,13 @@ export interface SpotBatchOrderRequestItemV2 {
 
 export interface SpotBatchOrderRequestV2 {
   symbol?: string;
-  batchMode?: SpotBatchMode;
+  batchMode?: SpotBatchModeV2;
   orderList: SpotBatchOrderRequestItemV2[];
 }
 
 export interface SpotBatchCancelOrderRequestV2 {
   symbol?: string;
-  batchMode?: SpotBatchMode;
+  batchMode?: SpotBatchModeV2;
   orderList: {
     symbol?: string;
     orderId?: string;
@@ -147,7 +147,7 @@ export interface GetSpotOpenOrdersRequestV2 {
   idLessThan?: string;
   limit?: string;
   orderId?: string;
-  tpslType?: SpotTPSLType;
+  tpslType?: SpotTPSLTypeV2;
   requestTime?: string;
   receiveWindow?: string;
 }
@@ -159,7 +159,7 @@ export interface GetSpotHistoryOrdersRequestV2 {
   idLessThan?: string;
   limit?: string;
   orderId?: string;
-  tpslType?: SpotTPSLType;
+  tpslType?: SpotTPSLTypeV2;
   requestTime?: string;
   receiveWindow?: string;
 }
@@ -179,29 +179,29 @@ export interface GetSpotFillsRequestV2 {
  *
  */
 
-export type SpotPlanType = 'amount' | 'total';
+export type SpotPlanTypeV2 = 'amount' | 'total';
 
-export type SpotTriggerType = 'fill_price' | 'mark_price';
+export type SpotTriggerTypeV2 = 'fill_price' | 'mark_price';
 
 export interface SpotPlanOrderRequestV2 {
   symbol: string;
-  side: SpotOrderSide;
+  side: SpotOrderSideV2;
   triggerPrice: string;
-  orderType: SpotOrderType;
+  orderType: SpotOrderTypeV2;
   executePrice?: string;
-  planType?: SpotPlanType;
+  planType?: SpotPlanTypeV2;
   size: string;
-  triggerType: SpotTriggerType;
+  triggerType: SpotTriggerTypeV2;
   clientOid?: string;
-  force?: SpotOrderForce;
-  stpMode?: SpotSTPMode;
+  force?: SpotOrderForceV2;
+  stpMode?: SpotSTPModeV2;
 }
 
 export interface SpotModifyPlanOrderRequestV2 {
   orderId?: string;
   clientOid?: string;
   triggerPrice: string;
-  orderType: SpotOrderType;
+  orderType: SpotOrderTypeV2;
   executePrice?: string;
   size: string;
 }
@@ -227,14 +227,14 @@ export interface GetSpotHistoryPlanOrdersRequestV2 {
  *
  */
 
-export type SpotBillGroupType =
+export type SpotBillGroupTypeV2 =
   | 'deposit'
   | 'withdraw'
   | 'transaction'
   | 'transfer'
   | 'other';
 
-export type SpotBusinessType =
+export type SpotBusinessTypeV2 =
   | 'deposit'
   | 'withdraw'
   | 'buy'
@@ -249,7 +249,7 @@ export type SpotBusinessType =
   | 'system lock'
   | 'user lock';
 
-export type SpotAccountType =
+export type SpotAccountTypeV2 =
   | 'spot'
   | 'p2p'
   | 'coin_futures'
@@ -260,8 +260,8 @@ export type SpotAccountType =
 
 export interface GetSpotAccountBillsRequestV2 {
   coin?: string;
-  groupType?: SpotBillGroupType;
-  businessType?: SpotBusinessType;
+  groupType?: SpotBillGroupTypeV2;
+  businessType?: SpotBusinessTypeV2;
   startTime?: string;
   endTime?: string;
   limit?: string;
@@ -269,8 +269,8 @@ export interface GetSpotAccountBillsRequestV2 {
 }
 
 export interface SpotTransferRequestV2 {
-  fromType: SpotAccountType;
-  toType: SpotAccountType;
+  fromType: SpotAccountTypeV2;
+  toType: SpotAccountTypeV2;
   amount: string;
   coin: string;
   symbol: string;
@@ -278,8 +278,8 @@ export interface SpotTransferRequestV2 {
 }
 
 export interface SpotSubAccountTransferRequestV2 {
-  fromType: SpotAccountType;
-  toType: SpotAccountType;
+  fromType: SpotAccountTypeV2;
+  toType: SpotAccountTypeV2;
   amount: string;
   coin: string;
   symbol?: string;
@@ -314,7 +314,7 @@ export interface SpotMainSubTransferRecordRequestV2 {
 
 export interface GetSpotTransferRecordRequestV2 {
   coin: string;
-  fromType: SpotAccountType;
+  fromType: SpotAccountTypeV2;
   startTime?: string;
   endTime?: string;
   clientOid?: string;

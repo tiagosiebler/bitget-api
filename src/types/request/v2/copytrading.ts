@@ -6,14 +6,14 @@
  *
  */
 
-export type CopyTradingProductType =
+export type CopyTradingProductTypeV2 =
   | 'USDT-FUTURES'
   | 'COIN-FUTURES'
   | 'USDC-FUTURES';
 
 export interface GetFuturesTraderCurrentOrdersRequestV2 {
   symbol?: string;
-  productType: CopyTradingProductType;
+  productType: CopyTradingProductTypeV2;
   startTime?: string;
   endTime?: string;
   limit?: string;
@@ -29,12 +29,12 @@ export interface GetFuturesTraderHistoryOrdersRequestV2 {
   limit?: string;
   order?: 'asc' | 'desc';
   symbol?: string;
-  productType: CopyTradingProductType;
+  productType: CopyTradingProductTypeV2;
 }
 
 export interface ModifyFuturesTraderOrderTPSLRequestV2 {
   trackingNo: string;
-  productType: CopyTradingProductType;
+  productType: CopyTradingProductTypeV2;
   stopSurplusPrice?: string;
   stopLossPrice?: string;
 }
@@ -50,7 +50,7 @@ export interface GetFuturesTraderProfitShareDetailRequestV2 {
 
 export interface FuturesTraderSymbolSettingRequestV2 {
   symbol: string;
-  productType: CopyTradingProductType;
+  productType: CopyTradingProductTypeV2;
   settingType: 'ADD' | 'DELETE' | 'UPDATE';
   stopSurplusRatio?: string;
   stopLossRatio?: string;
@@ -78,7 +78,7 @@ export interface GetFollowerFuturesCurrentTrackingOrdersRequestV2 {
   endTime?: string;
   limit?: string;
   symbol?: string;
-  productType: CopyTradingProductType;
+  productType: CopyTradingProductTypeV2;
   traderId?: string;
 }
 
@@ -89,14 +89,14 @@ export interface GetFollowerFuturesHistoryTrackingOrdersRequestV2 {
   endTime?: string;
   limit?: string;
   symbol?: string;
-  productType: CopyTradingProductType;
+  productType: CopyTradingProductTypeV2;
   traderId?: string;
 }
 
 export interface UpdateFuturesFollowerTPSLRequestV2 {
   trackingNo: string;
   symbol?: string;
-  productType: CopyTradingProductType;
+  productType: CopyTradingProductTypeV2;
   stopSurplusPrice?: string;
   stopLossPrice?: string;
 }
@@ -108,7 +108,7 @@ export type TraceType = 'percent' | 'amount' | 'count';
 
 export interface FollowerCopyTradeSettingRequestV2 {
   symbol: string;
-  productType: CopyTradingProductType;
+  productType: CopyTradingProductTypeV2;
   marginType: 'trader' | 'specify';
   marginCoin?: string;
   leverType: LeverageType;
@@ -128,7 +128,7 @@ export interface UpdateFuturesFollowerSettingsRequestV2 {
   settings: FollowerCopyTradeSettingRequestV2[];
 }
 export interface CloseFuturesFollowerPositionsRequestV2 {
-  productType: CopyTradingProductType;
+  productType: CopyTradingProductTypeV2;
   trackingNo?: string;
   symbol?: string;
   marginCoin?: string;
