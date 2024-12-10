@@ -1,12 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import EventEmitter from 'events';
 import WebSocket from 'isomorphic-ws';
 
-import { WebsocketClientOptions, WSClientConfigurableOptions } from '../types';
-import WsStore from './WsStore';
-import { WsConnectionStateEnum } from './WsStore.types';
-import { DefaultLogger } from './logger';
-import { isWsPong } from './requestUtils';
-import { getWsAuthSignature } from './websocket-util';
+import {
+  WebsocketClientOptions,
+  WSClientConfigurableOptions,
+} from '../types/index.js';
+import { DefaultLogger } from './logger.js';
+import { isWsPong } from './requestUtils.js';
+import { getWsAuthSignature } from './websocket-util.js';
+import WsStore from './WsStore.js';
+import { WsConnectionStateEnum } from './WsStore.types.js';
 
 interface WSClientEventMap<WsKey extends string> {
   /** Connection opened. If this connection was previously opened and reconnected, expect the reconnected event instead */
@@ -30,6 +34,7 @@ interface WSClientEventMap<WsKey extends string> {
 // Type safety for on and emit handlers: https://stackoverflow.com/a/61609010/880837
 export interface BaseWebsocketClient<
   TWSKey extends string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   TWSTopicSubscribeEventArgs extends object,
 > {
   on<U extends keyof WSClientEventMap<TWSKey>>(
@@ -42,8 +47,6 @@ export interface BaseWebsocketClient<
     ...args: Parameters<WSClientEventMap<TWSKey>[U]>
   ): boolean;
 }
-
-export interface BaseWSClientImpl {}
 
 const LOGGER_CATEGORY = { category: 'bitget-ws' };
 
@@ -382,7 +385,7 @@ export abstract class BaseWebsocketClient<
       this.logger.silly(
         `Subscribing to topics in batches of ${maxTopicsPerEvent}`,
       );
-      for (var i = 0; i < topics.length; i += maxTopicsPerEvent) {
+      for (let i = 0; i < topics.length; i += maxTopicsPerEvent) {
         const batch = topics.slice(i, i + maxTopicsPerEvent);
         this.logger.silly(`Subscribing to batch of ${batch.length}`);
         this.requestSubscribeTopics(wsKey, batch);
@@ -417,7 +420,7 @@ export abstract class BaseWebsocketClient<
       this.logger.silly(
         `Unsubscribing to topics in batches of ${maxTopicsPerEvent}`,
       );
-      for (var i = 0; i < topics.length; i += maxTopicsPerEvent) {
+      for (let i = 0; i < topics.length; i += maxTopicsPerEvent) {
         const batch = topics.slice(i, i + maxTopicsPerEvent);
         this.logger.silly(`Unsubscribing to batch of ${batch.length}`);
         this.requestUnsubscribeTopics(wsKey, batch);
