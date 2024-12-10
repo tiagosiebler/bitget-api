@@ -261,7 +261,7 @@ export interface FuturesGetOpenOrdersRequestV2 {
   limit?: string;
 }
 
-export type FuturesOrderSource =
+export type FuturesOrderSourceV2 =
   | 'normal'
   | 'market'
   | 'profit_market'
@@ -287,7 +287,7 @@ export interface FuturesGetHistoryOrdersRequestV2 {
   symbol?: string;
   productType: FuturesProductTypeV2;
   idLessThan?: string;
-  orderSource?: FuturesOrderSource;
+  orderSource?: FuturesOrderSourceV2;
   startTime?: string;
   endTime?: string;
   limit?: string;
@@ -307,9 +307,9 @@ export interface FuturesCancelAllOrdersRequestV2 {
  *
  */
 
-export type FuturesTriggerType = 'fill_price' | 'mark_price';
+export type FuturesTriggerTypeV2 = 'fill_price' | 'mark_price';
 
-export type FuturesStpMode =
+export type FuturesStpModeV2 =
   | 'none'
   | 'cancel_taker'
   | 'cancel_maker'
@@ -321,16 +321,16 @@ export interface FuturesTPSLOrderRequestV2 {
   symbol: string;
   planType: FuturesPlanTypeV2;
   triggerPrice: string;
-  triggerType?: FuturesTriggerType;
+  triggerType?: FuturesTriggerTypeV2;
   executePrice?: string;
   holdSide: 'long' | 'short' | 'buy' | 'sell';
   size: string;
   rangeRate?: string;
   clientOid?: string;
-  stpMode?: FuturesStpMode;
+  stpMode?: FuturesStpModeV2;
 }
 
-export type FuturesTriggerPriceType =
+export type FuturesTriggerPriceTypeV2 =
   | 'fill_price'
   | 'mark_price'
   | 'index_price';
@@ -353,11 +353,11 @@ export interface FuturesPlanOrderRequestV2 {
   reduceOnly?: 'YES' | 'NO';
   stopSurplusTriggerPrice?: string;
   stopSurplusExecutePrice?: string;
-  stopSurplusTriggerType?: FuturesTriggerPriceType;
+  stopSurplusTriggerType?: FuturesTriggerPriceTypeV2;
   stopLossTriggerPrice?: string;
   stopLossExecutePrice?: string;
-  stopLossTriggerType?: FuturesTriggerPriceType;
-  stpMode?: FuturesStpMode;
+  stopLossTriggerType?: FuturesTriggerPriceTypeV2;
+  stpMode?: FuturesStpModeV2;
 }
 
 export interface FuturesModifyTPSLOrderRequestV2 {
@@ -386,10 +386,10 @@ export interface FuturesModifyPlanOrderRequestV2 {
   newTriggerType?: 'fill_price' | 'mark_price';
   newStopSurplusTriggerPrice?: string;
   newStopSurplusExecutePrice?: string;
-  newStopSurplusTriggerType?: FuturesTriggerPriceType;
+  newStopSurplusTriggerType?: FuturesTriggerPriceTypeV2;
   newStopLossTriggerPrice?: string;
   newStopLossExecutePrice?: string;
-  newStopLossTriggerType?: FuturesTriggerPriceType;
+  newStopLossTriggerType?: FuturesTriggerPriceTypeV2;
 }
 
 export interface FuturesGetPlanOrdersRequestV2 {
@@ -404,12 +404,12 @@ export interface FuturesGetPlanOrdersRequestV2 {
   limit?: string;
 }
 
-interface FuturesCancelPlanOrderItem {
+interface FuturesCancelPlanOrderItemV2 {
   orderId?: string;
   clientOid?: string;
 }
 
-export type FuturesPlanOrderType =
+export type FuturesPlanOrderTypeV2 =
   | 'normal_plan'
   | 'profit_plan'
   | 'loss_plan'
@@ -418,20 +418,20 @@ export type FuturesPlanOrderType =
   | 'moving_plan';
 
 export interface FuturesCancelPlanOrderRequestV2 {
-  orderIdList?: FuturesCancelPlanOrderItem[];
+  orderIdList?: FuturesCancelPlanOrderItemV2[];
   symbol?: string;
   productType: FuturesProductTypeV2;
   marginCoin?: string;
-  planType?: FuturesPlanOrderType;
+  planType?: FuturesPlanOrderTypeV2;
 }
 
-export type FuturesPlanStatus = 'executed' | 'fail_trigger' | 'cancelled';
+export type FuturesPlanStatusV2 = 'executed' | 'fail_trigger' | 'cancelled';
 
 export interface FuturesGetHistoryPlanOrdersRequestV2 {
   orderId?: string;
   clientOid?: string;
   planType: 'normal_plan' | 'track_plan' | 'profit_loss';
-  planStatus?: FuturesPlanStatus;
+  planStatus?: FuturesPlanStatusV2;
   symbol?: string;
   productType: FuturesProductTypeV2;
   idLessThan?: string;

@@ -58,19 +58,19 @@ export interface GetFinancialHistoryRequestV2 {
  *
  */
 
-export type MarginOrderType = 'limit' | 'market';
+export type MarginOrderTypeV2 = 'limit' | 'market';
 
-export type MarginLoanType =
+export type MarginLoanTypeV2 =
   | 'normal'
   | 'autoLoan'
   | 'autoRepay'
   | 'autoLoanAndRepay';
 
-export type MarginTimeInForce = 'gtc' | 'post_only' | 'fok' | 'ioc';
+export type MarginTimeInForceV2 = 'gtc' | 'post_only' | 'fok' | 'ioc';
 
-export type MarginOrderSide = 'buy' | 'sell';
+export type MarginOrderSideV2 = 'buy' | 'sell';
 
-export type MarginSTPMode =
+export type MarginSTPModeV2 =
   | 'none'
   | 'cancel_taker'
   | 'cancel_maker'
@@ -78,27 +78,27 @@ export type MarginSTPMode =
 
 export interface MarginPlaceOrderRequestV2 {
   symbol: string;
-  orderType: MarginOrderType;
+  orderType: MarginOrderTypeV2;
   price?: string;
-  loanType: MarginLoanType;
-  force: MarginTimeInForce;
+  loanType: MarginLoanTypeV2;
+  force: MarginTimeInForceV2;
   baseSize?: string;
   quoteSize?: string;
   clientOid?: string;
-  side: MarginOrderSide;
-  stpMode?: MarginSTPMode;
+  side: MarginOrderSideV2;
+  stpMode?: MarginSTPModeV2;
 }
 
 export interface MarginBatchOrderEntry {
-  orderType: MarginOrderType;
+  orderType: MarginOrderTypeV2;
   price?: string;
-  loanType: MarginLoanType;
-  force: MarginTimeInForce;
+  loanType: MarginLoanTypeV2;
+  force: MarginTimeInForceV2;
   baseSize?: string;
   quoteSize?: string;
   clientOid?: string;
-  side: MarginOrderSide;
-  stpMode?: MarginSTPMode;
+  side: MarginOrderSideV2;
+  stpMode?: MarginSTPModeV2;
 }
 
 export interface MarginBatchOrdersRequestV2 {

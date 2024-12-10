@@ -12,7 +12,7 @@ export interface GetSubAccountsRequestV2 {
   endTime?: string;
 }
 
-export type SubAccountPermission =
+export type SubAccountPermissionV2 =
   | 'withdraw'
   | 'transfer'
   | 'spot_trade'
@@ -21,7 +21,7 @@ export type SubAccountPermission =
   | 'deposit'
   | 'margin_trade';
 
-export type SubAccountLanguage =
+export type SubAccountLanguageV2 =
   | 'en_US'
   | 'zh_CN'
   | 'ja_JP'
@@ -35,13 +35,13 @@ export type SubAccountLanguage =
   | 'pt_PT'
   | 'th_TH';
 
-export type SubAccountStatus = 'normal' | 'freeze';
+export type SubAccountStatusV2 = 'normal' | 'freeze';
 
 export interface ModifySubRequestV2 {
   subUid: string;
-  permList: SubAccountPermission[];
-  status: SubAccountStatus;
-  language?: SubAccountLanguage;
+  permList: SubAccountPermissionV2[];
+  status: SubAccountStatusV2;
+  language?: SubAccountLanguageV2;
 }
 
 export interface SubWithdrawalRequestV2 {
