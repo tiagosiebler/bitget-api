@@ -11,7 +11,7 @@ export type CopyTradingProductType =
   | 'COIN-FUTURES'
   | 'USDC-FUTURES';
 
-export interface GetFuturesTraderCurrentOrdersRequest {
+export interface GetFuturesTraderCurrentOrdersRequestV2 {
   symbol?: string;
   productType: CopyTradingProductType;
   startTime?: string;
@@ -21,7 +21,7 @@ export interface GetFuturesTraderCurrentOrdersRequest {
   idLessThan?: string;
 }
 
-export interface GetFuturesTraderHistoryOrdersRequest {
+export interface GetFuturesTraderHistoryOrdersRequestV2 {
   idLessThan?: string;
   idGreaterThan?: string;
   startTime?: string;
@@ -32,14 +32,14 @@ export interface GetFuturesTraderHistoryOrdersRequest {
   productType: CopyTradingProductType;
 }
 
-export interface ModifyFuturesTraderOrderTPSLRequest {
+export interface ModifyFuturesTraderOrderTPSLRequestV2 {
   trackingNo: string;
   productType: CopyTradingProductType;
   stopSurplusPrice?: string;
   stopLossPrice?: string;
 }
 
-export interface GetFuturesTraderProfitShareDetailRequest {
+export interface GetFuturesTraderProfitShareDetailRequestV2 {
   coin?: string;
   idLessThan?: string;
   idGreaterThan?: string;
@@ -48,7 +48,7 @@ export interface GetFuturesTraderProfitShareDetailRequest {
   limit?: string;
 }
 
-export interface FuturesTraderSymbolSettingReq {
+export interface FuturesTraderSymbolSettingRequestV2 {
   symbol: string;
   productType: CopyTradingProductType;
   settingType: 'ADD' | 'DELETE' | 'UPDATE';
@@ -56,7 +56,7 @@ export interface FuturesTraderSymbolSettingReq {
   stopLossRatio?: string;
 }
 
-export interface GetFuturesTraderFollowers {
+export interface GetFuturesTraderFollowersRequestV2 {
   pageNo?: string;
   pageSize?: string;
   startTime?: string;
@@ -71,7 +71,7 @@ export interface GetFuturesTraderFollowers {
  *
  */
 
-export interface GetFollowerFuturesCurrentTrackingOrdersRequest {
+export interface GetFollowerFuturesCurrentTrackingOrdersRequestV2 {
   idLessThan?: string;
   idGreaterThan?: string;
   startTime?: string;
@@ -82,7 +82,7 @@ export interface GetFollowerFuturesCurrentTrackingOrdersRequest {
   traderId?: string;
 }
 
-export interface GetFollowerFuturesHistoryTrackingOrdersRequest {
+export interface GetFollowerFuturesHistoryTrackingOrdersRequestV2 {
   idLessThan?: string;
   idGreaterThan?: string;
   startTime?: string;
@@ -93,7 +93,7 @@ export interface GetFollowerFuturesHistoryTrackingOrdersRequest {
   traderId?: string;
 }
 
-export interface UpdateFuturesFollowerTPSLRequest {
+export interface UpdateFuturesFollowerTPSLRequestV2 {
   trackingNo: string;
   symbol?: string;
   productType: CopyTradingProductType;
@@ -106,7 +106,7 @@ export type FollowMode = 'basic' | 'advanced';
 export type LeverageType = 'position' | 'specify' | 'trader';
 export type TraceType = 'percent' | 'amount' | 'count';
 
-export interface FollowerCopyTradeSetting {
+export interface FollowerCopyTradeSettingRequestV2 {
   symbol: string;
   productType: CopyTradingProductType;
   marginType: 'trader' | 'specify';
@@ -121,13 +121,13 @@ export interface FollowerCopyTradeSetting {
   stopLossRatio?: string;
 }
 
-export interface UpdateFuturesFollowerSettingsRequest {
+export interface UpdateFuturesFollowerSettingsRequestV2 {
   traderId: string;
   autoCopy?: AutoCopyOption;
   mode?: FollowMode;
-  settings: FollowerCopyTradeSetting[];
+  settings: FollowerCopyTradeSettingRequestV2[];
 }
-export interface CloseFuturesFollowerPositionsRequest {
+export interface CloseFuturesFollowerPositionsRequestV2 {
   productType: CopyTradingProductType;
   trackingNo?: string;
   symbol?: string;
@@ -136,7 +136,7 @@ export interface CloseFuturesFollowerPositionsRequest {
   holdSide?: 'long' | 'short';
 }
 
-export interface GetFuturesFollowerTradersRequest {
+export interface GetFuturesFollowerTradersRequestV2 {
   startTime?: string;
   endTime?: string;
   pageNo?: string;
@@ -151,7 +151,7 @@ export interface GetFuturesFollowerTradersRequest {
  *
  */
 
-export interface getSpotTraderHistoryProfitReq {
+export interface GetSpotTraderHistoryProfitRequestV2 {
   idLessThan?: string;
   idGreaterThan?: string;
   startTime?: string;
@@ -160,7 +160,7 @@ export interface getSpotTraderHistoryProfitReq {
   coin?: string;
 }
 
-export interface GetSpotTraderHistoryOrdersReq {
+export interface GetSpotTraderHistoryOrdersRequestV2 {
   idLessThan?: string;
   idGreaterThan?: string;
   startTime?: string;
@@ -169,7 +169,7 @@ export interface GetSpotTraderHistoryOrdersReq {
   symbol?: string;
 }
 
-export interface GetSpotTraderCurrentOrdersReq {
+export interface GetSpotTraderCurrentOrdersRequestV2 {
   symbol?: string;
   idLessThan?: string;
   idGreaterThan?: string;
@@ -178,7 +178,7 @@ export interface GetSpotTraderCurrentOrdersReq {
   limit?: string;
 }
 
-export interface GetSpotTraderFollowersRequest {
+export interface GetSpotTraderFollowersRequestV2 {
   pageNo?: string;
   pageSize?: string;
   startTime?: string;
@@ -193,7 +193,7 @@ export interface GetSpotTraderFollowersRequest {
  *
  */
 
-export interface SpotFollowerCopyTradeSetting {
+export interface SpotFollowerCopyTradeSettingV2 {
   symbol: string;
   traceType: 'percent' | 'amount' | 'count';
   maxHoldSize: string;
@@ -202,7 +202,7 @@ export interface SpotFollowerCopyTradeSetting {
   stopSurplusRatio?: string;
 }
 
-export interface GetSpotFollowerHistoryOrdersRequest {
+export interface GetSpotFollowerHistoryOrdersRequestV2 {
   symbol?: string;
   traderId?: string;
   idLessThan?: string;
@@ -212,7 +212,7 @@ export interface GetSpotFollowerHistoryOrdersRequest {
   limit?: string;
 }
 
-export interface GetSpotFollowerOpenOrdersRequest {
+export interface GetSpotFollowerOpenOrdersRequestV2 {
   symbol?: string;
   traderId?: string;
   idLessThan?: string;

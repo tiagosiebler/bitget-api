@@ -33,7 +33,7 @@ export interface SpotHistoricCandlesRequestV2 {
   limit?: string;
 }
 
-export interface SpotHistoricTradesRequest {
+export interface SpotHistoricTradesRequestV2 {
   symbol: string;
   limit?: string;
   idLessThan?: string;
@@ -63,7 +63,7 @@ export type SpotSTPMode =
 
 export type SpotBatchMode = 'single' | 'multiple';
 
-export interface SpotOrderRequest {
+export interface SpotOrderRequestV2 {
   symbol: string;
   side: SpotOrderSide;
   orderType: SpotOrderType;
@@ -82,7 +82,7 @@ export interface SpotOrderRequest {
   executeStopLossPrice?: string;
 }
 
-export interface SpotCancelandSubmitOrderRequest {
+export interface SpotCancelandSubmitOrderRequestV2 {
   symbol: string;
   price: string;
   size: string;
@@ -95,14 +95,14 @@ export interface SpotCancelandSubmitOrderRequest {
   executeStopLossPrice?: string;
 }
 
-export interface SpotCancelOrderRequest {
+export interface SpotCancelOrderRequestV2 {
   symbol: string;
   tpslType?: SpotTPSLType;
   orderId?: string;
   clientOid?: string;
 }
 
-export interface SpotBatchOrderRequestItem {
+export interface SpotBatchOrderRequestItemV2 {
   symbol?: string;
   side: SpotOrderSide;
   orderType: SpotOrderType;
@@ -117,13 +117,13 @@ export interface SpotBatchOrderRequestItem {
   executeStopLossPrice?: string;
 }
 
-export interface SpotBatchOrderRequest {
+export interface SpotBatchOrderRequestV2 {
   symbol?: string;
   batchMode?: SpotBatchMode;
-  orderList: SpotBatchOrderRequestItem[];
+  orderList: SpotBatchOrderRequestItemV2[];
 }
 
-export interface SpotBatchCancelOrderRequest {
+export interface SpotBatchCancelOrderRequestV2 {
   symbol?: string;
   batchMode?: SpotBatchMode;
   orderList: {
@@ -133,14 +133,14 @@ export interface SpotBatchCancelOrderRequest {
   }[];
 }
 
-export interface GetSpotOrderInfoRequest {
+export interface GetSpotOrderInfoRequestV2 {
   orderId?: string;
   clientOid?: string;
   requestTime?: string;
   receiveWindow?: string;
 }
 
-export interface GetSpotOpenOrdersRequest {
+export interface GetSpotOpenOrdersRequestV2 {
   symbol?: string;
   startTime?: string;
   endTime?: string;
@@ -152,7 +152,7 @@ export interface GetSpotOpenOrdersRequest {
   receiveWindow?: string;
 }
 
-export interface GetSpotHistoryOrdersRequest {
+export interface GetSpotHistoryOrdersRequestV2 {
   symbol?: string;
   startTime?: string;
   endTime?: string;
@@ -164,7 +164,7 @@ export interface GetSpotHistoryOrdersRequest {
   receiveWindow?: string;
 }
 
-export interface GetSpotFillsRequest {
+export interface GetSpotFillsRequestV2 {
   symbol: string;
   orderId?: string;
   startTime?: string;
@@ -183,7 +183,7 @@ export type SpotPlanType = 'amount' | 'total';
 
 export type SpotTriggerType = 'fill_price' | 'mark_price';
 
-export interface SpotPlanOrderRequest {
+export interface SpotPlanOrderRequestV2 {
   symbol: string;
   side: SpotOrderSide;
   triggerPrice: string;
@@ -197,7 +197,7 @@ export interface SpotPlanOrderRequest {
   stpMode?: SpotSTPMode;
 }
 
-export interface SpotModifyPlanOrderRequest {
+export interface SpotModifyPlanOrderRequestV2 {
   orderId?: string;
   clientOid?: string;
   triggerPrice: string;
@@ -206,7 +206,7 @@ export interface SpotModifyPlanOrderRequest {
   size: string;
 }
 
-export interface GetSpotCurrentPlanOrdersRequest {
+export interface GetSpotCurrentPlanOrdersRequestV2 {
   symbol: string;
   limit?: string;
   idLessThan?: string;
@@ -214,7 +214,7 @@ export interface GetSpotCurrentPlanOrdersRequest {
   endTime?: string;
 }
 
-export interface GetSpotHistoryPlanOrdersRequest {
+export interface GetSpotHistoryPlanOrdersRequestV2 {
   symbol: string;
   startTime: string;
   endTime: string;
@@ -258,7 +258,7 @@ export type SpotAccountType =
   | 'crossed_margin'
   | 'isolated_margin';
 
-export interface GetSpotAccountBillsRequest {
+export interface GetSpotAccountBillsRequestV2 {
   coin?: string;
   groupType?: SpotBillGroupType;
   businessType?: SpotBusinessType;
@@ -268,7 +268,7 @@ export interface GetSpotAccountBillsRequest {
   idLessThan?: string;
 }
 
-export interface SpotTransferRequest {
+export interface SpotTransferRequestV2 {
   fromType: SpotAccountType;
   toType: SpotAccountType;
   amount: string;
@@ -277,7 +277,7 @@ export interface SpotTransferRequest {
   clientOid?: string;
 }
 
-export interface SpotSubAccountTransferRequest {
+export interface SpotSubAccountTransferRequestV2 {
   fromType: SpotAccountType;
   toType: SpotAccountType;
   amount: string;
@@ -288,7 +288,7 @@ export interface SpotSubAccountTransferRequest {
   toUserId: string;
 }
 
-export interface SpotWithdrawalRequest {
+export interface SpotWithdrawalRequestV2 {
   coin: string;
   transferType: 'on_chain' | 'internal_transfer';
   address: string;
@@ -301,7 +301,7 @@ export interface SpotWithdrawalRequest {
   clientOid?: string;
 }
 
-export interface SpotMainSubTransferRecordRequest {
+export interface SpotMainSubTransferRecordRequestV2 {
   coin?: string;
   role?: 'initiator' | 'receiver';
   subUid?: string;
@@ -312,7 +312,7 @@ export interface SpotMainSubTransferRecordRequest {
   idLessThan?: string;
 }
 
-export interface GetSpotTransferRecordRequest {
+export interface GetSpotTransferRecordRequestV2 {
   coin: string;
   fromType: SpotAccountType;
   startTime?: string;
@@ -322,7 +322,7 @@ export interface GetSpotTransferRecordRequest {
   idLessThan?: string;
 }
 
-export interface GetSpotSubAccountDepositRecordRequest {
+export interface GetSpotSubAccountDepositRecordRequestV2 {
   subUid: string;
   coin?: string;
   startTime?: string;
@@ -331,7 +331,7 @@ export interface GetSpotSubAccountDepositRecordRequest {
   limit?: string;
 }
 
-export interface GetSpotWithdrawalRecordRequest {
+export interface GetSpotWithdrawalRecordRequestV2 {
   coin?: string;
   clientOid?: string;
   startTime: string;
@@ -341,7 +341,7 @@ export interface GetSpotWithdrawalRecordRequest {
   limit?: string;
 }
 
-export interface GetSpotDepositRecordRequest {
+export interface GetSpotDepositRecordRequestV2 {
   coin?: string;
   orderId?: string;
   startTime: string;

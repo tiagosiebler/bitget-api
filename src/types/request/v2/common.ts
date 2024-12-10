@@ -6,7 +6,7 @@ import { FuturesProductTypeV2, MarginType } from '../shared';
  *
  */
 
-export interface GetAnnouncementsRequest {
+export interface GetAnnouncementsRequestV2 {
   annType?: string;
   startTime?: string;
   endTime?: string;
@@ -19,7 +19,7 @@ export interface GetAnnouncementsRequest {
  *
  */
 
-export interface GetTradeRateRequest {
+export interface GetTradeRateRequestV2 {
   symbol: string;
   businessType: string;
 }
@@ -30,7 +30,7 @@ export interface GetTradeRateRequest {
  *
  */
 
-export interface GetSpotTransactionsRequest {
+export interface GetSpotTransactionsRequestV2 {
   coin?: string;
   startTime: string;
   endTime: string;
@@ -38,7 +38,7 @@ export interface GetSpotTransactionsRequest {
   idLessThan?: string;
 }
 
-export interface GetFuturesTransactionsRequest {
+export interface GetFuturesTransactionsRequestV2 {
   productType?: FuturesProductTypeV2;
   marginCoin?: string;
   startTime: string;
@@ -47,7 +47,7 @@ export interface GetFuturesTransactionsRequest {
   idLessThan?: string;
 }
 
-export interface GetMarginTransactionsRequest {
+export interface GetMarginTransactionsRequestV2 {
   marginType?: MarginType;
   coin?: string;
   startTime: string;
@@ -56,7 +56,7 @@ export interface GetMarginTransactionsRequest {
   idLessThan?: string;
 }
 
-export interface GetP2PTransactionsRequest {
+export interface GetP2PTransactionsRequestV2 {
   coin?: string;
   startTime: string;
   endTime: string;
@@ -70,13 +70,13 @@ export interface GetP2PTransactionsRequest {
  *
  */
 
-export interface GetP2PMerchantsRequest {
+export interface GetP2PMerchantsRequestV2 {
   online?: 'yes' | 'no';
   idLessThan?: string;
   limit?: string;
 }
 
-export interface GetMerchantP2POrdersRequest {
+export interface GetMerchantP2POrdersRequestV2 {
   startTime: string;
   endTime?: string;
   idLessThan?: string;
@@ -90,7 +90,7 @@ export interface GetMerchantP2POrdersRequest {
   orderNo?: string;
 }
 
-export interface GetMerchantAdvertisementsRequest {
+export interface GetMerchantAdvertisementsRequestV2 {
   startTime: string;
   endTime?: string;
   idLessThan?: string;
@@ -112,13 +112,13 @@ export interface GetMerchantAdvertisementsRequest {
  *
  */
 
-export interface ModifyVirtualSubRequest {
+export interface ModifyVirtualSubRequestV2 {
   subAccountUid: string;
   permList: string[];
   status: string;
 }
 
-export interface CreateVirtualSubRequest {
+export interface CreateVirtualSubRequestV2 {
   subAccountName: string;
   passphrase: string;
   label: string;
@@ -126,7 +126,7 @@ export interface CreateVirtualSubRequest {
   permList?: string[];
 }
 
-export interface CreateVirtualSubApiKeyRequest {
+export interface CreateVirtualSubApiKeyRequestV2 {
   subAccountUid: string;
   passphrase: string;
   label: string;
@@ -134,7 +134,7 @@ export interface CreateVirtualSubApiKeyRequest {
   permList?: string[];
 }
 
-export interface ModifyVirtualSubApiKeyRequest {
+export interface ModifyVirtualSubApiKeyRequestV2 {
   subAccountUid: string;
   subAccountApiKey: string;
   passphrase: string;
@@ -149,14 +149,14 @@ export interface ModifyVirtualSubApiKeyRequest {
  *
  */
 
-export interface ConvertQuoteRequest {
+export interface ConvertQuoteRequestV2 {
   fromCoin: string;
   fromCoinSize?: string;
   toCoin: string;
   toCoinSize?: string;
 }
 
-export interface ConvertRequest {
+export interface ConvertRequestV2 {
   fromCoin: string;
   fromCoinSize: string;
   cnvtPrice: string;
@@ -165,7 +165,7 @@ export interface ConvertRequest {
   traceId: string;
 }
 
-export interface GetConvertHistoryRequest {
+export interface GetConvertHistoryRequestV2 {
   startTime: string;
   endTime: string;
   limit?: string;
@@ -178,10 +178,10 @@ export interface GetConvertHistoryRequest {
  *
  */
 
-export interface GetConvertBGBHistoryRequest {
-    orderId?: string;
-    startTime: string;
-    endTime: string;
-    limit?: string;
-    idLessThan?: string;
-  }
+export interface GetConvertBGBHistoryRequestV2 {
+  orderId?: string;
+  startTime: string;
+  endTime: string;
+  limit?: string;
+  idLessThan?: string;
+}

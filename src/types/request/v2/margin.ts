@@ -4,7 +4,7 @@
  *
  */
 
-export interface GetBorrowHistoryRequest {
+export interface GetBorrowHistoryRequestV2 {
   loanId?: string;
   coin?: string;
   startTime: string;
@@ -13,7 +13,7 @@ export interface GetBorrowHistoryRequest {
   idLessThan?: string;
 }
 
-export interface GetRepayHistoryRequest {
+export interface GetRepayHistoryRequestV2 {
   repayId?: string;
   coin?: string;
   startTime: string;
@@ -22,7 +22,7 @@ export interface GetRepayHistoryRequest {
   idLessThan?: string;
 }
 
-export interface GetInterestHistoryRequest {
+export interface GetInterestHistoryRequestV2 {
   coin?: string;
   startTime: string;
   endTime?: string;
@@ -30,14 +30,14 @@ export interface GetInterestHistoryRequest {
   idLessThan?: string;
 }
 
-export interface GetLiquidationHistoryRequest {
+export interface GetLiquidationHistoryRequestV2 {
   startTime: string;
   endTime?: string;
   limit?: string;
   idLessThan?: string;
 }
 
-export interface GetFinancialHistoryRequest {
+export interface GetFinancialHistoryRequestV2 {
   marginType?: string;
   coin?: string;
   startTime: string;
@@ -76,7 +76,7 @@ export type MarginSTPMode =
   | 'cancel_maker'
   | 'cancel_both';
 
-export interface MarginPlaceOrderRequest {
+export interface MarginPlaceOrderRequestV2 {
   symbol: string;
   orderType: MarginOrderType;
   price?: string;
@@ -101,12 +101,12 @@ export interface MarginBatchOrderEntry {
   stpMode?: MarginSTPMode;
 }
 
-export interface MarginBatchOrdersRequest {
+export interface MarginBatchOrdersRequestV2 {
   symbol: string;
   orderList: MarginBatchOrderEntry[];
 }
 
-export interface GetMarginCurrentOrdersRequest {
+export interface GetMarginCurrentOrdersRequestV2 {
   symbol: string;
   orderId?: string;
   clientOid?: string;
@@ -116,7 +116,7 @@ export interface GetMarginCurrentOrdersRequest {
   idLessThan?: string;
 }
 
-export interface GetHistoryOrdersRequest {
+export interface GetHistoryOrdersRequestV2 {
   symbol: string;
   orderId?: string;
   enterPointSource?: string;
@@ -127,7 +127,7 @@ export interface GetHistoryOrdersRequest {
   idLessThan?: string;
 }
 
-export interface GetMarginOrderFillsRequest {
+export interface GetMarginOrderFillsRequestV2 {
   symbol: string;
   orderId?: string;
   idLessThan?: string;
@@ -136,7 +136,7 @@ export interface GetMarginOrderFillsRequest {
   limit?: string;
 }
 
-export interface GetMarginLiquidationOrdersRequest {
+export interface GetMarginLiquidationOrdersRequestV2 {
   type?: 'swap' | 'place_order';
   symbol?: string;
   fromCoin?: string;

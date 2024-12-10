@@ -6,7 +6,7 @@
  *
  */
 
-export interface GetEarnSavingsAssetsRequest {
+export interface GetEarnSavingsAssetsRequestV2 {
   periodType: string;
   startTime?: string;
   endTime?: string;
@@ -14,7 +14,7 @@ export interface GetEarnSavingsAssetsRequest {
   idLessThan?: string;
 }
 
-export interface GetEarnSavingsRecordsRequest {
+export interface GetEarnSavingsRecordsRequestV2 {
   coin?: string;
   periodType: string;
   orderType?: string;
@@ -24,7 +24,7 @@ export interface GetEarnSavingsRecordsRequest {
   idLessThan?: string;
 }
 
-export interface RedeemSavingsRequest {
+export interface RedeemSavingsRequestV2 {
   productId: string;
   orderId?: string;
   periodType: string;
@@ -39,7 +39,7 @@ export interface RedeemSavingsRequest {
  *
  */
 
-export interface GetSharkfinAssetsRequest {
+export interface GetSharkfinAssetsRequestV2 {
   status: string;
   startTime?: string;
   endTime?: string;
@@ -47,7 +47,7 @@ export interface GetSharkfinAssetsRequest {
   idLessThan?: string;
 }
 
-export interface GetSharkfinRecordsRequest {
+export interface GetSharkfinRecordsRequestV2 {
   coin?: string;
   type: string;
   startTime?: string;
@@ -64,14 +64,14 @@ export interface GetSharkfinRecordsRequest {
  *
  */
 
-export interface GetLoanEstInterestAndBorrowableRequest {
+export interface GetLoanEstInterestAndBorrowableRequestV2 {
   loanCoin: string;
   pledgeCoin: string;
   daily: 'SEVEN' | 'THIRTY';
   pledgeAmount?: string;
 }
 
-export interface BorrowLoanRequest {
+export interface BorrowLoanRequestV2 {
   loanCoin: string;
   pledgeCoin: string;
   daily: 'SEVEN' | 'THIRTY';
@@ -79,14 +79,14 @@ export interface BorrowLoanRequest {
   loanAmount?: string;
 }
 
-export interface RepayLoanRequest {
+export interface RepayLoanRequestV2 {
   orderId: string;
   amount?: string;
   repayUnlock?: string;
   repayAll: string;
 }
 
-export interface GetLoanRepayHistoryRequest {
+export interface GetLoanRepayHistoryRequestV2 {
   orderId?: string;
   loanCoin?: string;
   pledgeCoin?: string;
@@ -96,14 +96,14 @@ export interface GetLoanRepayHistoryRequest {
   pageSize?: string;
 }
 
-export interface ModifyLoanPledgeRateRequest {
+export interface ModifyLoanPledgeRateRequestV2 {
   orderId: string;
   amount: string;
   pledgeCoin: string;
   reviseType: string;
 }
 
-export interface GetLoanPledgeRateHistoryRequest {
+export interface GetLoanPledgeRateHistoryRequestV2 {
   orderId?: string;
   reviseSide?: string;
   pledgeCoin?: string;
@@ -113,7 +113,7 @@ export interface GetLoanPledgeRateHistoryRequest {
   pageSize?: string;
 }
 
-export interface GetLoanHistoryRequest {
+export interface GetLoanHistoryRequestV2 {
   orderId?: string;
   loanCoin?: string;
   pledgeCoin?: string;
@@ -124,7 +124,7 @@ export interface GetLoanHistoryRequest {
   pageSize?: string;
 }
 
-export interface GetLiquidationRecordsRequest {
+export interface GetLiquidationRecordsRequestV2 {
   orderId?: string;
   loanCoin?: string;
   pledgeCoin?: string;

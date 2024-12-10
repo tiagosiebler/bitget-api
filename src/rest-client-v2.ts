@@ -6,30 +6,30 @@ import {
   SpotCandlesRequestV2,
   SpotAccountBill,
   SpotHistoricCandlesRequestV2,
-  SpotHistoricTradesRequest,
-  SpotOrderRequest,
-  SpotCancelandSubmitOrderRequest,
-  SpotCancelOrderRequest,
-  SpotBatchOrderRequest,
-  SpotBatchCancelOrderRequest,
-  GetSpotOrderInfoRequest,
-  GetSpotOpenOrdersRequest,
-  GetSpotHistoryOrdersRequest,
-  GetSpotFillsRequest,
-  SpotPlanOrderRequest,
-  SpotModifyPlanOrderRequest,
-  GetSpotCurrentPlanOrdersRequest,
-  GetSpotHistoryPlanOrdersRequest,
-  GetSpotAccountBillsRequest,
-  SpotTransferRequest,
+  SpotHistoricTradesRequestV2,
+  SpotOrderRequestV2,
+  SpotCancelandSubmitOrderRequestV2,
+  SpotCancelOrderRequestV2,
+  SpotBatchOrderRequestV2,
+  SpotBatchCancelOrderRequestV2,
+  GetSpotOrderInfoRequestV2,
+  GetSpotOpenOrdersRequestV2,
+  GetSpotHistoryOrdersRequestV2,
+  GetSpotFillsRequestV2,
+  SpotPlanOrderRequestV2,
+  SpotModifyPlanOrderRequestV2,
+  GetSpotCurrentPlanOrdersRequestV2,
+  GetSpotHistoryPlanOrdersRequestV2,
+  GetSpotAccountBillsRequestV2,
+  SpotTransferRequestV2,
   SpotAccountType,
-  SpotSubAccountTransferRequest,
-  SpotWithdrawalRequest,
-  SpotMainSubTransferRecordRequest,
-  GetSpotTransferRecordRequest,
-  GetSpotSubAccountDepositRecordRequest,
-  GetSpotWithdrawalRecordRequest,
-  GetSpotDepositRecordRequest,
+  SpotSubAccountTransferRequestV2,
+  SpotWithdrawalRequestV2,
+  SpotMainSubTransferRecordRequestV2,
+  GetSpotTransferRecordRequestV2,
+  GetSpotSubAccountDepositRecordRequestV2,
+  GetSpotWithdrawalRecordRequestV2,
+  GetSpotDepositRecordRequestV2,
   FuturesMergeDepthRequestV2,
   FuturesProductTypeV2,
   FuturesRecentTradesRequestV2,
@@ -62,78 +62,78 @@ import {
   FuturesGetPlanOrdersRequestV2,
   FuturesCancelPlanOrderRequestV2,
   FuturesGetHistoryPlanOrdersRequestV2,
-  GetBorrowHistoryRequest,
-  GetRepayHistoryRequest,
-  GetInterestHistoryRequest,
-  GetLiquidationHistoryRequest,
-  GetFinancialHistoryRequest,
-  MarginPlaceOrderRequest,
-  MarginBatchOrdersRequest,
-  GetMarginCurrentOrdersRequest,
-  GetHistoryOrdersRequest,
-  GetMarginOrderFillsRequest,
-  GetMarginLiquidationOrdersRequest,
-  GetFuturesTraderCurrentOrdersRequest,
-  GetFuturesTraderHistoryOrdersRequest,
-  ModifyFuturesTraderOrderTPSLRequest,
-  GetFuturesTraderProfitShareDetailRequest,
+  GetBorrowHistoryRequestV2,
+  GetRepayHistoryRequestV2,
+  GetInterestHistoryRequestV2,
+  GetLiquidationHistoryRequestV2,
+  GetFinancialHistoryRequestV2,
+  MarginPlaceOrderRequestV2,
+  MarginBatchOrdersRequestV2,
+  GetMarginCurrentOrdersRequestV2,
+  GetHistoryOrdersRequestV2,
+  GetMarginOrderFillsRequestV2,
+  GetMarginLiquidationOrdersRequestV2,
+  GetFuturesTraderCurrentOrdersRequestV2,
+  GetFuturesTraderHistoryOrdersRequestV2,
+  ModifyFuturesTraderOrderTPSLRequestV2,
+  GetFuturesTraderProfitShareDetailRequestV2,
   CopyTradingProductType,
-  FuturesTraderSymbolSettingReq,
-  GetFuturesTraderFollowers,
-  GetFollowerFuturesCurrentTrackingOrdersRequest,
-  GetFollowerFuturesHistoryTrackingOrdersRequest,
-  UpdateFuturesFollowerTPSLRequest,
-  UpdateFuturesFollowerSettingsRequest,
-  GetFuturesFollowerTradersRequest,
-  CloseFuturesFollowerPositionsRequest,
-  getSpotTraderHistoryProfitReq,
-  GetSpotTraderHistoryOrdersReq,
-  GetSpotTraderCurrentOrdersReq,
-  GetSpotTraderFollowersRequest,
-  SpotFollowerCopyTradeSetting,
-  GetSpotFollowerHistoryOrdersRequest,
-  GetSpotFollowerOpenOrdersRequest,
-  GetEarnSavingsAssetsRequest,
-  GetEarnSavingsRecordsRequest,
-  RedeemSavingsRequest,
-  GetSharkfinAssetsRequest,
-  GetSharkfinRecordsRequest,
-  GetLoanEstInterestAndBorrowableRequest,
-  BorrowLoanRequest,
-  RepayLoanRequest,
-  GetLoanRepayHistoryRequest,
-  ModifyLoanPledgeRateRequest,
-  GetLoanPledgeRateHistoryRequest,
-  GetLoanHistoryRequest,
-  GetLiquidationRecordsRequest,
+  FuturesTraderSymbolSettingRequestV2,
+  GetFuturesTraderFollowersRequestV2,
+  GetFollowerFuturesCurrentTrackingOrdersRequestV2,
+  GetFollowerFuturesHistoryTrackingOrdersRequestV2,
+  UpdateFuturesFollowerTPSLRequestV2,
+  UpdateFuturesFollowerSettingsRequestV2,
+  GetFuturesFollowerTradersRequestV2,
+  CloseFuturesFollowerPositionsRequestV2,
+  GetSpotTraderHistoryProfitRequestV2,
+  GetSpotTraderHistoryOrdersRequestV2,
+  GetSpotTraderCurrentOrdersRequestV2,
+  GetSpotTraderFollowersRequestV2,
+  SpotFollowerCopyTradeSettingV2,
+  GetSpotFollowerHistoryOrdersRequestV2,
+  GetSpotFollowerOpenOrdersRequestV2,
+  GetEarnSavingsAssetsRequestV2,
+  GetEarnSavingsRecordsRequestV2,
+  RedeemSavingsRequestV2,
+  GetSharkfinAssetsRequestV2,
+  GetSharkfinRecordsRequestV2,
+  GetLoanEstInterestAndBorrowableRequestV2,
+  BorrowLoanRequestV2,
+  RepayLoanRequestV2,
+  GetLoanRepayHistoryRequestV2,
+  ModifyLoanPledgeRateRequestV2,
+  GetLoanPledgeRateHistoryRequestV2,
+  GetLoanHistoryRequestV2,
+  GetLiquidationRecordsRequestV2,
 } from './types';
 import {
-  CreateSubaccountApiKeyRequest,
-  GetSubaccountsRequest,
-  ModifySubaccountApiKeyRequest,
-  ModifySubRequest,
-  SubDepositRecordsRequest,
-  SubWithdrawalRecordsRequest,
-  SubWithdrawalRequest,
+  CreateSubAccountApiKeyRequestV2,
+  GetSubAccountsRequestV2,
+  ModifySubAccountApiKeyRequestV2,
+  ModifySubRequestV2,
+  SubDepositRecordsRequestV2,
+  SubWithdrawalRecordsRequestV2,
+  SubWithdrawalRequestV2,
 } from './types/request/v2/broker';
 import {
-  ConvertQuoteRequest,
-  ConvertRequest,
-  CreateVirtualSubApiKeyRequest,
-  CreateVirtualSubRequest,
-  GetAnnouncementsRequest,
-  GetConvertHistoryRequest,
-  GetFuturesTransactionsRequest,
-  GetMarginTransactionsRequest,
-  GetMerchantAdvertisementsRequest,
-  GetMerchantP2POrdersRequest,
-  GetP2PMerchantsRequest,
-  GetP2PTransactionsRequest,
-  GetSpotTransactionsRequest,
-  GetTradeRateRequest,
-  ModifyVirtualSubRequest,
-  ModifyVirtualSubApiKeyRequest,
-  GetConvertBGBHistoryRequest,
+  ConvertQuoteRequestV2,
+  ConvertRequestV2,
+  CreateVirtualSubApiKeyRequestV2,
+  CreateVirtualSubRequestV2,
+  GetAnnouncementsRequestV2,
+  GetConvertHistoryRequestV2,
+  GetFuturesTransactionsRequestV2,
+  GetMarginTransactionsRequestV2,
+  GetMerchantAdvertisementsRequestV2,
+  GetMerchantP2POrdersRequestV2,
+  GetP2PMerchantsRequestV2,
+  GetP2PTransactionsRequestV2,
+  GetSpotTransactionsRequestV2,
+  GetTradeRateRequestV2,
+  ModifyVirtualSubRequestV2,
+  ModifyVirtualSubApiKeyRequestV2,
+  GetConvertBGBHistoryRequestV2,
 } from './types/request/v2/common';
 import { REST_CLIENT_TYPE_ENUM, assertMarginType } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -235,7 +235,7 @@ export class RestClientV2 extends BaseRestClient {
    */
 
   getAnnouncements(
-    params?: GetAnnouncementsRequest,
+    params?: GetAnnouncementsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.get(`/api/v2/public/annoucements`, params);
   }
@@ -250,7 +250,7 @@ export class RestClientV2 extends BaseRestClient {
     return this.get(`/api/v2/public/time`);
   }
 
-  getTradeRate(params: GetTradeRateRequest): Promise<APIResponse<any>> {
+  getTradeRate(params: GetTradeRateRequestV2): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/common/trade-rate`, params);
   }
 
@@ -261,25 +261,25 @@ export class RestClientV2 extends BaseRestClient {
    */
 
   getSpotTransactionRecords(
-    params: GetSpotTransactionsRequest,
+    params: GetSpotTransactionsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/tax/spot-record`, params);
   }
 
   getFuturesTransactionRecords(
-    params: GetFuturesTransactionsRequest,
+    params: GetFuturesTransactionsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/tax/future-record`, params);
   }
 
   getMarginTransactionRecords(
-    params: GetMarginTransactionsRequest,
+    params: GetMarginTransactionsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/tax/margin-record`, params);
   }
 
   getP2PTransactionRecords(
-    params: GetP2PTransactionsRequest,
+    params: GetP2PTransactionsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/tax/p2p-record`, params);
   }
@@ -291,7 +291,7 @@ export class RestClientV2 extends BaseRestClient {
    */
 
   getP2PMerchantList(
-    params?: GetP2PMerchantsRequest,
+    params?: GetP2PMerchantsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/p2p/merchantList`, params);
   }
@@ -301,13 +301,13 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getP2PMerchantOrders(
-    params: GetMerchantP2POrdersRequest,
+    params: GetMerchantP2POrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/p2p/orderList`, params);
   }
 
   getP2PMerchantAdvertisementList(
-    params: GetMerchantAdvertisementsRequest,
+    params: GetMerchantAdvertisementsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/p2p/advList`, params);
   }
@@ -405,13 +405,13 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   modifyVirtualSubaccount(
-    params: ModifyVirtualSubRequest,
+    params: ModifyVirtualSubRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/user/modify-virtual-subaccount`, params);
   }
 
   batchCreateVirtualSubaccountAndAPIKey(
-    params: CreateVirtualSubRequest,
+    params: CreateVirtualSubRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(
       '/api/v2/user/batch-create-subaccount-and-apikey',
@@ -428,7 +428,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   createVirtualSubaccountAPIKey(
-    params: CreateVirtualSubApiKeyRequest,
+    params: CreateVirtualSubApiKeyRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(
       '/api/v2/user/create-virtual-subaccount-apikey',
@@ -437,7 +437,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   modifyVirtualSubaccountAPIKey(
-    params: ModifyVirtualSubApiKeyRequest,
+    params: ModifyVirtualSubApiKeyRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(
       '/api/v2/user/modify-virtual-subaccount-apikey',
@@ -483,17 +483,17 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getConvertQuotedPrice(
-    params: ConvertQuoteRequest,
+    params: ConvertQuoteRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/convert/quoted-price`, params);
   }
 
-  convert(params: ConvertRequest): Promise<APIResponse<any>> {
+  convert(params: ConvertRequestV2): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/convert/trade`, params);
   }
 
   getConvertHistory(
-    params: GetConvertHistoryRequest,
+    params: GetConvertHistoryRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/convert/convert-record`, params);
   }
@@ -513,7 +513,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getConvertBGBHistory(
-    params: GetConvertBGBHistoryRequest,
+    params: GetConvertBGBHistoryRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/convert/bgb-convert-records`, params);
   }
@@ -582,7 +582,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotHistoricTrades(
-    params: SpotHistoricTradesRequest,
+    params: SpotHistoricTradesRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/market/fills-history`, params);
   }
@@ -593,18 +593,18 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  spotSubmitOrder(params: SpotOrderRequest): Promise<APIResponse<any>> {
+  spotSubmitOrder(params: SpotOrderRequestV2): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/place-order`, params);
   }
 
   spotCancelandSubmitOrder(
-    params: SpotCancelandSubmitOrderRequest,
+    params: SpotCancelandSubmitOrderRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/cancel-replace-order`, params);
   }
 
   spotBatchCancelandSubmitOrder(params: {
-    orderList: SpotCancelandSubmitOrderRequest[];
+    orderList: SpotCancelandSubmitOrderRequestV2[];
   }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/spot/trade/batch-cancel-replace-order`,
@@ -612,18 +612,18 @@ export class RestClientV2 extends BaseRestClient {
     );
   }
 
-  spotCancelOrder(params: SpotCancelOrderRequest): Promise<APIResponse<any>> {
+  spotCancelOrder(params: SpotCancelOrderRequestV2): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/cancel-order`, params);
   }
 
   spotBatchSubmitOrders(
-    params: SpotBatchOrderRequest,
+    params: SpotBatchOrderRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/batch-orders`, params);
   }
 
   spotBatchCancelOrders(
-    params: SpotBatchCancelOrderRequest,
+    params: SpotBatchCancelOrderRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/batch-cancel-order`, params);
   }
@@ -632,23 +632,23 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate(`/api/v2/spot/trade/cancel-symbol-order`, params);
   }
 
-  getSpotOrder(params?: GetSpotOrderInfoRequest): Promise<APIResponse<any>> {
+  getSpotOrder(params?: GetSpotOrderInfoRequestV2): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/orderInfo`, params);
   }
 
   getSpotOpenOrders(
-    params?: GetSpotOpenOrdersRequest,
+    params?: GetSpotOpenOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/unfilled-orders`, params);
   }
 
   getSpotHistoricOrders(
-    params?: GetSpotHistoryOrdersRequest,
+    params?: GetSpotHistoryOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/history-orders`, params);
   }
 
-  getSpotFills(params: GetSpotFillsRequest): Promise<APIResponse<any>> {
+  getSpotFills(params: GetSpotFillsRequestV2): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/fills`, params);
   }
 
@@ -658,12 +658,14 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  spotSubmitPlanOrder(params: SpotPlanOrderRequest): Promise<APIResponse<any>> {
+  spotSubmitPlanOrder(
+    params: SpotPlanOrderRequestV2,
+  ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/place-plan-order`, params);
   }
 
   spotModifyPlanOrder(
-    params: SpotModifyPlanOrderRequest,
+    params: SpotModifyPlanOrderRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/trade/modify-plan-order`, params);
   }
@@ -676,7 +678,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotCurrentPlanOrders(
-    params: GetSpotCurrentPlanOrdersRequest,
+    params: GetSpotCurrentPlanOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/current-plan-order`, params);
   }
@@ -688,7 +690,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotHistoricPlanOrders(
-    params: GetSpotHistoryPlanOrdersRequest,
+    params: GetSpotHistoryPlanOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/trade/history-plan-order`, params);
   }
@@ -734,12 +736,12 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotAccountBills(
-    params?: GetSpotAccountBillsRequest,
+    params?: GetSpotAccountBillsRequestV2,
   ): Promise<APIResponse<SpotAccountBill[]>> {
     return this.getPrivate(`/api/v2/spot/account/bills`, params);
   }
 
-  spotTransfer(params: SpotTransferRequest): Promise<APIResponse<any>> {
+  spotTransfer(params: SpotTransferRequestV2): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/wallet/transfer`, params);
   }
 
@@ -751,17 +753,17 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   spotSubTransfer(
-    params: SpotSubAccountTransferRequest,
+    params: SpotSubAccountTransferRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/wallet/subaccount-transfer`, params);
   }
 
-  spotWithdraw(params: SpotWithdrawalRequest): Promise<APIResponse<any>> {
+  spotWithdraw(params: SpotWithdrawalRequestV2): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/spot/wallet/withdrawal`, params);
   }
 
   getSpotMainSubTransferRecord(
-    params: SpotMainSubTransferRecordRequest,
+    params: SpotMainSubTransferRecordRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/spot/account/sub-main-trans-record`,
@@ -770,7 +772,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotTransferHistory(
-    params: GetSpotTransferRecordRequest,
+    params: GetSpotTransferRecordRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/account/transferRecords`, params);
   }
@@ -807,7 +809,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSubAccountDepositRecords(
-    params: GetSpotSubAccountDepositRecordRequest,
+    params: GetSpotSubAccountDepositRecordRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/spot/wallet/subaccount-deposit-records`,
@@ -816,13 +818,13 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotDepositHistory(
-    params: GetSpotDepositRecordRequest,
+    params: GetSpotDepositRecordRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/wallet/deposit-records`, params);
   }
 
   getSpotWithdrawalHistory(
-    params: GetSpotWithdrawalRecordRequest,
+    params: GetSpotWithdrawalRecordRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/spot/wallet/withdrawal-records`, params);
   }
@@ -1245,11 +1247,11 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate(`/api/v2/broker/account/create-subaccount`, params);
   }
 
-  getSubaccounts(params?: GetSubaccountsRequest): Promise<APIResponse<any>> {
+  getSubaccounts(params?: GetSubAccountsRequestV2): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/broker/account/subaccount-list`, params);
   }
 
-  modifySubaccount(params: ModifySubRequest): Promise<APIResponse<any>> {
+  modifySubaccount(params: ModifySubRequestV2): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/broker/account/modify-subaccount`, params);
   }
 
@@ -1290,7 +1292,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   subaccountWithdrawal(
-    params: SubWithdrawalRequest,
+    params: SubWithdrawalRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/broker/account/subaccount-withdrawal`,
@@ -1310,13 +1312,13 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   subaccountDepositRecords(
-    params: SubDepositRecordsRequest,
+    params: SubDepositRecordsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/broker/subaccount-deposit`, params);
   }
 
   subaccountWithdrawalRecords(
-    params: SubWithdrawalRecordsRequest,
+    params: SubWithdrawalRecordsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/broker/subaccount-withdrawal`, params);
   }
@@ -1328,7 +1330,7 @@ export class RestClientV2 extends BaseRestClient {
    */
 
   createSubaccountApiKey(
-    params: CreateSubaccountApiKeyRequest,
+    params: CreateSubAccountApiKeyRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/broker/manage/create-subaccount-apikey`,
@@ -1344,7 +1346,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   modifySubaccountApiKey(
-    params: ModifySubaccountApiKeyRequest,
+    params: ModifySubAccountApiKeyRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/broker/manage/modify-subaccount-apikey`,
@@ -1378,7 +1380,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getMarginBorrowHistory(
     marginType: MarginType,
-    params: GetBorrowHistoryRequest,
+    params: GetBorrowHistoryRequestV2,
   ): Promise<APIResponse<any>> {
     assertMarginType(marginType);
     return this.getPrivate(
@@ -1389,7 +1391,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getMarginRepayHistory(
     marginType: MarginType,
-    params: GetRepayHistoryRequest,
+    params: GetRepayHistoryRequestV2,
   ): Promise<APIResponse<any>> {
     assertMarginType(marginType);
     return this.getPrivate(
@@ -1400,7 +1402,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getMarginInterestHistory(
     marginType: MarginType,
-    params: GetInterestHistoryRequest,
+    params: GetInterestHistoryRequestV2,
   ): Promise<APIResponse<any>> {
     assertMarginType(marginType);
     return this.getPrivate(
@@ -1411,7 +1413,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getMarginLiquidationHistory(
     marginType: MarginType,
-    params: GetLiquidationHistoryRequest,
+    params: GetLiquidationHistoryRequestV2,
   ): Promise<APIResponse<any>> {
     assertMarginType(marginType);
     return this.getPrivate(
@@ -1422,7 +1424,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getMarginFinancialHistory(
     marginType: MarginType,
-    params: GetFinancialHistoryRequest,
+    params: GetFinancialHistoryRequestV2,
   ): Promise<APIResponse<any>> {
     assertMarginType(marginType);
     return this.getPrivate(
@@ -1553,7 +1555,7 @@ export class RestClientV2 extends BaseRestClient {
 
   marginSubmitOrder(
     marginType: MarginType,
-    params: MarginPlaceOrderRequest,
+    params: MarginPlaceOrderRequestV2,
   ): Promise<APIResponse<any>> {
     assertMarginType(marginType);
     return this.postPrivate(`/api/v2/margin/${marginType}/place-order`, params);
@@ -1561,7 +1563,7 @@ export class RestClientV2 extends BaseRestClient {
 
   marginBatchSubmitOrders(
     marginType: MarginType,
-    params: MarginBatchOrdersRequest,
+    params: MarginBatchOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     assertMarginType(marginType);
     return this.postPrivate(
@@ -1601,7 +1603,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getMarginOpenOrders(
     marginType: MarginType,
-    params: GetMarginCurrentOrdersRequest,
+    params: GetMarginCurrentOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     assertMarginType(marginType);
     return this.getPrivate(`/api/v2/margin/${marginType}/open-orders`, params);
@@ -1609,7 +1611,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getMarginHistoricOrders(
     marginType: MarginType,
-    params: GetHistoryOrdersRequest,
+    params: GetHistoryOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     assertMarginType(marginType);
     return this.getPrivate(
@@ -1620,7 +1622,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getMarginHistoricOrderFills(
     marginType: MarginType,
-    params: GetMarginOrderFillsRequest,
+    params: GetMarginOrderFillsRequestV2,
   ): Promise<APIResponse<any>> {
     assertMarginType(marginType);
     return this.getPrivate(`/api/v2/margin/${marginType}/fills`, params);
@@ -1628,7 +1630,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getMarginLiquidationOrders(
     marginType: MarginType,
-    params: GetMarginLiquidationOrdersRequest,
+    params: GetMarginLiquidationOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     assertMarginType(marginType);
     return this.getPrivate(
@@ -1654,7 +1656,7 @@ export class RestClientV2 extends BaseRestClient {
    */
 
   getFuturesTraderCurrentOrder(
-    params: GetFuturesTraderCurrentOrdersRequest,
+    params: GetFuturesTraderCurrentOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-trader/order-current-track`,
@@ -1663,7 +1665,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getFuturesTraderHistoryOrders(
-    params: GetFuturesTraderHistoryOrdersRequest,
+    params: GetFuturesTraderHistoryOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-trader/order-history-track`,
@@ -1672,7 +1674,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   modifyFuturesTraderOrderTPSL(
-    params: ModifyFuturesTraderOrderTPSLRequest,
+    params: ModifyFuturesTraderOrderTPSLRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/mix-trader/order-modify-tpsl`,
@@ -1689,7 +1691,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getFuturesTraderProfitShareHistory(
-    params: GetFuturesTraderProfitShareDetailRequest,
+    params: GetFuturesTraderProfitShareDetailRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-trader/profit-history-details`,
@@ -1736,7 +1738,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   updateFuturesTraderSymbolSettings(params: {
-    settingList: FuturesTraderSymbolSettingReq[];
+    settingList: FuturesTraderSymbolSettingRequestV2[];
   }): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/mix-trader/config-setting-symbols`,
@@ -1756,7 +1758,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getFuturesTraderFollowers(
-    params?: GetFuturesTraderFollowers,
+    params?: GetFuturesTraderFollowersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-trader/config-query-followers`,
@@ -1782,7 +1784,7 @@ export class RestClientV2 extends BaseRestClient {
    */
 
   getFuturesFollowerCurrentOrders(
-    params: GetFollowerFuturesCurrentTrackingOrdersRequest,
+    params: GetFollowerFuturesCurrentTrackingOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-follower/query-current-orders`,
@@ -1791,7 +1793,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getFuturesFollowerHistoryOrders(
-    params: GetFollowerFuturesHistoryTrackingOrdersRequest,
+    params: GetFollowerFuturesHistoryTrackingOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/mix-follower/query-history-orders`,
@@ -1800,13 +1802,13 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   updateFuturesFollowerTPSL(
-    params: UpdateFuturesFollowerTPSLRequest,
+    params: UpdateFuturesFollowerTPSLRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/copy/mix-follower/setting-tpsl`, params);
   }
 
   updateFuturesFollowerSettings(
-    params: UpdateFuturesFollowerSettingsRequest,
+    params: UpdateFuturesFollowerSettingsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/copy/mix-follower/settings`, params);
   }
@@ -1818,7 +1820,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   closeFuturesFollowerPositions(
-    params: CloseFuturesFollowerPositionsRequest,
+    params: CloseFuturesFollowerPositionsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(
       `/api/v2/copy/mix-follower/close-positions`,
@@ -1827,7 +1829,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getFuturesFollowerTraders(
-    params: GetFuturesFollowerTradersRequest,
+    params: GetFuturesFollowerTradersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/copy/mix-follower/query-traders`, params);
   }
@@ -1887,7 +1889,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotTraderHistoryProfit(
-    params: getSpotTraderHistoryProfitReq,
+    params: GetSpotTraderHistoryProfitRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-trader/profit-history-details`,
@@ -1919,7 +1921,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotTraderHistoryOrders(
-    params: GetSpotTraderHistoryOrdersReq,
+    params: GetSpotTraderHistoryOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-trader/order-history-track`,
@@ -1928,7 +1930,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotTraderCurrentOrders(
-    params: GetSpotTraderCurrentOrdersReq,
+    params: GetSpotTraderCurrentOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-trader/order-current-track`,
@@ -1970,7 +1972,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotTraderFollowers(
-    params: GetSpotTraderFollowersRequest,
+    params: GetSpotTraderFollowersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-trader/config-query-followers`,
@@ -1996,7 +1998,7 @@ export class RestClientV2 extends BaseRestClient {
     traderId: string;
     autoCopy?: 'on' | 'off';
     mode?: 'basic' | 'advanced';
-    settings: SpotFollowerCopyTradeSetting[];
+    settings: SpotFollowerCopyTradeSettingV2[];
   }): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/copy/spot-follower/settings`, params);
   }
@@ -2034,7 +2036,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotFollowerHistoryOrders(
-    params: GetSpotFollowerHistoryOrdersRequest,
+    params: GetSpotFollowerHistoryOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-follower/query-history-orders`,
@@ -2043,7 +2045,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSpotFollowerOpenOrders(
-    params: GetSpotFollowerOpenOrdersRequest,
+    params: GetSpotFollowerOpenOrdersRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(
       `/api/v2/copy/spot-follower/query-current-orders`,
@@ -2085,13 +2087,13 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getEarnSavingsAssets(
-    params: GetEarnSavingsAssetsRequest,
+    params: GetEarnSavingsAssetsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/savings/assets`, params);
   }
 
   getEarnSavingsRecords(
-    params: GetEarnSavingsRecordsRequest,
+    params: GetEarnSavingsRecordsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/savings/records`, params);
   }
@@ -2118,7 +2120,7 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/earn/savings/subscribe-result`, params);
   }
 
-  earnRedeemSavings(params: RedeemSavingsRequest): Promise<APIResponse<any>> {
+  earnRedeemSavings(params: RedeemSavingsRequestV2): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/earn/savings/redeem`, params);
   }
 
@@ -2162,13 +2164,13 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getSharkfinAssets(
-    params: GetSharkfinAssetsRequest,
+    params: GetSharkfinAssetsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/sharkfin/assets`, params);
   }
 
   getSharkfinRecords(
-    params: GetSharkfinRecordsRequest,
+    params: GetSharkfinRecordsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/sharkfin/records`, params);
   }
@@ -2205,12 +2207,12 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getLoanEstInterestAndBorrowable(
-    params: GetLoanEstInterestAndBorrowableRequest,
+    params: GetLoanEstInterestAndBorrowableRequestV2,
   ): Promise<APIResponse<any>> {
     return this.get(`/api/v2/earn/loan/public/hour-interest`, params);
   }
 
-  borrowLoan(params: BorrowLoanRequest): Promise<APIResponse<any>> {
+  borrowLoan(params: BorrowLoanRequestV2): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/earn/loan/borrow`, params);
   }
 
@@ -2222,29 +2224,29 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate(`/api/v2/earn/loan/ongoing-orders`, params);
   }
 
-  repayLoan(params: RepayLoanRequest): Promise<APIResponse<any>> {
+  repayLoan(params: RepayLoanRequestV2): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/earn/loan/repay`, params);
   }
 
   getRepayHistory(
-    params: GetLoanRepayHistoryRequest,
+    params: GetLoanRepayHistoryRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/loan/repay-history`, params);
   }
 
   updateLoanPledgeRate(
-    params: ModifyLoanPledgeRateRequest,
+    params: ModifyLoanPledgeRateRequestV2,
   ): Promise<APIResponse<any>> {
     return this.postPrivate(`/api/v2/earn/loan/revise-pledge`, params);
   }
 
   getLoanPledgeRateHistory(
-    params: GetLoanPledgeRateHistoryRequest,
+    params: GetLoanPledgeRateHistoryRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/loan/revise-history`, params);
   }
 
-  getLoanHistory(params: GetLoanHistoryRequest): Promise<APIResponse<any>> {
+  getLoanHistory(params: GetLoanHistoryRequestV2): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/loan/borrow-history`, params);
   }
 
@@ -2253,7 +2255,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getLoanLiquidationRecords(
-    params: GetLiquidationRecordsRequest,
+    params: GetLiquidationRecordsRequestV2,
   ): Promise<APIResponse<any>> {
     return this.getPrivate(`/api/v2/earn/loan/reduces`, params);
   }

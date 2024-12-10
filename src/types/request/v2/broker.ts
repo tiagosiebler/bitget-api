@@ -4,7 +4,7 @@
  *
  */
 
-export interface GetSubaccountsRequest {
+export interface GetSubAccountsRequestV2 {
   limit?: string;
   idLessThan?: string;
   status?: 'normal' | 'freeze' | 'del';
@@ -12,7 +12,7 @@ export interface GetSubaccountsRequest {
   endTime?: string;
 }
 
-export type SubaccountPermission =
+export type SubAccountPermission =
   | 'withdraw'
   | 'transfer'
   | 'spot_trade'
@@ -21,7 +21,7 @@ export type SubaccountPermission =
   | 'deposit'
   | 'margin_trade';
 
-export type SubaccountLanguage =
+export type SubAccountLanguage =
   | 'en_US'
   | 'zh_CN'
   | 'ja_JP'
@@ -35,16 +35,16 @@ export type SubaccountLanguage =
   | 'pt_PT'
   | 'th_TH';
 
-export type SubaccountStatus = 'normal' | 'freeze';
+export type SubAccountStatus = 'normal' | 'freeze';
 
-export interface ModifySubRequest {
+export interface ModifySubRequestV2 {
   subUid: string;
-  permList: SubaccountPermission[];
-  status: SubaccountStatus;
-  language?: SubaccountLanguage;
+  permList: SubAccountPermission[];
+  status: SubAccountStatus;
+  language?: SubAccountLanguage;
 }
 
-export interface SubWithdrawalRequest {
+export interface SubWithdrawalRequestV2 {
   subUid: string;
   coin: string;
   dest: 'on_chain' | 'internal_transfer';
@@ -55,7 +55,7 @@ export interface SubWithdrawalRequest {
   clientOid?: string;
 }
 
-export interface SubDepositRecordsRequest {
+export interface SubDepositRecordsRequestV2 {
   orderId?: string;
   userId?: string;
   startTime?: string;
@@ -64,7 +64,7 @@ export interface SubDepositRecordsRequest {
   idLessThan?: string;
 }
 
-export interface SubWithdrawalRecordsRequest {
+export interface SubWithdrawalRecordsRequestV2 {
   orderId?: string;
   userId?: string;
   startTime?: string;
@@ -79,7 +79,7 @@ export interface SubWithdrawalRecordsRequest {
  *
  */
 
-export interface CreateSubaccountApiKeyRequest {
+export interface CreateSubAccountApiKeyRequestV2 {
   subUid: string;
   passphrase: string;
   label?: string;
@@ -88,7 +88,7 @@ export interface CreateSubaccountApiKeyRequest {
   permList: string[];
 }
 
-export interface ModifySubaccountApiKeyRequest {
+export interface ModifySubAccountApiKeyRequestV2 {
   subUid: string;
   apiKey: string;
   label?: string;
