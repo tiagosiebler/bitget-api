@@ -5,12 +5,12 @@ import WebSocket from 'isomorphic-ws';
 import {
   WebsocketClientOptions,
   WSClientConfigurableOptions,
-} from '../types/index.js';
-import { DefaultLogger } from './logger.js';
-import { isWsPong } from './requestUtils.js';
-import { getWsAuthSignature } from './websocket-util.js';
-import WsStore from './WsStore.js';
-import { WsConnectionStateEnum } from './WsStore.types.js';
+} from '../types/index';
+import { DefaultLogger } from './logger';
+import { isWsPong } from './requestUtils';
+import { getWsAuthSignature } from './websocket-util';
+import WsStore from './WsStore';
+import { WsConnectionStateEnum } from './WsStore.types';
 
 interface WSClientEventMap<WsKey extends string> {
   /** Connection opened. If this connection was previously opened and reconnected, expect the reconnected event instead */

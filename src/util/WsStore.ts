@@ -1,4 +1,5 @@
 import WebSocket from 'isomorphic-ws';
+
 import { DefaultLogger } from './logger';
 import { WsConnectionStateEnum, WsStoredState } from './WsStore.types';
 

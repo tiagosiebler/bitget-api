@@ -27,4 +27,4 @@ export type KlineInterval =
   | '1Mutc';
 
 export type RestClientType =
-  typeof REST_CLIENT_TYPE_ENUM[keyof typeof REST_CLIENT_TYPE_ENUM];
+  (typeof REST_CLIENT_TYPE_ENUM)[keyof typeof REST_CLIENT_TYPE_ENUM];

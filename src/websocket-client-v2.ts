@@ -12,17 +12,15 @@ import {
   WsTopicSubscribePrivateInstIdArgsV2,
   WsTopicV2,
 } from './types';
-
 import {
-  WS_AUTH_ON_CONNECT_KEYS,
-  WS_KEY_MAP,
   DefaultLogger,
-  WS_BASE_URL_MAP,
-  neverGuard,
   getMaxTopicsPerSubscribeEvent,
   isPrivateChannel,
+  neverGuard,
+  WS_AUTH_ON_CONNECT_KEYS,
+  WS_BASE_URL_MAP,
+  WS_KEY_MAP,
 } from './util';
-
 import { BaseWebsocketClient } from './util/BaseWSClient';
 
 const LOGGER_CATEGORY = { category: 'bitget-ws' };

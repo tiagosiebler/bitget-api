@@ -18,11 +18,11 @@ describe('Private Broker REST API POST Endpoints', () => {
     apiPass: API_PASS,
   });
 
-  const coin = 'BTC';
+  // const coin = 'BTC';
   const subUid = '123456';
-  const timestampOneHourAgo = new Date().getTime() - 1000 * 60 * 60;
-  const from = timestampOneHourAgo.toFixed(0);
-  const to = String(Number(from) + 1000 * 60 * 30); // 30 minutes
+  // const timestampOneHourAgo = new Date().getTime() - 1000 * 60 * 60;
+  // const from = timestampOneHourAgo.toFixed(0);
+  // const to = String(Number(from) + 1000 * 60 * 30); // 30 minutes
 
   it('createSubAccount()', async () => {
     try {

@@ -95,6 +95,7 @@ export function isPrivateChannel<TChannel extends string>(
 
 export function getWsKeyForTopic(
   subscribeEvent: WsTopicSubscribeEventArgs,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isPrivate?: boolean,
 ): WsKey {
   const instType = subscribeEvent.instType.toUpperCase() as BitgetInstType;

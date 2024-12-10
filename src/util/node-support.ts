@@ -16,6 +16,7 @@ export async function signMessage(
       return hmac.digest().toString('base64');
     }
     default: {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ((x: never) => {})(method);
       throw new Error(`Unhandled sign method: ${method}`);
     }

@@ -34,7 +34,7 @@ export interface RestClientOptions {
   parseExceptions?: boolean;
 }
 
-export function serializeParams<T extends object | undefined = {}>(
+export function serializeParams<T extends object | undefined = object>(
   params: T,
   strict_validation = false,
   encodeValues: boolean = true,

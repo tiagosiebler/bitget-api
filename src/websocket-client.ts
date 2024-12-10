@@ -1,7 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import { EventEmitter } from 'events';
 import WebSocket from 'isomorphic-ws';
-
-import WsStore from './util/WsStore';
 
 import {
   BitgetInstType,
@@ -11,19 +10,19 @@ import {
   WsTopic,
   WsTopicSubscribeEventArgs,
 } from './types';
-
 import {
-  isWsPong,
-  WS_AUTH_ON_CONNECT_KEYS,
-  WS_KEY_MAP,
   DefaultLogger,
-  WS_BASE_URL_MAP,
-  getWsKeyForTopic,
-  neverGuard,
   getMaxTopicsPerSubscribeEvent,
-  isPrivateChannel,
   getWsAuthSignature,
+  getWsKeyForTopic,
+  isPrivateChannel,
+  isWsPong,
+  neverGuard,
+  WS_AUTH_ON_CONNECT_KEYS,
+  WS_BASE_URL_MAP,
+  WS_KEY_MAP,
 } from './util';
+import WsStore from './util/WsStore';
 import { WsConnectionStateEnum } from './util/WsStore.types';
 
 const LOGGER_CATEGORY = { category: 'bitget-ws' };
@@ -387,7 +386,7 @@ export class WebsocketClient extends EventEmitter {
       this.logger.silly(
         `Subscribing to topics in batches of ${maxTopicsPerEvent}`,
       );
-      for (var i = 0; i < topics.length; i += maxTopicsPerEvent) {
+      for (let i = 0; i < topics.length; i += maxTopicsPerEvent) {
         const batch = topics.slice(i, i + maxTopicsPerEvent);
         this.logger.silly(`Subscribing to batch of ${batch.length}`);
         this.requestSubscribeTopics(wsKey, batch);
@@ -422,7 +421,7 @@ export class WebsocketClient extends EventEmitter {
       this.logger.silly(
         `Unsubscribing to topics in batches of ${maxTopicsPerEvent}`,
       );
-      for (var i = 0; i < topics.length; i += maxTopicsPerEvent) {
+      for (let i = 0; i < topics.length; i += maxTopicsPerEvent) {
         const batch = topics.slice(i, i + maxTopicsPerEvent);
         this.logger.silly(`Unsubscribing to batch of ${batch.length}`);
         this.requestUnsubscribeTopics(wsKey, batch);

@@ -1,32 +1,32 @@
 import {
   APIResponse,
-  FuturesProductType,
+  CancelFuturesPlanTPSL,
+  FuturesAccount,
   FuturesAccountBillRequest,
   FuturesBusinessBillRequest,
-  NewFuturesOrder,
-  NewBatchFuturesOrder,
+  FuturesCandleData,
+  FuturesHistoricPositions,
+  FuturesKlineInterval,
+  FuturesMarginMode,
+  FuturesMarketTrade,
   FuturesPagination,
-  NewFuturesPlanOrder,
+  FuturesPlanType,
+  FuturesPosition,
+  FuturesProductType,
+  FuturesSymbolRule,
+  GetHistoricTradesParams,
+  HistoricPlanOrderTPSLRequest,
+  ModifyFuturesOrder,
   ModifyFuturesPlanOrder,
   ModifyFuturesPlanOrderTPSL,
-  NewFuturesPlanPositionTPSL,
   ModifyFuturesPlanStopOrder,
-  CancelFuturesPlanTPSL,
-  HistoricPlanOrderTPSLRequest,
+  NewBatchFuturesOrder,
+  NewFuturesOrder,
+  NewFuturesPlanOrder,
+  NewFuturesPlanPositionTPSL,
   NewFuturesPlanStopOrder,
-  FuturesAccount,
-  FuturesSymbolRule,
-  FuturesMarginMode,
-  FuturesPosition,
   NewFuturesPlanTrailingStopOrder,
   VIPFeeRate,
-  GetHistoricTradesParams,
-  FuturesMarketTrade,
-  FuturesPlanType,
-  FuturesKlineInterval,
-  FuturesHistoricPositions,
-  ModifyFuturesOrder,
-  FuturesCandleData,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -105,9 +105,9 @@ export class FuturesClient extends BaseRestClient {
     symbol: string,
     granularity: FuturesKlineInterval,
     startTime: string,
-    endTime: string, 
+    endTime: string,
     limit?: string,
-    kLineType?: 'market' | 'mark' | 'index'
+    kLineType?: 'market' | 'mark' | 'index',
   ): Promise<APIResponse<FuturesCandleData[]>> {
     return this.get('/api/mix/v1/market/candles', {
       symbol,
@@ -569,16 +569,16 @@ export class FuturesClient extends BaseRestClient {
     return this.postPrivate('/api/mix/v1/plan/cancelPlan', params);
   }
 
-    /** Cancel Symbol Plan Order (TPSL) */
-    cancelSymbolPlanOrders(
-      symbol: string,
-      planType: FuturesPlanType,
-    ): Promise<APIResponse<any>> {
-      return this.postPrivate('/api/mix/v1/plan/cancelSymbolPlan', {
-        symbol,
-        planType,
-      });
-    }
+  /** Cancel Symbol Plan Order (TPSL) */
+  cancelSymbolPlanOrders(
+    symbol: string,
+    planType: FuturesPlanType,
+  ): Promise<APIResponse<any>> {
+    return this.postPrivate('/api/mix/v1/plan/cancelSymbolPlan', {
+      symbol,
+      planType,
+    });
+  }
 
   /** Cancel All Trigger Order (TPSL) */
   cancelAllPlanOrders(
