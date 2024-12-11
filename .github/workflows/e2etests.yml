@@ -1,13 +1,9 @@
-name: "Build & Test"
+name: "Build, Lint & Test"
 
-on: [push]
-
-# on:
-#   # pull_request:
-#   #   branches:
-#   #     - "master"
-#   push:
-#     branches:
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
@@ -15,19 +11,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: "Checkout source code"
-        uses: actions/checkout@v3
+      - name: 'Checkout source code'
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org/'
           cache: 'npm'
 
       - name: Install
         run: npm ci --ignore-scripts
 
-      - name: Build
+      - name: Clean
+        run: npm run clean
+
+      - name: Check Build
         run: npm run build
+
+      - name: Check Lint
+        run: npm run lint
 
       - name: Test
         run: npm run test

@@ -16,6 +16,7 @@
     "build:clean": "npm run clean && npm run build",
     "build:watch": "npm run clean && tsc --watch",
     "pack": "webpack --config webpack/webpack.config.js",
+    "lint": "eslint src",
     "prepublish": "npm run build:clean",
     "betapublish": "npm publish --tag beta"
   },

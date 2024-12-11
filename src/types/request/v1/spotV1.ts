@@ -20,7 +20,7 @@ export type SpotKlineInterval =
   | '1Dutc'
   | '3Dutc'
   | '1Wutc'
-  | '1Mutc';
+  | "1Mutc";
 
 export interface NewWalletTransfer {
   fromType: WalletType;
