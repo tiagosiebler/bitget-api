@@ -78,7 +78,7 @@ export function isWsFuturesPositionsSnapshotEvent(
  */
 export function assertMarginType(marginType: string): marginType is MarginType {
   if (marginType !== 'isolated' && marginType !== 'crossed') {
-    throw new Error(`MarginType should be one of: crossed | isolated`);
+    throw new Error('MarginType should be one of: crossed | isolated');
   }
   return true;
 }

@@ -27,3 +27,4 @@ restClientRegex.ts
 localtest.sh
 privaterepotracker
 testfile.ts
+dist

@@ -73,7 +73,9 @@ export declare interface WebsocketClient {
  */
 export class WebsocketClient extends EventEmitter {
   private logger: typeof DefaultLogger;
+
   private options: WebsocketClientOptions;
+
   private wsStore: WsStore<WsKey, WsTopicSubscribeEventArgs>;
 
   constructor(
@@ -144,6 +146,7 @@ export class WebsocketClient extends EventEmitter {
       }
     });
   }
+
   /**
    * Unsubscribe from topics & remove them from memory. They won't be re-subscribed to if the connection reconnects.
    * @param wsTopics topic or list of topics
@@ -281,7 +284,7 @@ export class WebsocketClient extends EventEmitter {
         recvWindow,
       );
 
-      this.logger.info(`Sending auth request...`, {
+      this.logger.info('Sending auth request...', {
         ...LOGGER_CATEGORY,
         wsKey,
       });
@@ -442,7 +445,7 @@ export class WebsocketClient extends EventEmitter {
 
   public tryWsSend(wsKey: WsKey, wsMessage: string) {
     try {
-      this.logger.silly(`Sending upstream ws message: `, {
+      this.logger.silly('Sending upstream ws message: ', {
         ...LOGGER_CATEGORY,
         wsMessage,
         wsKey,
@@ -460,7 +463,7 @@ export class WebsocketClient extends EventEmitter {
       }
       ws.send(wsMessage);
     } catch (e) {
-      this.logger.error(`Failed to send WS message`, {
+      this.logger.error('Failed to send WS message', {
         ...LOGGER_CATEGORY,
         wsMessage,
         wsKey,
@@ -553,7 +556,7 @@ export class WebsocketClient extends EventEmitter {
       if (typeof msg === 'object') {
         if (typeof msg['code'] === 'number') {
           if (msg.event === 'login' && msg.code === 0) {
-            this.logger.info(`Successfully authenticated WS client`, {
+            this.logger.info('Successfully authenticated WS client', {
               ...LOGGER_CATEGORY,
               wsKey,
             });
@@ -566,7 +569,7 @@ export class WebsocketClient extends EventEmitter {
 
         if (msg['event']) {
           if (msg.event === 'error') {
-            this.logger.error(`WS Error received`, {
+            this.logger.error('WS Error received', {
               ...LOGGER_CATEGORY,
               wsKey,
               message: msg || 'no message',
@@ -648,14 +651,14 @@ export class WebsocketClient extends EventEmitter {
       }
       case WS_KEY_MAP.v2Private:
       case WS_KEY_MAP.v2Public: {
-        throw new Error(`Use the WebsocketClientV2 for V2 websockets`);
+        throw new Error('Use the WebsocketClientV2 for V2 websockets');
       }
       default: {
         this.logger.error('getWsUrl(): Unhandled wsKey: ', {
           ...LOGGER_CATEGORY,
           wsKey,
         });
-        throw neverGuard(wsKey, `getWsUrl(): Unhandled wsKey`);
+        throw neverGuard(wsKey, 'getWsUrl(): Unhandled wsKey');
       }
     }
   }

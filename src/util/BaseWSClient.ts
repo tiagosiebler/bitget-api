@@ -57,6 +57,7 @@ export abstract class BaseWebsocketClient<
   private wsStore: WsStore<TWSKey, TWSTopicSubscribeEventArgs>;
 
   protected logger: typeof DefaultLogger;
+
   protected options: WebsocketClientOptions;
 
   constructor(
@@ -87,7 +88,9 @@ export abstract class BaseWebsocketClient<
   ): boolean;
 
   protected abstract shouldAuthOnConnect(wsKey: TWSKey): boolean;
+
   protected abstract getWsUrl(wsKey: TWSKey): string;
+
   protected abstract getMaxTopicsPerSubscribeEvent(
     wsKey: TWSKey,
   ): number | null;
@@ -280,7 +283,7 @@ export abstract class BaseWebsocketClient<
         recvWindow,
       );
 
-      this.logger.info(`Sending auth request...`, {
+      this.logger.info('Sending auth request...', {
         ...LOGGER_CATEGORY,
         wsKey,
       });
@@ -441,7 +444,7 @@ export abstract class BaseWebsocketClient<
 
   public tryWsSend(wsKey: TWSKey, wsMessage: string) {
     try {
-      this.logger.silly(`Sending upstream ws message: `, {
+      this.logger.silly('Sending upstream ws message: ', {
         ...LOGGER_CATEGORY,
         wsMessage,
         wsKey,
@@ -459,7 +462,7 @@ export abstract class BaseWebsocketClient<
       }
       ws.send(wsMessage);
     } catch (e) {
-      this.logger.error(`Failed to send WS message`, {
+      this.logger.error('Failed to send WS message', {
         ...LOGGER_CATEGORY,
         wsMessage,
         wsKey,
@@ -552,7 +555,7 @@ export abstract class BaseWebsocketClient<
       if (typeof msg === 'object') {
         if (typeof msg['code'] === 'number') {
           if (msg.event === 'login' && msg.code === 0) {
-            this.logger.info(`Successfully authenticated WS client`, {
+            this.logger.info('Successfully authenticated WS client', {
               ...LOGGER_CATEGORY,
               wsKey,
             });
@@ -565,7 +568,7 @@ export abstract class BaseWebsocketClient<
 
         if (msg['event']) {
           if (msg.event === 'error') {
-            this.logger.error(`WS Error received`, {
+            this.logger.error('WS Error received', {
               ...LOGGER_CATEGORY,
               wsKey,
               message: msg || 'no message',

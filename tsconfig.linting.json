@@ -12,6 +12,7 @@
     "test/**/*.*",
     "examples/**/*.*",
     ".eslintrc.cjs",
-    "jest.config.ts"
+    "jest.config.ts",
+    "webpack/webpack.config.ts"
   ]
 }

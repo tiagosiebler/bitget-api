@@ -70,10 +70,15 @@ if (ENABLE_HTTP_TRACE) {
 
 export default abstract class BaseRestClient {
   private options: RestClientOptions;
+
   private baseUrl: string;
+
   private globalRequestOptions: AxiosRequestConfig;
+
   private apiKey: string | undefined;
+
   private apiSecret: string | undefined;
+
   private apiPass: string | undefined;
 
   /** Defines the client type (affecting how requests & signatures behave) */
@@ -292,6 +297,7 @@ export default abstract class BaseRestClient {
     params?: TParams,
     isPublicApi?: true,
   ): Promise<UnsignedRequest<TParams>>;
+
   private async prepareSignParams<TParams extends object | undefined>(
     method: Method,
     endpoint: string,
@@ -299,6 +305,7 @@ export default abstract class BaseRestClient {
     params?: TParams,
     isPublicApi?: false | undefined,
   ): Promise<SignedRequest<TParams>>;
+
   private async prepareSignParams<TParams extends object | undefined>(
     method: Method,
     endpoint: string,

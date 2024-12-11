@@ -36,6 +36,7 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
   WsTopicSubscribeEventArgsV2
 > {
   protected logger: typeof DefaultLogger;
+
   protected options: WebsocketClientOptions;
 
   protected getWsKeyForTopic(
@@ -68,7 +69,7 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
       case WS_KEY_MAP.spotv1:
       case WS_KEY_MAP.mixv1: {
         throw new Error(
-          `Use the WebsocketClient instead of WebsocketClientV2 for V1 websockets`,
+          'Use the WebsocketClient instead of WebsocketClientV2 for V1 websockets',
         );
       }
       case WS_KEY_MAP.v2Private: {
@@ -82,7 +83,7 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
           ...LOGGER_CATEGORY,
           wsKey,
         });
-        throw neverGuard(wsKey, `getWsUrl(): Unhandled wsKey`);
+        throw neverGuard(wsKey, 'getWsUrl(): Unhandled wsKey');
       }
     }
   }
