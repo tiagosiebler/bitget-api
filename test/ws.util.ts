@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { WebsocketClient } from '../src';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getSilentLogger(logHint?: string) {
   return {
     silly: () => {},

@@ -1,15 +1,10 @@
 import {
   WebsocketClient,
-  WSClientConfigurableOptions,
   WS_ERROR_ENUM,
   WS_KEY_MAP,
+  WSClientConfigurableOptions,
 } from '../src';
-import {
-  getSilentLogger,
-  listenToSocketEvents,
-  logAllEvents,
-  waitForSocketEvent,
-} from './ws.util';
+import { getSilentLogger, logAllEvents, waitForSocketEvent } from './ws.util';
 
 describe.skip('Private Spot Websocket Client', () => {
   const API_KEY = process.env.API_KEY_COM;
@@ -50,7 +45,7 @@ describe.skip('Private Spot Websocket Client', () => {
       try {
         await Promise.all([wsResponsePromise]);
       } catch (e) {
-        // console.error()
+        console.error(e);
       }
       badClient.closeAll();
     });

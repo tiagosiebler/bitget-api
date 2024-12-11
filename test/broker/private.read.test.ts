@@ -20,9 +20,9 @@ describe('Private Broker REST API GET Endpoints', () => {
 
   const coin = 'BTC';
   const subUid = '123456';
-  const timestampOneHourAgo = new Date().getTime() - 1000 * 60 * 60;
-  const from = timestampOneHourAgo.toFixed(0);
-  const to = String(Number(from) + 1000 * 60 * 30); // 30 minutes
+  // const timestampOneHourAgo = new Date().getTime() - 1000 * 60 * 60;
+  // const from = timestampOneHourAgo.toFixed(0);
+  // const to = String(Number(from) + 1000 * 60 * 30); // 30 minutes
 
   it('getBrokerInfo()', async () => {
     try {

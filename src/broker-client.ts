@@ -1,9 +1,9 @@
 import {
   APIResponse,
   BrokerProductType,
-  BrokerSubWithdrawalRequest,
   BrokerSubAPIKeyModifyRequest,
   BrokerSubListRequest,
+  BrokerSubWithdrawalRequest,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';

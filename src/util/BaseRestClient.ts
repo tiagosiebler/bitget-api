@@ -1,15 +1,15 @@
 import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
-import { RestClientType } from '../types';
 
+import { RestClientType } from '../types';
 import { signMessage } from './node-support';
 import {
+  getRestBaseUrl,
   RestClientOptions,
   serializeParams,
-  getRestBaseUrl,
 } from './requestUtils';
 import { neverGuard } from './websocket-util';
 
-interface SignedRequest<T extends object | undefined = {}> {
+interface SignedRequest<T extends object | undefined = object> {
   originalParams: T;
   paramsWithSign?: T & { sign: string };
   serializedParams: string;
@@ -19,7 +19,7 @@ interface SignedRequest<T extends object | undefined = {}> {
   recvWindow: number;
 }
 
-interface UnsignedRequest<T extends object | undefined = {}> {
+interface UnsignedRequest<T extends object | undefined = object> {
   originalParams: T;
   paramsWithSign: T;
 }
@@ -70,10 +70,15 @@ if (ENABLE_HTTP_TRACE) {
 
 export default abstract class BaseRestClient {
   private options: RestClientOptions;
+
   private baseUrl: string;
+
   private globalRequestOptions: AxiosRequestConfig;
+
   private apiKey: string | undefined;
+
   private apiSecret: string | undefined;
+
   private apiPass: string | undefined;
 
   /** Defines the client type (affecting how requests & signatures behave) */
@@ -229,7 +234,7 @@ export default abstract class BaseRestClient {
   /**
    * @private sign request and set recv window
    */
-  private async signRequest<T extends object | undefined = {}>(
+  private async signRequest<T extends object | undefined = object>(
     data: T,
     endpoint: string,
     method: Method,
@@ -292,6 +297,7 @@ export default abstract class BaseRestClient {
     params?: TParams,
     isPublicApi?: true,
   ): Promise<UnsignedRequest<TParams>>;
+
   private async prepareSignParams<TParams extends object | undefined>(
     method: Method,
     endpoint: string,
@@ -299,6 +305,7 @@ export default abstract class BaseRestClient {
     params?: TParams,
     isPublicApi?: false | undefined,
   ): Promise<SignedRequest<TParams>>;
+
   private async prepareSignParams<TParams extends object | undefined>(
     method: Method,
     endpoint: string,

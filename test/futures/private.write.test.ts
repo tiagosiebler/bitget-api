@@ -22,9 +22,9 @@ describe('Private Futures REST API POST Endpoints', () => {
 
   const symbol = 'BTCUSDT_UMCBL';
   const marginCoin = 'USDT';
-  const timestampOneHourAgo = new Date().getTime() - 1000 * 60 * 60;
-  const from = timestampOneHourAgo.toFixed(0);
-  const to = String(Number(from) + 1000 * 60 * 30); // 30 minutes
+  // const timestampOneHourAgo = new Date().getTime() - 1000 * 60 * 60;
+  // const from = timestampOneHourAgo.toFixed(0);
+  // const to = String(Number(from) + 1000 * 60 * 30); // 30 minutes
 
   it('setLeverage()', async () => {
     try {

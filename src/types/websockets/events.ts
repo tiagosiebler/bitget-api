@@ -28,15 +28,6 @@ export interface WsSnapshotPositionsEvent extends WsBaseEvent<'snapshot'> {
   };
 }
 
-export interface WsAccountSnapshotUMCBL extends WsBaseEvent<'snapshot'> {
-  arg: {
-    instType: 'umcbl';
-    channel: 'account';
-    instId: string;
-  };
-  data: WsAccountSnapshotDataUMCBL[];
-}
-
 export interface WsAccountSnapshotDataUMCBL {
   marginCoin: string;
   locked: string;
@@ -47,13 +38,13 @@ export interface WsAccountSnapshotDataUMCBL {
   usdtEquity: string;
 }
 
-export interface WSPositionSnapshotUMCBL extends WsBaseEvent<'snapshot'> {
+export interface WsAccountSnapshotUMCBL extends WsBaseEvent<'snapshot'> {
   arg: {
     instType: 'umcbl';
-    channel: 'positions';
+    channel: 'account';
     instId: string;
   };
-  data: WsPositionSnapshotDataUMCBL[];
+  data: WsAccountSnapshotDataUMCBL[];
 }
 
 export interface WsPositionSnapshotDataUMCBL {
@@ -79,4 +70,13 @@ export interface WsPositionSnapshotDataUMCBL {
   cTime: string;
   uTime: string;
   markPrice: string;
+}
+
+export interface WSPositionSnapshotUMCBL extends WsBaseEvent<'snapshot'> {
+  arg: {
+    instType: 'umcbl';
+    channel: 'positions';
+    instId: string;
+  };
+  data: WsPositionSnapshotDataUMCBL[];
 }

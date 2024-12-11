@@ -40,6 +40,7 @@ export async function signMessage(
       return _arrayBufferToBase64(signature);
     }
     default: {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ((x: never) => {})(method);
       throw new Error(`Unhandled sign method: ${method}`);
     }

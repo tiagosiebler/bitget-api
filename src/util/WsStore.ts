@@ -1,4 +1,5 @@
 import WebSocket from 'isomorphic-ws';
+
 import { DefaultLogger } from './logger';
 import { WsConnectionStateEnum, WsStoredState } from './WsStore.types';
 
@@ -17,6 +18,7 @@ export default class WsStore<
 > {
   private wsState: Record<string, WsStoredState<TWSTopicSubscribeEventArgs>> =
     {};
+
   private logger: typeof DefaultLogger;
 
   constructor(logger: typeof DefaultLogger) {
@@ -28,10 +30,12 @@ export default class WsStore<
     key: WsKey,
     createIfMissing?: true,
   ): WsStoredState<TWSTopicSubscribeEventArgs>;
+
   get(
     key: WsKey,
     createIfMissing?: false,
   ): WsStoredState<TWSTopicSubscribeEventArgs> | undefined;
+
   get(
     key: WsKey,
     createIfMissing?: boolean,

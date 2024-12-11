@@ -1,6 +1,5 @@
-import { API_ERROR_CODE, SpotClient } from '../../src';
+import { SpotClient } from '../../src';
 import {
-  notAuthenticatedError,
   successResponseString,
   sucessEmptyResponseObject,
 } from '../response.util';
@@ -9,8 +8,6 @@ describe('Public Spot REST API Endpoints', () => {
   const api = new SpotClient();
 
   const symbol = 'BTCUSDT_SPBL';
-  const timestampOneHourAgo = new Date().getTime() / 1000 - 1000 * 60 * 60;
-  const from = Number(timestampOneHourAgo.toFixed(0));
 
   // it('should throw for unauthenticated private calls', async () => {
   //   expect(() => api.getOpenOrders()).rejects.toMatchObject(

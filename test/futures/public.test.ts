@@ -1,9 +1,5 @@
-import { API_ERROR_CODE, FuturesClient } from '../../src';
-import {
-  notAuthenticatedError,
-  successResponseString,
-  sucessEmptyResponseObject,
-} from '../response.util';
+import { FuturesClient } from '../../src';
+import { sucessEmptyResponseObject } from '../response.util';
 
 describe('Public Spot REST API Endpoints', () => {
   const api = new FuturesClient();

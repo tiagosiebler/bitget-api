@@ -1,12 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging */
 import EventEmitter from 'events';
 import WebSocket from 'isomorphic-ws';
 
-import { WebsocketClientOptions, WSClientConfigurableOptions } from '../types';
-import WsStore from './WsStore';
-import { WsConnectionStateEnum } from './WsStore.types';
+import {
+  WebsocketClientOptions,
+  WSClientConfigurableOptions,
+} from '../types/index';
 import { DefaultLogger } from './logger';
 import { isWsPong } from './requestUtils';
 import { getWsAuthSignature } from './websocket-util';
+import WsStore from './WsStore';
+import { WsConnectionStateEnum } from './WsStore.types';
 
 interface WSClientEventMap<WsKey extends string> {
   /** Connection opened. If this connection was previously opened and reconnected, expect the reconnected event instead */
@@ -30,6 +34,7 @@ interface WSClientEventMap<WsKey extends string> {
 // Type safety for on and emit handlers: https://stackoverflow.com/a/61609010/880837
 export interface BaseWebsocketClient<
   TWSKey extends string,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   TWSTopicSubscribeEventArgs extends object,
 > {
   on<U extends keyof WSClientEventMap<TWSKey>>(
@@ -43,8 +48,6 @@ export interface BaseWebsocketClient<
   ): boolean;
 }
 
-export interface BaseWSClientImpl {}
-
 const LOGGER_CATEGORY = { category: 'bitget-ws' };
 
 export abstract class BaseWebsocketClient<
@@ -54,6 +57,7 @@ export abstract class BaseWebsocketClient<
   private wsStore: WsStore<TWSKey, TWSTopicSubscribeEventArgs>;
 
   protected logger: typeof DefaultLogger;
+
   protected options: WebsocketClientOptions;
 
   constructor(
@@ -84,7 +88,9 @@ export abstract class BaseWebsocketClient<
   ): boolean;
 
   protected abstract shouldAuthOnConnect(wsKey: TWSKey): boolean;
+
   protected abstract getWsUrl(wsKey: TWSKey): string;
+
   protected abstract getMaxTopicsPerSubscribeEvent(
     wsKey: TWSKey,
   ): number | null;
@@ -277,7 +283,7 @@ export abstract class BaseWebsocketClient<
         recvWindow,
       );
 
-      this.logger.info(`Sending auth request...`, {
+      this.logger.info('Sending auth request...', {
         ...LOGGER_CATEGORY,
         wsKey,
       });
@@ -382,7 +388,7 @@ export abstract class BaseWebsocketClient<
       this.logger.silly(
         `Subscribing to topics in batches of ${maxTopicsPerEvent}`,
       );
-      for (var i = 0; i < topics.length; i += maxTopicsPerEvent) {
+      for (let i = 0; i < topics.length; i += maxTopicsPerEvent) {
         const batch = topics.slice(i, i + maxTopicsPerEvent);
         this.logger.silly(`Subscribing to batch of ${batch.length}`);
         this.requestSubscribeTopics(wsKey, batch);
@@ -417,7 +423,7 @@ export abstract class BaseWebsocketClient<
       this.logger.silly(
         `Unsubscribing to topics in batches of ${maxTopicsPerEvent}`,
       );
-      for (var i = 0; i < topics.length; i += maxTopicsPerEvent) {
+      for (let i = 0; i < topics.length; i += maxTopicsPerEvent) {
         const batch = topics.slice(i, i + maxTopicsPerEvent);
         this.logger.silly(`Unsubscribing to batch of ${batch.length}`);
         this.requestUnsubscribeTopics(wsKey, batch);
@@ -438,7 +444,7 @@ export abstract class BaseWebsocketClient<
 
   public tryWsSend(wsKey: TWSKey, wsMessage: string) {
     try {
-      this.logger.silly(`Sending upstream ws message: `, {
+      this.logger.silly('Sending upstream ws message: ', {
         ...LOGGER_CATEGORY,
         wsMessage,
         wsKey,
@@ -456,7 +462,7 @@ export abstract class BaseWebsocketClient<
       }
       ws.send(wsMessage);
     } catch (e) {
-      this.logger.error(`Failed to send WS message`, {
+      this.logger.error('Failed to send WS message', {
         ...LOGGER_CATEGORY,
         wsMessage,
         wsKey,
@@ -549,7 +555,7 @@ export abstract class BaseWebsocketClient<
       if (typeof msg === 'object') {
         if (typeof msg['code'] === 'number') {
           if (msg.event === 'login' && msg.code === 0) {
-            this.logger.info(`Successfully authenticated WS client`, {
+            this.logger.info('Successfully authenticated WS client', {
               ...LOGGER_CATEGORY,
               wsKey,
             });
@@ -562,7 +568,7 @@ export abstract class BaseWebsocketClient<
 
         if (msg['event']) {
           if (msg.event === 'error') {
-            this.logger.error(`WS Error received`, {
+            this.logger.error('WS Error received', {
               ...LOGGER_CATEGORY,
               wsKey,
               message: msg || 'no message',

@@ -95,6 +95,7 @@ export function isPrivateChannel<TChannel extends string>(
 
 export function getWsKeyForTopic(
   subscribeEvent: WsTopicSubscribeEventArgs,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isPrivate?: boolean,
 ): WsKey {
   const instType = subscribeEvent.instType.toUpperCase() as BitgetInstType;
@@ -137,7 +138,7 @@ export function getMaxTopicsPerSubscribeEvent(wsKey: WsKey): number | null {
       return 15;
     }
     default: {
-      throw neverGuard(wsKey, `getWsKeyForTopic(): Unhandled wsKey`);
+      throw neverGuard(wsKey, 'getWsKeyForTopic(): Unhandled wsKey');
     }
   }
 }
@@ -161,7 +162,7 @@ export async function getWsAuthSignature(
 }> {
   if (!apiKey || !apiSecret || !apiPass) {
     throw new Error(
-      `Cannot auth - missing api key, secret or passcode in config`,
+      'Cannot auth - missing api key, secret or passcode in config',
     );
   }
   const signatureExpiresAt = ((Date.now() + recvWindow) / 1000).toFixed(0);
