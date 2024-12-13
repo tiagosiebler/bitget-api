@@ -24,6 +24,10 @@ import {
   CreateVirtualSubAccountV2,
   CreateVirtualSubApiKeyRequestV2,
   CreateVirtualSubRequestV2,
+  CrossInterestRateAndLimitResponseV2,
+  CrossMaxBorrowableResponseV2,
+  CrossMaxTransferableResponseV2,
+  CrossTierConfigurationResponseV2,
   FundingAssetsV2,
   FuturesAccountBillRequestV2,
   FuturesAccountBillV2,
@@ -151,11 +155,27 @@ import {
   GetSpotWithdrawalRecordRequestV2,
   GetSubAccountsRequestV2,
   GetTradeRateRequestV2,
+  IsolatedInterestRateAndLimitResponseV2,
   IsolatedMarginBorrowingRatioV2,
+  IsolatedMaxBorrowableResponseV2,
+  IsolatedMaxTransferableResponseV2,
+  IsolatedTierConfigurationResponseV2,
   LeveragedLongShortRatioV2,
+  MarginAccountAssetV2,
   MarginBatchOrdersRequestV2,
+  MarginBatchOrdersResponseV2,
+  MarginBorrowHistoryV2,
+  MarginCurrencyV2,
+  MarginCurrentOrdersV2,
+  MarginFinancialHistoryV2,
+  MarginHistoryOrdersV2,
+  MarginInterestHistoryV2,
+  MarginLiquidationHistoryV2,
+  MarginLiquidationOrdersV2,
   MarginLoanGrowthRateV2,
+  MarginOrderFillsV2,
   MarginPlaceOrderRequestV2,
+  MarginRepaymentHistoryV2,
   MarginTransactionRecordV2,
   MarginType,
   ModifyFuturesTraderOrderTPSLRequestV2,
@@ -1619,7 +1639,7 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getMarginCurrencies(): Promise<APIResponse<any>> {
+  getMarginCurrencies(): Promise<APIResponse<MarginCurrencyV2[]>> {
     return this.get('/api/v2/margin/currencies');
   }
 
@@ -1632,7 +1652,7 @@ export class RestClientV2 extends BaseRestClient {
   getMarginBorrowHistory(
     marginType: MarginType,
     params: GetBorrowHistoryRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginBorrowHistoryV2>> {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/borrow-history`,
@@ -1643,7 +1663,7 @@ export class RestClientV2 extends BaseRestClient {
   getMarginRepayHistory(
     marginType: MarginType,
     params: GetRepayHistoryRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginRepaymentHistoryV2>> {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/repay-history`,
@@ -1654,7 +1674,7 @@ export class RestClientV2 extends BaseRestClient {
   getMarginInterestHistory(
     marginType: MarginType,
     params: GetInterestHistoryRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginInterestHistoryV2>> {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/interest-history`,
@@ -1665,7 +1685,7 @@ export class RestClientV2 extends BaseRestClient {
   getMarginLiquidationHistory(
     marginType: MarginType,
     params: GetLiquidationHistoryRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginLiquidationHistoryV2>> {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/liquidation-history`,
@@ -1676,7 +1696,7 @@ export class RestClientV2 extends BaseRestClient {
   getMarginFinancialHistory(
     marginType: MarginType,
     params: GetFinancialHistoryRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginFinancialHistoryV2>> {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/financial-records`,
@@ -1693,7 +1713,7 @@ export class RestClientV2 extends BaseRestClient {
   getMarginAccountAssets(
     marginType: MarginType,
     params?: { coin?: string },
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginAccountAssetV2[]>> {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/account/assets`,
@@ -1704,11 +1724,19 @@ export class RestClientV2 extends BaseRestClient {
   marginBorrow(
     marginType: MarginType,
     params: {
+      loanId: string;
+      symbol: string;
       coin: string;
       borrowAmount: string;
-      clientOid?: string;
     },
-  ): Promise<APIResponse<any>> {
+  ): Promise<
+    APIResponse<{
+      loanId: string;
+      symbol: string;
+      coin: string;
+      borrowAmount: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.postPrivate(
       `/api/v2/margin/${marginType}/account/borrow`,
@@ -1719,10 +1747,21 @@ export class RestClientV2 extends BaseRestClient {
   marginRepay(
     marginType: MarginType,
     params: {
+      remainDebtAmount: string;
+      symbol: string;
+      repayId: string;
       coin: string;
       repayAmount: string;
     },
-  ): Promise<APIResponse<any>> {
+  ): Promise<
+    APIResponse<{
+      symbol: string;
+      coin: string;
+      repayId: string;
+      remainDebtAmount: string;
+      repayAmount: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.postPrivate(
       `/api/v2/margin/${marginType}/account/repay`,
@@ -1730,7 +1769,14 @@ export class RestClientV2 extends BaseRestClient {
     );
   }
 
-  getMarginRiskRate(marginType: MarginType): Promise<APIResponse<any>> {
+  getMarginRiskRate(marginType: MarginType): Promise<
+    APIResponse<
+      {
+        symbol: string;
+        riskRateRatio: string;
+      }[]
+    >
+  > {
     assertMarginType(marginType);
     return this.getPrivate(`/api/v2/margin/${marginType}/account/risk-rate`);
   }
@@ -1738,7 +1784,9 @@ export class RestClientV2 extends BaseRestClient {
   getMarginMaxBorrowable(
     marginType: MarginType,
     params: { coin: string },
-  ): Promise<APIResponse<any>> {
+  ): Promise<
+    APIResponse<CrossMaxBorrowableResponseV2 | IsolatedMaxBorrowableResponseV2>
+  > {
     assertMarginType(marginType);
     return this.getPrivate(
       '/api/v2/margin/${marginType}/account/max-borrowable-amount',
@@ -1749,7 +1797,11 @@ export class RestClientV2 extends BaseRestClient {
   getMarginMaxTransferable(
     marginType: MarginType,
     params: { coin: string },
-  ): Promise<APIResponse<any>> {
+  ): Promise<
+    APIResponse<
+      CrossMaxTransferableResponseV2 | IsolatedMaxTransferableResponseV2
+    >
+  > {
     assertMarginType(marginType);
     return this.getPrivate(
       '/api/v2/margin/${marginType}/account/max-transfer-out-amount',
@@ -1760,7 +1812,12 @@ export class RestClientV2 extends BaseRestClient {
   getMarginInterestRateAndMaxBorrowable(
     marginType: MarginType,
     params: { coin: string },
-  ): Promise<APIResponse<any>> {
+  ): Promise<
+    APIResponse<
+      | IsolatedInterestRateAndLimitResponseV2[]
+      | CrossInterestRateAndLimitResponseV2[]
+    >
+  > {
     assertMarginType(marginType);
     return this.getPrivate(
       '/api/v2/margin/${marginType}/interest-rate-and-limit',
@@ -1771,7 +1828,11 @@ export class RestClientV2 extends BaseRestClient {
   getMarginTierConfiguration(
     marginType: MarginType,
     params: { coin: string },
-  ): Promise<APIResponse<any>> {
+  ): Promise<
+    APIResponse<
+      CrossTierConfigurationResponseV2[] | IsolatedTierConfigurationResponseV2[]
+    >
+  > {
     assertMarginType(marginType);
     return this.getPrivate(`/api/v2/margin/${marginType}/tier-data`, params);
   }
@@ -1779,7 +1840,14 @@ export class RestClientV2 extends BaseRestClient {
   marginFlashRepay(
     marginType: MarginType,
     params: { coin: string },
-  ): Promise<APIResponse<any>> {
+  ): Promise<
+    APIResponse<{
+      repayId: string;
+      coin?: string;
+      symbol?: string;
+      result?: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.postPrivate(
       '/api/v2/margin/${marginType}/account/flash-repay',
@@ -1790,7 +1858,14 @@ export class RestClientV2 extends BaseRestClient {
   getMarginFlashRepayResult(
     marginType: MarginType,
     params: { idList: string },
-  ): Promise<APIResponse<any>> {
+  ): Promise<
+    APIResponse<
+      {
+        repayId: string;
+        status: string;
+      }[]
+    >
+  > {
     assertMarginType(marginType);
     return this.getPrivate(
       '/api/v2/margin/${marginType}/account/query-flash-repay-status',
@@ -1807,7 +1882,12 @@ export class RestClientV2 extends BaseRestClient {
   marginSubmitOrder(
     marginType: MarginType,
     params: MarginPlaceOrderRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<
+    APIResponse<{
+      orderId: string;
+      clientOid: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.postPrivate(`/api/v2/margin/${marginType}/place-order`, params);
   }
@@ -1815,7 +1895,7 @@ export class RestClientV2 extends BaseRestClient {
   marginBatchSubmitOrders(
     marginType: MarginType,
     params: MarginBatchOrdersRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginBatchOrdersResponseV2>> {
     assertMarginType(marginType);
     return this.postPrivate(
       `/api/v2/margin/${marginType}/batch-place-order`,
@@ -1830,7 +1910,12 @@ export class RestClientV2 extends BaseRestClient {
       orderId?: string;
       clientOid?: string;
     },
-  ): Promise<APIResponse<any>> {
+  ): Promise<
+    APIResponse<{
+      orderId: string;
+      clientOid: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.postPrivate(
       `/api/v2/margin/${marginType}/cancel-order`,
@@ -1844,7 +1929,7 @@ export class RestClientV2 extends BaseRestClient {
       symbol: string;
       orderIdList: string[];
     },
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginBatchOrdersResponseV2>> {
     assertMarginType(marginType);
     return this.postPrivate(
       '/api/v2/margin/${marginType}/batch-cancel-order',
@@ -1855,7 +1940,7 @@ export class RestClientV2 extends BaseRestClient {
   getMarginOpenOrders(
     marginType: MarginType,
     params: GetMarginCurrentOrdersRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginCurrentOrdersV2>> {
     assertMarginType(marginType);
     return this.getPrivate(`/api/v2/margin/${marginType}/open-orders`, params);
   }
@@ -1863,7 +1948,7 @@ export class RestClientV2 extends BaseRestClient {
   getMarginHistoricOrders(
     marginType: MarginType,
     params: GetHistoryOrdersRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginHistoryOrdersV2>> {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/history-orders`,
@@ -1874,7 +1959,7 @@ export class RestClientV2 extends BaseRestClient {
   getMarginHistoricOrderFills(
     marginType: MarginType,
     params: GetMarginOrderFillsRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginOrderFillsV2>> {
     assertMarginType(marginType);
     return this.getPrivate(`/api/v2/margin/${marginType}/fills`, params);
   }
@@ -1882,7 +1967,7 @@ export class RestClientV2 extends BaseRestClient {
   getMarginLiquidationOrders(
     marginType: MarginType,
     params: GetMarginLiquidationOrdersRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<MarginLiquidationOrdersV2>> {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/liquidation-order`,

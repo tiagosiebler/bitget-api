@@ -4,4 +4,5 @@ export * from './v1/spot';
 export * from './v2/broker';
 export * from './v2/common';
 export * from './v2/futures';
+export * from './v2/margin';
 export * from './v2/spot';
