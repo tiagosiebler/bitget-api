@@ -23,16 +23,28 @@ import {
   CreateVirtualSubRequestV2,
   FundingAssetsV2,
   FuturesAccountBillRequestV2,
+  FuturesAccountBillV2,
+  FuturesAccountListV2,
+  FuturesAccountV2,
   FuturesActiveBuySellVolumeV2,
   FuturesActiveLongShortAccountV2,
   FuturesActiveLongShortPositionV2,
   FuturesBatchCancelOrderRequestV2,
   FuturesBatchOrderRequestV2,
+  FuturesBatchOrderResponseV2,
   FuturesCancelAllOrdersRequestV2,
+  FuturesCancelAllOrdersV2,
   FuturesCancelOrderRequestV2,
   FuturesCancelPlanOrderRequestV2,
+  FuturesCancelPlanOrderV2,
   FuturesCandlesRequestV2,
+  FuturesCandlestickV2,
+  FuturesClosePositionResponseV2,
+  FuturesContractConfigV2,
+  FuturesDiscountRateV2,
+  FuturesFillV2,
   FuturesFlashClosePositionsRequestV2,
+  FuturesFundingTimeV2,
   FuturesGetHistoricalFillsRequestV2,
   FuturesGetHistoryOrdersRequestV2,
   FuturesGetHistoryPlanOrdersRequestV2,
@@ -40,17 +52,32 @@ import {
   FuturesGetOrderFillsRequestV2,
   FuturesGetOrderRequestV2,
   FuturesGetPlanOrdersRequestV2,
+  FuturesHistoricalFundingRateV2,
   FuturesHistoricalPositionsRequestV2,
+  FuturesHistoricalPositionV2,
   FuturesHistoricTradesRequestV2,
+  FuturesHistoryOrdersV2,
+  FuturesHistoryPlanOrderV2,
+  FuturesInterestExchangeRateV2,
   FuturesInterestHistoryRequestV2,
+  FuturesInterestHistoryV2,
+  FuturesInterestRateHistoryV2,
   FuturesLongShortRatioV2,
   FuturesMergeDepthRequestV2,
+  FuturesMergeDepthV2,
   FuturesModifyOrderRequestV2,
   FuturesModifyPlanOrderRequestV2,
   FuturesModifyTPSLOrderRequestV2,
   FuturesOpenCountRequestV2,
+  FuturesOpenInterestV2,
+  FuturesOpenOrdersV2,
+  FuturesOrderDetailV2,
+  FuturesOrderFillsV2,
+  FuturesPendingPlanOrderV2,
   FuturesPlaceOrderRequestV2,
   FuturesPlanOrderRequestV2,
+  FuturesPositionTierV2,
+  FuturesPositionV2,
   FuturesProductTypeV2,
   FuturesRecentTradesRequestV2,
   FuturesReversalOrderRequestV2,
@@ -59,9 +86,14 @@ import {
   FuturesSetMarginModeRequestV2,
   FuturesSetPositionMarginRequestV2,
   FuturesSingleAccountRequestV2,
+  FuturesSubAccountAssetsV2,
+  FuturesSymbolPriceV2,
+  FuturesTickerV2,
   FuturesTPSLOrderRequestV2,
   FuturesTraderSymbolSettingRequestV2,
   FuturesTransactionRecordV2,
+  FuturesTriggerSubOrderV2,
+  FuturesVipFeeRateV2,
   GetAnnouncementsRequestV2,
   GetBorrowHistoryRequestV2,
   GetConvertBGBHistoryRequestV2,
@@ -136,6 +168,8 @@ import {
   P2PMerchantOrderV2,
   RedeemSavingsRequestV2,
   RepayLoanRequestV2,
+  SetLeverageResponseV2,
+  SetMarginModeResponseV2,
   SpotAccountAssetV2,
   SpotAccountBillV2,
   SpotAccountInfoV2,
@@ -990,97 +1024,99 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getFuturesVIPFeeRate(): Promise<APIResponse<any>> {
+  getFuturesVIPFeeRate(): Promise<APIResponse<FuturesVipFeeRateV2[]>> {
     return this.get('/api/v2/mix/market/vip-fee-rate');
   }
 
   getFuturesInterestRateHistory(params: {
     coin: string;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesInterestRateHistoryV2>> {
     return this.get('/api/v2/mix/market/union-interest-rate-history', params);
+  }
+
+  getFuturesInterestExchangeRate(): Promise<
+    APIResponse<FuturesInterestExchangeRateV2[]>
+  > {
+    return this.get('/api/v2/mix/market/exchange-rate');
+  }
+
+  getFuturesDiscountRate(): Promise<APIResponse<FuturesDiscountRateV2[]>> {
+    return this.get('/api/v2/mix/market/discount-rate');
+  }
+
+  getFuturesMergeDepth(
+    params: FuturesMergeDepthRequestV2,
+  ): Promise<APIResponse<FuturesMergeDepthV2>> {
+    return this.get('/api/v2/mix/market/merge-depth', params);
   }
 
   getFuturesTicker(params: {
     symbol: string;
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesTickerV2[]>> {
     return this.get('/api/v2/mix/market/ticker', params);
-  }
-
-  getFuturesInterestExchangeRate(): Promise<APIResponse<any>> {
-    return this.get('/api/v2/mix/market/exchange-rate');
-  }
-
-  getFuturesDiscountRate(): Promise<APIResponse<any>> {
-    return this.get('/api/v2/mix/market/discount-rate');
   }
 
   getFuturesAllTickers(params: {
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesTickerV2[]>> {
     return this.get('/api/v2/mix/market/tickers', params);
-  }
-
-  getFuturesMergeDepth(
-    params: FuturesMergeDepthRequestV2,
-  ): Promise<APIResponse<any>> {
-    return this.get('/api/v2/mix/market/merge-depth', params);
-  }
-
-  getFuturesCandles(
-    params: FuturesCandlesRequestV2,
-  ): Promise<APIResponse<any>> {
-    return this.get('/api/v2/mix/market/candles', params);
-  }
-
-  getFuturesHistoricCandles(
-    params: FuturesCandlesRequestV2,
-  ): Promise<APIResponse<any>> {
-    return this.get('/api/v2/mix/market/history-candles', params);
-  }
-
-  getFuturesHistoricIndexPriceCandles(
-    params: FuturesCandlesRequestV2,
-  ): Promise<APIResponse<any>> {
-    return this.get('/api/v2/mix/market/history-index-candles', params);
-  }
-
-  getFuturesHistoricMarkPriceCandles(
-    params: FuturesCandlesRequestV2,
-  ): Promise<APIResponse<any>> {
-    return this.get('/api/v2/mix/market/history-mark-candles', params);
   }
 
   getFuturesRecentTrades(
     params: FuturesRecentTradesRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesFillV2[]>> {
     return this.get('/api/v2/mix/market/fills', params);
   }
 
   getFuturesHistoricTrades(
     params: FuturesHistoricTradesRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesFillV2[]>> {
     return this.get('/api/v2/mix/market/fills-history', params);
+  }
+
+  getFuturesCandles(
+    params: FuturesCandlesRequestV2,
+  ): Promise<APIResponse<FuturesCandlestickV2[]>> {
+    return this.get('/api/v2/mix/market/candles', params);
+  }
+
+  getFuturesHistoricCandles(
+    params: FuturesCandlesRequestV2,
+  ): Promise<APIResponse<FuturesCandlestickV2[]>> {
+    return this.get('/api/v2/mix/market/history-candles', params);
+  }
+
+  getFuturesHistoricIndexPriceCandles(
+    params: FuturesCandlesRequestV2,
+  ): Promise<APIResponse<FuturesCandlestickV2[]>> {
+    return this.get('/api/v2/mix/market/history-index-candles', params);
+  }
+
+  getFuturesHistoricMarkPriceCandles(
+    params: FuturesCandlesRequestV2,
+  ): Promise<APIResponse<FuturesCandlestickV2[]>> {
+    return this.get('/api/v2/mix/market/history-mark-candles', params);
   }
 
   getFuturesOpenInterest(params: {
     symbol: string;
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesOpenInterestV2>> {
     return this.get('/api/v2/mix/market/open-interest', params);
   }
 
   getFuturesNextFundingTime(params: {
     symbol: string;
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesFundingTimeV2[]>> {
     return this.get('/api/v2/mix/market/funding-time', params);
   }
 
   getFuturesSymbolPrice(params: {
     symbol: string;
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesSymbolPriceV2[]>> {
     return this.get('/api/v2/mix/market/symbol-price', params);
   }
 
@@ -1089,21 +1125,28 @@ export class RestClientV2 extends BaseRestClient {
     productType: FuturesProductTypeV2;
     pageSize?: string;
     pageNumber?: string;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesHistoricalFundingRateV2>> {
     return this.get('/api/v2/mix/market/history-fund-rate', params);
   }
 
   getFuturesCurrentFundingRate(params: {
     symbol: string;
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<any>> {
+  }): Promise<
+    APIResponse<
+      {
+        symbol: string;
+        fundingRate: string;
+      }[]
+    >
+  > {
     return this.get('/api/v2/mix/market/current-fund-rate', params);
   }
 
   getFuturesContractConfig(params: {
     symbol: string;
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesContractConfigV2[]>> {
     return this.get('/api/v2/mix/market/contracts', params);
   }
 
@@ -1115,75 +1158,81 @@ export class RestClientV2 extends BaseRestClient {
 
   getFuturesAccountAsset(
     params: FuturesSingleAccountRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesAccountV2>> {
     return this.getPrivate('/api/v2/mix/account/account', params);
   }
 
   getFuturesAccountAssets(params: {
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesAccountListV2[]>> {
     return this.getPrivate('/api/v2/mix/account/accounts', params);
   }
 
   getFuturesSubAccountAssets(params: {
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesSubAccountAssetsV2[]>> {
     return this.getPrivate('/api/v2/mix/account/sub-account-assets', params);
   }
 
   getFuturesInterestHistory(
     params: FuturesInterestHistoryRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesInterestHistoryV2[]>> {
     return this.getPrivate('/api/v2/mix/account/interest-history', params);
   }
 
-  getFuturesOpenCount(
-    params: FuturesOpenCountRequestV2,
-  ): Promise<APIResponse<any>> {
+  getFuturesOpenCount(params: FuturesOpenCountRequestV2): Promise<
+    APIResponse<{
+      size: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/mix/account/open-count', params);
-  }
-
-  setFuturesLeverage(
-    params: FuturesSetLeverageRequestV2,
-  ): Promise<APIResponse<any>> {
-    return this.postPrivate('/api/v2/mix/account/set-leverage', params);
   }
 
   setFuturesPositionAutoMargin(
     params: FuturesSetAutoMarginRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<string>> {
     return this.postPrivate('/api/v2/mix/account/set-auto-margin', params);
+  }
+
+  setFuturesLeverage(
+    params: FuturesSetLeverageRequestV2,
+  ): Promise<APIResponse<SetLeverageResponseV2>> {
+    return this.postPrivate('/api/v2/mix/account/set-leverage', params);
   }
 
   setFuturesPositionMargin(
     params: FuturesSetPositionMarginRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<string>> {
     return this.postPrivate('/api/v2/mix/account/set-margin', params);
   }
 
   setFuturesAssetMode(params: {
     productType: 'USDT-FUTURES' | 'SUSDT-FUTURES';
     assetMode: 'single' | 'union';
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<string>> {
     return this.postPrivate('/api/v2/mix/account/set-asset-mode', params);
   }
 
   setFuturesMarginMode(
     params: FuturesSetMarginModeRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<SetMarginModeResponseV2>> {
     return this.postPrivate('/api/v2/mix/account/set-margin-mode', params);
   }
 
   setFuturesPositionMode(params: {
     productType: FuturesProductTypeV2;
     posMode: 'one_way_mode' | 'hedge_mode';
-  }): Promise<APIResponse<any>> {
+  }): Promise<
+    APIResponse<{
+      posMode: 'one_way_mode' | 'hedge_mode';
+    }>
+  > {
     return this.postPrivate('/api/v2/mix/account/set-position-mode', params);
   }
 
   getFuturesAccountBills(
     params: FuturesAccountBillRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesAccountBillV2>> {
     return this.getPrivate('/api/v2/mix/account/bill', params);
   }
 
@@ -1196,7 +1245,7 @@ export class RestClientV2 extends BaseRestClient {
   getFuturesPositionTier(params: {
     productType: FuturesProductTypeV2;
     symbol: string;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesPositionTierV2[]>> {
     return this.get('/api/v2/mix/market/query-position-lever', params);
   }
 
@@ -1204,20 +1253,20 @@ export class RestClientV2 extends BaseRestClient {
     productType: FuturesProductTypeV2;
     symbol: string;
     marginCoin: string;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesPositionV2[]>> {
     return this.getPrivate('/api/v2/mix/position/single-position', params);
   }
 
   getFuturesPositions(params: {
     productType: FuturesProductTypeV2;
     marginCoin?: string;
-  }): Promise<APIResponse<any>> {
+  }): Promise<APIResponse<FuturesPositionV2[]>> {
     return this.getPrivate('/api/v2/mix/position/all-position', params);
   }
 
   getFuturesHistoricPositions(
     params?: FuturesHistoricalPositionsRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesHistoricalPositionV2>> {
     return this.getPrivate('/api/v2/mix/position/history-position', params);
   }
 
@@ -1227,79 +1276,93 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  futuresSubmitOrder(
-    params: FuturesPlaceOrderRequestV2,
-  ): Promise<APIResponse<any>> {
+  futuresSubmitOrder(params: FuturesPlaceOrderRequestV2): Promise<
+    APIResponse<{
+      orderId: string;
+      clientOid: string;
+    }>
+  > {
     return this.postPrivate('/api/v2/mix/order/place-order', params);
   }
 
-  futuresCancelOrder(
-    params: FuturesCancelOrderRequestV2,
-  ): Promise<APIResponse<any>> {
-    return this.postPrivate('/api/v2/mix/order/cancel-order', params);
-  }
-
-  futuresSubmitReversal(
-    params: FuturesReversalOrderRequestV2,
-  ): Promise<APIResponse<any>> {
+  futuresSubmitReversal(params: FuturesReversalOrderRequestV2): Promise<
+    APIResponse<{
+      orderId: string;
+      clientOid: string;
+    }>
+  > {
     return this.postPrivate('/api/v2/mix/order/click-backhand', params);
   }
 
   futuresBatchSubmitOrders(
     params: FuturesBatchOrderRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesBatchOrderResponseV2>> {
     return this.postPrivate('/api/v2/mix/order/batch-place-order', params);
   }
 
-  futuresModifyOrder(
-    params: FuturesModifyOrderRequestV2,
-  ): Promise<APIResponse<any>> {
+  futuresModifyOrder(params: FuturesModifyOrderRequestV2): Promise<
+    APIResponse<{
+      orderId: string;
+      clientOid: string;
+    }>
+  > {
     return this.postPrivate('/api/v2/mix/order/modify-order', params);
+  }
+
+  futuresCancelOrder(params: FuturesCancelOrderRequestV2): Promise<
+    APIResponse<{
+      orderId: string;
+      clientOid: string;
+    }>
+  > {
+    return this.postPrivate('/api/v2/mix/order/cancel-order', params);
   }
 
   futuresBatchCancelOrders(
     params: FuturesBatchCancelOrderRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesBatchOrderResponseV2>> {
     return this.postPrivate('/api/v2/mix/order/batch-cancel-orders', params);
   }
 
   futuresFlashClosePositions(
     params: FuturesFlashClosePositionsRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesClosePositionResponseV2>> {
     return this.postPrivate('/api/v2/mix/order/close-positions', params);
   }
 
-  getFuturesOrder(params: FuturesGetOrderRequestV2): Promise<APIResponse<any>> {
+  getFuturesOrder(
+    params: FuturesGetOrderRequestV2,
+  ): Promise<APIResponse<FuturesOrderDetailV2>> {
     return this.getPrivate('/api/v2/mix/order/detail', params);
   }
 
   getFuturesFills(
     params: FuturesGetOrderFillsRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesOrderFillsV2>> {
     return this.getPrivate('/api/v2/mix/order/fills', params);
   }
 
   getFuturesHistoricOrderFills(
     params: FuturesGetHistoricalFillsRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesOrderFillsV2>> {
     return this.getPrivate('/api/v2/mix/order/fill-history', params);
   }
 
   getFuturesOpenOrders(
     params: FuturesGetOpenOrdersRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesOpenOrdersV2>> {
     return this.getPrivate('/api/v2/mix/order/orders-pending', params);
   }
 
   getFuturesHistoricOrders(
     params: FuturesGetHistoryOrdersRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesHistoryOrdersV2>> {
     return this.getPrivate('/api/v2/mix/order/orders-history', params);
   }
 
   futuresCancelAllOrders(
     params: FuturesCancelAllOrdersRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesCancelAllOrdersV2>> {
     return this.postPrivate('/api/v2/mix/order/cancel-all-orders', params);
   }
 
@@ -1309,53 +1372,65 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  futuresSubmitPlanSubOrder(params: {
+  getFuturesTriggerSubOrder(params: {
     planType: 'normal_plan' | 'track_plan';
     planOrderId: string;
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<any>> {
-    return this.postPrivate('/api/v2/mix/order/plan-sub-order', params);
+  }): Promise<APIResponse<FuturesTriggerSubOrderV2[]>> {
+    return this.getPrivate('/api/v2/mix/order/plan-sub-order', params);
   }
 
-  futuresSubmitTPSLOrder(
-    params: FuturesTPSLOrderRequestV2,
-  ): Promise<APIResponse<any>> {
+  futuresSubmitTPSLOrder(params: FuturesTPSLOrderRequestV2): Promise<
+    APIResponse<{
+      orderId: string;
+      clientOid: string;
+    }>
+  > {
     return this.postPrivate('/api/v2/mix/order/place-tpsl-order', params);
   }
 
-  futuresSubmitPlanOrder(
-    params: FuturesPlanOrderRequestV2,
-  ): Promise<APIResponse<any>> {
+  futuresSubmitPlanOrder(params: FuturesPlanOrderRequestV2): Promise<
+    APIResponse<{
+      orderId: string;
+      clientOid: string;
+    }>
+  > {
     return this.postPrivate('/api/v2/mix/order/place-plan-order', params);
   }
 
-  futuresModifyTPSLPOrder(
-    params: FuturesModifyTPSLOrderRequestV2,
-  ): Promise<APIResponse<any>> {
+  futuresModifyTPSLPOrder(params: FuturesModifyTPSLOrderRequestV2): Promise<
+    APIResponse<{
+      orderId: string;
+      clientOid: string;
+    }>
+  > {
     return this.postPrivate('/api/v2/mix/order/modify-tpsl-order', params);
   }
 
-  futuresModifyPlanOrder(
-    params: FuturesModifyPlanOrderRequestV2,
-  ): Promise<APIResponse<any>> {
+  futuresModifyPlanOrder(params: FuturesModifyPlanOrderRequestV2): Promise<
+    APIResponse<{
+      orderId: string;
+      clientOid: string;
+    }>
+  > {
     return this.postPrivate('/api/v2/mix/order/modify-plan-order', params);
-  }
-
-  futuresCancelPlanOrder(
-    params: FuturesCancelPlanOrderRequestV2,
-  ): Promise<APIResponse<any>> {
-    return this.postPrivate('/api/v2/mix/order/cancel-plan-order', params);
   }
 
   getFuturesPlanOrders(
     params: FuturesGetPlanOrdersRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesPendingPlanOrderV2>> {
     return this.getPrivate('/api/v2/mix/order/orders-plan-pending', params);
+  }
+
+  futuresCancelPlanOrder(
+    params: FuturesCancelPlanOrderRequestV2,
+  ): Promise<APIResponse<FuturesCancelPlanOrderV2>> {
+    return this.postPrivate('/api/v2/mix/order/cancel-plan-order', params);
   }
 
   getFuturesHistoricPlanOrders(
     params: FuturesGetHistoryPlanOrdersRequestV2,
-  ): Promise<APIResponse<any>> {
+  ): Promise<APIResponse<FuturesHistoryPlanOrderV2>> {
     return this.getPrivate('/api/v2/mix/order/orders-plan-history', params);
   }
 
