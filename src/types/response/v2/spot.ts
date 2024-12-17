@@ -92,16 +92,16 @@ export interface SpotOrderBookDepthV2 {
   ts: string;
 }
 
-export interface SpotCandlestickV2 {
-  [0]: string; // timestamp
-  [1]: string; // open
-  [2]: string; // high
-  [3]: string; // low
-  [4]: string; // close
-  [5]: string; // baseVolume
-  [6]: string; // usdtVolume
-  [7]: string; // quoteVolume
-}
+export type SpotCandlestickV2 = [
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+  string,
+];
 
 export interface SpotTradeV2 {
   symbol: string;
