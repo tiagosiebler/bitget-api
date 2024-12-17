@@ -86,14 +86,14 @@ export interface FuturesFillV2 {
 }
 
 export type FuturesCandlestickV2 = [
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
-  string,
+  string, // timestamp
+  string, // open
+  string, // high
+  string, // low
+  string, // close
+  string, // baseVolume
+  string, // usdtVolume
+  string, // quoteVolume
 ];
 
 export interface FuturesOpenInterestV2 {
