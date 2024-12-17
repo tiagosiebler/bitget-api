@@ -13,19 +13,15 @@ export interface CreateSubaccountResponseV2 {
   cTime: string;
 }
 
-export interface SubaccountsListV2 {
-  hasNextPage: boolean;
-  idLessThan: number;
-  subList: {
-    subUid: string;
-    subaccountName: string;
-    status: string;
-    permList: string[];
-    label: string;
-    language: string;
-    cTime: string;
-    uTime: string;
-  }[];
+export interface BrokerSubaccountV2 {
+  subUid: string;
+  subaccountName: string;
+  status: string;
+  permList: string[];
+  label: string;
+  language: string;
+  cTime: string;
+  uTime: string;
 }
 
 export interface ModifySubaccountResponseV2 {
@@ -47,30 +43,26 @@ export interface SubaccountEmailV2 {
   uTime: string;
 }
 
-export interface SubaccountSpotAssetsV2 {
-  assetsList: {
-    coin: string;
-    available: string;
-    frozen: string;
-    locked: string;
-    uTime: string;
-  }[];
+export interface BrokerSubaccountSpotAssetV2 {
+  coin: string;
+  available: string;
+  frozen: string;
+  locked: string;
+  uTime: string;
 }
 
-export interface SubaccountFutureAssetsV2 {
-  assetsList: {
-    marginCoin: string;
-    available: string;
-    frozen: string;
-    locked: string;
-    crossedMaxAvailable: string;
-    isolatedMaxAvailable: string;
-    maxTransferOut: string;
-    accountEquity: string;
-    usdtEquity: string;
-    btcEquity: string;
-    uTime: string;
-  }[];
+export interface BrokerSubaccountFutureAssetV2 {
+  marginCoin: string;
+  available: string;
+  frozen: string;
+  locked: string;
+  crossedMaxAvailable: string;
+  isolatedMaxAvailable: string;
+  maxTransferOut: string;
+  accountEquity: string;
+  usdtEquity: string;
+  btcEquity: string;
+  uTime: string;
 }
 
 export interface CreateSubaccountDepositAddressV2 {
@@ -101,26 +93,23 @@ export interface SubaccountDepositV2 {
   uTime: string;
 }
 
-export interface SubaccountWithdrawalV2 {
-  resultList: {
-    orderId: string;
-    txId: string;
-    coin: string;
-    type: string;
-    dest: string;
-    amount: string;
-    status: string;
-    fromAddress: string;
-    toAddress: string;
-    fee: string;
-    chain: string;
-    confirm: string;
-    tag: string;
-    userId: string;
-    cTime: string;
-    uTime: string;
-  }[];
-  endId: string;
+export interface BrokerSubaccountWithdrawalV2 {
+  orderId: string;
+  txId: string;
+  coin: string;
+  type: string;
+  dest: string;
+  amount: string;
+  status: string;
+  fromAddress: string;
+  toAddress: string;
+  fee: string;
+  chain: string;
+  confirm: string;
+  tag: string;
+  userId: string;
+  cTime: string;
+  uTime: string;
 }
 
 /**

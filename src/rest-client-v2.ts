@@ -1,17 +1,21 @@
 import {
   AnnouncementV2,
   APIResponse,
-  BGBConvertCoinsV2,
+  BGBConvertCoinV2,
   BGBConvertHistoryV2,
   BorrowLoanRequestV2,
-  BotAssetsV2,
+  BotAssetV2,
+  BrokerSubaccountFutureAssetV2,
+  BrokerSubaccountSpotAssetV2,
+  BrokerSubaccountV2,
+  BrokerSubaccountWithdrawalV2,
   CancelAndSubmitSpotOrderResponseV2,
   CloseFuturesFollowerPositionsRequestV2,
   ConvertBGBResponseV2,
-  ConvertCurrenciesV2,
-  ConvertHistoryV2,
+  ConvertCurrencyV2,
   ConvertQuotedPriceV2,
   ConvertQuoteRequestV2,
+  ConvertRecordV2,
   ConvertRequestV2,
   ConvertTradeResponseV2,
   CopyTradingProductTypeV2,
@@ -32,7 +36,7 @@ import {
   CTFuturesFollowerHistoryOrdersV2,
   CTFuturesFollowerMyTradersV2,
   CTFuturesFollowerSettingsV2,
-  CTFuturesTraderCurrentOrderV2,
+  CTFuturesTraderCurrentOrdersV2,
   CTFuturesTraderHistoryOrderV2,
   CTFuturesTraderHistoryProfitSummaryV2,
   CTFuturesTraderMyFollowersV2,
@@ -68,10 +72,10 @@ import {
   EarnSharkfinProductsV2,
   EarnSharkfinRecordsV2,
   EarnSharkfinSubscriptionDetailV2,
-  FundingAssetsV2,
+  FundingAssetV2,
   FuturesAccountBillRequestV2,
   FuturesAccountBillV2,
-  FuturesAccountListV2,
+  FuturesAccountsV2,
   FuturesAccountV2,
   FuturesActiveBuySellVolumeV2,
   FuturesActiveLongShortAccountV2,
@@ -88,7 +92,7 @@ import {
   FuturesCandlestickV2,
   FuturesClosePositionResponseV2,
   FuturesContractConfigV2,
-  FuturesDiscountRateV2,
+  FuturesDiscountRatesV2,
   FuturesFillV2,
   FuturesFlashClosePositionsRequestV2,
   FuturesFundingTimeV2,
@@ -101,14 +105,14 @@ import {
   FuturesGetPlanOrdersRequestV2,
   FuturesHistoricalFundingRateV2,
   FuturesHistoricalPositionsRequestV2,
-  FuturesHistoricalPositionV2,
   FuturesHistoricTradesRequestV2,
-  FuturesHistoryOrdersV2,
+  FuturesHistoryInterestRateV2,
+  FuturesHistoryOrderV2,
   FuturesHistoryPlanOrderV2,
+  FuturesHistoryPositionV2,
   FuturesInterestExchangeRateV2,
   FuturesInterestHistoryRequestV2,
   FuturesInterestHistoryV2,
-  FuturesInterestRateHistoryV2,
   FuturesLongShortRatioV2,
   FuturesMergeDepthRequestV2,
   FuturesMergeDepthV2,
@@ -117,9 +121,9 @@ import {
   FuturesModifyTPSLOrderRequestV2,
   FuturesOpenCountRequestV2,
   FuturesOpenInterestV2,
-  FuturesOpenOrdersV2,
+  FuturesOpenOrderV2,
   FuturesOrderDetailV2,
-  FuturesOrderFillsV2,
+  FuturesOrderFillV2,
   FuturesPendingPlanOrderV2,
   FuturesPlaceOrderRequestV2,
   FuturesPlanOrderRequestV2,
@@ -133,7 +137,7 @@ import {
   FuturesSetMarginModeRequestV2,
   FuturesSetPositionMarginRequestV2,
   FuturesSingleAccountRequestV2,
-  FuturesSubAccountAssetsV2,
+  FuturesSubAccountAssetV2,
   FuturesSymbolPriceV2,
   FuturesTickerV2,
   FuturesTPSLOrderRequestV2,
@@ -204,18 +208,18 @@ import {
   MarginAccountAssetV2,
   MarginBatchOrdersRequestV2,
   MarginBatchOrdersResponseV2,
-  MarginBorrowHistoryV2,
+  MarginBorrowHistoryItemV2,
   MarginCurrencyV2,
-  MarginCurrentOrdersV2,
-  MarginFinancialHistoryV2,
-  MarginHistoryOrdersV2,
-  MarginInterestHistoryV2,
-  MarginLiquidationHistoryV2,
-  MarginLiquidationOrdersV2,
+  MarginCurrentOrderV2,
+  MarginFinancialHistoryItemV2,
+  MarginHistoryOrderV2,
+  MarginInterestHistoryItemV2,
+  MarginLiquidationHistoryItemV2,
+  MarginLiquidationOrderV2,
   MarginLoanGrowthRateV2,
-  MarginOrderFillsV2,
+  MarginOrderFillV2,
   MarginPlaceOrderRequestV2,
-  MarginRepaymentHistoryV2,
+  MarginRepaymentHistoryItemV2,
   MarginTransactionRecordV2,
   MarginType,
   ModifyFuturesTraderOrderTPSLRequestV2,
@@ -227,10 +231,11 @@ import {
   ModifyVirtualSubAccountApiKeyV2,
   ModifyVirtualSubApiKeyRequestV2,
   ModifyVirtualSubRequestV2,
-  P2PMerchantAdvertisementV2,
+  P2PMerchantAdvertismentV2,
   P2PMerchantInfoV2,
-  P2PMerchantListV2,
+  P2PMerchantOrdersV2,
   P2PMerchantOrderV2,
+  P2PMerchantV2,
   RedeemSavingsRequestV2,
   RepayLoanRequestV2,
   SetLeverageResponseV2,
@@ -255,6 +260,7 @@ import {
   SpotFundFlowV2,
   SpotHistoricCandlesRequestV2,
   SpotHistoricTradesRequestV2,
+  SpotHistoryPlanOrderV2,
   SpotMainSubTransferRecordRequestV2,
   SpotMainSubTransferRecordV2,
   SpotMergeDepthV2,
@@ -278,21 +284,17 @@ import {
   SpotWhaleNetFlowV2,
   SpotWithdrawalRecordV2,
   SpotWithdrawalRequestV2,
-  SubAccountApiKeyListV2,
+  SubAccountApiKeyItemV2,
   SubaccountApiKeyV2,
   SubaccountDepositV2,
   SubaccountEmailV2,
-  SubaccountFutureAssetsV2,
-  SubaccountsListV2,
-  SubaccountSpotAssetsV2,
-  SubaccountWithdrawalV2,
   SubDepositRecordsRequestV2,
   SubmitSpotBatchOrdersResponseV2,
   SubWithdrawalRecordsRequestV2,
   SubWithdrawalRequestV2,
   UpdateFuturesFollowerSettingsRequestV2,
   UpdateFuturesFollowerTPSLRequestV2,
-  VirtualSubAccountListV2,
+  VirtualSubAccountV2,
 } from './types';
 import { assertMarginType, REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -448,7 +450,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getP2PTransactionRecords(
     params: GetP2PTransactionsRequestV2,
-  ): Promise<APIResponse<P2PMerchantOrderV2[]>> {
+  ): Promise<APIResponse<P2PMerchantOrdersV2[]>> {
     return this.getPrivate('/api/v2/tax/p2p-record', params);
   }
 
@@ -458,9 +460,12 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getP2PMerchantList(
-    params?: GetP2PMerchantsRequestV2,
-  ): Promise<APIResponse<P2PMerchantListV2>> {
+  getP2PMerchantList(params?: GetP2PMerchantsRequestV2): Promise<
+    APIResponse<{
+      merchantList: P2PMerchantV2[];
+      minMerchantId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/p2p/merchantList', params);
   }
 
@@ -468,15 +473,23 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate('/api/v2/p2p/merchantInfo');
   }
 
-  getP2PMerchantOrders(
-    params: GetMerchantP2POrdersRequestV2,
-  ): Promise<APIResponse<P2PMerchantOrderV2>> {
+  getP2PMerchantOrders(params: GetMerchantP2POrdersRequestV2): Promise<
+    APIResponse<{
+      orderList: P2PMerchantOrderV2[];
+      minOrderId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/p2p/orderList', params);
   }
 
   getP2PMerchantAdvertisementList(
     params: GetMerchantAdvertisementsRequestV2,
-  ): Promise<APIResponse<P2PMerchantAdvertisementV2>> {
+  ): Promise<
+    APIResponse<{
+      advList: P2PMerchantAdvertismentV2[];
+      minAdvId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/p2p/advList', params);
   }
 
@@ -603,7 +616,12 @@ export class RestClientV2 extends BaseRestClient {
     limit?: string;
     idLessThan?: string;
     status?: 'normal' | 'freeze';
-  }): Promise<APIResponse<VirtualSubAccountListV2>> {
+  }): Promise<
+    APIResponse<{
+      endId: string;
+      subAccountList: VirtualSubAccountV2[];
+    }>
+  > {
     return this.getPrivate('/api/v2/user/virtual-subaccount-list', params);
   }
 
@@ -627,7 +645,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getVirtualSubaccountAPIKeys(params: {
     subAccountUid: string;
-  }): Promise<APIResponse<SubAccountApiKeyListV2[]>> {
+  }): Promise<APIResponse<SubAccountApiKeyItemV2[]>> {
     return this.getPrivate(
       '/api/v2/user/virtual-subaccount-apikey-list',
       params,
@@ -641,13 +659,13 @@ export class RestClientV2 extends BaseRestClient {
    */
   getFundingAssets(params?: {
     coin?: string;
-  }): Promise<APIResponse<FundingAssetsV2[]>> {
+  }): Promise<APIResponse<FundingAssetV2[]>> {
     return this.getPrivate('/api/v2/account/funding-assets', params);
   }
 
   getBotAccount(params?: {
     accountType?: string;
-  }): Promise<APIResponse<BotAssetsV2[]>> {
+  }): Promise<APIResponse<BotAssetV2[]>> {
     return this.getPrivate('/api/v2/account/bot-assets', params);
   }
 
@@ -669,7 +687,7 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getConvertCoins(): Promise<APIResponse<ConvertCurrenciesV2[]>> {
+  getConvertCoins(): Promise<APIResponse<ConvertCurrencyV2[]>> {
     return this.getPrivate('/api/v2/convert/currencies');
   }
 
@@ -685,9 +703,12 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate('/api/v2/convert/trade', params);
   }
 
-  getConvertHistory(
-    params: GetConvertHistoryRequestV2,
-  ): Promise<APIResponse<ConvertHistoryV2>> {
+  getConvertHistory(params: GetConvertHistoryRequestV2): Promise<
+    APIResponse<{
+      dataList: ConvertRecordV2[];
+      endId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/convert/convert-record', params);
   }
 
@@ -697,7 +718,11 @@ export class RestClientV2 extends BaseRestClient {
    *
    */
 
-  getConvertBGBCoins(): Promise<APIResponse<BGBConvertCoinsV2>> {
+  getConvertBGBCoins(): Promise<
+    APIResponse<{
+      coinList: BGBConvertCoinV2[];
+    }>
+  > {
     return this.getPrivate('/api/v2/convert/bgb-convert-coin-list');
   }
 
@@ -908,9 +933,13 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate('/api/v2/spot/trade/cancel-plan-order', params);
   }
 
-  getSpotCurrentPlanOrders(
-    params: GetSpotCurrentPlanOrdersRequestV2,
-  ): Promise<APIResponse<SpotCurrentPlanOrderV2>> {
+  getSpotCurrentPlanOrders(params: GetSpotCurrentPlanOrdersRequestV2): Promise<
+    APIResponse<{
+      nextFlag: boolean;
+      idLessThan: string;
+      orderList: SpotCurrentPlanOrderV2[];
+    }>
+  > {
     return this.getPrivate('/api/v2/spot/trade/current-plan-order', params);
   }
 
@@ -920,9 +949,13 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate('/api/v2/spot/trade/plan-sub-order', params);
   }
 
-  getSpotHistoricPlanOrders(
-    params: GetSpotHistoryPlanOrdersRequestV2,
-  ): Promise<APIResponse<SpotCurrentPlanOrderV2>> {
+  getSpotHistoricPlanOrders(params: GetSpotHistoryPlanOrdersRequestV2): Promise<
+    APIResponse<{
+      nextFlag: boolean;
+      idLessThan: string;
+      orderList: SpotHistoryPlanOrderV2[];
+    }>
+  > {
     return this.getPrivate('/api/v2/spot/trade/history-plan-order', params);
   }
 
@@ -1100,19 +1133,27 @@ export class RestClientV2 extends BaseRestClient {
     return this.get('/api/v2/mix/market/vip-fee-rate');
   }
 
-  getFuturesInterestRateHistory(params: {
-    coin: string;
-  }): Promise<APIResponse<FuturesInterestRateHistoryV2>> {
+  getFuturesInterestRateHistory(params: { coin: string }): Promise<
+    APIResponse<{
+      coin: string;
+      historyInterestRateList: FuturesHistoryInterestRateV2[];
+    }>
+  > {
     return this.get('/api/v2/mix/market/union-interest-rate-history', params);
   }
 
   getFuturesInterestExchangeRate(): Promise<
-    APIResponse<FuturesInterestExchangeRateV2[]>
+    APIResponse<
+      {
+        coin: string;
+        exchangeRateList: FuturesInterestExchangeRateV2[];
+      }[]
+    >
   > {
     return this.get('/api/v2/mix/market/exchange-rate');
   }
 
-  getFuturesDiscountRate(): Promise<APIResponse<FuturesDiscountRateV2[]>> {
+  getFuturesDiscountRate(): Promise<APIResponse<FuturesDiscountRatesV2[]>> {
     return this.get('/api/v2/mix/market/discount-rate');
   }
 
@@ -1174,7 +1215,12 @@ export class RestClientV2 extends BaseRestClient {
   getFuturesOpenInterest(params: {
     symbol: string;
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<FuturesOpenInterestV2>> {
+  }): Promise<
+    APIResponse<{
+      openInterestList: FuturesOpenInterestV2[];
+      ts: string;
+    }>
+  > {
     return this.get('/api/v2/mix/market/open-interest', params);
   }
 
@@ -1236,13 +1282,20 @@ export class RestClientV2 extends BaseRestClient {
 
   getFuturesAccountAssets(params: {
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<FuturesAccountListV2[]>> {
+  }): Promise<APIResponse<FuturesAccountsV2[]>> {
     return this.getPrivate('/api/v2/mix/account/accounts', params);
   }
 
   getFuturesSubAccountAssets(params: {
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<FuturesSubAccountAssetsV2[]>> {
+  }): Promise<
+    APIResponse<
+      {
+        userId: number;
+        assetList: FuturesSubAccountAssetV2[];
+      }[]
+    >
+  > {
     return this.getPrivate('/api/v2/mix/account/sub-account-assets', params);
   }
 
@@ -1302,9 +1355,12 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate('/api/v2/mix/account/set-position-mode', params);
   }
 
-  getFuturesAccountBills(
-    params: FuturesAccountBillRequestV2,
-  ): Promise<APIResponse<FuturesAccountBillV2>> {
+  getFuturesAccountBills(params: FuturesAccountBillRequestV2): Promise<
+    APIResponse<{
+      bills: FuturesAccountBillV2[];
+      endId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/mix/account/bill', params);
   }
 
@@ -1338,7 +1394,12 @@ export class RestClientV2 extends BaseRestClient {
 
   getFuturesHistoricPositions(
     params?: FuturesHistoricalPositionsRequestV2,
-  ): Promise<APIResponse<FuturesHistoricalPositionV2>> {
+  ): Promise<
+    APIResponse<{
+      list: FuturesHistoryPositionV2[];
+      endId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/mix/position/history-position', params);
   }
 
@@ -1408,27 +1469,41 @@ export class RestClientV2 extends BaseRestClient {
     return this.getPrivate('/api/v2/mix/order/detail', params);
   }
 
-  getFuturesFills(
-    params: FuturesGetOrderFillsRequestV2,
-  ): Promise<APIResponse<FuturesOrderFillsV2>> {
+  getFuturesFills(params: FuturesGetOrderFillsRequestV2): Promise<
+    APIResponse<{
+      fillList: FuturesOrderFillV2[];
+      endId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/mix/order/fills', params);
   }
 
   getFuturesHistoricOrderFills(
     params: FuturesGetHistoricalFillsRequestV2,
-  ): Promise<APIResponse<FuturesOrderFillsV2>> {
+  ): Promise<
+    APIResponse<{
+      fillList: FuturesOrderFillV2[];
+      endId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/mix/order/fill-history', params);
   }
 
-  getFuturesOpenOrders(
-    params: FuturesGetOpenOrdersRequestV2,
-  ): Promise<APIResponse<FuturesOpenOrdersV2>> {
+  getFuturesOpenOrders(params: FuturesGetOpenOrdersRequestV2): Promise<
+    APIResponse<{
+      entrustedList: FuturesOpenOrderV2[];
+      endId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/mix/order/orders-pending', params);
   }
 
-  getFuturesHistoricOrders(
-    params: FuturesGetHistoryOrdersRequestV2,
-  ): Promise<APIResponse<FuturesHistoryOrdersV2>> {
+  getFuturesHistoricOrders(params: FuturesGetHistoryOrdersRequestV2): Promise<
+    APIResponse<{
+      entrustedList: FuturesHistoryOrderV2[];
+      endId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/mix/order/orders-history', params);
   }
 
@@ -1488,9 +1563,12 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate('/api/v2/mix/order/modify-plan-order', params);
   }
 
-  getFuturesPlanOrders(
-    params: FuturesGetPlanOrdersRequestV2,
-  ): Promise<APIResponse<FuturesPendingPlanOrderV2>> {
+  getFuturesPlanOrders(params: FuturesGetPlanOrdersRequestV2): Promise<
+    APIResponse<{
+      entrustedList: FuturesPendingPlanOrderV2[];
+      endId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/mix/order/orders-plan-pending', params);
   }
 
@@ -1502,7 +1580,12 @@ export class RestClientV2 extends BaseRestClient {
 
   getFuturesHistoricPlanOrders(
     params: FuturesGetHistoryPlanOrdersRequestV2,
-  ): Promise<APIResponse<FuturesHistoryPlanOrderV2>> {
+  ): Promise<
+    APIResponse<{
+      entrustedList: FuturesHistoryPlanOrderV2[];
+      endId: string;
+    }>
+  > {
     return this.getPrivate('/api/v2/mix/order/orders-plan-history', params);
   }
 
@@ -1547,9 +1630,13 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate('/api/v2/broker/account/create-subaccount', params);
   }
 
-  getSubaccounts(
-    params?: GetSubAccountsRequestV2,
-  ): Promise<APIResponse<SubaccountsListV2>> {
+  getSubaccounts(params?: GetSubAccountsRequestV2): Promise<
+    APIResponse<{
+      hasNextPage: boolean;
+      idLessThan: number;
+      subList: BrokerSubaccountV2[];
+    }>
+  > {
     return this.getPrivate('/api/v2/broker/account/subaccount-list', params);
   }
 
@@ -1569,7 +1656,11 @@ export class RestClientV2 extends BaseRestClient {
     subUid: string;
     coin?: string;
     assetType?: 'hold_only' | 'all';
-  }): Promise<APIResponse<SubaccountSpotAssetsV2>> {
+  }): Promise<
+    APIResponse<{
+      assetsList: BrokerSubaccountSpotAssetV2[];
+    }>
+  > {
     return this.getPrivate(
       '/api/v2/broker/account/subaccount-spot-assets',
       params,
@@ -1579,7 +1670,11 @@ export class RestClientV2 extends BaseRestClient {
   getSubaccountFuturesAssets(params: {
     subUid: string;
     productType: FuturesProductTypeV2;
-  }): Promise<APIResponse<SubaccountFutureAssetsV2>> {
+  }): Promise<
+    APIResponse<{
+      assetsList: BrokerSubaccountFutureAssetV2[];
+    }>
+  > {
     return this.getPrivate(
       '/api/v2/broker/account/subaccount-future-assets',
       params,
@@ -1626,9 +1721,12 @@ export class RestClientV2 extends BaseRestClient {
     return this.postPrivate('/api/v2/broker/subaccount-deposit', params);
   }
 
-  subaccountWithdrawalRecords(
-    params: SubWithdrawalRecordsRequestV2,
-  ): Promise<APIResponse<SubaccountWithdrawalV2>> {
+  subaccountWithdrawalRecords(params: SubWithdrawalRecordsRequestV2): Promise<
+    APIResponse<{
+      resultList: BrokerSubaccountWithdrawalV2[];
+      endId: string;
+    }>
+  > {
     return this.postPrivate('/api/v2/broker/subaccount-withdrawal', params);
   }
 
@@ -1692,7 +1790,13 @@ export class RestClientV2 extends BaseRestClient {
   getMarginBorrowHistory(
     marginType: MarginType,
     params: GetBorrowHistoryRequestV2,
-  ): Promise<APIResponse<MarginBorrowHistoryV2>> {
+  ): Promise<
+    APIResponse<{
+      resultList: MarginBorrowHistoryItemV2[];
+      maxId: string;
+      minId: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/borrow-history`,
@@ -1703,7 +1807,13 @@ export class RestClientV2 extends BaseRestClient {
   getMarginRepayHistory(
     marginType: MarginType,
     params: GetRepayHistoryRequestV2,
-  ): Promise<APIResponse<MarginRepaymentHistoryV2>> {
+  ): Promise<
+    APIResponse<{
+      resultList: MarginRepaymentHistoryItemV2[];
+      maxId: string;
+      minId: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/repay-history`,
@@ -1714,7 +1824,13 @@ export class RestClientV2 extends BaseRestClient {
   getMarginInterestHistory(
     marginType: MarginType,
     params: GetInterestHistoryRequestV2,
-  ): Promise<APIResponse<MarginInterestHistoryV2>> {
+  ): Promise<
+    APIResponse<{
+      resultList: MarginInterestHistoryItemV2[];
+      maxId: string;
+      minId: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/interest-history`,
@@ -1725,7 +1841,13 @@ export class RestClientV2 extends BaseRestClient {
   getMarginLiquidationHistory(
     marginType: MarginType,
     params: GetLiquidationHistoryRequestV2,
-  ): Promise<APIResponse<MarginLiquidationHistoryV2>> {
+  ): Promise<
+    APIResponse<{
+      resultList: MarginLiquidationHistoryItemV2[];
+      maxId: string;
+      minId: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/liquidation-history`,
@@ -1736,7 +1858,13 @@ export class RestClientV2 extends BaseRestClient {
   getMarginFinancialHistory(
     marginType: MarginType,
     params: GetFinancialHistoryRequestV2,
-  ): Promise<APIResponse<MarginFinancialHistoryV2>> {
+  ): Promise<
+    APIResponse<{
+      resultList: MarginFinancialHistoryItemV2[];
+      maxId: string;
+      minId: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/financial-records`,
@@ -1980,7 +2108,13 @@ export class RestClientV2 extends BaseRestClient {
   getMarginOpenOrders(
     marginType: MarginType,
     params: GetMarginCurrentOrdersRequestV2,
-  ): Promise<APIResponse<MarginCurrentOrdersV2>> {
+  ): Promise<
+    APIResponse<{
+      orderList: MarginCurrentOrderV2[];
+      maxId: string;
+      minId: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.getPrivate(`/api/v2/margin/${marginType}/open-orders`, params);
   }
@@ -1988,7 +2122,13 @@ export class RestClientV2 extends BaseRestClient {
   getMarginHistoricOrders(
     marginType: MarginType,
     params: GetHistoryOrdersRequestV2,
-  ): Promise<APIResponse<MarginHistoryOrdersV2>> {
+  ): Promise<
+    APIResponse<{
+      orderList: MarginHistoryOrderV2[];
+      maxId: string;
+      minId: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/history-orders`,
@@ -1999,7 +2139,13 @@ export class RestClientV2 extends BaseRestClient {
   getMarginHistoricOrderFills(
     marginType: MarginType,
     params: GetMarginOrderFillsRequestV2,
-  ): Promise<APIResponse<MarginOrderFillsV2>> {
+  ): Promise<
+    APIResponse<{
+      fills: MarginOrderFillV2[];
+      minId: string;
+      maxId: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.getPrivate(`/api/v2/margin/${marginType}/fills`, params);
   }
@@ -2007,7 +2153,12 @@ export class RestClientV2 extends BaseRestClient {
   getMarginLiquidationOrders(
     marginType: MarginType,
     params: GetMarginLiquidationOrdersRequestV2,
-  ): Promise<APIResponse<MarginLiquidationOrdersV2>> {
+  ): Promise<
+    APIResponse<{
+      resultList: MarginLiquidationOrderV2[];
+      idLessThan: string;
+    }>
+  > {
     assertMarginType(marginType);
     return this.getPrivate(
       `/api/v2/margin/${marginType}/liquidation-order`,
@@ -2033,7 +2184,7 @@ export class RestClientV2 extends BaseRestClient {
 
   getFuturesTraderCurrentOrder(
     params: GetFuturesTraderCurrentOrdersRequestV2,
-  ): Promise<APIResponse<CTFuturesTraderCurrentOrderV2>> {
+  ): Promise<APIResponse<CTFuturesTraderCurrentOrdersV2>> {
     return this.getPrivate(
       '/api/v2/copy/mix-trader/order-current-track',
       params,

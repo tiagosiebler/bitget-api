@@ -33,43 +33,47 @@ export interface EarnSavingsAccountV2 {
   usdtTotalEarning: string;
 }
 
-export interface EarnSavingsAssetsV2 {
-  resultList: {
-    productId: string;
-    orderId: string;
-    productCoin: string;
-    interestCoin: string;
-    periodType: string;
-    period: string;
-    holdAmount: string;
-    lastProfit: string;
-    totalProfit: string;
-    holdDays: string;
-    status: string;
-    allowRedemption: string;
-    productLevel: string;
-    apy: {
-      rateLevel: string;
-      minApy: string;
-      maxApy: string;
-      currentApy: string;
-    }[];
+export interface EarnSavingsAssetV2 {
+  productId: string;
+  orderId: string;
+  productCoin: string;
+  interestCoin: string;
+  periodType: string;
+  period: string;
+  holdAmount: string;
+  lastProfit: string;
+  totalProfit: string;
+  holdDays: string;
+  status: string;
+  allowRedemption: string;
+  productLevel: string;
+  apy: {
+    rateLevel: string;
+    minApy: string;
+    maxApy: string;
+    currentApy: string;
   }[];
+}
+
+export interface EarnSavingsAssetsV2 {
+  resultList: EarnSavingsAssetV2[];
   endId: string;
 }
 
+export interface EarnSavingsRecordV2 {
+  orderId: string;
+  coinName: string;
+  settleCoinName: string;
+  productType: string;
+  period: string;
+  productLevel: string;
+  amount: string;
+  ts: string;
+  orderType: string;
+}
+
 export interface EarnSavingsRecordsV2 {
-  resultList: {
-    orderId: string;
-    coinName: string;
-    settleCoinName: string;
-    productType: string;
-    period: string;
-    productLevel: string;
-    amount: string;
-    ts: string;
-    orderType: string;
-  }[];
+  resultList: EarnSavingsRecordV2[];
   endId: string;
 }
 
@@ -110,26 +114,28 @@ export interface EarnSavingsSubscriptionDetailV2 {
  *
  */
 
+export interface EarnSharkfinProductV2 {
+  productId: string;
+  productName: string;
+  productCoin: string;
+  subscribeCoin: string;
+  farmingStartTime: string;
+  farmingEndTime: string;
+  lowerRate: string;
+  defaultRate: string;
+  upperRate: string;
+  period: string;
+  interestStartTime: string;
+  status: string;
+  minAmount: string;
+  limitAmount: string;
+  soldAmount: string;
+  endTime: string;
+  startTime: string;
+}
+
 export interface EarnSharkfinProductsV2 {
-  resultList: {
-    productId: string;
-    productName: string;
-    productCoin: string;
-    subscribeCoin: string;
-    farmingStartTime: string;
-    farmingEndTime: string;
-    lowerRate: string;
-    defaultRate: string;
-    upperRate: string;
-    period: string;
-    interestStartTime: string;
-    status: string;
-    minAmount: string;
-    limitAmount: string;
-    soldAmount: string;
-    endTime: string;
-    startTime: string;
-  }[];
+  resultList: EarnSharkfinProductV2[];
   endId: string;
 }
 
@@ -142,30 +148,33 @@ export interface EarnSharkfinAccountV2 {
   usdtTotalEarning: string;
 }
 
+export interface EarnSharkfinAssetV2 {
+  productId: string;
+  interestStartTime: string;
+  interestEndTime: string;
+  productCoin: string;
+  subscribeCoin: string;
+  trend: string;
+  settleTime: string;
+  interestAmount: string;
+  productStatus: string;
+}
+
 export interface EarnSharkfinAssetsV2 {
-  resultList: {
-    productId: string;
-    interestStartTime: string;
-    interestEndTime: string;
-    productCoin: string;
-    subscribeCoin: string;
-    trend: string;
-    settleTime: string;
-    interestAmount: string;
-    productStatus: string;
-  }[];
+  resultList: EarnSharkfinAssetV2[];
   endId: string;
 }
 
+export interface EarnSharkfinRecordV2 {
+  orderId: string;
+  product: string;
+  period: string;
+  amount: string;
+  ts: string;
+  type: string;
+}
 export interface EarnSharkfinRecordsV2 {
-  resultList: {
-    orderId: string;
-    product: string;
-    period: string;
-    amount: string;
-    ts: string;
-    type: string;
-  }[];
+  resultList: EarnSharkfinRecordV2[];
   endId: string;
 }
 
@@ -197,26 +206,29 @@ export interface EarnSharkfinSubscriptionDetailV2 {
  *
  */
 
+export interface EarnLoanCurrencyLoanInfoV2 {
+  coin: string;
+  hourRate7D: string;
+  rate7D: string;
+  hourRate30D: string;
+  rate30D: string;
+  minUsdt: string;
+  maxUsdt: string;
+  min: string;
+  max: string;
+}
+export interface EarnLoanCurrencyPledgeInfoV2 {
+  coin: string;
+  initRate: string;
+  supRate: string;
+  forceRate: string;
+  minUsdt: string;
+  maxUsdt: string;
+}
+
 export interface EarnLoanCurrenciesV2 {
-  loanInfos: {
-    coin: string;
-    hourRate7D: string;
-    rate7D: string;
-    hourRate30D: string;
-    rate30D: string;
-    minUsdt: string;
-    maxUsdt: string;
-    min: string;
-    max: string;
-  }[];
-  pledgeInfos: {
-    coin: string;
-    initRate: string;
-    supRate: string;
-    forceRate: string;
-    minUsdt: string;
-    maxUsdt: string;
-  }[];
+  loanInfos: EarnLoanCurrencyLoanInfoV2[];
+  pledgeInfos: EarnLoanCurrencyPledgeInfoV2[];
 }
 
 export interface EarnLoanOrdersV2 {
@@ -277,17 +289,21 @@ export interface EarnLoanHistoryV2 {
   status: string;
 }
 
+export interface EarnLoanDebtPledgeInfoV2 {
+  coin: string;
+  amount: string;
+  amountUsdt: string;
+}
+
+export interface EarnLoanDebtLoanInfoV2 {
+  coin: string;
+  amount: string;
+  amountUsdt: string;
+}
+
 export interface EarnLoanDebtsV2 {
-  pledgeInfos: {
-    coin: string;
-    amount: string;
-    amountUsdt: string;
-  }[];
-  loanInfos: {
-    coin: string;
-    amount: string;
-    amountUsdt: string;
-  }[];
+  pledgeInfos: EarnLoanDebtPledgeInfoV2[];
+  loanInfos: EarnLoanDebtLoanInfoV2[];
 }
 
 export interface EarnLoanLiquidationRecordsV2 {

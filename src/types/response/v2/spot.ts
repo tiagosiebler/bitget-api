@@ -4,27 +4,29 @@
  *
  */
 
+export interface SpotCoinChainV2 {
+  chain: string;
+  needTag: boolean;
+  withdrawable: boolean;
+  rechargeable: boolean;
+  withdrawFee: string;
+  extraWithdrawFee: string;
+  depositConfirm: string;
+  withdrawConfirm: string;
+  minDepositAmount: string;
+  minWithdrawAmount: string;
+  browserUrl: string;
+  contractAddress: string;
+  withdrawStep: string;
+  withdrawMinScale: string;
+  congestion: string;
+}
+
 export interface SpotCoinInfoV2 {
   coinId: string;
   coin: string;
   transfer: boolean;
-  chains: {
-    chain: string;
-    needTag: boolean;
-    withdrawable: boolean;
-    rechargeable: boolean;
-    withdrawFee: string;
-    extraWithdrawFee: string;
-    depositConfirm: string;
-    withdrawConfirm: string;
-    minDepositAmount: string;
-    minWithdrawAmount: string;
-    browserUrl: string;
-    contractAddress: string;
-    withdrawStep: string;
-    withdrawMinScale: string;
-    congestion: string;
-  }[];
+  chains: SpotCoinChainV2[];
 }
 
 export interface SpotSymbolInfoV2 {
@@ -225,24 +227,37 @@ export interface SpotFillV2 {
  */
 
 export interface SpotCurrentPlanOrderV2 {
-  nextFlag: boolean;
-  idLessThan: string;
-  orderList: {
-    orderId: string;
-    clientOid: string;
-    symbol: string;
-    size: string;
-    executePrice: string;
-    triggerPrice: string;
-    status: string;
-    orderType: string;
-    side: string;
-    planType: string;
-    triggerType: string;
-    enterPointSource: string;
-    uTime: string;
-    cTime: string;
-  }[];
+  orderId: string;
+  clientOid: string;
+  symbol: string;
+  size: string;
+  executePrice: string;
+  triggerPrice: string;
+  status: string;
+  orderType: string;
+  side: string;
+  planType: string;
+  triggerType: string;
+  enterPointSource: string;
+  uTime: string;
+  cTime: string;
+}
+
+export interface SpotHistoryPlanOrderV2 {
+  orderId: string;
+  clientOid: string;
+  symbol: string;
+  size: string;
+  executePrice: string;
+  triggerPrice: string;
+  status: string;
+  orderType: string;
+  side: string;
+  planType: string;
+  triggerType: string;
+  enterPointSource: string;
+  uTime: string;
+  cTime: string;
 }
 
 export interface SpotPlanSubOrderV2 {
@@ -291,16 +306,17 @@ export interface SpotAccountAssetV2 {
   uTime: string;
 }
 
+export interface SpotSubAccountAssetV2 {
+  coin: string;
+  available: string;
+  limitAvailable: string;
+  frozen: string;
+  locked: string;
+  uTime: string;
+}
 export interface SpotSubAccountAssetsV2 {
   userId: number;
-  assetsList: {
-    coin: string;
-    available: string;
-    limitAvailable: string;
-    frozen: string;
-    locked: string;
-    uTime: string;
-  }[];
+  assetsList: SpotSubAccountAssetV2[];
 }
 
 export interface SpotAccountBillV2 {

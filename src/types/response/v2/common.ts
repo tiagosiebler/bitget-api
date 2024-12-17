@@ -56,7 +56,7 @@ export interface MarginTransactionRecordV2 {
   ts: string;
 }
 
-export interface P2PMerchantOrderV2 {
+export interface P2PMerchantOrdersV2 {
   id: string;
   coin: string;
   p2pTaxType: string;
@@ -70,23 +70,20 @@ export interface P2PMerchantOrderV2 {
  *
  */
 
-export interface P2PMerchantListV2 {
-  merchantList: {
-    registerTime: string;
-    nickName: string;
-    isOnline: string;
-    avgPaymentTime: string;
-    avgReleaseTime: string;
-    totalTrades: string;
-    totalBuy: string;
-    totalSell: string;
-    totalCompletionRate: string;
-    trades30d: string;
-    sell30d: string;
-    buy30d: string;
-    completionRate30d: string;
-  }[];
-  minMerchantId: string;
+export interface P2PMerchantV2 {
+  registerTime: string;
+  nickName: string;
+  isOnline: string;
+  avgPaymentTime: string;
+  avgReleaseTime: string;
+  totalTrades: string;
+  totalBuy: string;
+  totalSell: string;
+  totalCompletionRate: string;
+  trades30d: string;
+  sell30d: string;
+  buy30d: string;
+  completionRate30d: string;
 }
 
 export interface P2PMerchantInfoV2 {
@@ -111,85 +108,79 @@ export interface P2PMerchantInfoV2 {
 }
 
 export interface P2PMerchantOrderV2 {
-  orderList: {
-    orderId: string;
-    orderNo: string;
-    advNo: string;
-    side: string;
-    count: string;
-    coin: string;
-    price: string;
-    fiat: string;
-    withdrawTime: string;
-    representTime: string;
-    releaseTime: string;
-    paymentTime: string;
-    amount: string;
-    status: string;
-    buyerRealName: string;
-    sellerRealName: string;
-    ctime: string;
-    utime: string;
-    paymentInfo: {
-      paymethodName: string;
-      paymethodId: string;
-      paymethodInfo: {
-        name: string;
-        required: string;
-        type: string;
-        value: string;
-      }[];
-    };
-  }[];
-  minOrderId: string;
+  orderId: string;
+  orderNo: string;
+  advNo: string;
+  side: string;
+  count: string;
+  coin: string;
+  price: string;
+  fiat: string;
+  withdrawTime: string;
+  representTime: string;
+  releaseTime: string;
+  paymentTime: string;
+  amount: string;
+  status: string;
+  buyerRealName: string;
+  sellerRealName: string;
+  ctime: string;
+  utime: string;
+  paymentInfo: {
+    paymethodName: string;
+    paymethodId: string;
+    paymethodInfo: {
+      name: string;
+      required: string;
+      type: string;
+      value: string;
+    }[];
+  };
 }
 
-export interface P2PMerchantAdvertisementV2 {
-  advList: {
-    advId: string;
-    advNo: string;
-    side: string;
-    advSize: string;
-    size: string;
-    coin: string;
-    price: string;
-    coinPrecision: string;
-    fiat: string;
-    fiatPrecision: string;
-    fiatSymbol: string;
-    status: string;
-    hide: string;
-    maxTradeAmount: string;
-    minTradeAmount: string;
-    payDuration: string;
-    turnoverNum: string;
-    turnoverRate: string;
-    label: string | null;
-    userLimitList: {
-      minCompleteNum: string;
-      maxCompleteNum: string;
-      placeOrderNum: string;
-      allowMerchantPlace: string;
-      completeRate30d: string;
-      country: string;
-    };
-    paymentMethodList: {
-      paymentMethod: string;
-      paymentId: string;
-      paymentInfo: {
-        name: string;
-        required: boolean;
-        type: string;
-      }[];
+export interface P2PMerchantAdvertismentV2 {
+  advId: string;
+  advNo: string;
+  side: string;
+  advSize: string;
+  size: string;
+  coin: string;
+  price: string;
+  coinPrecision: string;
+  fiat: string;
+  fiatPrecision: string;
+  fiatSymbol: string;
+  status: string;
+  hide: string;
+  maxTradeAmount: string;
+  minTradeAmount: string;
+  payDuration: string;
+  turnoverNum: string;
+  turnoverRate: string;
+  label: string | null;
+  userLimitList: {
+    minCompleteNum: string;
+    maxCompleteNum: string;
+    placeOrderNum: string;
+    allowMerchantPlace: string;
+    completeRate30d: string;
+    country: string;
+  };
+  paymentMethodList: {
+    paymentMethod: string;
+    paymentId: string;
+    paymentInfo: {
+      name: string;
+      required: boolean;
+      type: string;
     }[];
-    merchantCertifiedList: {
-      imageUrl: string;
-      desc: string;
-    }[];
-    utime: string;
-    ctime: string;
   }[];
-  minAdvId: string;
+  merchantCertifiedList: {
+    imageUrl: string;
+    desc: string;
+  }[];
+  utime: string;
+  ctime: string;
 }
 
 /**
@@ -291,19 +282,16 @@ export interface CreateVirtualSubAccountAndApiKeyV2 {
   ipList: string[];
 }
 
-export interface VirtualSubAccountListV2 {
-  endId: string;
-  subAccountList: {
-    subAccountUid: string;
-    subAccountName: string;
-    status: string;
-    permList: string[];
-    label: string;
-    accountType: string;
-    bindingTime: string;
-    cTime: string;
-    uTime: string;
-  }[];
+export interface VirtualSubAccountV2 {
+  subAccountUid: string;
+  subAccountName: string;
+  status: string;
+  permList: string[];
+  label: string;
+  accountType: string;
+  bindingTime: string;
+  cTime: string;
+  uTime: string;
 }
 
 export interface CreateVirtualSubAccountApiKeyV2 {
@@ -324,7 +312,7 @@ export interface ModifyVirtualSubAccountApiKeyV2 {
   ipList: string[];
 }
 
-export interface SubAccountApiKeyListV2 {
+export interface SubAccountApiKeyItemV2 {
   subAccountUid: string;
   label: string;
   subAccountApiKey: string;
@@ -338,14 +326,14 @@ export interface SubAccountApiKeyListV2 {
  *
  */
 
-export interface FundingAssetsV2 {
+export interface FundingAssetV2 {
   coin: string;
   available: string;
   frozen: string;
   usdtValue: string;
 }
 
-export interface BotAssetsV2 {
+export interface BotAssetV2 {
   coin: string;
   available: string;
   equity: string;
@@ -360,8 +348,7 @@ export interface BotAssetsV2 {
  *
  */
 
-export interface ConvertCurrenciesV2 {
-  // array type
+export interface ConvertCurrencyV2 {
   coin: string;
   available: string;
   maxAmount: string;
@@ -385,19 +372,17 @@ export interface ConvertTradeResponseV2 {
   toCoin: string;
 }
 
-export interface ConvertHistoryV2 {
-  dataList: {
-    id: string;
-    ts: string;
-    cnvtPrice: string;
-    fee: string;
-    fromCoinSize: string;
-    fromCoin: string;
-    toCoinSize: string;
-    toCoin: string;
-  }[];
-  endId: string;
+export interface ConvertRecordV2 {
+  id: string;
+  ts: string;
+  cnvtPrice: string;
+  fee: string;
+  fromCoinSize: string;
+  fromCoin: string;
+  toCoinSize: string;
+  toCoin: string;
 }
+
 
 /**
  *
@@ -405,19 +390,18 @@ export interface ConvertHistoryV2 {
  *
  */
 
-export interface BGBConvertCoinsV2 {
-  coinList: {
-    coin: string;
-    available: string;
-    bgbEstAmount: string;
-    precision: string;
-    feeDetail: {
-      feeRate: string;
-      fee: string;
-    }[];
-    cTime: string;
+export interface BGBConvertCoinV2 {
+  coin: string;
+  available: string;
+  bgbEstAmount: string;
+  precision: string;
+  feeDetail: {
+    feeRate: string;
+    fee: string;
   }[];
+  cTime: string;
 }
+
 
 export interface ConvertBGBResponseV2 {
   orderList: {

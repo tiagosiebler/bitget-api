@@ -14,35 +14,31 @@ export interface FuturesVipFeeRateV2 {
   usdtWithdrawAmount: string;
 }
 
-export interface FuturesInterestRateHistoryV2 {
-  coin: string;
-  historyInterestRateList: {
-    ts: string;
-    annualInterestRate: string;
-    dailyInterestRate: string;
-  }[];
+export interface FuturesHistoryInterestRateV2 {
+  ts: string;
+  annualInterestRate: string;
+  dailyInterestRate: string;
 }
 
 export interface FuturesInterestExchangeRateV2 {
-  coin: string;
-  exchangeRateList: {
-    tier: string;
-    minAmount: string;
-    maxAmount: string;
-    exchangeRate: string;
-  }[];
+  tier: string;
+  minAmount: string;
+  maxAmount: string;
+  exchangeRate: string;
 }
 
 export interface FuturesDiscountRateV2 {
+  tier: string;
+  minAmount: string;
+  maxAmount: string;
+  discountRate: string;
+}
+
+export interface FuturesDiscountRatesV2 {
   coin: string;
   userLimit: string;
   totalLimit: string;
-  discountRateList: {
-    tier: string;
-    minAmount: string;
-    maxAmount: string;
-    discountRate: string;
-  }[];
+  discountRateList: FuturesDiscountRateV2[];
 }
 
 export interface FuturesMergeDepthV2 {
@@ -100,11 +96,8 @@ export interface FuturesCandlestickV2 {
 }
 
 export interface FuturesOpenInterestV2 {
-  openInterestList: {
-    symbol: string;
-    size: string;
-  }[];
-  ts: string;
+  symbol: string;
+  size: string;
 }
 
 export interface FuturesFundingTimeV2 {
@@ -190,7 +183,7 @@ export interface FuturesAccountV2 {
   assetMode: string;
 }
 
-export interface FuturesAccountListV2 {
+export interface FuturesAccountsV2 {
   marginCoin: string;
   locked: string;
   available: string;
@@ -217,36 +210,34 @@ export interface FuturesAccountListV2 {
   assetMode: string;
 }
 
-export interface FuturesSubAccountAssetsV2 {
-  userId: number;
-  assetList: {
-    marginCoin: string;
-    locked: string;
-    available: string;
-    crossedMaxAvailable: string;
-    isolatedMaxAvailable: string;
-    maxTransferOut: string;
-    accountEquity: string;
-    usdtEquity: string;
-    btcEquity: string;
-    unrealizedPL: string;
-    coupon: string;
-  }[];
+export interface FuturesSubAccountAssetV2 {
+  marginCoin: string;
+  locked: string;
+  available: string;
+  crossedMaxAvailable: string;
+  isolatedMaxAvailable: string;
+  maxTransferOut: string;
+  accountEquity: string;
+  usdtEquity: string;
+  btcEquity: string;
+  unrealizedPL: string;
+  coupon: string;
 }
 
+export interface FuturesInterestV2 {
+  coin: string;
+  liability: string;
+  interestFreeLimit: string;
+  interestLimit: string;
+  hourInterestRate: string;
+  interest: string;
+  cTime: string;
+}
 export interface FuturesInterestHistoryV2 {
   nextSettleTime: string;
   borrowAmount: string;
   borrowLimit: string;
-  interestList: {
-    coin: string;
-    liability: string;
-    interestFreeLimit: string;
-    interestLimit: string;
-    hourInterestRate: string;
-    interest: string;
-    cTime: string;
-  }[];
+  interestList: FuturesInterestV2[];
   endId: string;
 }
 
@@ -268,18 +259,15 @@ export interface SetMarginModeResponseV2 {
 }
 
 export interface FuturesAccountBillV2 {
-  bills: {
-    billId: string;
-    symbol: string;
-    amount: string;
-    fee: string;
-    feeByCoupon: string;
-    businessType: string;
-    coin: string;
-    balance: string;
-    cTime: string;
-  }[];
-  endId: string;
+  billId: string;
+  symbol: string;
+  amount: string;
+  fee: string;
+  feeByCoupon: string;
+  businessType: string;
+  coin: string;
+  balance: string;
+  cTime: string;
 }
 
 /**
@@ -325,26 +313,23 @@ export interface FuturesPositionV2 {
   cTime: string;
 }
 
-export interface FuturesHistoricalPositionV2 {
-  list: {
-    positionId: string;
-    marginCoin: string;
-    symbol: string;
-    holdSide: string;
-    openAvgPrice: string;
-    closeAvgPrice: string;
-    marginMode: string;
-    openTotalPos: string;
-    closeTotalPos: string;
-    pnl: string;
-    netProfit: string;
-    totalFunding: string;
-    openFee: string;
-    closeFee: string;
-    cTime: string;
-    uTime: string;
-  }[];
-  endId: string;
+export interface FuturesHistoryPositionV2 {
+  positionId: string;
+  marginCoin: string;
+  symbol: string;
+  holdSide: string;
+  openAvgPrice: string;
+  closeAvgPrice: string;
+  marginMode: string;
+  openTotalPos: string;
+  closeTotalPos: string;
+  pnl: string;
+  netProfit: string;
+  totalFunding: string;
+  openFee: string;
+  closeFee: string;
+  cTime: string;
+  uTime: string;
 }
 
 /**
@@ -412,97 +397,88 @@ export interface FuturesOrderDetailV2 {
   uTime: string;
 }
 
-export interface FuturesOrderFillsV2 {
-  fillList: {
-    tradeId: string;
-    symbol: string;
-    orderId: string;
-    price: string;
-    baseVolume: string;
-    feeDetail: {
-      deduction: string;
-      feeCoin: string;
-      totalDeductionFee: string;
-      totalFee: string;
-    }[];
-    side: string;
-    quoteVolume: string;
-    profit: string;
-    enterPointSource: string;
-    tradeSide: string;
-    posMode: string;
-    tradeScope: string;
-    cTime: string;
+export interface FuturesOrderFillV2 {
+  tradeId: string;
+  symbol: string;
+  orderId: string;
+  price: string;
+  baseVolume: string;
+  feeDetail: {
+    deduction: string;
+    feeCoin: string;
+    totalDeductionFee: string;
+    totalFee: string;
   }[];
-  endId: string;
+  side: string;
+  quoteVolume: string;
+  profit: string;
+  enterPointSource: string;
+  tradeSide: string;
+  posMode: string;
+  tradeScope: string;
+  cTime: string;
 }
 
-export interface FuturesOpenOrdersV2 {
-  entrustedList: {
-    symbol: string;
-    size: string;
-    orderId: string;
-    clientOid: string;
-    baseVolume: string;
-    fee: string;
-    price: string;
-    priceAvg: string;
-    status: string;
-    side: string;
-    force: string;
-    totalProfits: string;
-    posSide: string;
-    marginCoin: string;
-    quoteVolume: string;
-    leverage: string;
-    marginMode: string;
-    enterPointSource: string;
-    tradeSide: string;
-    posMode: string;
-    orderType: string;
-    orderSource: string;
-    cTime: string;
-    uTime: string;
-    presetStopSurplusPrice: string;
-    presetStopSurplusType: string;
-    presetStopSurplusExecutePrice: string;
-    presetStopLossPrice: string;
-    presetStopLossType: string;
-    presetStopLossExecutePrice: string;
-  }[];
-  endId: string;
+export interface FuturesOpenOrderV2 {
+  symbol: string;
+  size: string;
+  orderId: string;
+  clientOid: string;
+  baseVolume: string;
+  fee: string;
+  price: string;
+  priceAvg: string;
+  status: string;
+  side: string;
+  force: string;
+  totalProfits: string;
+  posSide: string;
+  marginCoin: string;
+  quoteVolume: string;
+  leverage: string;
+  marginMode: string;
+  enterPointSource: string;
+  tradeSide: string;
+  posMode: string;
+  orderType: string;
+  orderSource: string;
+  cTime: string;
+  uTime: string;
+  presetStopSurplusPrice: string;
+  presetStopSurplusType: string;
+  presetStopSurplusExecutePrice: string;
+  presetStopLossPrice: string;
+  presetStopLossType: string;
+  presetStopLossExecutePrice: string;
 }
 
-export interface FuturesHistoryOrdersV2 {
-  entrustedList: {
-    symbol: string;
-    size: string;
-    orderId: string;
-    clientOid: string;
-    baseVolume: string;
-    fee: string;
-    price: string;
-    priceAvg: string;
-    status: string;
-    side: string;
-    force: string;
-    totalProfits: string;
-    posSide: string;
-    marginCoin: string;
-    quoteVolume: string;
-    leverage: string;
-    marginMode: string;
-    enterPointSource: string;
-    tradeSide: string;
-    posMode: string;
-    orderType: string;
-    orderSource: string;
-    cTime: string;
-    uTime: string;
-    presetStopSurplusPrice: string;
-    presetStopLossPrice: string;
-  }[];
-  endId: string;
+export interface FuturesHistoryOrderV2 {
+  symbol: string;
+  size: string;
+  orderId: string;
+  clientOid: string;
+  baseVolume: string;
+  fee: string;
+  price: string;
+  priceAvg: string;
+  status: string;
+  side: string;
+  force: string;
+  totalProfits: string;
+  posSide: string;
+  marginCoin: string;
+  quoteVolume: string;
+  leverage: string;
+  marginMode: string;
+  enterPointSource: string;
+  tradeSide: string;
+  posMode: string;
+  orderType: string;
+  orderSource: string;
+  cTime: string;
+  uTime: string;
+  presetStopSurplusPrice: string;
+  presetStopLossPrice: string;
 }
 
 export interface FuturesCancelAllOrdersV2 {
@@ -532,37 +508,34 @@ export interface FuturesTriggerSubOrderV2 {
 }
 
 export interface FuturesPendingPlanOrderV2 {
-  entrustedList: {
-    planType: string;
-    symbol: string;
-    size: string;
-    orderId: string;
-    clientOid: string;
-    price: string;
-    executePrice: string;
-    callbackRatio: string;
-    triggerPrice: string;
-    triggerType: string;
-    planStatus: string;
-    side: string;
-    posSide: string;
-    marginCoin: string;
-    marginMode: string;
-    enterPointSource: string;
-    tradeSide: string;
-    posMode: string;
-    orderType: string;
-    orderSource: string;
-    cTime: string;
-    uTime: string;
-    stopSurplusExecutePrice: string;
-    stopSurplusTriggerPrice: string;
-    stopSurplusTriggerType: string;
-    stopLossExecutePrice: string;
-    stopLossTriggerPrice: string;
-    stopLossTriggerType: string;
-  }[];
-  endId: string;
+  planType: string;
+  symbol: string;
+  size: string;
+  orderId: string;
+  clientOid: string;
+  price: string;
+  executePrice: string;
+  callbackRatio: string;
+  triggerPrice: string;
+  triggerType: string;
+  planStatus: string;
+  side: string;
+  posSide: string;
+  marginCoin: string;
+  marginMode: string;
+  enterPointSource: string;
+  tradeSide: string;
+  posMode: string;
+  orderType: string;
+  orderSource: string;
+  cTime: string;
+  uTime: string;
+  stopSurplusExecutePrice: string;
+  stopSurplusTriggerPrice: string;
+  stopSurplusTriggerType: string;
+  stopLossExecutePrice: string;
+  stopLossTriggerPrice: string;
+  stopLossTriggerType: string;
 }
 
 export interface FuturesCancelPlanOrderV2 {
@@ -578,37 +551,34 @@ export interface FuturesCancelPlanOrderV2 {
 }
 
 export interface FuturesHistoryPlanOrderV2 {
-  entrustedList: {
-    planType: string;
-    symbol: string;
-    size: string;
-    orderId: string;
-    executeOrderId: string;
-    clientOid: string;
-    planStatus: string;
-    price: string;
-    executePrice: string;
-    priceAvg: string;
-    baseVolume: string;
-    callbackRatio: string;
-    triggerPrice: string;
-    triggerType: string;
-    side: string;
-    posSide: string;
-    marginCoin: string;
-    marginMode: string;
-    enterPointSource: string;
-    tradeSide: string;
-    posMode: string;
-    orderType: string;
-    cTime: string;
-    uTime: string;
-    stopSurplusExecutePrice: string;
-    stopSurplusTriggerPrice: string;
-    stopSurplusTriggerType: string;
-    stopLossExecutePrice: string;
-    stopLossTriggerPrice: string;
-    stopLossTriggerType: string;
-  }[];
-  endId: string;
+  planType: string;
+  symbol: string;
+  size: string;
+  orderId: string;
+  executeOrderId: string;
+  clientOid: string;
+  planStatus: string;
+  price: string;
+  executePrice: string;
+  priceAvg: string;
+  baseVolume: string;
+  callbackRatio: string;
+  triggerPrice: string;
+  triggerType: string;
+  side: string;
+  posSide: string;
+  marginCoin: string;
+  marginMode: string;
+  enterPointSource: string;
+  tradeSide: string;
+  posMode: string;
+  orderType: string;
+  cTime: string;
+  uTime: string;
+  stopSurplusExecutePrice: string;
+  stopSurplusTriggerPrice: string;
+  stopSurplusTriggerType: string;
+  stopLossExecutePrice: string;
+  stopLossTriggerPrice: string;
+  stopLossTriggerType: string;
 }
