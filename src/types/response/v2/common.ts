@@ -383,7 +383,6 @@ export interface ConvertRecordV2 {
   toCoin: string;
 }
 
-
 /**
  *
  * * Common | BGB Convert
@@ -401,7 +400,6 @@ export interface BGBConvertCoinV2 {
   }[];
   cTime: string;
 }
-
 
 export interface ConvertBGBResponseV2 {
   orderList: {
