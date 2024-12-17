@@ -2,7 +2,7 @@ import {
   FuturesHoldMode,
   FuturesHoldSide,
   FuturesMarginMode,
-} from '../request';
+} from '../../request';
 
 export interface FuturesMarketTrade {
   tradeId: string;
