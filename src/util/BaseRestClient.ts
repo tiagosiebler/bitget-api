@@ -92,7 +92,6 @@ export default abstract class BaseRestClient {
   constructor(
     restOptions: RestClientOptions = {},
     networkOptions: AxiosRequestConfig = {},
-    useDemoTrading: boolean = false,
   ) {
     this.options = {
       recvWindow: 5000,
@@ -111,7 +110,7 @@ export default abstract class BaseRestClient {
         'X-CHANNEL-API-CODE': 'hbnni',
         'Content-Type': 'application/json',
         locale: 'en-US',
-        ...(useDemoTrading ? { paptrading: '1' } : {}),
+        ...(restOptions.demoTrading ? { paptrading: '1' } : {}),
       },
     };
 
