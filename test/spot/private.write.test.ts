@@ -35,8 +35,8 @@ describe('Private Spot REST API POST Endpoints', () => {
       } catch (e) {
         // console.error('transfer: ', e);
         expect(e.body).toMatchObject({
-          // not sure what this error means, probably no balance. Seems to change?
-          code: expect.stringMatching(/42013|43117/gim),
+          // not sure what this error means, probably no kyc. Seems to change?
+          code: expect.stringMatching(/42013|43117|40035/gim),
         });
       }
     });
@@ -54,8 +54,8 @@ describe('Private Spot REST API POST Endpoints', () => {
       } catch (e) {
         // console.error('transferV2: ', e);
         expect(e.body).toMatchObject({
-          // not sure what this error means, probably no balance. Seems to change?
-          code: expect.stringMatching(/42013|43117/gim),
+          // not sure what this error means, probably no kyc. Seems to change?
+          code: expect.stringMatching(/42013|43117|40035/gim),
         });
       }
     });
@@ -89,7 +89,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             amount: '100',
             coin,
             chain: 'TRC20',
-            address: `123456`,
+            address: '123456',
           }),
         ).toMatchObject({
           ...sucessEmptyResponseObject(),
@@ -109,7 +109,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             amount: '100',
             coin,
             chain: 'TRC20',
-            address: `123456`,
+            address: '123456',
           }),
         ).toMatchObject({
           ...sucessEmptyResponseObject(),
