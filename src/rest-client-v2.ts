@@ -1262,7 +1262,7 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   getFuturesContractConfig(params: {
-    symbol: string;
+    symbol?: string;
     productType: FuturesProductTypeV2;
   }): Promise<APIResponse<FuturesContractConfigV2[]>> {
     return this.get('/api/v2/mix/market/contracts', params);

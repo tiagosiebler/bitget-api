@@ -11,6 +11,13 @@ export interface RestClientOptions {
   /** Set to `true` to connect to testnet. Uses the live environment by default. */
   // testnet?: boolean;
 
+  /**
+   * Set to `true` to use Bitget's demo trading: https://www.bitget.com/api-doc/common/demotrading/restapi.
+   *
+   * Disabled by default.
+   */
+  demoTrading?: boolean;
+
   /** Override the max size of the request window (in ms) */
   recvWindow?: number;
 

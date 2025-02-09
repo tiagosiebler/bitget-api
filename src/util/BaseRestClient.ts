@@ -110,6 +110,7 @@ export default abstract class BaseRestClient {
         'X-CHANNEL-API-CODE': 'hbnni',
         'Content-Type': 'application/json',
         locale: 'en-US',
+        ...(restOptions.demoTrading ? { paptrading: '1' } : {}),
       },
     };
 
