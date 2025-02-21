@@ -155,4 +155,20 @@ export class BrokerClient extends BaseRestClient {
   ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/broker/v1/manage/sub-api-modify', params);
   }
+
+  /**
+   * Undocumented endpoints
+   */
+
+  getAgentCommissionDetail(params?: {
+    startTime?: string;
+    endTime?: string;
+    limit?: string;
+    idLessTham?: string;
+  }): Promise<APIResponse<any>> {
+    return this.getPrivate(
+      '/api/broker/v1/agent/commission-distribution',
+      params,
+    );
+  }
 }
