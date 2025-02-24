@@ -1,6 +1,6 @@
 {
   "name": "bitget-api",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Node.js & JavaScript SDK for Bitget REST APIs & WebSockets, with TypeScript & end-to-end tests.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

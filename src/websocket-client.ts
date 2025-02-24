@@ -18,6 +18,7 @@ import {
   isPrivateChannel,
   isWsPong,
   neverGuard,
+  safeTerminateWs,
   WS_AUTH_ON_CONNECT_KEYS,
   WS_BASE_URL_MAP,
   WS_KEY_MAP,
@@ -185,7 +186,7 @@ export class WebsocketClient extends EventEmitter {
     const ws = this.getWs(wsKey);
     ws?.close();
     if (force) {
-      ws?.terminate();
+      safeTerminateWs(ws);
     }
   }
 
@@ -341,7 +342,7 @@ export class WebsocketClient extends EventEmitter {
         ...LOGGER_CATEGORY,
         wsKey,
       });
-      this.getWs(wsKey)?.terminate();
+      safeTerminateWs(this.getWs(wsKey), true);
       delete this.wsStore.get(wsKey, true).activePongTimer;
     }, this.options.pongTimeout);
   }
