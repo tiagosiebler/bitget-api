@@ -164,7 +164,7 @@ export class BrokerClient extends BaseRestClient {
     startTime?: string;
     endTime?: string;
     limit?: string;
-    idLessTham?: string;
+    idLessThan?: string;
   }): Promise<APIResponse<any>> {
     return this.getPrivate(
       '/api/broker/v1/agent/commission-distribution',
