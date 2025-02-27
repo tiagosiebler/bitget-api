@@ -1,4 +1,4 @@
-import { DefaultLogger, WS_KEY_MAP, WebsocketClientV2 } from '../src';
+import { DefaultLogger, WebsocketClientV2, WS_KEY_MAP } from '../src';
 
 // or
 // import { DefaultLogger, WS_KEY_MAP, WebsocketClientV2 } from 'bitget-api';

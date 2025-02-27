@@ -1,4 +1,4 @@
-import { RestClientV2, WebsocketClient } from '../src/index';
+import { RestClientV2 } from '../src/index';
 
 // or
 // import { RestClientV2 } from 'bitget-api';

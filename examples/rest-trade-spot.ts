@@ -1,14 +1,17 @@
-import { SpotClient, WebsocketClient } from '../src/index';
+import {
+  RestClientV2,
+  SpotOrderRequestV2,
+  WebsocketClientV2,
+} from '../src/index';
 
-// or
-// import { SpotClient } from 'bitget-api';
+// import { RestClientV2, WebsocketClient } from '../src/index';
 
 // read from environmental variables
 const API_KEY = process.env.API_KEY_COM;
 const API_SECRET = process.env.API_SECRET_COM;
 const API_PASS = process.env.API_PASS_COM;
 
-const client = new SpotClient({
+const client = new RestClientV2({
   apiKey: API_KEY,
   apiSecret: API_SECRET,
   apiPass: API_PASS,
@@ -17,7 +20,7 @@ const client = new SpotClient({
   // apiPass: 'apiPassHere',
 });
 
-const wsClient = new WebsocketClient({
+const wsClient = new WebsocketClientV2({
   apiKey: API_KEY,
   apiSecret: API_SECRET,
   apiPass: API_PASS,
@@ -30,13 +33,6 @@ function logWSEvent(type, data) {
 // simple sleep function
 function promiseSleep(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
-}
-
-// WARNING: for sensitive math you should be using a library such as decimal.js!
-function roundDown(value, decimals) {
-  return Number(
-    Math.floor(parseFloat(value + 'e' + decimals)) + 'e-' + decimals,
-  );
 }
 
 /** This is a simple script wrapped in a immediately invoked function expression, designed to check for any available BTC balance and immediately sell the full amount for USDT */
@@ -52,16 +48,22 @@ function roundDown(value, decimals) {
     wsClient.on('exception', (data) => logWSEvent('exception', data));
 
     // Subscribe to private account topics
-    wsClient.subscribeTopic('SPBL', 'account');
-    wsClient.subscribeTopic('SPBL', 'orders');
+    // spot private
+    // : account updates
+    wsClient.subscribeTopic('SPOT', 'account');
+
+    // : order updates (note: symbol is required)
+    wsClient.subscribeTopic('SPOT', 'orders', 'BTCUSDT');
 
     // wait briefly for ws to be ready (could also use the response or authenticated events, to make sure topics are subscribed to before starting)
     await promiseSleep(2.5 * 1000);
 
-    const balanceResult = await client.getBalance();
+    const balanceResult = await client.getSpotAccountAssets();
     const allBalances = balanceResult.data;
-    // const balances = allBalances.filter((bal) => Number(bal.available) != 0);
-    const balanceBTC = allBalances.find((bal) => bal.coinName === 'BTC');
+
+    const balanceBTC = allBalances.find(
+      (bal) => bal.coin === 'BTC' || bal.coin === 'btc',
+    );
     const btcAmount = balanceBTC ? Number(balanceBTC.available) : 0;
     // console.log('balance: ', JSON.stringify(balances, null, 2));
     console.log('BTC balance result: ', balanceBTC);
@@ -72,30 +74,28 @@ function roundDown(value, decimals) {
     }
 
     console.log(`BTC available: ${btcAmount}`);
-    const symbol = 'BTCUSDT_SPBL';
+    const symbol = 'BTCUSDT';
 
-    const symbolsResult = await client.getSymbols();
+    const symbolsResult = await client.getSpotSymbolInfo();
     const btcRules = symbolsResult.data.find((rule) => rule.symbol === symbol);
     console.log('btc trading rules: ', btcRules);
     if (!btcRules) {
       return console.log('no rules found for trading ' + symbol);
     }
 
-    const quantityScale = Number(btcRules.quantityScale);
-    // const quantityRoundedDown = btcAmount - btcAmount % 0.01
-    const quantity = roundDown(btcAmount, quantityScale);
+    const quantity = btcRules.minTradeAmount;
 
-    const order = {
+    const order: SpotOrderRequestV2 = {
       symbol: symbol,
       side: 'sell',
-      force: 'normal',
       orderType: 'market',
-      quantity: String(quantity),
+      force: 'gtc',
+      size: quantity,
     } as const;
 
     console.log('submitting order: ', order);
 
-    const sellResult = await client.submitOrder(order);
+    const sellResult = await client.spotSubmitOrder(order);
 
     console.log('sell result: ', sellResult);
   } catch (e) {

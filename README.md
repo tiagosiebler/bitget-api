@@ -86,7 +86,7 @@ Each REST API group has a dedicated REST client. To avoid confusion, here are th
 | Class | Description |
 |:------------------------------------: |:---------------------------------------------------------------------------------------------: |
 | [RestClientV2](src/rest-client-v2.ts) | [V2 REST APIs](https://www.bitget.com/api-doc/common/intro) |
-| [WebsocketClient](src/websocket-client-v2.ts) | Universal client for all Bitget's V2 Websockets |
+| [WebsocketClientV2](src/websocket-client-v2.ts) | Universal client for all Bitget's V2 Websockets |
 | [~~SpotClient~~ (deprecated, use RestClientV2)](src/spot-client.ts) | [~~Spot APIs~~](https://bitgetlimited.github.io/apidoc/en/spot/#introduction) |
 | [~~FuturesClient~~ (deprecated, use RestClientV2)](src/futures-client.ts) | [~~Futures APIs~~](https://bitgetlimited.github.io/apidoc/en/mix/#introduction) |
 | [~~BrokerClient~~ (deprecated, use RestClientV2)](src/broker-client.ts) | [~~Broker APIs~~](https://bitgetlimited.github.io/apidoc/en/broker/#introduction) |
@@ -164,7 +164,7 @@ For more examples, including how to use websockets with Bitget, check the [examp
 Pass a custom logger which supports the log methods `silly`, `debug`, `notice`, `info`, `warning` and `error`, or override methods from the default logger as desired.
 
 ```javascript
-const { WebsocketClient, DefaultLogger } = require('bitget-api');
+const { WebsocketClientV2, DefaultLogger } = require('bitget-api');
 
 // Disable all logging on the silly level (less console logs)
 const customLogger = {

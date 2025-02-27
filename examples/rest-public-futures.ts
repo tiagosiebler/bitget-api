@@ -1,7 +1,7 @@
-import { RestClientV2, SpotClient } from '../src/index';
+import { RestClientV2 } from '../src/index';
 
 // or
-// import { SpotClient } from 'bitget-api';
+// import { RestClientV2 } from 'bitget-api';
 
 const restClient = new RestClientV2();
 
