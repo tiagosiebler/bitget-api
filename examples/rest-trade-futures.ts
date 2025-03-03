@@ -1,26 +1,18 @@
 import {
-  FuturesClient,
-  isWsFuturesAccountSnapshotEvent,
-  isWsFuturesPositionsSnapshotEvent,
-  NewFuturesOrder,
-  WebsocketClient,
+  FuturesPlaceOrderRequestV2,
+  RestClientV2,
+  WebsocketClientV2,
 } from '../src';
 
 // or
-// import {
-//   FuturesClient,
-//   isWsFuturesAccountSnapshotEvent,
-//   isWsFuturesPositionsSnapshotEvent,
-//   NewFuturesOrder,
-//   WebsocketClient,
-// } from 'bitget-api';
+// import { FuturesPlaceOrderRequestV2, RestClientV2, WebsocketClientV2 } from '../src';
 
 // read from environmental variables
 const API_KEY = process.env.API_KEY_COM;
 const API_SECRET = process.env.API_SECRET_COM;
 const API_PASS = process.env.API_PASS_COM;
 
-const client = new FuturesClient({
+const client = new RestClientV2({
   apiKey: API_KEY,
   apiSecret: API_SECRET,
   apiPass: API_PASS,
@@ -29,7 +21,7 @@ const client = new FuturesClient({
   // apiPass: 'apiPassHere',
 });
 
-const wsClient = new WebsocketClient({
+const wsClient = new WebsocketClientV2({
   apiKey: API_KEY,
   apiSecret: API_SECRET,
   apiPass: API_PASS,
@@ -44,28 +36,6 @@ function promiseSleep(milliseconds) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
-// WARNING: for sensitive math you should be using a library such as decimal.js!
-function roundDown(value, decimals) {
-  return Number(
-    Math.floor(parseFloat(value + 'e' + decimals)) + 'e-' + decimals,
-  );
-}
-
-/** WS event handler that uses type guards to narrow down event type */
-async function handleWsUpdate(event) {
-  if (isWsFuturesAccountSnapshotEvent(event)) {
-    console.log(new Date(), 'ws update (account balance):', event);
-    return;
-  }
-
-  if (isWsFuturesPositionsSnapshotEvent(event)) {
-    console.log(new Date(), 'ws update (positions):', event);
-    return;
-  }
-
-  logWSEvent('update (unhandled)', event);
-}
-
 /**
  * This is a simple script wrapped in a immediately invoked function expression (to execute the below workflow immediately).
  *
@@ -77,12 +47,11 @@ async function handleWsUpdate(event) {
  * - immediately send closing orders for any active futures positions
  * - check positions again
  *
- * The corresponding UI for this is at https://www.bitget.com/en/mix/usdt/BTCUSDT_UMCBL
  */
 (async () => {
   try {
     // Add event listeners to log websocket events on account
-    wsClient.on('update', (data) => handleWsUpdate(data));
+    wsClient.on('update', (data) => logWSEvent('update', data));
 
     wsClient.on('open', (data) => logWSEvent('open', data));
     wsClient.on('response', (data) => logWSEvent('response', data));
@@ -91,23 +60,34 @@ async function handleWsUpdate(event) {
     wsClient.on('authenticated', (data) => logWSEvent('authenticated', data));
     wsClient.on('exception', (data) => logWSEvent('exception', data));
 
-    // Subscribe to private account topics
-    wsClient.subscribeTopic('UMCBL', 'account');
+    // futures private
+    // : account updates
+    wsClient.subscribeTopic('USDT-FUTURES', 'account');
+
     // : position updates
-    wsClient.subscribeTopic('UMCBL', 'positions');
+    wsClient.subscribeTopic('USDT-FUTURES', 'positions');
+
     // : order updates
-    wsClient.subscribeTopic('UMCBL', 'orders');
+    wsClient.subscribeTopic('USDT-FUTURES', 'orders');
 
     // wait briefly for ws to be ready (could also use the response or authenticated events, to make sure topics are subscribed to before starting)
     await promiseSleep(2.5 * 1000);
 
-    const symbol = 'BTCUSDT_UMCBL';
+    const symbol = 'BTCUSDT';
     const marginCoin = 'USDT';
 
-    const balanceResult = await client.getAccount(symbol, marginCoin);
+    const balanceResult = await client.getFuturesAccountAssets({
+      productType: 'USDT-FUTURES',
+    });
     const accountBalance = balanceResult.data;
     // const balances = allBalances.filter((bal) => Number(bal.available) != 0);
-    const usdtAmount = accountBalance.available;
+    const assetList = accountBalance.find(
+      (bal) => bal.marginCoin === marginCoin,
+    )?.assetList;
+    const usdtAmount = assetList?.find(
+      (asset) => asset.coin === 'USDT',
+    )?.balance;
+
     console.log('USDT balance: ', usdtAmount);
 
     if (!usdtAmount) {
@@ -115,7 +95,10 @@ async function handleWsUpdate(event) {
       return;
     }
 
-    const symbolRulesResult = await client.getSymbols('umcbl');
+    const symbolRulesResult = await client.getFuturesContractConfig({
+      symbol,
+      productType: 'USDT-FUTURES',
+    });
     const bitcoinUSDFuturesRule = symbolRulesResult.data.find(
       (row) => row.symbol === symbol,
     );
@@ -126,21 +109,25 @@ async function handleWsUpdate(event) {
       return;
     }
 
-    const order: NewFuturesOrder = {
-      marginCoin,
+    const order: FuturesPlaceOrderRequestV2 = {
+      marginCoin: marginCoin,
+      marginMode: 'crossed',
+      productType: 'USDT-FUTURES',
       orderType: 'market',
-      side: 'open_long',
+      side: 'buy',
       size: bitcoinUSDFuturesRule.minTradeNum,
-      symbol,
+      symbol: symbol,
     } as const;
 
     console.log('placing order: ', order);
 
-    const result = await client.submitOrder(order);
+    const result = await client.futuresSubmitOrder(order);
 
     console.log('order result: ', result);
 
-    const positionsResult = await client.getPositions('umcbl');
+    const positionsResult = await client.getFuturesPositions({
+      productType: 'USDT-FUTURES',
+    });
     const positionsToClose = positionsResult.data.filter(
       (pos) => pos.total !== '0',
     );
@@ -149,10 +136,11 @@ async function handleWsUpdate(event) {
 
     // Loop through any active positions and send a closing market order on each position
     for (const position of positionsToClose) {
-      const closingSide =
-        position.holdSide === 'long' ? 'close_long' : 'close_short';
-      const closingOrder: NewFuturesOrder = {
+      const closingSide = position.holdSide === 'long' ? 'sell' : 'buy';
+      const closingOrder: FuturesPlaceOrderRequestV2 = {
         marginCoin: position.marginCoin,
+        marginMode: 'crossed',
+        productType: 'USDT-FUTURES',
         orderType: 'market',
         side: closingSide,
         size: position.available,
@@ -161,13 +149,15 @@ async function handleWsUpdate(event) {
 
       console.log('closing position with market order: ', closingOrder);
 
-      const result = await client.submitOrder(closingOrder);
+      const result = await client.futuresSubmitOrder(closingOrder);
       console.log('position closing order result: ', result);
     }
 
     console.log(
       'positions after closing all: ',
-      await client.getPositions('umcbl'),
+      await client.getFuturesPositions({
+        productType: 'USDT-FUTURES',
+      }),
     );
   } catch (e) {
     console.error('request failed: ', e);
