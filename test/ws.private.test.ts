@@ -90,7 +90,7 @@ describe.skip('Private Spot Websocket Client', () => {
           event: 'login',
         });
       } catch (e) {
-        console.error(`Wait for "books" subscription response exception: `, e);
+        console.error('Wait for "books" subscription response exception: ', e);
         expect(e).toBeFalsy();
       }
     });
