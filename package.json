@@ -11,6 +11,8 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
+    "test:public": "jest --testPathIgnorePatterns='.*private.*'",
+    "test:private": "jest --testPathPattern='.*private.*'",
     "clean": "rm -rf lib dist",
     "build": "tsc",
     "build:clean": "npm run clean && npm run build",

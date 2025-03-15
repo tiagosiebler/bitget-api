@@ -50,7 +50,7 @@ describe('Public Spot Websocket Client', () => {
         wsKey: WS_KEY_MAP.spotv1,
       });
     } catch (e) {
-      console.error(`Wait for "books" subscription response exception: `, e);
+      console.error('Wait for "books" subscription response exception: ', e);
       expect(e).toBeFalsy();
     }
 
@@ -67,7 +67,7 @@ describe('Public Spot Websocket Client', () => {
         wsKey: 'spotv1',
       });
     } catch (e) {
-      console.error(`Wait for "books" event exception: `, e);
+      console.error('Wait for "books" event exception: ', e);
       expect(e).toBeFalsy();
     }
   });
