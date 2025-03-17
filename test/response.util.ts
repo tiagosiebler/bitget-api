@@ -28,13 +28,18 @@ export function errorResponseObject(
   };
 }
 
-export function errorResponseObjectV3(
-  result: null | any = null,
-  retCode: number,
-) {
+export function errorResponseObjectV3(code: string, statusCode: number = 400) {
   return {
-    result,
-    retCode: retCode,
+    body: {
+      code,
+      data: null,
+      msg: expect.any(String),
+      requestTime: expect.any(Number),
+    },
+    code: statusCode,
+    headers: expect.any(Object),
+    message: expect.any(String),
+    requestOptions: expect.any(Object),
   };
 }
 
