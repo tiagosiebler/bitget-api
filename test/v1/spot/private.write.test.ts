@@ -1,5 +1,5 @@
-import { API_ERROR_CODE, SpotClient } from '../../src';
-import { sucessEmptyResponseObject } from '../response.util';
+import { API_ERROR_CODE, SpotClient } from '../../../src';
+import { sucessEmptyResponseObject } from '../../response.util';
 
 describe('Private Spot REST API POST Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM;

@@ -1,8 +1,8 @@
-import { RestClientV2 } from '../src/rest-client-v2';
+import { RestClientV2 } from '../../src/rest-client-v2';
 import {
     errorResponseObjectV3,
     sucessEmptyResponseObject,
-} from './response.util';
+} from '../response.util';
 
 describe('Bitget Private REST API Read Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM;

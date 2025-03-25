@@ -1,7 +1,7 @@
-import { API_ERROR_CODE, BrokerClient } from '../../src';
-import { sucessEmptyResponseObject } from '../response.util';
+import { API_ERROR_CODE, BrokerClient } from '../../../src';
+import { sucessEmptyResponseObject } from '../../response.util';
 
-describe('Private Broker REST API GET Endpoints', () => {
+describe('Private Broker REST API POST Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM;
   const API_SECRET = process.env.API_SECRET_COM;
   const API_PASS = process.env.API_PASS_COM;
@@ -18,15 +18,15 @@ describe('Private Broker REST API GET Endpoints', () => {
     apiPass: API_PASS,
   });
 
-  const coin = 'BTC';
+  // const coin = 'BTC';
   const subUid = '123456';
   // const timestampOneHourAgo = new Date().getTime() - 1000 * 60 * 60;
   // const from = timestampOneHourAgo.toFixed(0);
   // const to = String(Number(from) + 1000 * 60 * 30); // 30 minutes
 
-  it('getBrokerInfo()', async () => {
+  it('createSubAccount()', async () => {
     try {
-      expect(await api.getBrokerInfo()).toMatchObject(
+      expect(await api.createSubAccount('test1')).toMatchObject(
         sucessEmptyResponseObject(),
       );
     } catch (e) {
@@ -36,11 +36,11 @@ describe('Private Broker REST API GET Endpoints', () => {
     }
   });
 
-  it('getSubAccounts()', async () => {
+  it('modifySubAccount()', async () => {
     try {
-      expect(await api.getSubAccounts()).toMatchObject(
-        sucessEmptyResponseObject(),
-      );
+      expect(
+        await api.modifySubAccount('test1', 'spot_trade,transfer', 'normal'),
+      ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
@@ -48,11 +48,11 @@ describe('Private Broker REST API GET Endpoints', () => {
     }
   });
 
-  it('getSubEmail()', async () => {
+  it('modifySubEmail()', async () => {
     try {
-      expect(await api.getSubEmail(subUid)).toMatchObject(
-        sucessEmptyResponseObject(),
-      );
+      expect(
+        await api.modifySubEmail('test1', 'ASDFASDF@LKMASDF.COM'),
+      ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
@@ -60,24 +60,17 @@ describe('Private Broker REST API GET Endpoints', () => {
     }
   });
 
-  it('getSubSpotAssets()', async () => {
+  it('subWithdrawal()', async () => {
     try {
-      expect(await api.getSubSpotAssets(subUid)).toMatchObject(
-        sucessEmptyResponseObject(),
-      );
-    } catch (e) {
-      // expect(e.body).toBeNull();
-      expect(e.body).toMatchObject({
-        code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
-      });
-    }
-  });
-
-  it('getSubFutureAssets()', async () => {
-    try {
-      expect(await api.getSubFutureAssets(subUid, 'usdt')).toMatchObject(
-        sucessEmptyResponseObject(),
-      );
+      expect(
+        await api.subWithdrawal({
+          address: '123455',
+          amount: '12345',
+          chain: 'TRC20',
+          coin: 'USDT',
+          subUid,
+        }),
+      ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
@@ -85,11 +78,11 @@ describe('Private Broker REST API GET Endpoints', () => {
     }
   });
 
-  it('getSubDepositAddress()', async () => {
+  it('setSubDepositAutoTransfer()', async () => {
     try {
-      expect(await api.getSubDepositAddress(subUid, coin)).toMatchObject(
-        sucessEmptyResponseObject(),
-      );
+      expect(
+        await api.setSubDepositAutoTransfer(subUid, 'USDT', 'spot'),
+      ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
@@ -97,14 +90,35 @@ describe('Private Broker REST API GET Endpoints', () => {
     }
   });
 
-  it('getSubAPIKeys()', async () => {
+  it('createSubAPIKey()', async () => {
     try {
-      expect(await api.getSubAPIKeys(subUid)).toMatchObject(
-        sucessEmptyResponseObject(),
-      );
+      expect(
+        await api.createSubAPIKey(
+          subUid,
+          'passphrase12345',
+          'remark',
+          '10.0.0.1',
+        ),
+      ).toMatchObject(sucessEmptyResponseObject());
     } catch (e) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
+      });
+    }
+  });
+
+  it('modifySubAPIKey()', async () => {
+    try {
+      expect(
+        await api.modifySubAPIKey({
+          apikey: '12345',
+          subUid,
+          remark: 'test',
+        }),
+      ).toMatchObject(sucessEmptyResponseObject());
+    } catch (e) {
+      expect(e.body).toMatchObject({
+        code: API_ERROR_CODE.PASSPHRASE_CANNOT_BE_EMPTY,
       });
     }
   });
