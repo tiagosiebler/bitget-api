@@ -1,8 +1,8 @@
-import { SpotClient } from '../../src';
+import { SpotClient } from '../../../src';
 import {
-  successResponseString,
-  sucessEmptyResponseObject,
-} from '../response.util';
+    successResponseString,
+    sucessEmptyResponseObject,
+} from '../../response.util';
 
 describe('Public Spot REST API Endpoints', () => {
   const api = new SpotClient();
