@@ -1,3 +1,4 @@
+import { API_ERROR_CODE } from '../../src';
 import { RestClientV2 } from '../../src/rest-client-v2';
 import {
   errorResponseObjectV3,
@@ -164,7 +165,9 @@ describe('Bitget Private REST API Read Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40109')); // The data of the order cannot be found, please confirm the order number
+        expect(e).toMatchObject(
+          errorResponseObjectV3(API_ERROR_CODE.FUTURES_ORDER_GET_NOT_FOUND),
+        ); // The data of the order cannot be found, please confirm the order number
       }
     });
   });

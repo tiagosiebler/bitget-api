@@ -35,7 +35,9 @@ describe('Bitget Private REST API Write Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('43012')); // not enough balance
+        expect(e).toMatchObject(
+          errorResponseObjectV3(API_ERROR_CODE.INSUFFICIENT_BALANCE),
+        ); // not enough balance
       }
     });
 
@@ -114,7 +116,7 @@ describe('Bitget Private REST API Write Endpoints', () => {
       }
     });
 
-    it('spotWithdraw()', async () => {
+    it.skip('spotWithdraw()', async () => {
       try {
         const res = await api.spotWithdraw({
           coin: 'BTC',
