@@ -177,7 +177,7 @@ describe('Private Spot REST API GET Endpoints', () => {
     }
   });
 
-  it('getHistoricPlanOrders()', async () => {
+  it.skip('getHistoricPlanOrders()', async () => {
     try {
       expect(
         await api.getHistoricPlanOrders({

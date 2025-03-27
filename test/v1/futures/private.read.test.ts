@@ -1,5 +1,5 @@
-import { API_ERROR_CODE, FuturesClient } from '../../src';
-import { sucessEmptyResponseObject } from '../response.util';
+import { API_ERROR_CODE, FuturesClient } from '../../../src';
+import { sucessEmptyResponseObject } from '../../response.util';
 
 describe('Private Futures REST API GET Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM;

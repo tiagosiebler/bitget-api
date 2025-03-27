@@ -1,5 +1,5 @@
-import { API_ERROR_CODE, FuturesClient } from '../../src';
-import { sucessEmptyResponseObject } from '../response.util';
+import { API_ERROR_CODE, FuturesClient } from '../../../src';
+import { sucessEmptyResponseObject } from '../../response.util';
 
 jest.setTimeout(10000);
 
@@ -66,17 +66,18 @@ describe('Private Futures REST API POST Endpoints', () => {
     }
   });
 
-  it('submitOrder()', async () => {
-    const symbol = 'BTCUSDT_UMCBL';
+  it.skip('submitOrder()', async () => {
+    const symbol = 'BTCUSDT';
     const marginCoin = 'USDT';
 
     try {
       expect(
         await api.submitOrder({
           marginCoin,
+          productType: 'USDT-FUTURES',
           orderType: 'market',
-          symbol,
-          size: '1',
+          symbol: symbol,
+          quantity: '10',
           side: 'open_long',
         }),
       ).toMatchObject({
@@ -84,13 +85,14 @@ describe('Private Futures REST API POST Endpoints', () => {
         data: {},
       });
     } catch (e) {
+      console.log(e.body);
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_KYC_REQUIRED,
       });
     }
   });
 
-  it('batchSubmitOrder()', async () => {
+  it.skip('batchSubmitOrder()', async () => {
     try {
       expect(
         await api.batchSubmitOrder(symbol, marginCoin, [

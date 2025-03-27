@@ -2,8 +2,8 @@ import {
   WebsocketClient,
   WS_KEY_MAP,
   WSClientConfigurableOptions,
-} from '../src';
-import { getSilentLogger, logAllEvents, waitForSocketEvent } from './ws.util';
+} from '../../src';
+import { getSilentLogger, logAllEvents, waitForSocketEvent } from '../ws.util';
 
 describe('Public Spot Websocket Client', () => {
   let wsClient: WebsocketClient;

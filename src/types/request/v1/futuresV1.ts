@@ -66,8 +66,10 @@ export type FuturesOrderSide =
 
 export interface NewFuturesOrder {
   symbol: string;
+  productType: string;
   marginCoin: string;
-  size: string;
+  size?: string;
+  quantity?: string;
   price?: string;
   side: FuturesOrderSide;
   orderType: FuturesOrderType;

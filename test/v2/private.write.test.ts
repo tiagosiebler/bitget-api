@@ -1,7 +1,8 @@
+import { API_ERROR_CODE } from '../../src';
 import { RestClientV2 } from '../../src/rest-client-v2';
 import {
-    errorResponseObjectV3,
-    sucessEmptyResponseObject,
+  errorResponseObjectV3,
+  sucessEmptyResponseObject,
 } from '../response.util';
 
 describe('Bitget Private REST API Write Endpoints', () => {
@@ -46,7 +47,9 @@ describe('Bitget Private REST API Write Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('43001')); //The order does not exist
+        expect(e).toMatchObject(
+          errorResponseObjectV3(API_ERROR_CODE.ORDER_NOT_FOUND),
+        ); //The order does not exist
       }
     });
 
@@ -67,7 +70,9 @@ describe('Bitget Private REST API Write Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('43001')); //The order does not exist
+        expect(e).toMatchObject(
+          errorResponseObjectV3(API_ERROR_CODE.ORDER_NOT_FOUND),
+        ); //The order does not exist
       }
     });
 
@@ -84,7 +89,9 @@ describe('Bitget Private REST API Write Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('43001')); //The order does not exist
+        expect(e).toMatchObject(
+          errorResponseObjectV3(API_ERROR_CODE.ORDER_NOT_FOUND),
+        ); //The order does not exist
       }
     });
   });
@@ -101,7 +108,9 @@ describe('Bitget Private REST API Write Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('43117')); // Exceeds the maximum amount that can be transferred
+        expect(e).toMatchObject(
+          errorResponseObjectV3(API_ERROR_CODE.EXCEEDS_MAX_AMOUNT_TRANSFERRED),
+        ); // Exceeds the maximum amount that can be transferred
       }
     });
 
@@ -116,7 +125,9 @@ describe('Bitget Private REST API Write Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40014')); // Incorrect permissions
+        expect(e).toMatchObject(
+          errorResponseObjectV3(API_ERROR_CODE.INCORRECT_PERMISSIONS),
+        ); // Incorrect permissions
       }
     });
   });
@@ -136,7 +147,11 @@ describe('Bitget Private REST API Write Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40774')); // The order type for unilateral position must also be the unilateral position type.
+        expect(e).toMatchObject(
+          errorResponseObjectV3(
+            API_ERROR_CODE.ORDER_TYPE_MUST_BE_UNILATERAL_POSITION,
+          ),
+        ); // The order type for unilateral position must also be the unilateral position type.
       }
     });
 
@@ -149,7 +164,9 @@ describe('Bitget Private REST API Write Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40768')); // The order does not exist
+        expect(e).toMatchObject(
+          errorResponseObjectV3(API_ERROR_CODE.FUTURES_ORDER_CANCEL_NOT_FOUND),
+        ); // The order does not exist
       }
     });
 
@@ -171,7 +188,9 @@ describe('Bitget Private REST API Write Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('43001'));
+        expect(e).toMatchObject(
+          errorResponseObjectV3(API_ERROR_CODE.ORDER_NOT_FOUND),
+        );
       }
     });
 
@@ -188,7 +207,9 @@ describe('Bitget Private REST API Write Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('43001'));
+        expect(e).toMatchObject(
+          errorResponseObjectV3(API_ERROR_CODE.ORDER_NOT_FOUND),
+        );
       }
     });
   });

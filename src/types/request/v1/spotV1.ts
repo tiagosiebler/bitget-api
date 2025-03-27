@@ -56,7 +56,8 @@ export interface NewSpotOrder {
   orderType: 'limit' | 'market';
   force: OrderTimeInForce;
   price?: string;
-  quantity: string;
+  size?: string;
+  quantity?: string;
   clientOrderId?: string;
 }
 

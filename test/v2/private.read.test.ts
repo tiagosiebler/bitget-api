@@ -1,7 +1,7 @@
 import { RestClientV2 } from '../../src/rest-client-v2';
 import {
-    errorResponseObjectV3,
-    sucessEmptyResponseObject,
+  errorResponseObjectV3,
+  sucessEmptyResponseObject,
 } from '../response.util';
 
 describe('Bitget Private REST API Read Endpoints', () => {
@@ -27,7 +27,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         const res = await api.getSpotAccount();
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
 
@@ -36,7 +36,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         const res = await api.getSpotAccountAssets();
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
 
@@ -45,7 +45,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         const res = await api.getSpotAccountBills();
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
   });
@@ -58,7 +58,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
 
@@ -67,7 +67,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         const res = await api.getSpotOpenOrders();
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
 
@@ -76,7 +76,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         const res = await api.getSpotHistoricOrders();
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
 
@@ -87,7 +87,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
   });
@@ -101,7 +101,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
 
@@ -113,7 +113,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
 
@@ -125,7 +125,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
   });
@@ -140,7 +140,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
 
@@ -151,7 +151,7 @@ describe('Bitget Private REST API Read Endpoints', () => {
         });
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
-        expect(e).toMatchObject(errorResponseObjectV3('40001'));
+        expect(e).toBeUndefined();
       }
     });
 
