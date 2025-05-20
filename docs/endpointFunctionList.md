@@ -1,7 +1,14 @@
 
 # Endpoint maps
 
-[![connector logo](https://github.com/tiagosiebler/bitget-api/blob/master/docs/images/logo1.png?raw=true)][1]
+<p align="center">
+  <a href="https://www.npmjs.com/package/bitget-api">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/tiagosiebler/bitget-api/blob/master/docs/images/logoDarkMode2.svg?raw=true#gh-dark-mode-only">
+      <img alt="SDK Logo" src="https://github.com/tiagosiebler/bitget-api/blob/master/docs/images/logoBrightMode2.svg?raw=true#gh-light-mode-only">
+    </picture>
+  </a>
+</p>
 
 Each REST client is a JavaScript class, which provides functions individually mapped to each endpoint available in the exchange's API offering. 
 
