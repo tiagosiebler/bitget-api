@@ -106,4 +106,5 @@ export const REST_CLIENT_TYPE_ENUM = {
   futures: 'futures',
   broker: 'broker',
   v2: 'v2',
+  v3: 'v3',
 } as const;

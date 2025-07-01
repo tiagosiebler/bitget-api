@@ -8,3 +8,5 @@ export * from './v2/earn';
 export * from './v2/futures';
 export * from './v2/margin';
 export * from './v2/spot';
+export * from './v3/public';
+
