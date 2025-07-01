@@ -3,6 +3,8 @@ import {
     AccountAssetsV3,
     AccountSettingsV3,
     APIResponse,
+    BindUidRequestV3,
+    BindUidResponseV3,
     CandlestickV3,
     ContractOiV3,
     ConvertRecordsResponseV3,
@@ -13,6 +15,7 @@ import {
     CurrentFundingRateV3,
     DeleteSubAccountApiKeyRequestV3,
     DiscountRateV3,
+    EnsureCoinsResponseV3,
     FillV3,
     FinancialRecordsResponseV3,
     FreezeSubAccountRequestV3,
@@ -20,15 +23,20 @@ import {
     GetContractsOiRequestV3,
     GetConvertRecordsRequestV3,
     GetCurrentFundingRateRequestV3,
+    GetEnsureCoinsRequestV3,
     GetFillsRequestV3,
     GetFinancialRecordsRequestV3,
     GetHistoryCandlesRequestV3,
     GetHistoryFundingRateRequestV3,
     GetInstrumentsRequestV3,
+    GetLoanOrderRequestV3,
+    GetLTVConvertRequestV3,
     GetMarginLoansRequestV3,
     GetOpenInterestRequestV3,
     GetOrderBookRequestV3,
     GetPositionTierRequestV3,
+    GetProductInfosRequestV3,
+    GetRepaidHistoryRequestV3,
     GetRiskReserveRequestV3,
     GetSubAccountApiKeysRequestV3,
     GetSubAccountApiKeysResponseV3,
@@ -36,27 +44,36 @@ import {
     GetSubAccountListResponseV3,
     GetSubTransferRecordsRequestV3,
     GetSubTransferRecordsResponseV3,
+    GetSymbolsRequestV3,
     GetTickersRequestV3,
     GetTransferableCoinsRequestV3,
+    GetTransferedRequestV3,
     HistoryFundingRateV3,
     InstrumentV3,
+    LoanOrderV3,
+    LTVConvertResponseV3,
     MarginLoanV3,
     OpenInterestV3,
     OrderBookV3,
     PaymentCoinsResponseV3,
     PositionTierV3,
+    ProductInfosResponseV3,
+    RepaidHistoryItemV3,
     RepayableCoinsResponseV3,
     RepayRequestV3,
     RepayResponseV3,
     RiskReserveV3,
+    RiskUnitResponseV3,
     SetLeverageRequestV3,
     SubAccountTransferRequestV3,
     SubAccountTransferResponseV3,
+    SymbolsResponseV3,
     TickerV3,
+    TransferedResponseV3,
     TransferRequestV3,
     TransferResponseV3,
     UpdateSubAccountApiKeyRequestV3,
-    UpdateSubAccountApiKeyResponseV3,
+    UpdateSubAccountApiKeyResponseV3
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -460,4 +477,89 @@ export class RestClientV3 extends BaseRestClient {
   getTickers(params: GetTickersRequestV3): Promise<APIResponse<TickerV3[]>> {
     return this.get('/api/v3/market/tickers', params);
   }
+
+  /**
+   *
+   * Loan endpoints
+   *
+   */
+
+  /**
+   * Get Transferred Quantity
+   */
+  getLoanTransfered(
+    params: GetTransferedRequestV3,
+  ): Promise<APIResponse<TransferedResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/transfered', params);
+  }
+
+  /**
+   * Get Trade Symbols
+   */
+  getLoanSymbols(
+    params: GetSymbolsRequestV3,
+  ): Promise<APIResponse<SymbolsResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/symbols', params);
+  }
+
+  /**
+   * Get Risk Unit
+   */
+  getLoanRiskUnit(): Promise<APIResponse<RiskUnitResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/risk-unit');
+  }
+
+  /**
+   * Get Repayment Orders
+   */
+  getLoanRepaidHistory(
+    params?: GetRepaidHistoryRequestV3,
+  ): Promise<APIResponse<RepaidHistoryItemV3[]>> {
+    return this.getPrivate('/api/v3/ins-loan/repaid-history', params);
+  }
+
+  /**
+   * Get Product Info
+   */
+  getLoanProductInfo(
+    params: GetProductInfosRequestV3,
+  ): Promise<APIResponse<ProductInfosResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/product-infos', params);
+  }
+
+  /**
+   * Get Loan Orders
+   */
+  getLoanOrder(
+    params?: GetLoanOrderRequestV3,
+  ): Promise<APIResponse<LoanOrderV3[]>> {
+    return this.getPrivate('/api/v3/ins-loan/loan-order', params);
+  }
+
+  /**
+   * Get Margin Coin Info
+   */
+  getLoanMarginCoinInfo(
+    params: GetEnsureCoinsRequestV3,
+  ): Promise<APIResponse<EnsureCoinsResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/ensure-coins-convert', params);
+  }
+
+  /**
+   * Bind/Unbind UID to Risk Unit
+   */
+  bindLoanUid(params: BindUidRequestV3): Promise<APIResponse<BindUidResponseV3>> {
+    return this.postPrivate('/api/v3/ins-loan/bind-uid', params);
+  }
+
+  /**
+   * Get LTV
+   */
+  getLoanLTVConvert(
+    params?: GetLTVConvertRequestV3,
+  ): Promise<APIResponse<LTVConvertResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/ltv-convert', params);
+  }
+
+
 }

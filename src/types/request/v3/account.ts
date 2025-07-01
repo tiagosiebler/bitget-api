@@ -18,7 +18,12 @@ export interface GetConvertRecordsRequestV3 {
 }
 
 export interface GetFinancialRecordsRequestV3 {
-  category: 'SPOT' | 'MARGIN' | 'USDT-FUTURES' | 'COIN-FUTURES' | 'USDC-FUTURES';
+  category:
+    | 'SPOT'
+    | 'MARGIN'
+    | 'USDT-FUTURES'
+    | 'COIN-FUTURES'
+    | 'USDC-FUTURES';
   coin?: string;
   startTime?: string;
   endTime?: string;
@@ -79,16 +84,48 @@ export interface GetSubAccountListRequestV3 {
 // Transfer Request Types
 
 export interface TransferRequestV3 {
-  fromType: 'spot' | 'p2p' | 'coin-futures' | 'usdt-futures' | 'usdc-futures' | 'crossed-margin' | 'isolated-margin' | 'uta';
-  toType: 'spot' | 'p2p' | 'coin-futures' | 'usdt-futures' | 'usdc-futures' | 'crossed-margin' | 'isolated-margin' | 'uta';
+  fromType:
+    | 'spot'
+    | 'p2p'
+    | 'coin-futures'
+    | 'usdt-futures'
+    | 'usdc-futures'
+    | 'crossed-margin'
+    | 'isolated-margin'
+    | 'uta';
+  toType:
+    | 'spot'
+    | 'p2p'
+    | 'coin-futures'
+    | 'usdt-futures'
+    | 'usdc-futures'
+    | 'crossed-margin'
+    | 'isolated-margin'
+    | 'uta';
   amount: string;
   coin: string;
   symbol?: string;
 }
 
 export interface GetTransferableCoinsRequestV3 {
-  fromType: 'spot' | 'p2p' | 'coin-futures' | 'usdt-futures' | 'usdc-futures' | 'crossed-margin' | 'isolated-margin' | 'uta';
-  toType: 'spot' | 'p2p' | 'coin-futures' | 'usdt-futures' | 'usdc-futures' | 'crossed-margin' | 'isolated-margin' | 'uta';
+  fromType:
+    | 'spot'
+    | 'p2p'
+    | 'coin-futures'
+    | 'usdt-futures'
+    | 'usdc-futures'
+    | 'crossed-margin'
+    | 'isolated-margin'
+    | 'uta';
+  toType:
+    | 'spot'
+    | 'p2p'
+    | 'coin-futures'
+    | 'usdt-futures'
+    | 'usdc-futures'
+    | 'crossed-margin'
+    | 'isolated-margin'
+    | 'uta';
 }
 
 export interface GetSubTransferRecordsRequestV3 {
@@ -103,8 +140,22 @@ export interface GetSubTransferRecordsRequestV3 {
 }
 
 export interface SubAccountTransferRequestV3 {
-  fromType: 'spot' | 'p2p' | 'usdt_futures' | 'coin_futures' | 'usdc_futures' | 'crossed_margin' | 'uta';
-  toType: 'spot' | 'p2p' | 'usdt_futures' | 'coin_futures' | 'usdc_futures' | 'crossed_margin' | 'uta';
+  fromType:
+    | 'spot'
+    | 'p2p'
+    | 'usdt_futures'
+    | 'coin_futures'
+    | 'usdc_futures'
+    | 'crossed_margin'
+    | 'uta';
+  toType:
+    | 'spot'
+    | 'p2p'
+    | 'usdt_futures'
+    | 'coin_futures'
+    | 'usdc_futures'
+    | 'crossed_margin'
+    | 'uta';
   amount: string;
   coin: string;
   fromUserId: string;
