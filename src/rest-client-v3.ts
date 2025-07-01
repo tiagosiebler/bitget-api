@@ -1,14 +1,27 @@
+/* eslint-disable prettier/prettier */
 import {
+    AccountAssetsV3,
+    AccountSettingsV3,
     APIResponse,
     CandlestickV3,
     ContractOiV3,
+    ConvertRecordsResponseV3,
+    CreateSubAccountApiKeyRequestV3,
+    CreateSubAccountApiKeyResponseV3,
+    CreateSubAccountRequestV3,
+    CreateSubAccountResponseV3,
     CurrentFundingRateV3,
+    DeleteSubAccountApiKeyRequestV3,
     DiscountRateV3,
     FillV3,
+    FinancialRecordsResponseV3,
+    FreezeSubAccountRequestV3,
     GetCandlesRequestV3,
     GetContractsOiRequestV3,
+    GetConvertRecordsRequestV3,
     GetCurrentFundingRateRequestV3,
     GetFillsRequestV3,
+    GetFinancialRecordsRequestV3,
     GetHistoryCandlesRequestV3,
     GetHistoryFundingRateRequestV3,
     GetInstrumentsRequestV3,
@@ -17,15 +30,33 @@ import {
     GetOrderBookRequestV3,
     GetPositionTierRequestV3,
     GetRiskReserveRequestV3,
+    GetSubAccountApiKeysRequestV3,
+    GetSubAccountApiKeysResponseV3,
+    GetSubAccountListRequestV3,
+    GetSubAccountListResponseV3,
+    GetSubTransferRecordsRequestV3,
+    GetSubTransferRecordsResponseV3,
     GetTickersRequestV3,
+    GetTransferableCoinsRequestV3,
     HistoryFundingRateV3,
     InstrumentV3,
     MarginLoanV3,
     OpenInterestV3,
     OrderBookV3,
+    PaymentCoinsResponseV3,
     PositionTierV3,
+    RepayableCoinsResponseV3,
+    RepayRequestV3,
+    RepayResponseV3,
     RiskReserveV3,
+    SetLeverageRequestV3,
+    SubAccountTransferRequestV3,
+    SubAccountTransferResponseV3,
     TickerV3,
+    TransferRequestV3,
+    TransferResponseV3,
+    UpdateSubAccountApiKeyRequestV3,
+    UpdateSubAccountApiKeyResponseV3,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -118,6 +149,190 @@ export class RestClientV3 extends BaseRestClient {
     }>
   > {
     return this.get('/api/v3/public/time');
+  }
+
+  /**
+   *
+   * Account Management endpoints
+   *
+   */
+
+  /**
+   * Set Leverage
+   */
+  setLeverage(params: SetLeverageRequestV3): Promise<APIResponse<string>> {
+    return this.postPrivate('/api/v3/account/set-leverage', params);
+  }
+
+  /**
+   * Set Holding Mode
+   */
+  setHoldMode(params: {
+    holdMode: 'one_way_mode' | 'hedge_mode';
+  }): Promise<APIResponse<string>> {
+    return this.postPrivate('/api/v3/account/set-hold-mode', params);
+  }
+
+  /**
+   * Get Account Info
+   */
+  getAccountSettings(): Promise<APIResponse<AccountSettingsV3>> {
+    return this.getPrivate('/api/v3/account/settings');
+  }
+
+  /**
+   * Get Account Assets
+   */
+  getAccountAssets(): Promise<APIResponse<AccountAssetsV3>> {
+    return this.getPrivate('/api/v3/account/assets');
+  }
+
+  /**
+   * Get Convert Records
+   */
+  getConvertRecords(
+    params: GetConvertRecordsRequestV3,
+  ): Promise<APIResponse<ConvertRecordsResponseV3>> {
+    return this.getPrivate('/api/v3/account/convert-records', params);
+  }
+
+  /**
+   * Get Financial Records
+   */
+  getFinancialRecords(
+    params: GetFinancialRecordsRequestV3,
+  ): Promise<APIResponse<FinancialRecordsResponseV3>> {
+    return this.getPrivate('/api/v3/account/financial-records', params);
+  }
+
+  /**
+   * Get Payment Coins
+   */
+  getPaymentCoins(): Promise<APIResponse<PaymentCoinsResponseV3>> {
+    return this.getPrivate('/api/v3/account/payment-coins');
+  }
+
+  /**
+   * Get Repayable Coins
+   */
+  getRepayableCoins(): Promise<APIResponse<RepayableCoinsResponseV3>> {
+    return this.getPrivate('/api/v3/account/repayable-coins');
+  }
+
+  /**
+   * Repay
+   */
+  submitRepay(params: RepayRequestV3): Promise<APIResponse<RepayResponseV3>> {
+    return this.postPrivate('/api/v3/account/repay', params);
+  }
+
+  /**
+   *
+   * Sub-account Management endpoints
+   *
+   */
+
+  /**
+   * Create Sub-account API Key
+   */
+  createSubAccountApiKey(
+    params: CreateSubAccountApiKeyRequestV3,
+  ): Promise<APIResponse<CreateSubAccountApiKeyResponseV3>> {
+    return this.postPrivate('/api/v3/user/create-sub-api', params);
+  }
+
+  /**
+   * Delete Sub-account API Key
+   */
+  deleteSubAccountApiKey(
+    params: DeleteSubAccountApiKeyRequestV3,
+  ): Promise<APIResponse<object>> {
+    return this.postPrivate('/api/v3/user/delete-sub-api', params);
+  }
+
+  /**
+   * Get Sub-account API Keys
+   */
+  getSubAccountApiKeys(
+    params: GetSubAccountApiKeysRequestV3,
+  ): Promise<APIResponse<GetSubAccountApiKeysResponseV3>> {
+    return this.getPrivate('/api/v3/user/sub-api-list', params);
+  }
+
+  /**
+   * Modify Sub-account API Key
+   */
+  updateSubAccountApiKey(
+    params: UpdateSubAccountApiKeyRequestV3,
+  ): Promise<APIResponse<UpdateSubAccountApiKeyResponseV3>> {
+    return this.postPrivate('/api/v3/user/update-sub-api', params);
+  }
+
+  /**
+   * Create Sub-account
+   */
+  createSubAccount(
+    params: CreateSubAccountRequestV3,
+  ): Promise<APIResponse<CreateSubAccountResponseV3>> {
+    return this.postPrivate('/api/v3/user/create-sub', params);
+  }
+
+  /**
+   * Freeze/Unfreeze Sub-account
+   */
+  freezeSubAccount(
+    params: FreezeSubAccountRequestV3,
+  ): Promise<APIResponse<object>> {
+    return this.postPrivate('/api/v3/user/freeze-sub', params);
+  }
+
+  /**
+   * Get Sub-account List
+   */
+  getSubAccountList(
+    params?: GetSubAccountListRequestV3,
+  ): Promise<APIResponse<GetSubAccountListResponseV3>> {
+    return this.getPrivate('/api/v3/user/sub-list', params);
+  }
+
+  /**
+   *
+   * Transfer endpoints
+   *
+   */
+
+  /**
+   * Transfer
+   */
+  submitTransfer(params: TransferRequestV3): Promise<APIResponse<TransferResponseV3>> {
+    return this.postPrivate('/api/v3/account/transfer', params);
+  }
+
+  /**
+   * Get Transferable Coins
+   */
+  getTransferableCoins(
+    params: GetTransferableCoinsRequestV3,
+  ): Promise<APIResponse<string[]>> {
+    return this.getPrivate('/api/v3/account/transferable-coins', params);
+  }
+
+  /**
+   * Get Main-Sub Transfer Records
+   */
+  getSubTransferRecords(
+    params?: GetSubTransferRecordsRequestV3,
+  ): Promise<APIResponse<GetSubTransferRecordsResponseV3>> {
+    return this.getPrivate('/api/v3/account/sub-transfer-record', params);
+  }
+
+  /**
+   * Main-Sub Account Transfer
+   */
+  subAccountTransfer(
+    params: SubAccountTransferRequestV3,
+  ): Promise<APIResponse<SubAccountTransferResponseV3>> {
+    return this.postPrivate('/api/v3/account/sub-transfer', params);
   }
 
   /**
