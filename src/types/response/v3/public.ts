@@ -1,4 +1,4 @@
-export interface FillV3 {
+export interface PublicFillV3 {
   execId: string;
   price: string;
   size: string;

@@ -1,4 +1,4 @@
-export interface GetFillsRequestV3 {
+export interface GetPublicFillsRequestV3 {
   category:
     | 'SPOT'
     | 'MARGIN'

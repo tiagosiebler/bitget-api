@@ -11,4 +11,5 @@ export * from './v2/spot';
 export * from './v3/account';
 export * from './v3/loan';
 export * from './v3/public';
+export * from './v3/trade';
 

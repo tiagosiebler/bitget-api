@@ -3,9 +3,19 @@ import {
     AccountAssetsV3,
     AccountSettingsV3,
     APIResponse,
+    BatchModifyOrderRequestV3,
+    BatchModifyOrderResponseV3,
     BindUidRequestV3,
     BindUidResponseV3,
+    CancelAllOrdersRequestV3,
+    CancelAllOrdersResponseV3,
+    CancelBatchOrdersRequestV3,
+    CancelBatchOrdersResponseV3,
+    CancelOrderRequestV3,
+    CancelOrderResponseV3,
     CandlestickV3,
+    CloseAllPositionsRequestV3,
+    CloseAllPositionsResponseV3,
     ContractOiV3,
     ConvertRecordsResponseV3,
     CreateSubAccountApiKeyRequestV3,
@@ -16,26 +26,36 @@ import {
     DeleteSubAccountApiKeyRequestV3,
     DiscountRateV3,
     EnsureCoinsResponseV3,
-    FillV3,
     FinancialRecordsResponseV3,
     FreezeSubAccountRequestV3,
     GetCandlesRequestV3,
     GetContractsOiRequestV3,
     GetConvertRecordsRequestV3,
     GetCurrentFundingRateRequestV3,
+    GetCurrentPositionRequestV3,
+    GetCurrentPositionResponseV3,
     GetEnsureCoinsRequestV3,
     GetFillsRequestV3,
+    GetFillsResponseV3,
     GetFinancialRecordsRequestV3,
     GetHistoryCandlesRequestV3,
     GetHistoryFundingRateRequestV3,
+    GetHistoryOrdersRequestV3,
+    GetHistoryOrdersResponseV3,
     GetInstrumentsRequestV3,
     GetLoanOrderRequestV3,
     GetLTVConvertRequestV3,
     GetMarginLoansRequestV3,
+    GetMaxOpenAvailableRequestV3,
+    GetMaxOpenAvailableResponseV3,
     GetOpenInterestRequestV3,
     GetOrderBookRequestV3,
+    GetOrderInfoRequestV3,
+    GetPositionHistoryRequestV3,
+    GetPositionHistoryResponseV3,
     GetPositionTierRequestV3,
     GetProductInfosRequestV3,
+    GetPublicFillsRequestV3,
     GetRepaidHistoryRequestV3,
     GetRiskReserveRequestV3,
     GetSubAccountApiKeysRequestV3,
@@ -48,16 +68,26 @@ import {
     GetTickersRequestV3,
     GetTransferableCoinsRequestV3,
     GetTransferedRequestV3,
+    GetUnfilledOrdersRequestV3,
+    GetUnfilledOrdersResponseV3,
     HistoryFundingRateV3,
     InstrumentV3,
     LoanOrderV3,
     LTVConvertResponseV3,
     MarginLoanV3,
+    ModifyOrderRequestV3,
+    ModifyOrderResponseV3,
     OpenInterestV3,
     OrderBookV3,
+    OrderInfoV3,
     PaymentCoinsResponseV3,
+    PlaceBatchOrdersRequestV3,
+    PlaceBatchOrdersResponseV3,
+    PlaceOrderRequestV3,
+    PlaceOrderResponseV3,
     PositionTierV3,
     ProductInfosResponseV3,
+    PublicFillV3,
     RepaidHistoryItemV3,
     RepayableCoinsResponseV3,
     RepayRequestV3,
@@ -73,7 +103,7 @@ import {
     TransferRequestV3,
     TransferResponseV3,
     UpdateSubAccountApiKeyRequestV3,
-    UpdateSubAccountApiKeyResponseV3
+    UpdateSubAccountApiKeyResponseV3,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -321,7 +351,9 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Transfer
    */
-  submitTransfer(params: TransferRequestV3): Promise<APIResponse<TransferResponseV3>> {
+  submitTransfer(
+    params: TransferRequestV3,
+  ): Promise<APIResponse<TransferResponseV3>> {
     return this.postPrivate('/api/v3/account/transfer', params);
   }
 
@@ -361,7 +393,9 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Get Recent Public Fills
    */
-  getFills(params: GetFillsRequestV3): Promise<APIResponse<FillV3[]>> {
+  getFills(
+    params: GetPublicFillsRequestV3,
+  ): Promise<APIResponse<PublicFillV3[]>> {
     return this.get('/api/v3/market/fills', params);
   }
 
@@ -548,7 +582,9 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Bind/Unbind UID to Risk Unit
    */
-  bindLoanUid(params: BindUidRequestV3): Promise<APIResponse<BindUidResponseV3>> {
+  bindLoanUid(
+    params: BindUidRequestV3,
+  ): Promise<APIResponse<BindUidResponseV3>> {
     return this.postPrivate('/api/v3/ins-loan/bind-uid', params);
   }
 
@@ -561,5 +597,144 @@ export class RestClientV3 extends BaseRestClient {
     return this.getPrivate('/api/v3/ins-loan/ltv-convert', params);
   }
 
+  /**
+   *
+   * Trade endpoints
+   *
+   */
 
+  /**
+   * Place Order
+   */
+  placeOrder(
+    params: PlaceOrderRequestV3,
+  ): Promise<APIResponse<PlaceOrderResponseV3>> {
+    return this.postPrivate('/api/v3/trade/place-order', params);
+  }
+
+  /**
+   * Modify Order
+   */
+  modifyOrder(
+    params: ModifyOrderRequestV3,
+  ): Promise<APIResponse<ModifyOrderResponseV3>> {
+    return this.postPrivate('/api/v3/trade/modify-order', params);
+  }
+
+  /**
+   * Cancel Order
+   */
+  cancelOrder(
+    params: CancelOrderRequestV3,
+  ): Promise<APIResponse<CancelOrderResponseV3>> {
+    return this.postPrivate('/api/v3/trade/cancel-order', params);
+  }
+
+  /**
+   * Batch Order
+   */
+  placeBatchOrders(
+    params: PlaceBatchOrdersRequestV3[],
+  ): Promise<APIResponse<PlaceBatchOrdersResponseV3[]>> {
+    return this.postPrivate('/api/v3/trade/place-batch', params);
+  }
+
+  /**
+   * Batch Modify Orders
+   */
+  batchModifyOrders(
+    params: BatchModifyOrderRequestV3[],
+  ): Promise<APIResponse<BatchModifyOrderResponseV3[]>> {
+    return this.postPrivate('/api/v3/trade/batch-modify-order', params);
+  }
+
+  /**
+   * Batch Cancel
+   */
+  cancelBatchOrders(
+    params: CancelBatchOrdersRequestV3[],
+  ): Promise<APIResponse<CancelBatchOrdersResponseV3[]>> {
+    return this.postPrivate('/api/v3/trade/cancel-batch', params);
+  }
+
+  /**
+   * Cancel All Orders
+   */
+  cancelAllOrders(
+    params: CancelAllOrdersRequestV3,
+  ): Promise<APIResponse<CancelAllOrdersResponseV3>> {
+    return this.postPrivate('/api/v3/trade/cancel-symbol-order', params);
+  }
+
+  /**
+   * Close All Positions
+   */
+  closeAllPositions(
+    params: CloseAllPositionsRequestV3,
+  ): Promise<APIResponse<CloseAllPositionsResponseV3>> {
+    return this.postPrivate('/api/v3/trade/close-positions', params);
+  }
+
+  /**
+   * Get Order Details
+   */
+  getOrderInfo(
+    params: GetOrderInfoRequestV3,
+  ): Promise<APIResponse<OrderInfoV3>> {
+    return this.getPrivate('/api/v3/trade/order-info', params);
+  }
+
+  /**
+   * Get Open Orders
+   */
+  getUnfilledOrders(
+    params?: GetUnfilledOrdersRequestV3,
+  ): Promise<APIResponse<GetUnfilledOrdersResponseV3>> {
+    return this.getPrivate('/api/v3/trade/unfilled-orders', params);
+  }
+
+  /**
+   * Get Order History
+   */
+  getHistoryOrders(
+    params: GetHistoryOrdersRequestV3,
+  ): Promise<APIResponse<GetHistoryOrdersResponseV3>> {
+    return this.getPrivate('/api/v3/trade/history-orders', params);
+  }
+
+  /**
+   * Get Fill History
+   */
+  getTradeFills(
+    params?: GetFillsRequestV3,
+  ): Promise<APIResponse<GetFillsResponseV3>> {
+    return this.getPrivate('/api/v3/trade/fills', params);
+  }
+
+  /**
+   * Get Position Info
+   */
+  getCurrentPosition(
+    params: GetCurrentPositionRequestV3,
+  ): Promise<APIResponse<GetCurrentPositionResponseV3>> {
+    return this.getPrivate('/api/v3/position/current-position', params);
+  }
+
+  /**
+   * Get Positions History
+   */
+  getPositionHistory(
+    params: GetPositionHistoryRequestV3,
+  ): Promise<APIResponse<GetPositionHistoryResponseV3>> {
+    return this.getPrivate('/api/v3/position/history-position', params);
+  }
+
+  /**
+   * Get Max Open Available
+   */
+  getMaxOpenAvailable(
+    params: GetMaxOpenAvailableRequestV3,
+  ): Promise<APIResponse<GetMaxOpenAvailableResponseV3>> {
+    return this.postPrivate('/api/v3/account/max-open-available', params);
+  }
 }
