@@ -111,9 +111,16 @@ export default abstract class BaseRestClient {
         'X-CHANNEL-API-CODE': 'hbnni',
         'Content-Type': 'application/json',
         locale: 'en-US',
-        ...(restOptions.demoTrading ? { paptrading: '1' } : {}),
       },
     };
+
+    if (this.options.demoTrading) {
+      this.globalRequestOptions.headers = {
+        ...this.globalRequestOptions.headers,
+        // Header to enable paper trading with provided demo API keys
+        paptrading: '1',
+      };
+    }
 
     // If enabled, configure a https agent with keepAlive enabled
     if (this.options.keepAlive) {
