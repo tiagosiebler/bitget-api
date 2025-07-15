@@ -24,26 +24,42 @@ type NetworkMap<
 
 export const WS_BASE_URL_MAP: Record<
   WsKey,
-  Record<'all', NetworkMap<'livenet'>>
+  Record<'all', NetworkMap<'livenet' | 'demo'>>
 > = {
   mixv1: {
     all: {
       livenet: 'wss://ws.bitget.com/mix/v1/stream',
+      demo: 'NotSupportedForV1',
     },
   },
   spotv1: {
     all: {
       livenet: 'wss://ws.bitget.com/spot/v1/stream',
+      demo: 'NotSupportedForV1',
     },
   },
   v2Public: {
     all: {
       livenet: 'wss://ws.bitget.com/v2/ws/public',
+      demo: 'wss://wspap.bitget.com/v2/ws/public',
     },
   },
   v2Private: {
     all: {
       livenet: 'wss://ws.bitget.com/v2/ws/private',
+      demo: 'wss://wspap.bitget.com/v2/ws/private',
+    },
+  },
+  v3Public: {
+    all: {
+      livenet: 'wss://ws.bitget.com/v3/ws/public',
+      demo: 'wss://wspap.bitget.com/v3/ws/public',
+    },
+  },
+  v3Private: {
+    all: {
+      livenet: 'wss://ws.bitget.com/v3/ws/private',
+      demo: 'wss://wspap.bitget.com/v3/ws/private',
     },
   },
 };
@@ -54,6 +70,8 @@ export const WS_KEY_MAP = {
   mixv1: 'mixv1',
   v2Public: 'v2Public',
   v2Private: 'v2Private',
+  v3Public: 'v3Public',
+  v3Private: 'v3Private',
 } as const;
 
 /** Any WS keys in this list will trigger auth on connect, if credentials are available */
@@ -133,7 +151,9 @@ export function getMaxTopicsPerSubscribeEvent(wsKey: WsKey): number | null {
     case 'mixv1':
     case 'spotv1':
     case 'v2Public':
-    case 'v2Private': {
+    case 'v2Private':
+    case 'v3Public':
+    case 'v3Private': {
       // Technically there doesn't seem to be a documented cap, but there is a size limit per request. Doesn't hurt to batch requests.
       return 15;
     }
@@ -199,4 +219,20 @@ export function safeTerminateWs(
   }
 
   return false;
+}
+
+/**
+ * WebSocket.ping() is not available in browsers. This is a simple check used to
+ * disable heartbeats in browers, for exchanges that use native WebSocket ping/pong frames.
+ */
+export function isWSPingFrameAvailable(): boolean {
+  return typeof WebSocket.prototype['ping'] === 'function';
+}
+
+/**
+ * WebSocket.pong() is not available in browsers. This is a simple check used to
+ * disable heartbeats in browers, for exchanges that use native WebSocket ping/pong frames.
+ */
+export function isWSPongFrameAvailable(): boolean {
+  return typeof WebSocket.prototype['pong'] === 'function';
 }
