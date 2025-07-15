@@ -167,6 +167,7 @@ export interface TransferResponseV3 {
 
 export interface SubTransferRecordV3 {
   transferId: string;
+  oldTransferId?: string;
   fromType: string;
   toType: string;
   amount: string;
@@ -187,4 +188,32 @@ export interface GetSubTransferRecordsResponseV3 {
 export interface SubAccountTransferResponseV3 {
   transferId: string;
   clientOid: string;
+}
+
+export interface SubUnifiedAssetV3 {
+  coin: string;
+  equity: string;
+  usdValue: string;
+  balance: string;
+  available: string;
+  debt: string;
+  locked: string;
+}
+
+export interface SubUnifiedAssetsItemV3 {
+  subUid: string;
+  cursor: string;
+  assets: SubUnifiedAssetV3[];
+}
+
+export interface GetFeeRateResponseV3 {
+  makerFeeRate: string;
+  takerFeeRate: string;
+}
+
+export interface FundingAssetV3 {
+  coin: string;
+  available: string;
+  frozen: string;
+  balance: string;
 }

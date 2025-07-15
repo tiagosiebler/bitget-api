@@ -68,6 +68,7 @@ export interface OrderInfoV3 {
   feeDetail: FeeDetailV3[];
   cancelReason: string;
   execType: string;
+  stpMode?: string;
   createdTime: string;
   updatedTime: string;
 }
@@ -84,6 +85,8 @@ export interface FillV3 {
   execValue: string;
   tradeScope: string;
   feeDetail: FeeDetailV3[];
+  execPnl?: string;
+  tradeSide?: string;
   createdTime: string;
   updatedTime: string;
 }
@@ -112,6 +115,7 @@ export interface UnfilledOrderV3 {
   holdMode: string;
   reduceOnly: string;
   feeDetail: FeeDetailV3[];
+  stpMode?: string;
   createdTime: string;
   updatedTime: string;
 }
@@ -142,6 +146,7 @@ export interface HistoryOrderV3 {
   feeDetail: FeeDetailV3[];
   cancelReason: string;
   execType: string;
+  stpMode?: string;
   createdTime: string;
   updatedTime: string;
 }

@@ -17,6 +17,7 @@ import {
   CloseAllPositionsResponseV3,
   ContractOiV3,
   ConvertRecordsResponseV3,
+  CountdownCancelAllRequestV3,
   CreateSubAccountApiKeyRequestV3,
   CreateSubAccountApiKeyResponseV3,
   CreateSubAccountRequestV3,
@@ -27,6 +28,7 @@ import {
   EnsureCoinsResponseV3,
   FinancialRecordsResponseV3,
   FreezeSubAccountRequestV3,
+  FundingAssetV3,
   GetCandlesRequestV3,
   GetContractsOiRequestV3,
   GetConvertRecordsRequestV3,
@@ -34,9 +36,12 @@ import {
   GetCurrentPositionRequestV3,
   GetCurrentPositionResponseV3,
   GetEnsureCoinsRequestV3,
+  GetFeeRateRequestV3,
+  GetFeeRateResponseV3,
   GetFillsRequestV3,
   GetFillsResponseV3,
   GetFinancialRecordsRequestV3,
+  GetFundingAssetsRequestV3,
   GetHistoryCandlesRequestV3,
   GetHistoryFundingRateRequestV3,
   GetHistoryOrdersRequestV3,
@@ -63,6 +68,7 @@ import {
   GetSubAccountListResponseV3,
   GetSubTransferRecordsRequestV3,
   GetSubTransferRecordsResponseV3,
+  GetSubUnifiedAssetsRequestV3,
   GetSymbolsRequestV3,
   GetTickersRequestV3,
   GetTransferableCoinsRequestV3,
@@ -96,6 +102,7 @@ import {
   SetLeverageRequestV3,
   SubAccountTransferRequestV3,
   SubAccountTransferResponseV3,
+  SubUnifiedAssetsItemV3,
   SymbolsResponseV3,
   TickerV3,
   TransferedResponseV3,
@@ -204,6 +211,15 @@ export class RestClientV3 extends BaseRestClient {
    */
 
   /**
+   * Get Fund Account Assets
+   */
+  getFundingAssets(
+    params?: GetFundingAssetsRequestV3,
+  ): Promise<APIResponse<FundingAssetV3[]>> {
+    return this.getPrivate('/api/v3/account/funding-assets', params);
+  }
+
+  /**
    * Set Leverage
    */
   setLeverage(params: SetLeverageRequestV3): Promise<APIResponse<string>> {
@@ -270,6 +286,15 @@ export class RestClientV3 extends BaseRestClient {
    */
   submitRepay(params: RepayRequestV3): Promise<APIResponse<RepayResponseV3>> {
     return this.postPrivate('/api/v3/account/repay', params);
+  }
+
+  /**
+   * Get Trading Fee Rate
+   */
+  getFeeRate(
+    params: GetFeeRateRequestV3,
+  ): Promise<APIResponse<GetFeeRateResponseV3>> {
+    return this.getPrivate('/api/v3/account/fee-rate', params);
   }
 
   /**
@@ -363,6 +388,15 @@ export class RestClientV3 extends BaseRestClient {
     params: GetTransferableCoinsRequestV3,
   ): Promise<APIResponse<string[]>> {
     return this.getPrivate('/api/v3/account/transferable-coins', params);
+  }
+
+  /**
+   * Get Sub-account Unified Account Assets
+   */
+  getSubUnifiedAssets(
+    params?: GetSubUnifiedAssetsRequestV3,
+  ): Promise<APIResponse<SubUnifiedAssetsItemV3[]>> {
+    return this.getPrivate('/api/v3/account/sub-unified-assets', params);
   }
 
   /**
@@ -735,5 +769,14 @@ export class RestClientV3 extends BaseRestClient {
     params: GetMaxOpenAvailableRequestV3,
   ): Promise<APIResponse<GetMaxOpenAvailableResponseV3>> {
     return this.postPrivate('/api/v3/account/max-open-available', params);
+  }
+
+  /**
+   * CountDown Cancel All
+   */
+  countdownCancelAll(
+    params: CountdownCancelAllRequestV3,
+  ): Promise<APIResponse<string>> {
+    return this.postPrivate('/api/v3/trade/countdown-cancel-all', params);
   }
 }

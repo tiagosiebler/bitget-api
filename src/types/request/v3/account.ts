@@ -25,6 +25,7 @@ export interface GetFinancialRecordsRequestV3 {
     | 'COIN-FUTURES'
     | 'USDC-FUTURES';
   coin?: string;
+  type?: string;
   startTime?: string;
   endTime?: string;
   limit?: string;
@@ -161,4 +162,24 @@ export interface SubAccountTransferRequestV3 {
   fromUserId: string;
   toUserId: string;
   clientOid: string;
+}
+
+export interface GetSubUnifiedAssetsRequestV3 {
+  subUid?: string;
+  cursor?: string;
+  limit?: string;
+}
+
+export interface GetFeeRateRequestV3 {
+  category:
+    | 'SPOT'
+    | 'MARGIN'
+    | 'USDT-FUTURES'
+    | 'COIN-FUTURES'
+    | 'USDC-FUTURES';
+  symbol: string;
+}
+
+export interface GetFundingAssetsRequestV3 {
+  coin?: string;
 }

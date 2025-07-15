@@ -151,4 +151,12 @@ export interface PlaceOrderRequestV3 {
   clientOid?: string;
   reduceOnly?: 'yes' | 'no';
   stpMode?: 'none' | 'cancel_taker' | 'cancel_maker' | 'cancel_both';
+  takeProfitPrice?: string;
+  stopLossPrice?: string;
+  takeProfitTriggerType?: 'mark_price' | 'last_price';
+  stopLossTriggerType?: 'mark_price' | 'last_price';
+}
+
+export interface CountdownCancelAllRequestV3 {
+  countdown: string; // seconds until auto-cancel (5-60, or 0 to disable)
 }

@@ -78,7 +78,6 @@ export interface RiskReserveRecordV3 {
 }
 
 export interface RiskReserveV3 {
-  totalBalance: string;
   coin: string;
   riskReserveRecords: RiskReserveRecordV3[];
 }
@@ -98,6 +97,7 @@ export interface InstrumentV3 {
   feeRateUpRatio: string;
   minOrderQty: string;
   maxOrderQty: string;
+  maxMarketOrderQty: string;
   pricePrecision: string;
   quantityPrecision: string;
   quotePrecision: string;
