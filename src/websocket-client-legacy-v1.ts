@@ -305,7 +305,7 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
 
       return this.tryWsSend(wsKey, JSON.stringify(request));
     } catch (e) {
-      this.logger.silly(e, { ...LOGGER_CATEGORY, wsKey });
+      this.logger.trace(e, { ...LOGGER_CATEGORY, wsKey });
     }
   }
 
@@ -334,7 +334,7 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
 
     this.clearPongTimer(wsKey);
 
-    this.logger.silly('Sending ping', { ...LOGGER_CATEGORY, wsKey });
+    this.logger.trace('Sending ping', { ...LOGGER_CATEGORY, wsKey });
     this.tryWsSend(wsKey, 'ping');
 
     this.wsStore.get(wsKey, true).activePongTimer = setTimeout(() => {
@@ -387,15 +387,15 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
 
     const maxTopicsPerEvent = getMaxTopicsPerSubscribeEvent(wsKey);
     if (maxTopicsPerEvent && topics.length > maxTopicsPerEvent) {
-      this.logger.silly(
+      this.logger.trace(
         `Subscribing to topics in batches of ${maxTopicsPerEvent}`,
       );
       for (let i = 0; i < topics.length; i += maxTopicsPerEvent) {
         const batch = topics.slice(i, i + maxTopicsPerEvent);
-        this.logger.silly(`Subscribing to batch of ${batch.length}`);
+        this.logger.trace(`Subscribing to batch of ${batch.length}`);
         this.requestSubscribeTopics(wsKey, batch);
       }
-      this.logger.silly(
+      this.logger.trace(
         `Finished batch subscribing to ${topics.length} topics`,
       );
       return;
@@ -422,15 +422,15 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
 
     const maxTopicsPerEvent = getMaxTopicsPerSubscribeEvent(wsKey);
     if (maxTopicsPerEvent && topics.length > maxTopicsPerEvent) {
-      this.logger.silly(
+      this.logger.trace(
         `Unsubscribing to topics in batches of ${maxTopicsPerEvent}`,
       );
       for (let i = 0; i < topics.length; i += maxTopicsPerEvent) {
         const batch = topics.slice(i, i + maxTopicsPerEvent);
-        this.logger.silly(`Unsubscribing to batch of ${batch.length}`);
+        this.logger.trace(`Unsubscribing to batch of ${batch.length}`);
         this.requestUnsubscribeTopics(wsKey, batch);
       }
-      this.logger.silly(
+      this.logger.trace(
         `Finished batch unsubscribing to ${topics.length} topics`,
       );
       return;
@@ -446,7 +446,7 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
 
   public tryWsSend(wsKey: WsKey, wsMessage: string) {
     try {
-      this.logger.silly('Sending upstream ws message: ', {
+      this.logger.trace('Sending upstream ws message: ', {
         ...LOGGER_CATEGORY,
         wsMessage,
         wsKey,
@@ -474,7 +474,7 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
   }
 
   private connectToWsUrl(url: string, wsKey: WsKey): WebSocket {
-    this.logger.silly(`Opening WS connection to URL: ${url}`, {
+    this.logger.trace(`Opening WS connection to URL: ${url}`, {
       ...LOGGER_CATEGORY,
       wsKey,
     });
@@ -547,7 +547,7 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
       this.clearPongTimer(wsKey);
 
       if (isWsPong(event)) {
-        this.logger.silly('Received pong', { ...LOGGER_CATEGORY, wsKey });
+        this.logger.trace('Received pong', { ...LOGGER_CATEGORY, wsKey });
         return;
       }
 
@@ -590,7 +590,7 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
         }
       }
 
-      this.logger.warning('Unhandled/unrecognised ws event message', {
+      this.logger.info('Unhandled/unrecognised ws event message', {
         ...LOGGER_CATEGORY,
         message: msg || 'no message',
         // messageType: typeof msg,
