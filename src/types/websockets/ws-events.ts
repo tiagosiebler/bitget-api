@@ -1,3 +1,18 @@
+export interface MessageEventLike {
+  target: WebSocket;
+  type: 'message';
+  data: string;
+}
+
+export function isMessageEvent(msg: unknown): msg is MessageEventLike {
+  if (typeof msg !== 'object' || !msg) {
+    return false;
+  }
+
+  const message = msg as MessageEventLike;
+  return message['type'] === 'message' && typeof message['data'] === 'string';
+}
+
 export interface WsBaseEvent<TAction = 'snapshot' | string, TData = unknown> {
   action: TAction;
   arg: unknown;

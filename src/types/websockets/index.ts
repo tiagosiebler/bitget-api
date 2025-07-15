@@ -1,2 +1,3 @@
-export * from './client';
-export * from './events';
+export * from './ws-api';
+export * from './ws-events';
+export * from './ws-general';

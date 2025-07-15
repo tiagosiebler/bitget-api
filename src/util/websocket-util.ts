@@ -7,6 +7,8 @@ import {
 } from '../types';
 import { signMessage } from './node-support';
 
+export const WS_LOGGER_CATEGORY = { category: 'bitget-ws' };
+
 /**
  * Some exchanges have two livenet environments, some have test environments, some dont. This allows easy flexibility for different exchanges.
  * Examples:
@@ -79,6 +81,7 @@ export const WS_AUTH_ON_CONNECT_KEYS: WsKey[] = [
   WS_KEY_MAP.spotv1,
   WS_KEY_MAP.mixv1,
   WS_KEY_MAP.v2Private,
+  WS_KEY_MAP.v3Private,
 ];
 
 /** Any WS keys in this list will ALWAYS skip the authentication process, even if credentials are available */
@@ -101,6 +104,29 @@ export const PRIVATE_TOPICS_V2: WsPrivateTopicV2[] = [
   'account-isolated',
   'orders-isolated',
 ];
+
+/**
+ * Normalised internal format for a request (subscribe/unsubscribe/etc) on a topic, with optional parameters.
+ *
+ * - Topic: the topic this event is for
+ * - Payload: the parameters to include, optional. E.g. auth requires key + sign. Some topics allow configurable parameters.
+ * - Category: required for bybit, since different categories have different public endpoints
+ */
+export interface WsTopicRequest<
+  TWSTopic extends string = string,
+  TWSPayload = unknown,
+> {
+  topic: TWSTopic;
+  payload?: TWSPayload;
+}
+
+/**
+ * Conveniently allow users to request a topic either as string topics or objects (containing string topic + params)
+ */
+export type WsTopicRequestOrStringTopic<
+  TWSTopic extends string,
+  TWSPayload = unknown,
+> = WsTopicRequest<TWSTopic, TWSPayload> | string;
 
 export function isPrivateChannel<TChannel extends string>(
   channel: TChannel,
@@ -191,6 +217,7 @@ export async function getWsAuthSignature(
     signatureExpiresAt + 'GET' + '/user/verify',
     apiSecret,
     'base64',
+    'SHA-256',
   );
 
   return {
@@ -219,6 +246,32 @@ export function safeTerminateWs(
   }
 
   return false;
+}
+/**
+ * Users can conveniently pass topics as strings or objects (object has topic name + optional params).
+ *
+ * This method normalises topics into objects (object has topic name + optional params).
+ */
+export function getNormalisedTopicRequests(
+  wsTopicRequests: WsTopicRequestOrStringTopic<string>[],
+): WsTopicRequest<string>[] {
+  const normalisedTopicRequests: WsTopicRequest<string>[] = [];
+
+  for (const wsTopicRequest of wsTopicRequests) {
+    // passed as string, convert to object
+    if (typeof wsTopicRequest === 'string') {
+      const topicRequest: WsTopicRequest<string> = {
+        topic: wsTopicRequest,
+        payload: undefined,
+      };
+      normalisedTopicRequests.push(topicRequest);
+      continue;
+    }
+
+    // already a normalised object, thanks to user
+    normalisedTopicRequests.push(wsTopicRequest);
+  }
+  return normalisedTopicRequests;
 }
 
 /**
