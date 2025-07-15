@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import https from 'https';
 
 import { RestClientType } from '../types';
 import { signMessage } from './node-support';
@@ -113,6 +114,23 @@ export default abstract class BaseRestClient {
         ...(restOptions.demoTrading ? { paptrading: '1' } : {}),
       },
     };
+
+    // If enabled, configure a https agent with keepAlive enabled
+    if (this.options.keepAlive) {
+      // Extract existing https agent parameters, if provided, to prevent the keepAlive flag from overwriting an existing https agent completely
+      const existingHttpsAgent = this.globalRequestOptions.httpsAgent as
+        | https.Agent
+        | undefined;
+      const existingAgentOptions = existingHttpsAgent?.options || {};
+
+      // For more advanced configuration, raise an issue on GitHub or use the "networkOptions"
+      // parameter to define a custom httpsAgent with the desired properties
+      this.globalRequestOptions.httpsAgent = new https.Agent({
+        ...existingAgentOptions,
+        keepAlive: true,
+        keepAliveMsecs: this.options.keepAliveMsecs,
+      });
+    }
 
     this.baseUrl = getRestBaseUrl(false, restOptions);
     this.apiKey = this.options.apiKey;
