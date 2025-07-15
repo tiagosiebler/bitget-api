@@ -58,12 +58,13 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
     return WS_AUTH_ON_CONNECT_KEYS.includes(wsKey as WsKey);
   }
 
-  protected getWsUrl(wsKey: WsKey): string {
+  protected getWsUrl(
+    wsKey: WsKey,
+    networkKey: 'livenet' | 'demo' = 'livenet',
+  ): string {
     if (this.options.wsUrl) {
       return this.options.wsUrl;
     }
-
-    const networkKey = 'livenet';
 
     switch (wsKey) {
       case WS_KEY_MAP.spotv1:
@@ -77,6 +78,12 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
       }
       case WS_KEY_MAP.v2Public: {
         return WS_BASE_URL_MAP.v2Public.all[networkKey];
+      }
+      case WS_KEY_MAP.v3Private: {
+        return WS_BASE_URL_MAP.v3Private.all[networkKey];
+      }
+      case WS_KEY_MAP.v3Public: {
+        return WS_BASE_URL_MAP.v3Public.all[networkKey];
       }
       default: {
         this.logger.error('getWsUrl(): Unhandled wsKey: ', {
