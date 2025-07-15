@@ -57,7 +57,7 @@ interface WebsocketClientEvents {
 }
 
 // Type safety for on and emit handlers: https://stackoverflow.com/a/61609010/880837
-export declare interface WebsocketClient {
+export declare interface WebsocketClientLegacyV1 {
   on<U extends keyof WebsocketClientEvents>(
     event: U,
     listener: WebsocketClientEvents[U],
@@ -72,7 +72,7 @@ export declare interface WebsocketClient {
 /**
  * @deprecated use WebsocketClientV2 instead
  */
-export class WebsocketClient extends EventEmitter {
+export class WebsocketClientLegacyV1 extends EventEmitter {
   private logger: typeof DefaultLogger;
 
   private options: WebsocketClientOptions;
