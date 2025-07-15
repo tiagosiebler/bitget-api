@@ -12,6 +12,7 @@ import {
   CancelBatchOrdersResponseV3,
   CancelOrderRequestV3,
   CancelOrderResponseV3,
+  CancelStrategyOrderRequestV3,
   CandlestickV3,
   CloseAllPositionsRequestV3,
   CloseAllPositionsResponseV3,
@@ -23,7 +24,10 @@ import {
   CreateSubAccountRequestV3,
   CreateSubAccountResponseV3,
   CurrentFundingRateV3,
+  DeductInfoResponseV3,
   DeleteSubAccountApiKeyRequestV3,
+  DepositAddressV3,
+  DepositRecordV3,
   DiscountRateV3,
   EnsureCoinsResponseV3,
   FinancialRecordsResponseV3,
@@ -35,6 +39,8 @@ import {
   GetCurrentFundingRateRequestV3,
   GetCurrentPositionRequestV3,
   GetCurrentPositionResponseV3,
+  GetDepositAddressRequestV3,
+  GetDepositRecordsRequestV3,
   GetEnsureCoinsRequestV3,
   GetFeeRateRequestV3,
   GetFeeRateResponseV3,
@@ -46,6 +52,8 @@ import {
   GetHistoryFundingRateRequestV3,
   GetHistoryOrdersRequestV3,
   GetHistoryOrdersResponseV3,
+  GetHistoryStrategyOrdersRequestV3,
+  GetHistoryStrategyOrdersResponseV3,
   GetInstrumentsRequestV3,
   GetLoanOrderRequestV3,
   GetLTVConvertRequestV3,
@@ -66,6 +74,8 @@ import {
   GetSubAccountApiKeysResponseV3,
   GetSubAccountListRequestV3,
   GetSubAccountListResponseV3,
+  GetSubDepositAddressRequestV3,
+  GetSubDepositRecordsRequestV3,
   GetSubTransferRecordsRequestV3,
   GetSubTransferRecordsResponseV3,
   GetSubUnifiedAssetsRequestV3,
@@ -75,6 +85,8 @@ import {
   GetTransferedRequestV3,
   GetUnfilledOrdersRequestV3,
   GetUnfilledOrdersResponseV3,
+  GetUnfilledStrategyOrdersRequestV3,
+  GetWithdrawRecordsRequestV3,
   HistoryFundingRateV3,
   InstrumentV3,
   LoanOrderV3,
@@ -82,6 +94,8 @@ import {
   MarginLoanV3,
   ModifyOrderRequestV3,
   ModifyOrderResponseV3,
+  ModifyStrategyOrderRequestV3,
+  ModifyStrategyOrderResponseV3,
   OpenInterestV3,
   OrderBookV3,
   OrderInfoV3,
@@ -90,6 +104,8 @@ import {
   PlaceBatchOrdersResponseV3,
   PlaceOrderRequestV3,
   PlaceOrderResponseV3,
+  PlaceStrategyOrderRequestV3,
+  PlaceStrategyOrderResponseV3,
   PositionTierV3,
   ProductInfosResponseV3,
   PublicFillV3,
@@ -100,9 +116,11 @@ import {
   RiskReserveV3,
   RiskUnitResponseV3,
   SetLeverageRequestV3,
+  StrategyOrderV3,
   SubAccountTransferRequestV3,
   SubAccountTransferResponseV3,
   SubUnifiedAssetsItemV3,
+  SwitchDeductRequestV3,
   SymbolsResponseV3,
   TickerV3,
   TransferedResponseV3,
@@ -110,6 +128,9 @@ import {
   TransferResponseV3,
   UpdateSubAccountApiKeyRequestV3,
   UpdateSubAccountApiKeyResponseV3,
+  WithdrawRecordV3,
+  WithdrawRequestV3,
+  WithdrawResponseV3,
 } from './types';
 import { REST_CLIENT_TYPE_ENUM } from './util';
 import BaseRestClient from './util/BaseRestClient';
@@ -206,222 +227,34 @@ export class RestClientV3 extends BaseRestClient {
 
   /**
    *
-   * Account Management endpoints
+   * =====Market======= endpoints
    *
    */
 
   /**
-   * Get Fund Account Assets
+   * Get Instruments
    */
-  getFundingAssets(
-    params?: GetFundingAssetsRequestV3,
-  ): Promise<APIResponse<FundingAssetV3[]>> {
-    return this.getPrivate('/api/v3/account/funding-assets', params);
+  getInstruments(
+    params: GetInstrumentsRequestV3,
+  ): Promise<APIResponse<InstrumentV3[]>> {
+    return this.get('/api/v3/market/instruments', params);
   }
 
   /**
-   * Set Leverage
+   * Get Tickers
    */
-  setLeverage(params: SetLeverageRequestV3): Promise<APIResponse<string>> {
-    return this.postPrivate('/api/v3/account/set-leverage', params);
+  getTickers(params: GetTickersRequestV3): Promise<APIResponse<TickerV3[]>> {
+    return this.get('/api/v3/market/tickers', params);
   }
 
   /**
-   * Set Holding Mode
+   * Get OrderBook
    */
-  setHoldMode(params: {
-    holdMode: 'one_way_mode' | 'hedge_mode';
-  }): Promise<APIResponse<string>> {
-    return this.postPrivate('/api/v3/account/set-hold-mode', params);
+  getOrderBook(
+    params: GetOrderBookRequestV3,
+  ): Promise<APIResponse<OrderBookV3>> {
+    return this.get('/api/v3/market/orderbook', params);
   }
-
-  /**
-   * Get Account Info
-   */
-  getAccountSettings(): Promise<APIResponse<AccountSettingsV3>> {
-    return this.getPrivate('/api/v3/account/settings');
-  }
-
-  /**
-   * Get Account Assets
-   */
-  getAccountAssets(): Promise<APIResponse<AccountAssetsV3>> {
-    return this.getPrivate('/api/v3/account/assets');
-  }
-
-  /**
-   * Get Convert Records
-   */
-  getConvertRecords(
-    params: GetConvertRecordsRequestV3,
-  ): Promise<APIResponse<ConvertRecordsResponseV3>> {
-    return this.getPrivate('/api/v3/account/convert-records', params);
-  }
-
-  /**
-   * Get Financial Records
-   */
-  getFinancialRecords(
-    params: GetFinancialRecordsRequestV3,
-  ): Promise<APIResponse<FinancialRecordsResponseV3>> {
-    return this.getPrivate('/api/v3/account/financial-records', params);
-  }
-
-  /**
-   * Get Payment Coins
-   */
-  getPaymentCoins(): Promise<APIResponse<PaymentCoinsResponseV3>> {
-    return this.getPrivate('/api/v3/account/payment-coins');
-  }
-
-  /**
-   * Get Repayable Coins
-   */
-  getRepayableCoins(): Promise<APIResponse<RepayableCoinsResponseV3>> {
-    return this.getPrivate('/api/v3/account/repayable-coins');
-  }
-
-  /**
-   * Repay
-   */
-  submitRepay(params: RepayRequestV3): Promise<APIResponse<RepayResponseV3>> {
-    return this.postPrivate('/api/v3/account/repay', params);
-  }
-
-  /**
-   * Get Trading Fee Rate
-   */
-  getFeeRate(
-    params: GetFeeRateRequestV3,
-  ): Promise<APIResponse<GetFeeRateResponseV3>> {
-    return this.getPrivate('/api/v3/account/fee-rate', params);
-  }
-
-  /**
-   *
-   * Sub-account Management endpoints
-   *
-   */
-
-  /**
-   * Create Sub-account API Key
-   */
-  createSubAccountApiKey(
-    params: CreateSubAccountApiKeyRequestV3,
-  ): Promise<APIResponse<CreateSubAccountApiKeyResponseV3>> {
-    return this.postPrivate('/api/v3/user/create-sub-api', params);
-  }
-
-  /**
-   * Delete Sub-account API Key
-   */
-  deleteSubAccountApiKey(
-    params: DeleteSubAccountApiKeyRequestV3,
-  ): Promise<APIResponse<object>> {
-    return this.postPrivate('/api/v3/user/delete-sub-api', params);
-  }
-
-  /**
-   * Get Sub-account API Keys
-   */
-  getSubAccountApiKeys(
-    params: GetSubAccountApiKeysRequestV3,
-  ): Promise<APIResponse<GetSubAccountApiKeysResponseV3>> {
-    return this.getPrivate('/api/v3/user/sub-api-list', params);
-  }
-
-  /**
-   * Modify Sub-account API Key
-   */
-  updateSubAccountApiKey(
-    params: UpdateSubAccountApiKeyRequestV3,
-  ): Promise<APIResponse<UpdateSubAccountApiKeyResponseV3>> {
-    return this.postPrivate('/api/v3/user/update-sub-api', params);
-  }
-
-  /**
-   * Create Sub-account
-   */
-  createSubAccount(
-    params: CreateSubAccountRequestV3,
-  ): Promise<APIResponse<CreateSubAccountResponseV3>> {
-    return this.postPrivate('/api/v3/user/create-sub', params);
-  }
-
-  /**
-   * Freeze/Unfreeze Sub-account
-   */
-  freezeSubAccount(
-    params: FreezeSubAccountRequestV3,
-  ): Promise<APIResponse<object>> {
-    return this.postPrivate('/api/v3/user/freeze-sub', params);
-  }
-
-  /**
-   * Get Sub-account List
-   */
-  getSubAccountList(
-    params?: GetSubAccountListRequestV3,
-  ): Promise<APIResponse<GetSubAccountListResponseV3>> {
-    return this.getPrivate('/api/v3/user/sub-list', params);
-  }
-
-  /**
-   *
-   * Transfer endpoints
-   *
-   */
-
-  /**
-   * Transfer
-   */
-  submitTransfer(
-    params: TransferRequestV3,
-  ): Promise<APIResponse<TransferResponseV3>> {
-    return this.postPrivate('/api/v3/account/transfer', params);
-  }
-
-  /**
-   * Get Transferable Coins
-   */
-  getTransferableCoins(
-    params: GetTransferableCoinsRequestV3,
-  ): Promise<APIResponse<string[]>> {
-    return this.getPrivate('/api/v3/account/transferable-coins', params);
-  }
-
-  /**
-   * Get Sub-account Unified Account Assets
-   */
-  getSubUnifiedAssets(
-    params?: GetSubUnifiedAssetsRequestV3,
-  ): Promise<APIResponse<SubUnifiedAssetsItemV3[]>> {
-    return this.getPrivate('/api/v3/account/sub-unified-assets', params);
-  }
-
-  /**
-   * Get Main-Sub Transfer Records
-   */
-  getSubTransferRecords(
-    params?: GetSubTransferRecordsRequestV3,
-  ): Promise<APIResponse<GetSubTransferRecordsResponseV3>> {
-    return this.getPrivate('/api/v3/account/sub-transfer-record', params);
-  }
-
-  /**
-   * Main-Sub Account Transfer
-   */
-  subAccountTransfer(
-    params: SubAccountTransferRequestV3,
-  ): Promise<APIResponse<SubAccountTransferResponseV3>> {
-    return this.postPrivate('/api/v3/account/sub-transfer', params);
-  }
-
-  /**
-   *
-   * Market Data endpoints
-   *
-   */
 
   /**
    * Get Recent Public Fills
@@ -430,6 +263,15 @@ export class RestClientV3 extends BaseRestClient {
     params: GetPublicFillsRequestV3,
   ): Promise<APIResponse<PublicFillV3[]>> {
     return this.get('/api/v3/market/fills', params);
+  }
+
+  /**
+   * Get Open Interest
+   */
+  getOpenInterest(
+    params: GetOpenInterestRequestV3,
+  ): Promise<APIResponse<OpenInterestV3>> {
+    return this.get('/api/v3/market/open-interest', params);
   }
 
   /**
@@ -451,28 +293,12 @@ export class RestClientV3 extends BaseRestClient {
   }
 
   /**
-   * Get Open Interest Limit
-   */
-  getContractsOi(
-    params: GetContractsOiRequestV3,
-  ): Promise<APIResponse<ContractOiV3[]>> {
-    return this.get('/api/v3/market/oi-limit', params);
-  }
-
-  /**
    * Get Current Funding Rate
    */
   getCurrentFundingRate(
     params: GetCurrentFundingRateRequestV3,
   ): Promise<APIResponse<CurrentFundingRateV3[]>> {
     return this.get('/api/v3/market/current-fund-rate', params);
-  }
-
-  /**
-   * Get Discount Rate
-   */
-  getDiscountRate(): Promise<APIResponse<DiscountRateV3[]>> {
-    return this.get('/api/v3/market/discount-rate');
   }
 
   /**
@@ -485,21 +311,28 @@ export class RestClientV3 extends BaseRestClient {
   }
 
   /**
+   * Get Risk Reserve
+   */
+  getRiskReserve(
+    params: GetRiskReserveRequestV3,
+  ): Promise<APIResponse<RiskReserveV3>> {
+    return this.get('/api/v3/market/risk-reserve', params);
+  }
+
+  /**
+   * Get Discount Rate
+   */
+  getDiscountRate(): Promise<APIResponse<DiscountRateV3[]>> {
+    return this.get('/api/v3/market/discount-rate');
+  }
+
+  /**
    * Get Margin Loan
    */
   getMarginLoans(
     params: GetMarginLoansRequestV3,
   ): Promise<APIResponse<MarginLoanV3>> {
     return this.get('/api/v3/market/margin-loans', params);
-  }
-
-  /**
-   * Get Open Interest
-   */
-  getOpenInterest(
-    params: GetOpenInterestRequestV3,
-  ): Promise<APIResponse<OpenInterestV3>> {
-    return this.get('/api/v3/market/open-interest', params);
   }
 
   /**
@@ -512,127 +345,310 @@ export class RestClientV3 extends BaseRestClient {
   }
 
   /**
-   * Get Risk Reserve
+   * Get Open Interest Limit
    */
-  getRiskReserve(
-    params: GetRiskReserveRequestV3,
-  ): Promise<APIResponse<RiskReserveV3>> {
-    return this.get('/api/v3/market/risk-reserve', params);
-  }
-
-  /**
-   * Get Instruments
-   */
-  getInstruments(
-    params: GetInstrumentsRequestV3,
-  ): Promise<APIResponse<InstrumentV3[]>> {
-    return this.get('/api/v3/market/instruments', params);
-  }
-
-  /**
-   * Get OrderBook
-   */
-  getOrderBook(
-    params: GetOrderBookRequestV3,
-  ): Promise<APIResponse<OrderBookV3>> {
-    return this.get('/api/v3/market/orderbook', params);
-  }
-
-  /**
-   * Get Tickers
-   */
-  getTickers(params: GetTickersRequestV3): Promise<APIResponse<TickerV3[]>> {
-    return this.get('/api/v3/market/tickers', params);
+  getContractsOi(
+    params: GetContractsOiRequestV3,
+  ): Promise<APIResponse<ContractOiV3[]>> {
+    return this.get('/api/v3/market/oi-limit', params);
   }
 
   /**
    *
-   * Loan endpoints
+   * =====Account======= endpoints
    *
    */
 
   /**
-   * Get Transferred Quantity
+   * Get Account Assets
    */
-  getLoanTransfered(
-    params: GetTransferedRequestV3,
-  ): Promise<APIResponse<TransferedResponseV3>> {
-    return this.getPrivate('/api/v3/ins-loan/transfered', params);
+  getAccountAssets(): Promise<APIResponse<AccountAssetsV3>> {
+    return this.getPrivate('/api/v3/account/assets');
   }
 
   /**
-   * Get Trade Symbols
+   * Get Fund Account Assets
    */
-  getLoanSymbols(
-    params: GetSymbolsRequestV3,
-  ): Promise<APIResponse<SymbolsResponseV3>> {
-    return this.getPrivate('/api/v3/ins-loan/symbols', params);
+  getFundingAssets(
+    params?: GetFundingAssetsRequestV3,
+  ): Promise<APIResponse<FundingAssetV3[]>> {
+    return this.getPrivate('/api/v3/account/funding-assets', params);
   }
 
   /**
-   * Get Risk Unit
+   * Get Account Info
    */
-  getLoanRiskUnit(): Promise<APIResponse<RiskUnitResponseV3>> {
-    return this.getPrivate('/api/v3/ins-loan/risk-unit');
+  getAccountSettings(): Promise<APIResponse<AccountSettingsV3>> {
+    return this.getPrivate('/api/v3/account/settings');
   }
 
   /**
-   * Get Repayment Orders
+   * Set Leverage
    */
-  getLoanRepaidHistory(
-    params?: GetRepaidHistoryRequestV3,
-  ): Promise<APIResponse<RepaidHistoryItemV3[]>> {
-    return this.getPrivate('/api/v3/ins-loan/repaid-history', params);
+  setLeverage(params: SetLeverageRequestV3): Promise<APIResponse<string>> {
+    return this.postPrivate('/api/v3/account/set-leverage', params);
   }
 
   /**
-   * Get Product Info
+   * Set Holding Mode
    */
-  getLoanProductInfo(
-    params: GetProductInfosRequestV3,
-  ): Promise<APIResponse<ProductInfosResponseV3>> {
-    return this.getPrivate('/api/v3/ins-loan/product-infos', params);
+  setHoldMode(params: {
+    holdMode: 'one_way_mode' | 'hedge_mode';
+  }): Promise<APIResponse<string>> {
+    return this.postPrivate('/api/v3/account/set-hold-mode', params);
   }
 
   /**
-   * Get Loan Orders
+   * Get Financial Records
    */
-  getLoanOrder(
-    params?: GetLoanOrderRequestV3,
-  ): Promise<APIResponse<LoanOrderV3[]>> {
-    return this.getPrivate('/api/v3/ins-loan/loan-order', params);
+  getFinancialRecords(
+    params: GetFinancialRecordsRequestV3,
+  ): Promise<APIResponse<FinancialRecordsResponseV3>> {
+    return this.getPrivate('/api/v3/account/financial-records', params);
   }
 
   /**
-   * Get Margin Coin Info
+   * Get Repayable Coins
    */
-  getLoanMarginCoinInfo(
-    params: GetEnsureCoinsRequestV3,
-  ): Promise<APIResponse<EnsureCoinsResponseV3>> {
-    return this.getPrivate('/api/v3/ins-loan/ensure-coins-convert', params);
+  getRepayableCoins(): Promise<APIResponse<RepayableCoinsResponseV3>> {
+    return this.getPrivate('/api/v3/account/repayable-coins');
   }
 
   /**
-   * Bind/Unbind UID to Risk Unit
+   * Get Payment Coins
    */
-  bindLoanUid(
-    params: BindUidRequestV3,
-  ): Promise<APIResponse<BindUidResponseV3>> {
-    return this.postPrivate('/api/v3/ins-loan/bind-uid', params);
+  getPaymentCoins(): Promise<APIResponse<PaymentCoinsResponseV3>> {
+    return this.getPrivate('/api/v3/account/payment-coins');
   }
 
   /**
-   * Get LTV
+   * Repay
    */
-  getLoanLTVConvert(
-    params?: GetLTVConvertRequestV3,
-  ): Promise<APIResponse<LTVConvertResponseV3>> {
-    return this.getPrivate('/api/v3/ins-loan/ltv-convert', params);
+  submitRepay(params: RepayRequestV3): Promise<APIResponse<RepayResponseV3>> {
+    return this.postPrivate('/api/v3/account/repay', params);
+  }
+
+  /**
+   * Get Convert Records
+   */
+  getConvertRecords(
+    params: GetConvertRecordsRequestV3,
+  ): Promise<APIResponse<ConvertRecordsResponseV3>> {
+    return this.getPrivate('/api/v3/account/convert-records', params);
+  }
+
+  /**
+   * Switch Deduct - Set BGB deduction
+   */
+  switchDeduct(params: SwitchDeductRequestV3): Promise<APIResponse<string>> {
+    return this.postPrivate('/api/v3/account/switch-deduct', params);
+  }
+
+  /**
+   * Get Deduct Info - Get BGB deduction status
+   */
+  getDeductInfo(): Promise<APIResponse<DeductInfoResponseV3>> {
+    return this.getPrivate('/api/v3/account/deduct-info');
+  }
+
+  /**
+   * Get Trading Fee Rate
+   */
+  getFeeRate(
+    params: GetFeeRateRequestV3,
+  ): Promise<APIResponse<GetFeeRateResponseV3>> {
+    return this.getPrivate('/api/v3/account/fee-rate', params);
   }
 
   /**
    *
-   * Trade endpoints
+   * =====SubAccount======= endpoints
+   *
+   */
+
+  /**
+   * Create Sub-account
+   */
+  createSubAccount(
+    params: CreateSubAccountRequestV3,
+  ): Promise<APIResponse<CreateSubAccountResponseV3>> {
+    return this.postPrivate('/api/v3/user/create-sub', params);
+  }
+
+  /**
+   * Freeze/Unfreeze Sub-account
+   */
+  freezeSubAccount(
+    params: FreezeSubAccountRequestV3,
+  ): Promise<APIResponse<object>> {
+    return this.postPrivate('/api/v3/user/freeze-sub', params);
+  }
+
+  /**
+   * Get Sub-account Unified Account Assets
+   */
+  getSubUnifiedAssets(
+    params?: GetSubUnifiedAssetsRequestV3,
+  ): Promise<APIResponse<SubUnifiedAssetsItemV3[]>> {
+    return this.getPrivate('/api/v3/account/sub-unified-assets', params);
+  }
+
+  /**
+   * Get Sub-account List
+   */
+  getSubAccountList(
+    params?: GetSubAccountListRequestV3,
+  ): Promise<APIResponse<GetSubAccountListResponseV3>> {
+    return this.getPrivate('/api/v3/user/sub-list', params);
+  }
+
+  /**
+   * Create Sub-account API Key
+   */
+  createSubAccountApiKey(
+    params: CreateSubAccountApiKeyRequestV3,
+  ): Promise<APIResponse<CreateSubAccountApiKeyResponseV3>> {
+    return this.postPrivate('/api/v3/user/create-sub-api', params);
+  }
+
+  /**
+   * Modify Sub-account API Key
+   */
+  updateSubAccountApiKey(
+    params: UpdateSubAccountApiKeyRequestV3,
+  ): Promise<APIResponse<UpdateSubAccountApiKeyResponseV3>> {
+    return this.postPrivate('/api/v3/user/update-sub-api', params);
+  }
+
+  /**
+   * Delete Sub-account API Key
+   */
+  deleteSubAccountApiKey(
+    params: DeleteSubAccountApiKeyRequestV3,
+  ): Promise<APIResponse<object>> {
+    return this.postPrivate('/api/v3/user/delete-sub-api', params);
+  }
+
+  /**
+   * Get Sub-account API Keys
+   */
+  getSubAccountApiKeys(
+    params: GetSubAccountApiKeysRequestV3,
+  ): Promise<APIResponse<GetSubAccountApiKeysResponseV3>> {
+    return this.getPrivate('/api/v3/user/sub-api-list', params);
+  }
+
+  /**
+   *
+   * =====Transfer======= endpoints
+   *
+   */
+
+  /**
+   * Get Transferable Coins
+   */
+  getTransferableCoins(
+    params: GetTransferableCoinsRequestV3,
+  ): Promise<APIResponse<string[]>> {
+    return this.getPrivate('/api/v3/account/transferable-coins', params);
+  }
+
+  /**
+   * Transfer
+   */
+  submitTransfer(
+    params: TransferRequestV3,
+  ): Promise<APIResponse<TransferResponseV3>> {
+    return this.postPrivate('/api/v3/account/transfer', params);
+  }
+
+  /**
+   * Main-Sub Account Transfer
+   */
+  subAccountTransfer(
+    params: SubAccountTransferRequestV3,
+  ): Promise<APIResponse<SubAccountTransferResponseV3>> {
+    return this.postPrivate('/api/v3/account/sub-transfer', params);
+  }
+
+  /**
+   * Get Main-Sub Transfer Records
+   */
+  getSubTransferRecords(
+    params?: GetSubTransferRecordsRequestV3,
+  ): Promise<APIResponse<GetSubTransferRecordsResponseV3>> {
+    return this.getPrivate('/api/v3/account/sub-transfer-record', params);
+  }
+
+  /**
+   *
+   * =====Deposit======= endpoints
+   *
+   */
+
+  /**
+   * Get Deposit Address
+   */
+  getDepositAddress(
+    params: GetDepositAddressRequestV3,
+  ): Promise<APIResponse<DepositAddressV3>> {
+    return this.getPrivate('/api/v3/account/deposit-address', params);
+  }
+
+  /**
+   * Get Sub Deposit Address
+   */
+  getSubDepositAddress(
+    params: GetSubDepositAddressRequestV3,
+  ): Promise<APIResponse<DepositAddressV3>> {
+    return this.getPrivate('/api/v3/account/sub-deposit-address', params);
+  }
+
+  /**
+   * Get Deposit Records
+   */
+  getDepositRecords(
+    params: GetDepositRecordsRequestV3,
+  ): Promise<APIResponse<DepositRecordV3[]>> {
+    return this.getPrivate('/api/v3/account/deposit-records', params);
+  }
+
+  /**
+   * Get Sub Deposit Records
+   */
+  getSubDepositRecords(
+    params: GetSubDepositRecordsRequestV3,
+  ): Promise<APIResponse<DepositRecordV3[]>> {
+    return this.postPrivate('/api/v3/account/sub-deposit-records', params);
+  }
+
+  /**
+   *
+   * =====Withdraw======= endpoints
+   *
+   */
+
+  /**
+   * Withdraw - Includes on-chain withdrawals and internal transfers
+   */
+  submitWithdraw(
+    params: WithdrawRequestV3,
+  ): Promise<APIResponse<WithdrawResponseV3>> {
+    return this.postPrivate('/api/v3/account/withdraw', params);
+  }
+
+  /**
+   * Get Withdraw Records
+   */
+  getWithdrawRecords(
+    params: GetWithdrawRecordsRequestV3,
+  ): Promise<APIResponse<WithdrawRecordV3[]>> {
+    return this.getPrivate('/api/v3/account/withdrawl-records', params);
+  }
+
+  /**
+   *
+   * =====Trade======= endpoints
    *
    */
 
@@ -778,5 +794,141 @@ export class RestClientV3 extends BaseRestClient {
     params: CountdownCancelAllRequestV3,
   ): Promise<APIResponse<string>> {
     return this.postPrivate('/api/v3/trade/countdown-cancel-all', params);
+  }
+
+  /**
+   *
+   * =====Inst Loan======= endpoints
+   *
+   */
+
+  /**
+   * Get Transferred Quantity
+   */
+  getLoanTransfered(
+    params: GetTransferedRequestV3,
+  ): Promise<APIResponse<TransferedResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/transfered', params);
+  }
+
+  /**
+   * Get Trade Symbols
+   */
+  getLoanSymbols(
+    params: GetSymbolsRequestV3,
+  ): Promise<APIResponse<SymbolsResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/symbols', params);
+  }
+
+  /**
+   * Get Risk Unit
+   */
+  getLoanRiskUnit(): Promise<APIResponse<RiskUnitResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/risk-unit');
+  }
+
+  /**
+   * Get Repayment Orders
+   */
+  getLoanRepaidHistory(
+    params?: GetRepaidHistoryRequestV3,
+  ): Promise<APIResponse<RepaidHistoryItemV3[]>> {
+    return this.getPrivate('/api/v3/ins-loan/repaid-history', params);
+  }
+
+  /**
+   * Get Product Info
+   */
+  getLoanProductInfo(
+    params: GetProductInfosRequestV3,
+  ): Promise<APIResponse<ProductInfosResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/product-infos', params);
+  }
+
+  /**
+   * Get Loan Orders
+   */
+  getLoanOrder(
+    params?: GetLoanOrderRequestV3,
+  ): Promise<APIResponse<LoanOrderV3[]>> {
+    return this.getPrivate('/api/v3/ins-loan/loan-order', params);
+  }
+
+  /**
+   * Get LTV
+   */
+  getLoanLTVConvert(
+    params?: GetLTVConvertRequestV3,
+  ): Promise<APIResponse<LTVConvertResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/ltv-convert', params);
+  }
+
+  /**
+   * Get Margin Coin Info
+   */
+  getLoanMarginCoinInfo(
+    params: GetEnsureCoinsRequestV3,
+  ): Promise<APIResponse<EnsureCoinsResponseV3>> {
+    return this.getPrivate('/api/v3/ins-loan/ensure-coins-convert', params);
+  }
+
+  /**
+   * Bind/Unbind UID to Risk Unit
+   */
+  bindLoanUid(
+    params: BindUidRequestV3,
+  ): Promise<APIResponse<BindUidResponseV3>> {
+    return this.postPrivate('/api/v3/ins-loan/bind-uid', params);
+  }
+
+  /**
+   *
+   * =====Strategy======= endpoints
+   *
+   */
+
+  /**
+   * Place Strategy Order
+   */
+  placeStrategyOrder(
+    params: PlaceStrategyOrderRequestV3,
+  ): Promise<APIResponse<PlaceStrategyOrderResponseV3>> {
+    return this.postPrivate('/api/v3/trade/place-strategy-order', params);
+  }
+
+  /**
+   * Modify Strategy Order
+   */
+  modifyStrategyOrder(
+    params: ModifyStrategyOrderRequestV3,
+  ): Promise<APIResponse<ModifyStrategyOrderResponseV3>> {
+    return this.postPrivate('/api/v3/trade/modify-strategy-order', params);
+  }
+
+  /**
+   * Cancel Strategy Order
+   */
+  cancelStrategyOrder(
+    params: CancelStrategyOrderRequestV3,
+  ): Promise<APIResponse<null>> {
+    return this.postPrivate('/api/v3/trade/cancel-strategy-order', params);
+  }
+
+  /**
+   * Get Unfilled Strategy Orders
+   */
+  getUnfilledStrategyOrders(
+    params: GetUnfilledStrategyOrdersRequestV3,
+  ): Promise<APIResponse<StrategyOrderV3[]>> {
+    return this.getPrivate('/api/v3/trade/unfilled-strategy-orders', params);
+  }
+
+  /**
+   * Get Strategy Order History
+   */
+  getHistoryStrategyOrders(
+    params: GetHistoryStrategyOrdersRequestV3,
+  ): Promise<APIResponse<GetHistoryStrategyOrdersResponseV3>> {
+    return this.getPrivate('/api/v3/trade/history-strategy-orders', params);
   }
 }

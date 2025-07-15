@@ -217,3 +217,58 @@ export interface FundingAssetV3 {
   frozen: string;
   balance: string;
 }
+
+export interface DeductInfoResponseV3 {
+  deduct: 'on' | 'off';
+}
+
+// Deposit Response Types
+
+export interface DepositAddressV3 {
+  address: string;
+  chain: string;
+  coin: string;
+  tag: string;
+  url: string;
+}
+
+export interface DepositRecordV3 {
+  orderId: string;
+  recordId: string;
+  coin: string;
+  type: 'deposit';
+  dest: 'on_chain' | 'internal_transfer';
+  size: string;
+  status: 'pending' | 'success' | 'fail';
+  fromAddress: string;
+  toAddress: string;
+  chain: string;
+  createdTime: string;
+  updatedTime: string;
+}
+
+// Withdraw Response Types
+
+export interface WithdrawResponseV3 {
+  orderId: string;
+  clientOid: string;
+}
+
+export interface WithdrawRecordV3 {
+  orderId: string;
+  clientOid: string;
+  recordId: string;
+  coin: string;
+  type: 'withdraw';
+  dest: 'on_chain' | 'internal_transfer';
+  size: string;
+  status: 'pending' | 'success' | 'fail';
+  fromAddress: string;
+  toAddress: string;
+  chain: string;
+  fee: string;
+  confirm: string;
+  tag: string;
+  createdTime: string;
+  updatedTime: string;
+}
