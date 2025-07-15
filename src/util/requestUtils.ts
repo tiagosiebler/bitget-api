@@ -32,6 +32,15 @@ export interface RestClientOptions {
   encodeQueryStringValues?: boolean;
 
   /**
+   * Optionally override API protocol + domain
+   * e.g baseUrl: 'https://api.bitget.com'
+   **/
+  baseUrl?: string;
+
+  /** Default: true. whether to try and post-process request exceptions (and throw them). */
+  parseExceptions?: boolean;
+
+  /**
    * Enable keep alive for REST API requests (via axios).
    */
   keepAlive?: boolean;
@@ -42,15 +51,6 @@ export interface RestClientOptions {
    * Default: 1000 (defaults comes from https agent)
    */
   keepAliveMsecs?: number;
-
-  /**
-   * Optionally override API protocol + domain
-   * e.g baseUrl: 'https://api.bitget.com'
-   **/
-  baseUrl?: string;
-
-  /** Default: true. whether to try and post-process request exceptions (and throw them). */
-  parseExceptions?: boolean;
 }
 
 export function serializeParams<T extends object | undefined = object>(
