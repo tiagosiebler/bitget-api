@@ -25,6 +25,7 @@ export interface GetFinancialRecordsRequestV3 {
     | 'COIN-FUTURES'
     | 'USDC-FUTURES';
   coin?: string;
+  type?: string;
   startTime?: string;
   endTime?: string;
   limit?: string;
@@ -161,4 +162,91 @@ export interface SubAccountTransferRequestV3 {
   fromUserId: string;
   toUserId: string;
   clientOid: string;
+}
+
+export interface GetSubUnifiedAssetsRequestV3 {
+  subUid?: string;
+  cursor?: string;
+  limit?: string;
+}
+
+export interface GetFeeRateRequestV3 {
+  category:
+    | 'SPOT'
+    | 'MARGIN'
+    | 'USDT-FUTURES'
+    | 'COIN-FUTURES'
+    | 'USDC-FUTURES';
+  symbol: string;
+}
+
+export interface GetFundingAssetsRequestV3 {
+  coin?: string;
+}
+
+export interface SwitchDeductRequestV3 {
+  deduct: 'on' | 'off';
+}
+
+// Deposit Request Types
+
+export interface GetDepositAddressRequestV3 {
+  coin: string;
+  chain?: string;
+  size?: string;
+}
+
+export interface GetSubDepositAddressRequestV3 {
+  subUid: string;
+  coin: string;
+  chain?: string;
+  size?: string;
+}
+
+export interface GetDepositRecordsRequestV3 {
+  coin?: string;
+  orderId?: string;
+  startTime: string;
+  endTime: string;
+  limit?: string;
+  cursor?: string;
+}
+
+export interface GetSubDepositRecordsRequestV3 {
+  coin?: string;
+  subUid: string;
+  startTime: string;
+  endTime: string;
+  limit?: string;
+  cursor?: string;
+}
+
+// Withdraw Request Types
+
+export interface WithdrawRequestV3 {
+  coin: string;
+  chain?: string;
+  transferType: 'on_chain' | 'internal_transfer';
+  address: string;
+  innerToType?: 'uid' | 'email' | 'mobile';
+  areaCode?: string;
+  tag?: string;
+  size: string;
+  remark?: string;
+  clientOid?: string;
+  memberCode?: 'bithumb' | 'korbit' | 'coinone';
+  identityType?: 'company' | 'user';
+  companyName?: string;
+  firstName?: string;
+  lastName?: string;
+}
+
+export interface GetWithdrawRecordsRequestV3 {
+  coin?: string;
+  orderId?: string;
+  clientOid?: string;
+  startTime: string;
+  endTime: string;
+  limit?: string;
+  cursor?: string;
 }

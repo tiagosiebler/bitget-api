@@ -52,11 +52,6 @@ export interface ConvertRecordV3 {
   ts: string;
 }
 
-export interface ConvertRecordsResponseV3 {
-  list: ConvertRecordV3[];
-  cursor: string;
-}
-
 export interface FinancialRecordV3 {
   category: string;
   id: string;
@@ -69,30 +64,16 @@ export interface FinancialRecordV3 {
   ts: string;
 }
 
-export interface FinancialRecordsResponseV3 {
-  list: FinancialRecordV3[];
-  cursor: string;
-}
-
 export interface PaymentCoinV3 {
   coin: string;
   size: string;
   amount: string;
-}
-export interface PaymentCoinsResponseV3 {
-  paymentCoinList: PaymentCoinV3[];
-  maxSelection: string;
 }
 
 export interface RepayableCoinV3 {
   coin: string;
   size: string;
   amount: string;
-}
-
-export interface RepayableCoinsResponseV3 {
-  repayableCoinList: RepayableCoinV3[];
-  maxSelection: string;
 }
 
 export interface RepayResponseV3 {
@@ -117,12 +98,6 @@ export interface SubAccountApiKeyV3 {
   permissions: string[];
   ips: string[];
   ts?: string;
-}
-
-export interface GetSubAccountApiKeysResponseV3 {
-  items: SubAccountApiKeyV3[];
-  hasNext: boolean;
-  cursor: string;
 }
 
 export interface UpdateSubAccountApiKeyResponseV3 {
@@ -153,12 +128,6 @@ export interface SubAccountV3 {
   updatedTime: string;
 }
 
-export interface GetSubAccountListResponseV3 {
-  list: SubAccountV3[];
-  hasNext: boolean;
-  cursor: string;
-}
-
 // Transfer Response Types
 
 export interface TransferResponseV3 {
@@ -167,6 +136,7 @@ export interface TransferResponseV3 {
 
 export interface SubTransferRecordV3 {
   transferId: string;
+  oldTransferId?: string;
   fromType: string;
   toType: string;
   amount: string;
@@ -179,12 +149,81 @@ export interface SubTransferRecordV3 {
   updatedTime: string;
 }
 
-export interface GetSubTransferRecordsResponseV3 {
-  items: SubTransferRecordV3[];
-  cursor: string;
+export interface SubUnifiedAssetV3 {
+  coin: string;
+  equity: string;
+  usdValue: string;
+  balance: string;
+  available: string;
+  debt: string;
+  locked: string;
 }
 
-export interface SubAccountTransferResponseV3 {
-  transferId: string;
+export interface SubUnifiedAssetV3 {
+  subUid: string;
+  cursor: string;
+  assets: SubUnifiedAssetV3[];
+}
+
+export interface GetFeeRateResponseV3 {
+  makerFeeRate: string;
+  takerFeeRate: string;
+}
+
+export interface FundingAssetV3 {
+  coin: string;
+  available: string;
+  frozen: string;
+  balance: string;
+}
+
+// Deposit Response Types
+
+export interface DepositAddressV3 {
+  address: string;
+  chain: string;
+  coin: string;
+  tag: string;
+  url: string;
+}
+
+export interface DepositRecordV3 {
+  orderId: string;
+  recordId: string;
+  coin: string;
+  type: 'deposit';
+  dest: 'on_chain' | 'internal_transfer';
+  size: string;
+  status: 'pending' | 'success' | 'fail';
+  fromAddress: string;
+  toAddress: string;
+  chain: string;
+  createdTime: string;
+  updatedTime: string;
+}
+
+// Withdraw Response Types
+
+export interface WithdrawResponseV3 {
+  orderId: string;
   clientOid: string;
+}
+
+export interface WithdrawRecordV3 {
+  orderId: string;
+  clientOid: string;
+  recordId: string;
+  coin: string;
+  type: 'withdraw';
+  dest: 'on_chain' | 'internal_transfer';
+  size: string;
+  status: 'pending' | 'success' | 'fail';
+  fromAddress: string;
+  toAddress: string;
+  chain: string;
+  fee: string;
+  confirm: string;
+  tag: string;
+  createdTime: string;
+  updatedTime: string;
 }

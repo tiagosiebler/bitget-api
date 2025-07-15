@@ -68,6 +68,7 @@ export interface OrderInfoV3 {
   feeDetail: FeeDetailV3[];
   cancelReason: string;
   execType: string;
+  stpMode?: string;
   createdTime: string;
   updatedTime: string;
 }
@@ -84,13 +85,10 @@ export interface FillV3 {
   execValue: string;
   tradeScope: string;
   feeDetail: FeeDetailV3[];
+  execPnl?: string;
+  tradeSide?: string;
   createdTime: string;
   updatedTime: string;
-}
-
-export interface GetFillsResponseV3 {
-  list: FillV3[];
-  cursor: string;
 }
 
 export interface UnfilledOrderV3 {
@@ -112,13 +110,9 @@ export interface UnfilledOrderV3 {
   holdMode: string;
   reduceOnly: string;
   feeDetail: FeeDetailV3[];
+  stpMode?: string;
   createdTime: string;
   updatedTime: string;
-}
-
-export interface GetUnfilledOrdersResponseV3 {
-  list: UnfilledOrderV3[];
-  cursor: string;
 }
 
 export interface HistoryOrderV3 {
@@ -142,13 +136,9 @@ export interface HistoryOrderV3 {
   feeDetail: FeeDetailV3[];
   cancelReason: string;
   execType: string;
+  stpMode?: string;
   createdTime: string;
   updatedTime: string;
-}
-
-export interface GetHistoryOrdersResponseV3 {
-  list: HistoryOrderV3[];
-  cursor: string;
 }
 
 export interface PositionHistoryV3 {
@@ -170,11 +160,6 @@ export interface PositionHistoryV3 {
   closeFeeTotal: string;
   createdTime: string;
   updatedTime: string;
-}
-
-export interface GetPositionHistoryResponseV3 {
-  list: PositionHistoryV3[];
-  cursor: string;
 }
 
 export interface CurrentPositionV3 {
@@ -203,10 +188,6 @@ export interface CurrentPositionV3 {
   closeFeeTotal: string;
   createdTime: string;
   updatedTime: string;
-}
-
-export interface GetCurrentPositionResponseV3 {
-  list: CurrentPositionV3[];
 }
 
 export interface ModifyOrderResponseV3 {
