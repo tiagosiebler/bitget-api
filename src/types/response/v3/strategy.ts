@@ -26,8 +26,3 @@ export interface StrategyOrderV3 {
   createdTime: string;
   updatedTime: string;
 }
-
-export interface GetHistoryStrategyOrdersResponseV3 {
-  list: StrategyOrderV3[];
-  cursor?: string;
-}

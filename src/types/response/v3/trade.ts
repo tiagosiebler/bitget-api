@@ -91,11 +91,6 @@ export interface FillV3 {
   updatedTime: string;
 }
 
-export interface GetFillsResponseV3 {
-  list: FillV3[];
-  cursor: string;
-}
-
 export interface UnfilledOrderV3 {
   orderId: string;
   clientOid: string;
@@ -118,11 +113,6 @@ export interface UnfilledOrderV3 {
   stpMode?: string;
   createdTime: string;
   updatedTime: string;
-}
-
-export interface GetUnfilledOrdersResponseV3 {
-  list: UnfilledOrderV3[];
-  cursor: string;
 }
 
 export interface HistoryOrderV3 {
@@ -151,11 +141,6 @@ export interface HistoryOrderV3 {
   updatedTime: string;
 }
 
-export interface GetHistoryOrdersResponseV3 {
-  list: HistoryOrderV3[];
-  cursor: string;
-}
-
 export interface PositionHistoryV3 {
   positionId: string;
   category: string;
@@ -175,11 +160,6 @@ export interface PositionHistoryV3 {
   closeFeeTotal: string;
   createdTime: string;
   updatedTime: string;
-}
-
-export interface GetPositionHistoryResponseV3 {
-  list: PositionHistoryV3[];
-  cursor: string;
 }
 
 export interface CurrentPositionV3 {
@@ -208,10 +188,6 @@ export interface CurrentPositionV3 {
   closeFeeTotal: string;
   createdTime: string;
   updatedTime: string;
-}
-
-export interface GetCurrentPositionResponseV3 {
-  list: CurrentPositionV3[];
 }
 
 export interface ModifyOrderResponseV3 {

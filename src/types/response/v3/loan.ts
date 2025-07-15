@@ -1,27 +1,23 @@
-export interface TransferedResponseV3 {
+export interface LoanTransfersV3 {
   coin: string;
   transfered: string;
   userId: string;
 }
 
-export interface SymbolSettingV3 {
+export interface LoanSymbolSettingV3 {
   symbol: string;
   leverage: string;
 }
 
-export interface SymbolsResponseV3 {
+export interface LoanSymbolsV3 {
   productId: string;
   spotSymbols: string[];
   usdtContractLeverage: string;
   coinContractLeverage: string;
   usdcContractLeverage: string;
-  usdtContractSymbols: SymbolSettingV3[];
-  coinContractSymbols: SymbolSettingV3[];
-  usdcContractSymbols: SymbolSettingV3[];
-}
-
-export interface RiskUnitResponseV3 {
-  riskUnitId: string[];
+  usdtContractSymbols: LoanSymbolSettingV3[];
+  coinContractSymbols: LoanSymbolSettingV3[];
+  usdcContractSymbols: LoanSymbolSettingV3[];
 }
 
 export interface RepaidHistoryItemV3 {
@@ -34,7 +30,7 @@ export interface RepaidHistoryItemV3 {
   repayInterest: string;
 }
 
-export interface ProductInfosResponseV3 {
+export interface LoanProductInfoV3 {
   productId: string;
   leverage: string;
   supportUsdtContract: 'YES' | 'NO';
@@ -68,11 +64,6 @@ export interface CoinInfoV3 {
   coin: string;
   convertRatio: string;
   maxConvertValue: string;
-}
-
-export interface EnsureCoinsResponseV3 {
-  productId: string;
-  coinInfo: CoinInfoV3[];
 }
 
 export interface BindUidResponseV3 {

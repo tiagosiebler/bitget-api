@@ -52,11 +52,6 @@ export interface ConvertRecordV3 {
   ts: string;
 }
 
-export interface ConvertRecordsResponseV3 {
-  list: ConvertRecordV3[];
-  cursor: string;
-}
-
 export interface FinancialRecordV3 {
   category: string;
   id: string;
@@ -69,30 +64,16 @@ export interface FinancialRecordV3 {
   ts: string;
 }
 
-export interface FinancialRecordsResponseV3 {
-  list: FinancialRecordV3[];
-  cursor: string;
-}
-
 export interface PaymentCoinV3 {
   coin: string;
   size: string;
   amount: string;
-}
-export interface PaymentCoinsResponseV3 {
-  paymentCoinList: PaymentCoinV3[];
-  maxSelection: string;
 }
 
 export interface RepayableCoinV3 {
   coin: string;
   size: string;
   amount: string;
-}
-
-export interface RepayableCoinsResponseV3 {
-  repayableCoinList: RepayableCoinV3[];
-  maxSelection: string;
 }
 
 export interface RepayResponseV3 {
@@ -117,12 +98,6 @@ export interface SubAccountApiKeyV3 {
   permissions: string[];
   ips: string[];
   ts?: string;
-}
-
-export interface GetSubAccountApiKeysResponseV3 {
-  items: SubAccountApiKeyV3[];
-  hasNext: boolean;
-  cursor: string;
 }
 
 export interface UpdateSubAccountApiKeyResponseV3 {
@@ -153,12 +128,6 @@ export interface SubAccountV3 {
   updatedTime: string;
 }
 
-export interface GetSubAccountListResponseV3 {
-  list: SubAccountV3[];
-  hasNext: boolean;
-  cursor: string;
-}
-
 // Transfer Response Types
 
 export interface TransferResponseV3 {
@@ -180,16 +149,6 @@ export interface SubTransferRecordV3 {
   updatedTime: string;
 }
 
-export interface GetSubTransferRecordsResponseV3 {
-  items: SubTransferRecordV3[];
-  cursor: string;
-}
-
-export interface SubAccountTransferResponseV3 {
-  transferId: string;
-  clientOid: string;
-}
-
 export interface SubUnifiedAssetV3 {
   coin: string;
   equity: string;
@@ -200,7 +159,7 @@ export interface SubUnifiedAssetV3 {
   locked: string;
 }
 
-export interface SubUnifiedAssetsItemV3 {
+export interface SubUnifiedAssetV3 {
   subUid: string;
   cursor: string;
   assets: SubUnifiedAssetV3[];
@@ -216,10 +175,6 @@ export interface FundingAssetV3 {
   available: string;
   frozen: string;
   balance: string;
-}
-
-export interface DeductInfoResponseV3 {
-  deduct: 'on' | 'off';
 }
 
 // Deposit Response Types

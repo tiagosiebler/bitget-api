@@ -16,21 +16,22 @@ import {
   CandlestickV3,
   CloseAllPositionsRequestV3,
   CloseAllPositionsResponseV3,
+  CoinInfoV3,
   ContractOiV3,
-  ConvertRecordsResponseV3,
+  ConvertRecordV3,
   CountdownCancelAllRequestV3,
   CreateSubAccountApiKeyRequestV3,
   CreateSubAccountApiKeyResponseV3,
   CreateSubAccountRequestV3,
   CreateSubAccountResponseV3,
   CurrentFundingRateV3,
-  DeductInfoResponseV3,
+  CurrentPositionV3,
   DeleteSubAccountApiKeyRequestV3,
   DepositAddressV3,
   DepositRecordV3,
   DiscountRateV3,
-  EnsureCoinsResponseV3,
-  FinancialRecordsResponseV3,
+  FillV3,
+  FinancialRecordV3,
   FreezeSubAccountRequestV3,
   FundingAssetV3,
   GetCandlesRequestV3,
@@ -38,22 +39,17 @@ import {
   GetConvertRecordsRequestV3,
   GetCurrentFundingRateRequestV3,
   GetCurrentPositionRequestV3,
-  GetCurrentPositionResponseV3,
   GetDepositAddressRequestV3,
   GetDepositRecordsRequestV3,
   GetEnsureCoinsRequestV3,
   GetFeeRateRequestV3,
-  GetFeeRateResponseV3,
   GetFillsRequestV3,
-  GetFillsResponseV3,
   GetFinancialRecordsRequestV3,
   GetFundingAssetsRequestV3,
   GetHistoryCandlesRequestV3,
   GetHistoryFundingRateRequestV3,
   GetHistoryOrdersRequestV3,
-  GetHistoryOrdersResponseV3,
   GetHistoryStrategyOrdersRequestV3,
-  GetHistoryStrategyOrdersResponseV3,
   GetInstrumentsRequestV3,
   GetLoanOrderRequestV3,
   GetLTVConvertRequestV3,
@@ -64,32 +60,31 @@ import {
   GetOrderBookRequestV3,
   GetOrderInfoRequestV3,
   GetPositionHistoryRequestV3,
-  GetPositionHistoryResponseV3,
   GetPositionTierRequestV3,
   GetProductInfosRequestV3,
   GetPublicFillsRequestV3,
   GetRepaidHistoryRequestV3,
   GetRiskReserveRequestV3,
   GetSubAccountApiKeysRequestV3,
-  GetSubAccountApiKeysResponseV3,
   GetSubAccountListRequestV3,
-  GetSubAccountListResponseV3,
   GetSubDepositAddressRequestV3,
   GetSubDepositRecordsRequestV3,
   GetSubTransferRecordsRequestV3,
-  GetSubTransferRecordsResponseV3,
   GetSubUnifiedAssetsRequestV3,
   GetSymbolsRequestV3,
   GetTickersRequestV3,
   GetTransferableCoinsRequestV3,
   GetTransferedRequestV3,
   GetUnfilledOrdersRequestV3,
-  GetUnfilledOrdersResponseV3,
   GetUnfilledStrategyOrdersRequestV3,
   GetWithdrawRecordsRequestV3,
   HistoryFundingRateV3,
+  HistoryOrderV3,
   InstrumentV3,
   LoanOrderV3,
+  LoanProductInfoV3,
+  LoanSymbolsV3,
+  LoanTransfersV3,
   LTVConvertResponseV3,
   MarginLoanV3,
   ModifyOrderRequestV3,
@@ -99,33 +94,33 @@ import {
   OpenInterestV3,
   OrderBookV3,
   OrderInfoV3,
-  PaymentCoinsResponseV3,
+  PaymentCoinV3,
   PlaceBatchOrdersRequestV3,
   PlaceBatchOrdersResponseV3,
   PlaceOrderRequestV3,
   PlaceOrderResponseV3,
   PlaceStrategyOrderRequestV3,
   PlaceStrategyOrderResponseV3,
+  PositionHistoryV3,
   PositionTierV3,
-  ProductInfosResponseV3,
   PublicFillV3,
   RepaidHistoryItemV3,
-  RepayableCoinsResponseV3,
+  RepayableCoinV3,
   RepayRequestV3,
   RepayResponseV3,
   RiskReserveV3,
-  RiskUnitResponseV3,
   SetLeverageRequestV3,
   StrategyOrderV3,
+  SubAccountApiKeyV3,
   SubAccountTransferRequestV3,
-  SubAccountTransferResponseV3,
-  SubUnifiedAssetsItemV3,
+  SubAccountV3,
+  SubTransferRecordV3,
+  SubUnifiedAssetV3,
   SwitchDeductRequestV3,
-  SymbolsResponseV3,
   TickerV3,
-  TransferedResponseV3,
   TransferRequestV3,
   TransferResponseV3,
+  UnfilledOrderV3,
   UpdateSubAccountApiKeyRequestV3,
   UpdateSubAccountApiKeyResponseV3,
   WithdrawRecordV3,
@@ -401,23 +396,36 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Get Financial Records
    */
-  getFinancialRecords(
-    params: GetFinancialRecordsRequestV3,
-  ): Promise<APIResponse<FinancialRecordsResponseV3>> {
+  getFinancialRecords(params: GetFinancialRecordsRequestV3): Promise<
+    APIResponse<{
+      list: FinancialRecordV3[];
+      cursor: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/account/financial-records', params);
   }
 
   /**
    * Get Repayable Coins
    */
-  getRepayableCoins(): Promise<APIResponse<RepayableCoinsResponseV3>> {
+  getRepayableCoins(): Promise<
+    APIResponse<{
+      repayableCoinList: RepayableCoinV3[];
+      maxSelection: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/account/repayable-coins');
   }
 
   /**
    * Get Payment Coins
    */
-  getPaymentCoins(): Promise<APIResponse<PaymentCoinsResponseV3>> {
+  getPaymentCoins(): Promise<
+    APIResponse<{
+      paymentCoinList: PaymentCoinV3[];
+      maxSelection: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/account/payment-coins');
   }
 
@@ -431,9 +439,12 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Get Convert Records
    */
-  getConvertRecords(
-    params: GetConvertRecordsRequestV3,
-  ): Promise<APIResponse<ConvertRecordsResponseV3>> {
+  getConvertRecords(params: GetConvertRecordsRequestV3): Promise<
+    APIResponse<{
+      list: ConvertRecordV3[];
+      cursor: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/account/convert-records', params);
   }
 
@@ -447,16 +458,23 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Get Deduct Info - Get BGB deduction status
    */
-  getDeductInfo(): Promise<APIResponse<DeductInfoResponseV3>> {
+  getDeductInfo(): Promise<
+    APIResponse<{
+      deduct: 'on' | 'off';
+    }>
+  > {
     return this.getPrivate('/api/v3/account/deduct-info');
   }
 
   /**
    * Get Trading Fee Rate
    */
-  getFeeRate(
-    params: GetFeeRateRequestV3,
-  ): Promise<APIResponse<GetFeeRateResponseV3>> {
+  getFeeRate(params: GetFeeRateRequestV3): Promise<
+    APIResponse<{
+      makerFeeRate: string;
+      takerFeeRate: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/account/fee-rate', params);
   }
 
@@ -489,16 +507,20 @@ export class RestClientV3 extends BaseRestClient {
    */
   getSubUnifiedAssets(
     params?: GetSubUnifiedAssetsRequestV3,
-  ): Promise<APIResponse<SubUnifiedAssetsItemV3[]>> {
+  ): Promise<APIResponse<SubUnifiedAssetV3[]>> {
     return this.getPrivate('/api/v3/account/sub-unified-assets', params);
   }
 
   /**
    * Get Sub-account List
    */
-  getSubAccountList(
-    params?: GetSubAccountListRequestV3,
-  ): Promise<APIResponse<GetSubAccountListResponseV3>> {
+  getSubAccountList(params?: GetSubAccountListRequestV3): Promise<
+    APIResponse<{
+      list: SubAccountV3[];
+      hasNext: boolean;
+      cursor: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/user/sub-list', params);
   }
 
@@ -525,16 +547,20 @@ export class RestClientV3 extends BaseRestClient {
    */
   deleteSubAccountApiKey(
     params: DeleteSubAccountApiKeyRequestV3,
-  ): Promise<APIResponse<object>> {
+  ): Promise<APIResponse<any>> {
     return this.postPrivate('/api/v3/user/delete-sub-api', params);
   }
 
   /**
    * Get Sub-account API Keys
    */
-  getSubAccountApiKeys(
-    params: GetSubAccountApiKeysRequestV3,
-  ): Promise<APIResponse<GetSubAccountApiKeysResponseV3>> {
+  getSubAccountApiKeys(params: GetSubAccountApiKeysRequestV3): Promise<
+    APIResponse<{
+      items: SubAccountApiKeyV3[];
+      hasNext: boolean;
+      cursor: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/user/sub-api-list', params);
   }
 
@@ -565,18 +591,24 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Main-Sub Account Transfer
    */
-  subAccountTransfer(
-    params: SubAccountTransferRequestV3,
-  ): Promise<APIResponse<SubAccountTransferResponseV3>> {
+  subAccountTransfer(params: SubAccountTransferRequestV3): Promise<
+    APIResponse<{
+      transferId: string;
+      clientOid: string;
+    }>
+  > {
     return this.postPrivate('/api/v3/account/sub-transfer', params);
   }
 
   /**
    * Get Main-Sub Transfer Records
    */
-  getSubTransferRecords(
-    params?: GetSubTransferRecordsRequestV3,
-  ): Promise<APIResponse<GetSubTransferRecordsResponseV3>> {
+  getSubTransferRecords(params?: GetSubTransferRecordsRequestV3): Promise<
+    APIResponse<{
+      items: SubTransferRecordV3[];
+      cursor: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/account/sub-transfer-record', params);
   }
 
@@ -736,45 +768,59 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Get Open Orders
    */
-  getUnfilledOrders(
-    params?: GetUnfilledOrdersRequestV3,
-  ): Promise<APIResponse<GetUnfilledOrdersResponseV3>> {
+  getUnfilledOrders(params?: GetUnfilledOrdersRequestV3): Promise<
+    APIResponse<{
+      list: UnfilledOrderV3[];
+      cursor: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/trade/unfilled-orders', params);
   }
 
   /**
    * Get Order History
    */
-  getHistoryOrders(
-    params: GetHistoryOrdersRequestV3,
-  ): Promise<APIResponse<GetHistoryOrdersResponseV3>> {
+  getHistoryOrders(params: GetHistoryOrdersRequestV3): Promise<
+    APIResponse<{
+      list: HistoryOrderV3[];
+      cursor: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/trade/history-orders', params);
   }
 
   /**
    * Get Fill History
    */
-  getTradeFills(
-    params?: GetFillsRequestV3,
-  ): Promise<APIResponse<GetFillsResponseV3>> {
+  getTradeFills(params?: GetFillsRequestV3): Promise<
+    APIResponse<{
+      list: FillV3[];
+      cursor: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/trade/fills', params);
   }
 
   /**
    * Get Position Info
    */
-  getCurrentPosition(
-    params: GetCurrentPositionRequestV3,
-  ): Promise<APIResponse<GetCurrentPositionResponseV3>> {
+  getCurrentPosition(params: GetCurrentPositionRequestV3): Promise<
+    APIResponse<{
+      list: CurrentPositionV3[];
+    }>
+  > {
     return this.getPrivate('/api/v3/position/current-position', params);
   }
 
   /**
    * Get Positions History
    */
-  getPositionHistory(
-    params: GetPositionHistoryRequestV3,
-  ): Promise<APIResponse<GetPositionHistoryResponseV3>> {
+  getPositionHistory(params: GetPositionHistoryRequestV3): Promise<
+    APIResponse<{
+      list: PositionHistoryV3[];
+      cursor: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/position/history-position', params);
   }
 
@@ -807,7 +853,7 @@ export class RestClientV3 extends BaseRestClient {
    */
   getLoanTransfered(
     params: GetTransferedRequestV3,
-  ): Promise<APIResponse<TransferedResponseV3>> {
+  ): Promise<APIResponse<LoanTransfersV3>> {
     return this.getPrivate('/api/v3/ins-loan/transfered', params);
   }
 
@@ -816,14 +862,18 @@ export class RestClientV3 extends BaseRestClient {
    */
   getLoanSymbols(
     params: GetSymbolsRequestV3,
-  ): Promise<APIResponse<SymbolsResponseV3>> {
+  ): Promise<APIResponse<LoanSymbolsV3>> {
     return this.getPrivate('/api/v3/ins-loan/symbols', params);
   }
 
   /**
    * Get Risk Unit
    */
-  getLoanRiskUnit(): Promise<APIResponse<RiskUnitResponseV3>> {
+  getLoanRiskUnit(): Promise<
+    APIResponse<{
+      riskUnitId: string[];
+    }>
+  > {
     return this.getPrivate('/api/v3/ins-loan/risk-unit');
   }
 
@@ -841,7 +891,7 @@ export class RestClientV3 extends BaseRestClient {
    */
   getLoanProductInfo(
     params: GetProductInfosRequestV3,
-  ): Promise<APIResponse<ProductInfosResponseV3>> {
+  ): Promise<APIResponse<LoanProductInfoV3>> {
     return this.getPrivate('/api/v3/ins-loan/product-infos', params);
   }
 
@@ -866,9 +916,12 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Get Margin Coin Info
    */
-  getLoanMarginCoinInfo(
-    params: GetEnsureCoinsRequestV3,
-  ): Promise<APIResponse<EnsureCoinsResponseV3>> {
+  getLoanMarginCoinInfo(params: GetEnsureCoinsRequestV3): Promise<
+    APIResponse<{
+      productId: string;
+      coinInfo: CoinInfoV3[];
+    }>
+  > {
     return this.getPrivate('/api/v3/ins-loan/ensure-coins-convert', params);
   }
 
@@ -890,7 +943,7 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Place Strategy Order
    */
-  placeStrategyOrder(
+  submitStrategyOrder(
     params: PlaceStrategyOrderRequestV3,
   ): Promise<APIResponse<PlaceStrategyOrderResponseV3>> {
     return this.postPrivate('/api/v3/trade/place-strategy-order', params);
@@ -926,9 +979,12 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Get Strategy Order History
    */
-  getHistoryStrategyOrders(
-    params: GetHistoryStrategyOrdersRequestV3,
-  ): Promise<APIResponse<GetHistoryStrategyOrdersResponseV3>> {
+  getHistoryStrategyOrders(params: GetHistoryStrategyOrdersRequestV3): Promise<
+    APIResponse<{
+      list: StrategyOrderV3[];
+      cursor?: string;
+    }>
+  > {
     return this.getPrivate('/api/v3/trade/history-strategy-orders', params);
   }
 }
