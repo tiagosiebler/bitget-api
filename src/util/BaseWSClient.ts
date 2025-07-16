@@ -10,7 +10,6 @@ import {
   WsOperation,
 } from '../types';
 import { DefaultLogger } from './logger';
-import { isWsPong } from './requestUtils';
 import {
   getNormalisedTopicRequests,
   safeTerminateWs,
@@ -509,7 +508,7 @@ export abstract class BaseWebsocketClient<
     const ws = new WebSocket(url, protocols, wsOptions);
 
     ws.onopen = (event) => this.onWsOpen(event, wsKey, url, ws);
-    ws.onmessage = (event) => this.onWsMessageLegacy(event, wsKey, ws);
+    ws.onmessage = (event) => this.onWsMessage(event, wsKey, ws);
     ws.onerror = (event) =>
       this.parseWsError('Websocket onWsError', event, wsKey);
     ws.onclose = (event) => this.onWsClose(event, wsKey);
@@ -977,97 +976,8 @@ export abstract class BaseWebsocketClient<
   }
 
   /**
-   * Original V1 & V2 WS Message handler. Might need to migrate to the common standard, see onWsMessage()
-   */
-  private onWsMessageLegacy(event: unknown, wsKey: TWSKey, ws: WebSocket) {
-    try {
-      // any message can clear the pong timer - wouldn't get a message if the ws wasn't working
-      this.clearPongTimer(wsKey);
-
-      if (isWsPong(event)) {
-        this.logger.trace('Received pong', {
-          ...WS_LOGGER_CATEGORY,
-          wsKey,
-          event: (event as any)?.data,
-        });
-        return;
-      }
-
-      if (this.isWsPing(event)) {
-        this.logger.trace('Received ping', {
-          ...WS_LOGGER_CATEGORY,
-          wsKey,
-          event,
-        });
-        this.sendPongEvent(wsKey, ws);
-        return;
-      }
-
-      const msg = JSON.parse((event && event['data']) || event);
-      const emittableEvent = { ...msg, wsKey };
-
-      // TODO: are v3 events different from V2? if yes? migrate to resolveEmittableEvents
-      if (typeof msg === 'object') {
-        if (typeof msg['code'] === 'number') {
-          if (msg.event === 'login' && msg.code === 0) {
-            this.logger.info('Successfully authenticated WS client', {
-              ...WS_LOGGER_CATEGORY,
-              wsKey,
-              msg,
-            });
-            this.emit('response', emittableEvent);
-            this.emit('authenticated', emittableEvent);
-            this.onWsAuthenticated(wsKey, msg);
-            return;
-          }
-        }
-
-        if (msg['event']) {
-          if (msg.event === 'error') {
-            this.logger.error('WS Error received', {
-              ...WS_LOGGER_CATEGORY,
-              wsKey,
-              message: msg || 'no message',
-              // messageType: typeof msg,
-              // messageString: JSON.stringify(msg),
-              event,
-            });
-            this.emit('exception', emittableEvent);
-            this.emit('response', emittableEvent);
-            return;
-          }
-          return this.emit('response', emittableEvent);
-        }
-
-        if (msg['arg']) {
-          return this.emit('update', emittableEvent);
-        }
-      }
-
-      this.logger.info('Unhandled/unrecognised ws event message', {
-        ...WS_LOGGER_CATEGORY,
-        message: msg || 'no message',
-        // messageType: typeof msg,
-        // messageString: JSON.stringify(msg),
-        event,
-        wsKey,
-      });
-
-      // fallback emit anyway
-      return this.emit('update', emittableEvent);
-    } catch (e) {
-      this.logger.error('Failed to parse ws event message', {
-        ...WS_LOGGER_CATEGORY,
-        error: e,
-        event,
-        wsKey,
-      });
-    }
-  }
-
-  /**
    * The newer standard. Requires resolveEmittableEvents in the integration layer.
-   * Might need to migrate to this for V3. TODO: check me.
+   * Change needed to support V3? TODO: check me.
    */
   private onWsMessage(event: unknown, wsKey: TWSKey, ws: WebSocket) {
     try {

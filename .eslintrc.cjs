@@ -53,5 +53,7 @@ module.exports = {
     'computed-property-spacing': [2, 'never'],
     'keyword-spacing': 2,
     'space-unary-ops': 2,
+    // https://eslint.org/docs/latest/rules/no-param-reassign
+    'no-param-reassign': ['error'],
   },
 };

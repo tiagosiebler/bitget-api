@@ -2,6 +2,7 @@ import WebSocket from 'isomorphic-ws';
 
 import {
   BitgetInstTypeV2,
+  MessageEventLike,
   WsKey,
   WsOperation,
   WsOperationLoginParams,
@@ -192,14 +193,6 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
       }),
     };
 
-    // console.log('getWsRequestEvents()', {
-    //   operation,
-    //   requests,
-    //   topics,
-    //   wsEvent: JSON.stringify(wsEvent, null, 2),
-    //   req_id,
-    // });
-
     const midflightWsEvent: MidflightWsRequestEvent<
       WsRequestOperationBitget<object>
     > = {
@@ -235,8 +228,91 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
   /**
    * Abstraction called to sort ws events into emittable event types (response to a request, data update, etc)
    */
-  protected resolveEmittableEvents(): EmittableEvent[] {
+  protected resolveEmittableEvents(
+    wsKey: WsKey,
+    event: MessageEventLike,
+  ): EmittableEvent[] {
     const results: EmittableEvent[] = [];
+
+    try {
+      const msg = JSON.parse(event.data);
+      const emittableEvent = { ...msg, wsKey };
+
+      // TODO: are v3 events different from V2? if yes? migrate to resolveEmittableEvents
+      // v2 event processing
+      if (typeof msg === 'object') {
+        if (typeof msg['code'] === 'number') {
+          // v2 authentication event
+          if (msg.event === 'login' && msg.code === 0) {
+            results.push({
+              eventType: 'response',
+              event: emittableEvent,
+            });
+            results.push({
+              eventType: 'authenticated',
+              event: emittableEvent,
+            });
+            return results;
+          }
+        }
+
+        if (msg['event']) {
+          results.push({
+            eventType: 'response',
+            event: emittableEvent,
+          });
+
+          if (msg.event === 'error') {
+            this.logger.error('WS Error received', {
+              ...WS_LOGGER_CATEGORY,
+              wsKey,
+              message: msg || 'no message',
+              // messageType: typeof msg,
+              // messageString: JSON.stringify(msg),
+              event,
+            });
+            results.push({
+              eventType: 'exception',
+              event: emittableEvent,
+            });
+          }
+
+          return results;
+        }
+
+        if (msg['arg']) {
+          results.push({
+            eventType: 'update',
+            event: emittableEvent,
+          });
+          return results;
+        }
+      }
+
+      this.logger.info('Unhandled/unrecognised ws event message', {
+        ...WS_LOGGER_CATEGORY,
+        message: msg || 'no message',
+        // messageType: typeof msg,
+        // messageString: JSON.stringify(msg),
+        event,
+        wsKey,
+      });
+
+      // fallback emit anyway
+      results.push({
+        eventType: 'update',
+        event: emittableEvent,
+      });
+      return results;
+    } catch (e) {
+      this.logger.error('Failed to parse ws event message', {
+        ...WS_LOGGER_CATEGORY,
+        error: e,
+        event,
+        wsKey,
+      });
+    }
+
     return results;
   }
 
@@ -370,96 +446,6 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
 
     return this.unsubscribeTopicsForWsKey(normalisedTopicRequests, wsKey);
   }
-
-  // /**
-  //  *
-  //  *
-  //  * Legacy internal methods that were redundant with the BaseWSClient upgrades for V3
-  //  *
-  //  *
-  //  */
-
-  // /**
-  //  * Subscribe to topics & track/persist them. They will be automatically resubscribed to if the connection drops/reconnects.
-  //  * @param wsTopics topic or list of topics
-  //  * @param isPrivateTopic optional - the library will try to detect private topics, you can use this to mark a topic as private (if the topic isn't recognised yet)
-  //  */
-  // public subscribeLegacy(
-  //   wsTopics: WsTopicSubscribeEventArgsV2,
-  //   isPrivateTopic?: boolean,
-  // ) {
-  //   const topics = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
-
-  //   topics.forEach((topic) => {
-  //     const wsKey = this.getWsKeyForTopic(topic, isPrivateTopic);
-
-  //     // Persist this topic to the expected topics list
-  //     this.getWsStore().addTopic(wsKey, topic);
-
-  //     // if connected, send subscription request
-  //     if (
-  //       this.getWsStore().isConnectionState(
-  //         wsKey,
-  //         WsConnectionStateEnum.CONNECTED,
-  //       )
-  //     ) {
-  //       // if not authenticated, dont sub to private topics yet.
-  //       // This'll happen automatically once authenticated
-  //       const isAuthenticated = this.getWsStore().get(wsKey)?.isAuthenticated;
-  //       if (!isAuthenticated) {
-  //         return this.requestSubscribeTopics(
-  //           wsKey,
-  //           topics.filter((topic) => !this.isPrivateChannel(topic)),
-  //         );
-  //       }
-  //       return this.requestSubscribeTopics(wsKey, topics);
-  //     }
-
-  //     // start connection process if it hasn't yet begun. Topics are automatically subscribed to on-connect
-  //     if (
-  //       !this.getWsStore().isConnectionState(
-  //         wsKey,
-  //         WsConnectionStateEnum.CONNECTING,
-  //       ) &&
-  //       !this.getWsStore().isConnectionState(
-  //         wsKey,
-  //         WsConnectionStateEnum.RECONNECTING,
-  //       )
-  //     ) {
-  //       return this.connect(wsKey);
-  //     }
-  //   });
-  // }
-
-  // /**
-  //  * Unsubscribe from topics & remove them from memory. They won't be re-subscribed to if the connection reconnects.
-  //  * @param wsTopics topic or list of topics
-  //  * @param isPrivateTopic optional - the library will try to detect private topics, you can use this to mark a topic as private (if the topic isn't recognised yet)
-  //  */
-  // public unsubscribeLegacy(
-  //   wsTopics: WsTopicSubscribeEventArgsV2,
-  //   isPrivateTopic?: boolean,
-  // ) {
-  //   const topics = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
-  //   topics.forEach((topic) => {
-  //     this.getWsStore().deleteTopic(
-  //       this.getWsKeyForTopic(topic, isPrivateTopic),
-  //       topic,
-  //     );
-
-  //     const wsKey = this.getWsKeyForTopic(topic, isPrivateTopic);
-
-  //     // unsubscribe request only necessary if active connection exists
-  //     if (
-  //       this.getWsStore().isConnectionState(
-  //         wsKey,
-  //         WsConnectionStateEnum.CONNECTED,
-  //       )
-  //     ) {
-  //       this.requestUnsubscribeTopics(wsKey, [topic]);
-  //     }
-  //   });
-  // }
 
   /**
    *
