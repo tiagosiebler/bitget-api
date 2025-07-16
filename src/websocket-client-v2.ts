@@ -37,7 +37,7 @@ const COIN_CHANNELS: WsTopicV2[] = [
 
 export class WebsocketClientV2 extends BaseWebsocketClient<
   WsKey,
-  WsRequestOperationBitget<WsTopic>
+  WsRequestOperationBitget<object> // subscribe requests have an "args" parameter with an object within
 > {
   protected getWsKeyForTopic(
     // subscribeEvent: WsTopicSubscribeEventArgsV2,
@@ -138,14 +138,16 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
    */
   protected async getWsRequestEvents(
     operation: WsOperation,
-    requests: WsTopicRequest<string>[],
-  ): Promise<MidflightWsRequestEvent<WsRequestOperationBitget<WsTopic>>[]> {
+    requests: WsTopicRequest<string, object>[],
+  ): Promise<MidflightWsRequestEvent<WsRequestOperationBitget<object>>[]> {
     const wsRequestEvents: MidflightWsRequestEvent<
-      WsRequestOperationBitget<WsTopic>
+      WsRequestOperationBitget<object>
     >[] = [];
     const wsRequestBuildingErrors: unknown[] = [];
 
-    const topics = requests.map((r) => r.topic);
+    const topics = requests.map(
+      (r) => r.topic + ',' + Object.values(r.payload || {}).join(','),
+    );
 
     // Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
     const req_id =
@@ -153,13 +155,53 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
         ? topics.join(',')
         : this.getNewRequestId().toFixed();
 
-    const wsEvent: WsRequestOperationBitget<WsTopic> = {
+    /**
+      {
+        "op":"subscribe",
+        "args":[
+            {
+                "instType":"SPOT",
+                "channel":"ticker",
+                "instId":"BTCUSDT"
+            },
+            {
+                "instType":"SPOT",
+                "channel":"candle5m",
+                "instId":"BTCUSDT"
+            }
+        ]
+      }
+    */
+    const wsEvent: WsRequestOperationBitget<object> = {
       op: operation,
-      args: topics,
+      args: requests.map((request) => {
+        // const request = {
+        //   topic: 'ticker',
+        //   payload: { instType: 'SPOT', instId: 'BTCUSDT' },
+        // };
+        // becomes:
+        // const request = {
+        //   channel: 'ticker',
+        //   instType: 'SPOT',
+        //   instId: 'BTCUSDT',
+        // };
+        return {
+          channel: request.topic,
+          ...request.payload,
+        };
+      }),
     };
 
+    // console.log('getWsRequestEvents()', {
+    //   operation,
+    //   requests,
+    //   topics,
+    //   wsEvent: JSON.stringify(wsEvent, null, 2),
+    //   req_id,
+    // });
+
     const midflightWsEvent: MidflightWsRequestEvent<
-      WsRequestOperationBitget<WsTopic>
+      WsRequestOperationBitget<object>
     > = {
       requestKey: req_id,
       requestEvent: wsEvent,
@@ -265,6 +307,7 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
     const subRequest = this.getSubRequest(instType, topic, coin);
     const isPrivateTopic = isPrivateChannel(topic);
     const wsKey = isPrivateTopic ? WS_KEY_MAP.v2Private : WS_KEY_MAP.v2Public;
+
     return this.subscribe(subRequest, wsKey);
   }
 
@@ -307,7 +350,6 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
   ): Promise<unknown> {
     const topicRequests = Array.isArray(requests) ? requests : [requests];
     const normalisedTopicRequests = getNormalisedTopicRequests(topicRequests);
-
     return this.subscribeTopicsForWsKey(normalisedTopicRequests, wsKey);
   }
 

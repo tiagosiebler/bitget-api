@@ -166,10 +166,10 @@ Pass a custom logger which supports the log methods `silly`, `debug`, `notice`, 
 ```javascript
 const { WebsocketClientV2, DefaultLogger } = require('bitget-api');
 
-// Disable all logging on the silly level (less console logs)
+// Disable all logging on the trace level (less console logs)
 const customLogger = {
   ...DefaultLogger,
-  silly: () => {},
+  trace: () => {},
 };
 
 const ws = new WebsocketClientV2(

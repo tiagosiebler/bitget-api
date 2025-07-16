@@ -6,7 +6,7 @@ import { DefaultLogger, WebsocketClientV2, WS_KEY_MAP } from '../src';
 (async () => {
   const logger = {
     ...DefaultLogger,
-    silly: (...params) => console.log('silly', ...params),
+    trace: (...params) => console.log('trace', ...params),
   };
 
   const wsClient = new WebsocketClientV2(

@@ -1,4 +1,4 @@
-import { DefaultLogger, WS_KEY_MAP, WebsocketClient } from '../../src';
+import { DefaultLogger, WebsocketClientLegacyV1, WS_KEY_MAP } from '../../src';
 
 // or
 // import { DefaultLogger, WS_KEY_MAP, WebsocketClient } from 'bitget-api';
@@ -6,10 +6,10 @@ import { DefaultLogger, WS_KEY_MAP, WebsocketClient } from '../../src';
 (async () => {
   const logger = {
     ...DefaultLogger,
-    silly: (...params) => console.log('silly', ...params),
+    trace: (...params) => console.log('trace', ...params),
   };
 
-  const wsClient = new WebsocketClient(
+  const wsClient = new WebsocketClientLegacyV1(
     {
       // restOptions: {
       // optionally provide rest options, e.g. to pass through a proxy

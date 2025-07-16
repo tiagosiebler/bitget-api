@@ -7,6 +7,25 @@ export interface WsOperationLoginParams {
   sign: string;
 }
 
+/**
+ * V2 request looks like this:
+{
+  "op":"subscribe",
+  "args":[
+      {
+          "instType":"SPOT",
+          "channel":"ticker",
+          "instId":"BTCUSDT"
+      },
+      {
+          "instType":"SPOT",
+          "channel":"candle5m",
+          "instId":"BTCUSDT"
+      }
+  ]
+}
+ */
+
 export interface WsRequestOperationBitget<TWSRequestArg> {
   op: WsOperation;
   args?: (TWSRequestArg | string | number)[];

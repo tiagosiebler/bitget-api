@@ -6,7 +6,7 @@ import { DefaultLogger, WebsocketClientV2 } from '../src';
 (async () => {
   const logger = {
     ...DefaultLogger,
-    silly: (...params) => console.log('silly', ...params),
+    trace: (...params) => console.log('trace', ...params),
   };
 
   const API_KEY = process.env.API_KEY_COM;

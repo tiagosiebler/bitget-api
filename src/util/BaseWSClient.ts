@@ -803,6 +803,23 @@ export abstract class BaseWebsocketClient<
     // });
   }
 
+  getCachedMidFlightRequest(
+    wsKey: TWSKey,
+    requestKey: string,
+  ): TWSRequestEvent | undefined {
+    if (!this.midflightRequestCache[wsKey]) {
+      this.midflightRequestCache[wsKey] = {};
+    }
+    return this.midflightRequestCache[wsKey][requestKey];
+  }
+
+  // TODO: where is this used?
+  removeCachedMidFlightRequest(wsKey: TWSKey, requestKey: string) {
+    if (this.getCachedMidFlightRequest(wsKey, requestKey)) {
+      delete this.midflightRequestCache[wsKey][requestKey];
+    }
+  }
+
   public tryWsSend(
     wsKey: TWSKey,
     wsMessage: string,
