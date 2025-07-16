@@ -730,11 +730,12 @@ export abstract class BaseWebsocketClient<
       }
 
       // Cache the request for this call, so we can enrich the response with request info
-      this.midflightRequestCache[wsKey][midflightRequest.requestKey] =
-        midflightRequest.requestEvent;
+      // this.midflightRequestCache[wsKey][midflightRequest.requestKey] =
+      // midflightRequest.requestEvent;
 
       this.logger.trace(
-        `Sending batch via message: "${JSON.stringify(wsMessage)}", cached with key "${midflightRequest.requestKey}"`,
+        // `Sending batch via message: "${JSON.stringify(wsMessage)}", cached with key "${midflightRequest.requestKey}"`,
+        `Sending batch via message: "${JSON.stringify(wsMessage)}"`,
       );
 
       try {

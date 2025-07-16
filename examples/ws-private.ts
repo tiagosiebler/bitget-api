@@ -62,20 +62,20 @@ import { DefaultLogger, WebsocketClientV2 } from '../src';
 
   // spot private
   // : account updates
-  // wsClient.subscribeTopic('SPOT', 'account');
+  wsClient.subscribeTopic('SPOT', 'account');
 
   // : order updates (note: symbol is required)
   // wsClient.subscribeTopic('SPOT', 'orders', 'BTCUSDT');
 
   // futures private
   // : account updates
-  // wsClient.subscribeTopic('USDT-FUTURES', 'account');
+  wsClient.subscribeTopic('USDT-FUTURES', 'account');
 
   // : position updates
-  // wsClient.subscribeTopic('USDT-FUTURES', 'positions');
+  wsClient.subscribeTopic('USDT-FUTURES', 'positions');
 
   // : order updates
-  // wsClient.subscribeTopic('USDT-FUTURES', 'orders');
+  wsClient.subscribeTopic('USDT-FUTURES', 'orders');
 
   // : plan order updates
   wsClient.subscribeTopic('USDT-FUTURES', 'orders-algo');
