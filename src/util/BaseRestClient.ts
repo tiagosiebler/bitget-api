@@ -303,7 +303,12 @@ export default abstract class BaseRestClient {
 
       // console.log('sign params: ', paramsStr);
 
-      res.sign = await signMessage(paramsStr, this.apiSecret, 'base64');
+      res.sign = await signMessage(
+        paramsStr,
+        this.apiSecret,
+        'base64',
+        'SHA-256',
+      );
       res.queryParamsWithSign = signRequestParams;
       return res;
     }

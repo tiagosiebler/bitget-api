@@ -1,17 +1,20 @@
-function _arrayBufferToBase64(buffer: ArrayBuffer) {
+function bufferToB64(buffer: ArrayBuffer): string {
   let binary = '';
   const bytes = new Uint8Array(buffer);
   const len = bytes.byteLength;
   for (let i = 0; i < len; i++) {
     binary += String.fromCharCode(bytes[i]);
   }
-  return window.btoa(binary);
+  return globalThis.btoa(binary);
 }
+
+export type SignEncodeMethod = 'hex' | 'base64';
+export type SignAlgorithm = 'SHA-256' | 'SHA-512';
 
 export async function signMessage(
   message: string,
   secret: string,
-  method: 'hex' | 'base64',
+  method: SignEncodeMethod,
 ): Promise<string> {
   const encoder = new TextEncoder();
   const key = await window.crypto.subtle.importKey(
@@ -37,7 +40,7 @@ export async function signMessage(
         .join('');
     }
     case 'base64': {
-      return _arrayBufferToBase64(signature);
+      return bufferToB64(signature);
     }
     default: {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

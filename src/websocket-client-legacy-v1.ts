@@ -93,6 +93,8 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
       pingInterval: 10000,
       reconnectTimeout: 500,
       recvWindow: 0,
+      authPrivateConnectionsOnConnect: true,
+      authPrivateRequests: false,
       ...options,
     };
   }
@@ -479,8 +481,9 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
       wsKey,
     });
 
-    const agent = this.options.requestOptions?.agent;
-    const ws = new WebSocket(url, undefined, agent ? { agent } : undefined);
+    const { protocols = [], ...wsOptions } = this.options.wsOptions || {};
+    const ws = new WebSocket(url, protocols, wsOptions);
+
     ws.onopen = (event) => this.onWsOpen(event, wsKey);
     ws.onmessage = (event) => this.onWsMessage(event, wsKey);
     ws.onerror = (event) => this.parseWsError('websocket error', event, wsKey);

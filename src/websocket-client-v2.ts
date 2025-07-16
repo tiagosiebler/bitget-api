@@ -2,26 +2,30 @@ import WebSocket from 'isomorphic-ws';
 
 import {
   BitgetInstTypeV2,
-  WebsocketClientOptions,
-  WsCoinChannelsV2,
-  WsInstIdChannelsV2,
   WsKey,
-  WsPublicTopicV2,
-  WsTopicSubscribeEventArgsV2,
-  WsTopicSubscribePrivateCoinArgsV2,
-  WsTopicSubscribePrivateInstIdArgsV2,
+  WsOperation,
+  WsOperationLoginParams,
+  WsRequestOperationBitget,
+  WsTopic,
   WsTopicV2,
 } from './types';
 import {
-  DefaultLogger,
+  BaseWebsocketClient,
+  EmittableEvent,
   getMaxTopicsPerSubscribeEvent,
+  getNormalisedTopicRequests,
   isPrivateChannel,
+  isWsPong,
+  MidflightWsRequestEvent,
   neverGuard,
   WS_AUTH_ON_CONNECT_KEYS,
   WS_BASE_URL_MAP,
   WS_KEY_MAP,
+  WS_LOGGER_CATEGORY,
+  WsTopicRequest,
 } from './util';
-import { BaseWebsocketClient } from './util/BaseWSClient';
+import { signMessage } from './util/node-support';
+import { SignAlgorithm } from './util/webCryptoAPI';
 
 const LOGGER_CATEGORY = { category: 'bitget-ws' };
 
@@ -33,38 +37,68 @@ const COIN_CHANNELS: WsTopicV2[] = [
 
 export class WebsocketClientV2 extends BaseWebsocketClient<
   WsKey,
-  WsTopicSubscribeEventArgsV2
+  WsRequestOperationBitget<WsTopic>
 > {
-  protected logger: typeof DefaultLogger;
-
-  protected options: WebsocketClientOptions;
-
   protected getWsKeyForTopic(
-    subscribeEvent: WsTopicSubscribeEventArgsV2,
+    // subscribeEvent: WsTopicSubscribeEventArgsV2,
+    subscribeEvent: WsTopicRequest<string>, // TWSTopicSubscribeEventArgs == WsTopicRequest<string> now
     isPrivate?: boolean,
   ): WsKey {
-    return isPrivate || isPrivateChannel(subscribeEvent.channel)
+    return isPrivate || isPrivateChannel(subscribeEvent.topic)
       ? WS_KEY_MAP.v2Private
       : WS_KEY_MAP.v2Public;
   }
 
-  protected isPrivateChannel(
-    subscribeEvent: WsTopicSubscribeEventArgsV2,
-  ): boolean {
-    return isPrivateChannel(subscribeEvent.channel);
+  protected isPrivateChannel(subscribeEvent: WsTopicRequest<string>): boolean {
+    return isPrivateChannel(subscribeEvent.topic);
   }
 
-  protected shouldAuthOnConnect(wsKey: WsKey): boolean {
-    return WS_AUTH_ON_CONNECT_KEYS.includes(wsKey as WsKey);
+  protected isCustomReconnectionNeeded(): boolean {
+    return false;
   }
 
-  protected getWsUrl(
+  protected async triggerCustomReconnectionWorkflow(): Promise<void> {}
+
+  protected sendPingEvent(wsKey: WsKey): void {
+    this.tryWsSend(wsKey, 'ping');
+  }
+
+  protected sendPongEvent(wsKey: WsKey): void {
+    this.tryWsSend(wsKey, 'pong');
+  }
+
+  protected isWsPing(data: any): boolean {
+    if (data?.data === 'ping') {
+      return true;
+    }
+    return false;
+  }
+
+  protected isWsPong(data: any): boolean {
+    return isWsPong(data);
+  }
+
+  protected isPrivateTopicRequest(
+    request: WsTopicRequest<string>,
     wsKey: WsKey,
-    networkKey: 'livenet' | 'demo' = 'livenet',
-  ): string {
+  ): boolean {
+    return WS_AUTH_ON_CONNECT_KEYS.includes(wsKey);
+  }
+
+  protected getPrivateWSKeys(): WsKey[] {
+    return WS_AUTH_ON_CONNECT_KEYS;
+  }
+
+  protected isAuthOnConnectWsKey(wsKey: WsKey): boolean {
+    return WS_AUTH_ON_CONNECT_KEYS.includes(wsKey);
+  }
+
+  protected async getWsUrl(wsKey: WsKey): Promise<string> {
     if (this.options.wsUrl) {
       return this.options.wsUrl;
     }
+
+    const networkKey: 'livenet' | 'demo' = 'livenet';
 
     switch (wsKey) {
       case WS_KEY_MAP.spotv1:
@@ -100,6 +134,75 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
   }
 
   /**
+   * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
+   */
+  protected async getWsRequestEvents(
+    operation: WsOperation,
+    requests: WsTopicRequest<string>[],
+  ): Promise<MidflightWsRequestEvent<WsRequestOperationBitget<WsTopic>>[]> {
+    const wsRequestEvents: MidflightWsRequestEvent<
+      WsRequestOperationBitget<WsTopic>
+    >[] = [];
+    const wsRequestBuildingErrors: unknown[] = [];
+
+    const topics = requests.map((r) => r.topic);
+
+    // Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
+    const req_id =
+      ['subscribe', 'unsubscribe'].includes(operation) && topics.length
+        ? topics.join(',')
+        : this.getNewRequestId().toFixed();
+
+    const wsEvent: WsRequestOperationBitget<WsTopic> = {
+      op: operation,
+      args: topics,
+    };
+
+    const midflightWsEvent: MidflightWsRequestEvent<
+      WsRequestOperationBitget<WsTopic>
+    > = {
+      requestKey: req_id,
+      requestEvent: wsEvent,
+    };
+
+    wsRequestEvents.push({
+      ...midflightWsEvent,
+    });
+
+    if (wsRequestBuildingErrors.length) {
+      const label =
+        wsRequestBuildingErrors.length === requests.length ? 'all' : 'some';
+
+      this.logger.error(
+        `Failed to build/send ${wsRequestBuildingErrors.length} event(s) for ${label} WS requests due to exceptions`,
+        {
+          ...WS_LOGGER_CATEGORY,
+          wsRequestBuildingErrors,
+          wsRequestBuildingErrorsStringified: JSON.stringify(
+            wsRequestBuildingErrors,
+            null,
+            2,
+          ),
+        },
+      );
+    }
+
+    return wsRequestEvents;
+  }
+
+  /**
+   * Abstraction called to sort ws events into emittable event types (response to a request, data update, etc)
+   */
+  protected resolveEmittableEvents(): EmittableEvent[] {
+    const results: EmittableEvent[] = [];
+    return results;
+  }
+
+  async sendWSAPIRequest(): Promise<unknown> {
+    return;
+  }
+
+  /**
    * Request connection of all dependent (public & private) websockets, instead of waiting for automatic connection by library
    */
   public connectAll(): Promise<WebSocket | undefined>[] {
@@ -114,35 +217,42 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
     instType: BitgetInstTypeV2,
     topic: WsTopicV2,
     coin: string = 'default',
-  ): WsTopicSubscribeEventArgsV2 {
+  ): WsTopicRequest<string> {
     if (isPrivateChannel(topic)) {
       if (COIN_CHANNELS.includes(topic)) {
-        const subscribeRequest: WsTopicSubscribePrivateCoinArgsV2 = {
-          instType,
-          channel: topic as WsCoinChannelsV2,
-          coin,
+        const subscribeRequest: WsTopicRequest<string> = {
+          topic,
+          payload: {
+            instType,
+            coin,
+          },
         };
         return subscribeRequest;
       }
 
-      const subscribeRequest: WsTopicSubscribePrivateInstIdArgsV2 = {
-        instType,
-        channel: topic as WsInstIdChannelsV2,
-        instId: coin,
+      const subscribeRequest: WsTopicRequest<string> = {
+        topic,
+        payload: {
+          instType,
+          instId: coin,
+        },
       };
 
       return subscribeRequest;
     }
 
-    return {
-      instType,
-      channel: topic as WsPublicTopicV2,
-      instId: coin,
+    const subscribeRequest: WsTopicRequest<string> = {
+      topic,
+      payload: {
+        instType,
+        instId: coin,
+      },
     };
+    return subscribeRequest;
   }
 
   /**
-   * Subscribe to a PUBLIC topic
+   * Subscribe to a topic
    * @param instType instrument type (refer to API docs).
    * @param topic topic name (e.g. "ticker").
    * @param instId instrument ID (e.g. "BTCUSDT"). Use "default" for private topics.
@@ -153,7 +263,9 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
     coin: string = 'default',
   ) {
     const subRequest = this.getSubRequest(instType, topic, coin);
-    return this.subscribe(subRequest);
+    const isPrivateTopic = isPrivateChannel(topic);
+    const wsKey = isPrivateTopic ? WS_KEY_MAP.v2Private : WS_KEY_MAP.v2Public;
+    return this.subscribe(subRequest, wsKey);
   }
 
   /**
@@ -168,6 +280,231 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
     coin: string = 'default',
   ) {
     const subRequest = this.getSubRequest(instType, topic, coin);
-    return this.unsubscribe(subRequest);
+
+    const isPrivateTopic = isPrivateChannel(topic);
+    const wsKey = isPrivateTopic ? WS_KEY_MAP.v2Private : WS_KEY_MAP.v2Public;
+
+    return this.unsubscribe(subRequest, wsKey);
+  }
+
+  /**
+   * Request subscription to one or more topics. Pass topics as either an array of strings,
+   * or array of objects (if the topic has parameters).
+   *
+   * Objects should be formatted as {topic: string, params: object, category: CategoryV5}.
+   *
+   * - Subscriptions are automatically routed to the correct websocket connection.
+   * - Authentication/connection is automatic.
+   * - Resubscribe after network issues is automatic.
+   *
+   * Call `unsubscribe(topics)` to remove topics
+   */
+  public subscribe(
+    requests:
+      | (WsTopicRequest<WsTopic | string> | WsTopic)
+      | (WsTopicRequest<WsTopic | string> | WsTopic)[],
+    wsKey: WsKey,
+  ): Promise<unknown> {
+    const topicRequests = Array.isArray(requests) ? requests : [requests];
+    const normalisedTopicRequests = getNormalisedTopicRequests(topicRequests);
+
+    return this.subscribeTopicsForWsKey(normalisedTopicRequests, wsKey);
+  }
+
+  /**
+   * Unsubscribe from one or more topics. Similar to subscribe() but in reverse.
+   *
+   * - Requests are automatically routed to the correct websocket connection.
+   * - These topics will be removed from the topic cache, so they won't be subscribed to again.
+   */
+  public unsubscribe(
+    requests:
+      | (WsTopicRequest<WsTopic | string> | WsTopic)
+      | (WsTopicRequest<WsTopic | string> | WsTopic)[],
+    wsKey: WsKey,
+  ) {
+    const topicRequests = Array.isArray(requests) ? requests : [requests];
+    const normalisedTopicRequests = getNormalisedTopicRequests(topicRequests);
+
+    return this.unsubscribeTopicsForWsKey(normalisedTopicRequests, wsKey);
+  }
+
+  // /**
+  //  *
+  //  *
+  //  * Legacy internal methods that were redundant with the BaseWSClient upgrades for V3
+  //  *
+  //  *
+  //  */
+
+  // /**
+  //  * Subscribe to topics & track/persist them. They will be automatically resubscribed to if the connection drops/reconnects.
+  //  * @param wsTopics topic or list of topics
+  //  * @param isPrivateTopic optional - the library will try to detect private topics, you can use this to mark a topic as private (if the topic isn't recognised yet)
+  //  */
+  // public subscribeLegacy(
+  //   wsTopics: WsTopicSubscribeEventArgsV2,
+  //   isPrivateTopic?: boolean,
+  // ) {
+  //   const topics = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
+
+  //   topics.forEach((topic) => {
+  //     const wsKey = this.getWsKeyForTopic(topic, isPrivateTopic);
+
+  //     // Persist this topic to the expected topics list
+  //     this.getWsStore().addTopic(wsKey, topic);
+
+  //     // if connected, send subscription request
+  //     if (
+  //       this.getWsStore().isConnectionState(
+  //         wsKey,
+  //         WsConnectionStateEnum.CONNECTED,
+  //       )
+  //     ) {
+  //       // if not authenticated, dont sub to private topics yet.
+  //       // This'll happen automatically once authenticated
+  //       const isAuthenticated = this.getWsStore().get(wsKey)?.isAuthenticated;
+  //       if (!isAuthenticated) {
+  //         return this.requestSubscribeTopics(
+  //           wsKey,
+  //           topics.filter((topic) => !this.isPrivateChannel(topic)),
+  //         );
+  //       }
+  //       return this.requestSubscribeTopics(wsKey, topics);
+  //     }
+
+  //     // start connection process if it hasn't yet begun. Topics are automatically subscribed to on-connect
+  //     if (
+  //       !this.getWsStore().isConnectionState(
+  //         wsKey,
+  //         WsConnectionStateEnum.CONNECTING,
+  //       ) &&
+  //       !this.getWsStore().isConnectionState(
+  //         wsKey,
+  //         WsConnectionStateEnum.RECONNECTING,
+  //       )
+  //     ) {
+  //       return this.connect(wsKey);
+  //     }
+  //   });
+  // }
+
+  // /**
+  //  * Unsubscribe from topics & remove them from memory. They won't be re-subscribed to if the connection reconnects.
+  //  * @param wsTopics topic or list of topics
+  //  * @param isPrivateTopic optional - the library will try to detect private topics, you can use this to mark a topic as private (if the topic isn't recognised yet)
+  //  */
+  // public unsubscribeLegacy(
+  //   wsTopics: WsTopicSubscribeEventArgsV2,
+  //   isPrivateTopic?: boolean,
+  // ) {
+  //   const topics = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
+  //   topics.forEach((topic) => {
+  //     this.getWsStore().deleteTopic(
+  //       this.getWsKeyForTopic(topic, isPrivateTopic),
+  //       topic,
+  //     );
+
+  //     const wsKey = this.getWsKeyForTopic(topic, isPrivateTopic);
+
+  //     // unsubscribe request only necessary if active connection exists
+  //     if (
+  //       this.getWsStore().isConnectionState(
+  //         wsKey,
+  //         WsConnectionStateEnum.CONNECTED,
+  //       )
+  //     ) {
+  //       this.requestUnsubscribeTopics(wsKey, [topic]);
+  //     }
+  //   });
+  // }
+
+  /**
+   *
+   *
+   * Internal methods required to integrate with the BaseWSClient
+   *
+   *
+   */
+
+  protected async getWsAuthRequestEvent(
+    wsKey: WsKey,
+  ): Promise<WsRequestOperationBitget<WsOperationLoginParams>> {
+    try {
+      const { apiKey, apiSecret, apiPass } = this.options;
+      const { signature, expiresAt } = await this.getWsAuthSignature(wsKey);
+
+      if (!apiKey || !apiSecret || !apiPass) {
+        this.logger.error(
+          'Cannot authenticate websocket, either api key, secret or passphrase missing.',
+          { ...WS_LOGGER_CATEGORY, wsKey },
+        );
+        throw new Error(
+          'Cannot auth - missing api or secret or pass in config',
+        );
+      }
+
+      const request: WsRequestOperationBitget<WsOperationLoginParams> = {
+        op: 'login',
+        args: [
+          {
+            apiKey,
+            passphrase: apiPass,
+            timestamp: expiresAt,
+            sign: signature,
+          },
+        ],
+      };
+
+      return request;
+    } catch (e) {
+      this.logger.error(e, { ...WS_LOGGER_CATEGORY, wsKey });
+      throw e;
+    }
+  }
+
+  private async getWsAuthSignature(
+    wsKey: WsKey,
+  ): Promise<{ expiresAt: number; signature: string }> {
+    const { apiKey, apiSecret, apiPass, recvWindow } = this.options;
+
+    if (!apiKey || !apiSecret || !apiPass) {
+      this.logger.error(
+        'Cannot authenticate websocket, either api key, secret or passphrase missing.',
+        { ...WS_LOGGER_CATEGORY, wsKey },
+      );
+      throw new Error('Cannot auth - missing api or secret or pass in config');
+    }
+
+    this.logger.trace("Getting auth'd request params", {
+      ...WS_LOGGER_CATEGORY,
+      wsKey,
+    });
+
+    const signatureExpiresAt = ((Date.now() + recvWindow) / 1000).toFixed(0);
+
+    const signature = await this.signMessage(
+      signatureExpiresAt + 'GET' + '/user/verify',
+      apiSecret,
+      'base64',
+      'SHA-256',
+    );
+
+    return {
+      expiresAt: +signatureExpiresAt,
+      signature,
+    };
+  }
+
+  private async signMessage(
+    paramsStr: string,
+    secret: string,
+    method: 'hex' | 'base64',
+    algorithm: SignAlgorithm,
+  ): Promise<string> {
+    if (typeof this.options.customSignMessageFn === 'function') {
+      return this.options.customSignMessageFn(paramsStr, secret);
+    }
+    return await signMessage(paramsStr, secret, method, algorithm);
   }
 }

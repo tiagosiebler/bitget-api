@@ -1,4 +1,4 @@
-import { WS_KEY_MAP } from '../../util';
+import { RestClientOptions, WS_KEY_MAP } from '../../util';
 import { FuturesProductTypeV2 } from '../request';
 
 /** A "topic" is always a string */
@@ -143,6 +143,12 @@ export interface WSClientConfigurableOptions {
   /** The passphrase you set when creating the API Key (NOT your account password) */
   apiPass?: string;
 
+  /** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
+  recvWindow?: number;
+
+  // Disable ping/pong ws heartbeat mechanism (not recommended) // TODO:
+  disableHeartbeat?: boolean;
+
   /** How often to check if the connection is alive */
   pingInterval?: number;
 
@@ -152,15 +158,22 @@ export interface WSClientConfigurableOptions {
   /** Delay in milliseconds before respawning the connection */
   reconnectTimeout?: number;
 
-  requestOptions?: {
-    /** override the user agent when opening the websocket connection (some proxies use this) */
-    agent?: string;
+  requestOptions?: RestClientOptions;
+
+  wsOptions?: {
+    protocols?: string[];
+    agent?: any;
   };
 
   wsUrl?: string;
 
-  /** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
-  recvWindow?: number;
+  // TODO:
+  /**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
 }
 
 export interface WebsocketClientOptions extends WSClientConfigurableOptions {
@@ -168,4 +181,6 @@ export interface WebsocketClientOptions extends WSClientConfigurableOptions {
   pongTimeout: number;
   reconnectTimeout: number;
   recvWindow: number;
+  authPrivateConnectionsOnConnect: boolean;
+  authPrivateRequests: boolean;
 }
