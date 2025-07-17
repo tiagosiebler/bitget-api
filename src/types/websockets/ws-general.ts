@@ -4,6 +4,7 @@ import { FuturesProductTypeV2 } from '../request';
 export type BitgetInstType = 'SP' | 'SPBL' | 'MC' | 'UMCBL' | 'DMCBL';
 export type BitgetInstTypeV2 = 'SPOT' | FuturesProductTypeV2;
 export type BitgetInstTypeV3 =
+  | 'UTA' // for account-level topics
   | 'spot'
   | 'usdt-futures'
   | 'coin-futures'
