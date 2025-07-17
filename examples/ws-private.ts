@@ -70,13 +70,36 @@ import { DefaultLogger, WebsocketClientV2 } from '../src';
   // futures private
   // : account updates
   wsClient.subscribeTopic('USDT-FUTURES', 'account');
+  wsClient.subscribeTopic('USDC-FUTURES', 'account');
 
   // : position updates
-  wsClient.subscribeTopic('USDT-FUTURES', 'positions');
+  // wsClient.subscribeTopic('USDT-FUTURES', 'positions');
 
   // : order updates
-  wsClient.subscribeTopic('USDT-FUTURES', 'orders');
+  // wsClient.subscribeTopic('USDT-FUTURES', 'orders');
 
   // : plan order updates
-  wsClient.subscribeTopic('USDT-FUTURES', 'orders-algo');
+  // wsClient.subscribeTopic('USDT-FUTURES', 'orders-algo');
+
+  // wsClient
+  //   .getWsStore()
+  //   .getKeys()
+  //   .forEach((wsKey) => {
+  //     const state = wsClient.getWsStore().get(wsKey);
+  //     console.log(`${wsKey} state: `, state.subscribedTopics.values());
+  //   });
+
+  // setTimeout(() => {
+  //   wsClient.unsubscribeTopic('USDT-FUTURES', 'account');
+  // }, 1000 * 2);
+
+  // setTimeout(() => {
+  //   wsClient
+  //     .getWsStore()
+  //     .getKeys()
+  //     .forEach((wsKey) => {
+  //       const state = wsClient.getWsStore().get(wsKey);
+  //       console.log(`${wsKey} state: `, state.subscribedTopics.values());
+  //     });
+  // }, 1000 * 5);
 })();

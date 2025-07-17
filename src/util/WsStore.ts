@@ -9,7 +9,7 @@ import {
 } from './WsStore.types';
 
 /**
- * Simple comparison of two objects, only checks 1-level deep (nested objects won't match)
+ * Simple comparison of two objects. Checks every key for match. Recursive if child properties contain objects.
  */
 export function isDeepObjectMatch(object1: unknown, object2: unknown): boolean {
   if (typeof object1 === 'string' && typeof object2 === 'string') {
@@ -20,11 +20,13 @@ export function isDeepObjectMatch(object1: unknown, object2: unknown): boolean {
     return false;
   }
 
+  // both are objects, run deeper match
   for (const key in object1) {
     const value1 = (object1 as any)[key];
     const value2 = (object2 as any)[key];
 
-    if (value1 !== value2) {
+    const matches = isDeepObjectMatch(value1, value2);
+    if (!matches) {
       return false;
     }
   }
@@ -412,7 +414,8 @@ export default class WsStore<
   getMatchingTopic(key: WsKey, topic: TWSTopicSubscribeEventArgs) {
     const allTopics = this.getTopics(key).values();
     for (const storedTopic of allTopics) {
-      if (isDeepObjectMatch(topic, storedTopic)) {
+      const matchesStoredTopic = isDeepObjectMatch(topic, storedTopic);
+      if (matchesStoredTopic) {
         return storedTopic;
       }
     }

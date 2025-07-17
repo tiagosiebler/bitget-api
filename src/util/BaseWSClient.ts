@@ -745,11 +745,6 @@ export abstract class BaseWebsocketClient<
         delete this.midflightRequestCache[wsKey][midflightRequest.requestKey];
       }
     }
-
-    // const wsMessage = JSON.stringify({
-    //   op: 'subscribe',
-    //   args: wsTopicRequests,
-    // });
   }
 
   /**
