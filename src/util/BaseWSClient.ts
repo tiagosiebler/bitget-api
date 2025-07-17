@@ -178,7 +178,7 @@ export abstract class BaseWebsocketClient<
       // Automatically send an authentication op/request after a connection opens, for private connections.
       authPrivateConnectionsOnConnect: true,
       // Individual requests do not require a signature, so this is disabled.
-      authPrivateRequests: false, // TODO:
+      authPrivateRequests: false,
 
       ...options,
     };
@@ -188,12 +188,6 @@ export abstract class BaseWebsocketClient<
    * Return true if this wsKey connection should automatically authenticate immediately after connecting
    */
   protected abstract isAuthOnConnectWsKey(wsKey: TWSKey): boolean;
-
-  protected abstract isCustomReconnectionNeeded(wsKey: TWSKey): boolean;
-
-  protected abstract triggerCustomReconnectionWorkflow(
-    wsKey: TWSKey,
-  ): Promise<void>;
 
   protected abstract sendPingEvent(wsKey: TWSKey, ws: WebSocket): void;
 
@@ -403,15 +397,6 @@ export abstract class BaseWebsocketClient<
       privateReqs: privateTopicRequests,
     };
   }
-
-  protected abstract getWsKeyForTopic(
-    subscribeEvent: WsTopicRequest<string>, // TWSTopicSubscribeEventArgs == WsTopicRequest<string> now
-    isPrivate?: boolean,
-  ): TWSKey;
-
-  protected abstract isPrivateChannel(
-    subscribeEvent: WsTopicRequest<string>,
-  ): boolean;
 
   /** Get the WsStore that tracks websockets & topics */
   public getWsStore(): WsStore<TWSKey, WsTopicRequest<string>> {

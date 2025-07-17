@@ -6,7 +6,7 @@ import {
   WsKey,
   WsOperation,
   WsOperationLoginParams,
-  WsRequestOperationBitget,
+  WsRequestOperationBitgetV2,
   WsTopic,
   WsTopicV2,
 } from './types';
@@ -15,20 +15,18 @@ import {
   EmittableEvent,
   getMaxTopicsPerSubscribeEvent,
   getNormalisedTopicRequests,
+  getWsUrl,
   isPrivateChannel,
   isWsPong,
   MidflightWsRequestEvent,
-  neverGuard,
   WS_AUTH_ON_CONNECT_KEYS,
-  WS_BASE_URL_MAP,
   WS_KEY_MAP,
-  WS_LOGGER_CATEGORY,
   WsTopicRequest,
 } from './util';
 import { signMessage } from './util/node-support';
 import { SignAlgorithm } from './util/webCryptoAPI';
 
-const LOGGER_CATEGORY = { category: 'bitget-ws' };
+const WS_LOGGER_CATEGORY = { category: 'bitget-ws' };
 
 const COIN_CHANNELS: WsTopicV2[] = [
   'account',
@@ -38,289 +36,8 @@ const COIN_CHANNELS: WsTopicV2[] = [
 
 export class WebsocketClientV2 extends BaseWebsocketClient<
   WsKey,
-  WsRequestOperationBitget<object> // subscribe requests have an "args" parameter with an object within
+  WsRequestOperationBitgetV2<object> // subscribe requests have an "args" parameter with an object within
 > {
-  protected getWsKeyForTopic(
-    // subscribeEvent: WsTopicSubscribeEventArgsV2,
-    subscribeEvent: WsTopicRequest<string>, // TWSTopicSubscribeEventArgs == WsTopicRequest<string> now
-    isPrivate?: boolean,
-  ): WsKey {
-    return isPrivate || isPrivateChannel(subscribeEvent.topic)
-      ? WS_KEY_MAP.v2Private
-      : WS_KEY_MAP.v2Public;
-  }
-
-  protected isPrivateChannel(subscribeEvent: WsTopicRequest<string>): boolean {
-    return isPrivateChannel(subscribeEvent.topic);
-  }
-
-  protected isCustomReconnectionNeeded(): boolean {
-    return false;
-  }
-
-  protected async triggerCustomReconnectionWorkflow(): Promise<void> {}
-
-  protected sendPingEvent(wsKey: WsKey): void {
-    this.tryWsSend(wsKey, 'ping');
-  }
-
-  protected sendPongEvent(wsKey: WsKey): void {
-    this.tryWsSend(wsKey, 'pong');
-  }
-
-  protected isWsPing(data: any): boolean {
-    if (data?.data === 'ping') {
-      return true;
-    }
-    return false;
-  }
-
-  protected isWsPong(data: any): boolean {
-    return isWsPong(data);
-  }
-
-  protected isPrivateTopicRequest(
-    request: WsTopicRequest<string>,
-    wsKey: WsKey,
-  ): boolean {
-    return WS_AUTH_ON_CONNECT_KEYS.includes(wsKey);
-  }
-
-  protected getPrivateWSKeys(): WsKey[] {
-    return WS_AUTH_ON_CONNECT_KEYS;
-  }
-
-  protected isAuthOnConnectWsKey(wsKey: WsKey): boolean {
-    return WS_AUTH_ON_CONNECT_KEYS.includes(wsKey);
-  }
-
-  protected async getWsUrl(wsKey: WsKey): Promise<string> {
-    if (this.options.wsUrl) {
-      return this.options.wsUrl;
-    }
-
-    const isDemoTrading = this.options.demoTrading;
-    const networkKey: 'livenet' | 'demo' = isDemoTrading ? 'demo' : 'livenet';
-
-    switch (wsKey) {
-      case WS_KEY_MAP.spotv1:
-      case WS_KEY_MAP.mixv1: {
-        throw new Error(
-          'Use the WebsocketClient instead of WebsocketClientV2 for V1 websockets',
-        );
-      }
-      case WS_KEY_MAP.v2Private: {
-        return WS_BASE_URL_MAP.v2Private.all[networkKey];
-      }
-      case WS_KEY_MAP.v2Public: {
-        return WS_BASE_URL_MAP.v2Public.all[networkKey];
-      }
-      case WS_KEY_MAP.v3Private: {
-        return WS_BASE_URL_MAP.v3Private.all[networkKey];
-      }
-      case WS_KEY_MAP.v3Public: {
-        return WS_BASE_URL_MAP.v3Public.all[networkKey];
-      }
-      default: {
-        this.logger.error('getWsUrl(): Unhandled wsKey: ', {
-          ...LOGGER_CATEGORY,
-          wsKey,
-        });
-        throw neverGuard(wsKey, 'getWsUrl(): Unhandled wsKey');
-      }
-    }
-  }
-
-  protected getMaxTopicsPerSubscribeEvent(wsKey: WsKey): number | null {
-    return getMaxTopicsPerSubscribeEvent(wsKey);
-  }
-
-  /**
-   * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
-   */
-  protected async getWsRequestEvents(
-    operation: WsOperation,
-    requests: WsTopicRequest<string, object>[],
-  ): Promise<MidflightWsRequestEvent<WsRequestOperationBitget<object>>[]> {
-    const wsRequestEvents: MidflightWsRequestEvent<
-      WsRequestOperationBitget<object>
-    >[] = [];
-    const wsRequestBuildingErrors: unknown[] = [];
-
-    const topics = requests.map(
-      (r) => r.topic + ',' + Object.values(r.payload || {}).join(','),
-    );
-
-    // Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
-    const req_id =
-      ['subscribe', 'unsubscribe'].includes(operation) && topics.length
-        ? topics.join(',')
-        : this.getNewRequestId().toFixed();
-
-    /**
-      {
-        "op":"subscribe",
-        "args":[
-            {
-                "instType":"SPOT",
-                "channel":"ticker",
-                "instId":"BTCUSDT"
-            },
-            {
-                "instType":"SPOT",
-                "channel":"candle5m",
-                "instId":"BTCUSDT"
-            }
-        ]
-      }
-    */
-    const wsEvent: WsRequestOperationBitget<object> = {
-      op: operation,
-      args: requests.map((request) => {
-        // const request = {
-        //   topic: 'ticker',
-        //   payload: { instType: 'SPOT', instId: 'BTCUSDT' },
-        // };
-        // becomes:
-        // const request = {
-        //   channel: 'ticker',
-        //   instType: 'SPOT',
-        //   instId: 'BTCUSDT',
-        // };
-        return {
-          channel: request.topic,
-          ...request.payload,
-        };
-      }),
-    };
-
-    const midflightWsEvent: MidflightWsRequestEvent<
-      WsRequestOperationBitget<object>
-    > = {
-      requestKey: req_id,
-      requestEvent: wsEvent,
-    };
-
-    wsRequestEvents.push({
-      ...midflightWsEvent,
-    });
-
-    if (wsRequestBuildingErrors.length) {
-      const label =
-        wsRequestBuildingErrors.length === requests.length ? 'all' : 'some';
-
-      this.logger.error(
-        `Failed to build/send ${wsRequestBuildingErrors.length} event(s) for ${label} WS requests due to exceptions`,
-        {
-          ...WS_LOGGER_CATEGORY,
-          wsRequestBuildingErrors,
-          wsRequestBuildingErrorsStringified: JSON.stringify(
-            wsRequestBuildingErrors,
-            null,
-            2,
-          ),
-        },
-      );
-    }
-
-    return wsRequestEvents;
-  }
-
-  /**
-   * Abstraction called to sort ws events into emittable event types (response to a request, data update, etc)
-   */
-  protected resolveEmittableEvents(
-    wsKey: WsKey,
-    event: MessageEventLike,
-  ): EmittableEvent[] {
-    const results: EmittableEvent[] = [];
-
-    try {
-      const msg = JSON.parse(event.data);
-      const emittableEvent = { ...msg, wsKey };
-
-      // TODO: are v3 events different from V2? if yes? migrate to resolveEmittableEvents
-      // v2 event processing
-      if (typeof msg === 'object') {
-        if (typeof msg['code'] === 'number') {
-          // v2 authentication event
-          if (msg.event === 'login' && msg.code === 0) {
-            results.push({
-              eventType: 'response',
-              event: emittableEvent,
-            });
-            results.push({
-              eventType: 'authenticated',
-              event: emittableEvent,
-            });
-            return results;
-          }
-        }
-
-        if (msg['event']) {
-          results.push({
-            eventType: 'response',
-            event: emittableEvent,
-          });
-
-          if (msg.event === 'error') {
-            this.logger.error('WS Error received', {
-              ...WS_LOGGER_CATEGORY,
-              wsKey,
-              message: msg || 'no message',
-              // messageType: typeof msg,
-              // messageString: JSON.stringify(msg),
-              event,
-            });
-            results.push({
-              eventType: 'exception',
-              event: emittableEvent,
-            });
-          }
-
-          return results;
-        }
-
-        if (msg['arg']) {
-          results.push({
-            eventType: 'update',
-            event: emittableEvent,
-          });
-          return results;
-        }
-      }
-
-      this.logger.info('Unhandled/unrecognised ws event message', {
-        ...WS_LOGGER_CATEGORY,
-        message: msg || 'no message',
-        // messageType: typeof msg,
-        // messageString: JSON.stringify(msg),
-        event,
-        wsKey,
-      });
-
-      // fallback emit anyway
-      results.push({
-        eventType: 'update',
-        event: emittableEvent,
-      });
-      return results;
-    } catch (e) {
-      this.logger.error('Failed to parse ws event message', {
-        ...WS_LOGGER_CATEGORY,
-        error: e,
-        event,
-        wsKey,
-      });
-    }
-
-    return results;
-  }
-
-  async sendWSAPIRequest(): Promise<unknown> {
-    return;
-  }
-
   /**
    * Request connection of all dependent (public & private) websockets, instead of waiting for automatic connection by library
    */
@@ -456,40 +173,130 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
    *
    */
 
-  protected async getWsAuthRequestEvent(
-    wsKey: WsKey,
-  ): Promise<WsRequestOperationBitget<WsOperationLoginParams>> {
-    try {
-      const { apiKey, apiSecret, apiPass } = this.options;
-      const { signature, expiresAt } = await this.getWsAuthSignature(wsKey);
+  protected sendPingEvent(wsKey: WsKey): void {
+    this.tryWsSend(wsKey, 'ping');
+  }
 
-      if (!apiKey || !apiSecret || !apiPass) {
-        this.logger.error(
-          'Cannot authenticate websocket, either api key, secret or passphrase missing.',
-          { ...WS_LOGGER_CATEGORY, wsKey },
-        );
-        throw new Error(
-          'Cannot auth - missing api or secret or pass in config',
-        );
-      }
+  protected sendPongEvent(wsKey: WsKey): void {
+    this.tryWsSend(wsKey, 'pong');
+  }
 
-      const request: WsRequestOperationBitget<WsOperationLoginParams> = {
-        op: 'login',
-        args: [
-          {
-            apiKey,
-            passphrase: apiPass,
-            timestamp: expiresAt,
-            sign: signature,
-          },
-        ],
-      };
-
-      return request;
-    } catch (e) {
-      this.logger.error(e, { ...WS_LOGGER_CATEGORY, wsKey });
-      throw e;
+  protected isWsPing(data: any): boolean {
+    if (data?.data === 'ping') {
+      return true;
     }
+    return false;
+  }
+
+  protected isWsPong(data: any): boolean {
+    return isWsPong(data);
+  }
+
+  protected isPrivateTopicRequest(
+    request: WsTopicRequest<string>,
+    wsKey: WsKey,
+  ): boolean {
+    return WS_AUTH_ON_CONNECT_KEYS.includes(wsKey);
+  }
+
+  protected getPrivateWSKeys(): WsKey[] {
+    return WS_AUTH_ON_CONNECT_KEYS;
+  }
+
+  protected isAuthOnConnectWsKey(wsKey: WsKey): boolean {
+    return WS_AUTH_ON_CONNECT_KEYS.includes(wsKey);
+  }
+
+  protected async getWsUrl(wsKey: WsKey): Promise<string> {
+    return getWsUrl(wsKey, this.options, this.logger);
+  }
+
+  protected getMaxTopicsPerSubscribeEvent(wsKey: WsKey): number | null {
+    return getMaxTopicsPerSubscribeEvent(wsKey);
+  }
+
+  /**
+   * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
+   */
+  protected async getWsRequestEvents(
+    operation: WsOperation,
+    requests: WsTopicRequest<string, object>[],
+  ): Promise<MidflightWsRequestEvent<WsRequestOperationBitgetV2<object>>[]> {
+    const wsRequestBuildingErrors: unknown[] = [];
+
+    const topics = requests.map(
+      (r) => r.topic + ',' + Object.values(r.payload || {}).join(','),
+    );
+
+    // Previously used to track topics in a request. Keeping this for subscribe/unsubscribe requests, no need for incremental values
+    const req_id =
+      ['subscribe', 'unsubscribe'].includes(operation) && topics.length
+        ? topics.join(',')
+        : this.getNewRequestId().toFixed();
+
+    /**
+      {
+        "op":"subscribe",
+        "args":[
+            {
+                "instType":"SPOT",
+                "channel":"ticker",
+                "instId":"BTCUSDT"
+            },
+            {
+                "instType":"SPOT",
+                "channel":"candle5m",
+                "instId":"BTCUSDT"
+            }
+        ]
+      }
+    */
+    const wsEvent: WsRequestOperationBitgetV2<object> = {
+      op: operation,
+      args: requests.map((request) => {
+        // const request = {
+        //   topic: 'ticker',
+        //   payload: { instType: 'SPOT', instId: 'BTCUSDT' },
+        // };
+        // becomes:
+        // const request = {
+        //   channel: 'ticker',
+        //   instType: 'SPOT',
+        //   instId: 'BTCUSDT',
+        // };
+        return {
+          channel: request.topic,
+          ...request.payload,
+        };
+      }),
+    };
+
+    const midflightWsEvent: MidflightWsRequestEvent<
+      WsRequestOperationBitgetV2<object>
+    > = {
+      requestKey: req_id,
+      requestEvent: wsEvent,
+    };
+
+    if (wsRequestBuildingErrors.length) {
+      const label =
+        wsRequestBuildingErrors.length === requests.length ? 'all' : 'some';
+
+      this.logger.error(
+        `Failed to build/send ${wsRequestBuildingErrors.length} event(s) for ${label} WS requests due to exceptions`,
+        {
+          ...WS_LOGGER_CATEGORY,
+          wsRequestBuildingErrors,
+          wsRequestBuildingErrorsStringified: JSON.stringify(
+            wsRequestBuildingErrors,
+            null,
+            2,
+          ),
+        },
+      );
+    }
+
+    return [midflightWsEvent];
   }
 
   private async getWsAuthSignature(
@@ -535,5 +342,136 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
       return this.options.customSignMessageFn(paramsStr, secret);
     }
     return await signMessage(paramsStr, secret, method, algorithm);
+  }
+
+  protected async getWsAuthRequestEvent(
+    wsKey: WsKey,
+  ): Promise<WsRequestOperationBitgetV2<WsOperationLoginParams>> {
+    try {
+      const { apiKey, apiSecret, apiPass } = this.options;
+      const { signature, expiresAt } = await this.getWsAuthSignature(wsKey);
+
+      if (!apiKey || !apiSecret || !apiPass) {
+        this.logger.error(
+          'Cannot authenticate websocket, either api key, secret or passphrase missing.',
+          { ...WS_LOGGER_CATEGORY, wsKey },
+        );
+        throw new Error(
+          'Cannot auth - missing api or secret or pass in config',
+        );
+      }
+
+      const request: WsRequestOperationBitgetV2<WsOperationLoginParams> = {
+        op: 'login',
+        args: [
+          {
+            apiKey,
+            passphrase: apiPass,
+            timestamp: expiresAt,
+            sign: signature,
+          },
+        ],
+      };
+
+      return request;
+    } catch (e) {
+      this.logger.error(e, { ...WS_LOGGER_CATEGORY, wsKey });
+      throw e;
+    }
+  }
+
+  /**
+   * Abstraction called to sort ws events into emittable event types (response to a request, data update, etc)
+   */
+  protected resolveEmittableEvents(
+    wsKey: WsKey,
+    event: MessageEventLike,
+  ): EmittableEvent[] {
+    const results: EmittableEvent[] = [];
+
+    try {
+      const msg = JSON.parse(event.data);
+      const emittableEvent = { ...msg, wsKey };
+
+      // TODO: are v3 events different from V2? if yes? migrate to resolveEmittableEvents
+      // v2 event processing
+      if (typeof msg === 'object') {
+        if (typeof msg['code'] === 'number') {
+          // v2 authentication event
+          if (msg.event === 'login' && msg.code === 0) {
+            results.push({
+              eventType: 'response',
+              event: emittableEvent,
+            });
+            results.push({
+              eventType: 'authenticated',
+              event: emittableEvent,
+            });
+            return results;
+          }
+        }
+
+        if (msg['event']) {
+          results.push({
+            eventType: 'response',
+            event: emittableEvent,
+          });
+
+          if (msg.event === 'error') {
+            this.logger.error('WS Error received', {
+              ...WS_LOGGER_CATEGORY,
+              wsKey,
+              message: msg || 'no message',
+              // messageType: typeof msg,
+              // messageString: JSON.stringify(msg),
+              event,
+            });
+            results.push({
+              eventType: 'exception',
+              event: emittableEvent,
+            });
+          }
+
+          return results;
+        }
+
+        if (msg['arg']) {
+          results.push({
+            eventType: 'update',
+            event: emittableEvent,
+          });
+          return results;
+        }
+      }
+
+      this.logger.info('Unhandled/unrecognised ws event message', {
+        ...WS_LOGGER_CATEGORY,
+        message: msg || 'no message',
+        // messageType: typeof msg,
+        // messageString: JSON.stringify(msg),
+        event,
+        wsKey,
+      });
+
+      // fallback emit anyway
+      results.push({
+        eventType: 'update',
+        event: emittableEvent,
+      });
+      return results;
+    } catch (e) {
+      this.logger.error('Failed to parse ws event message', {
+        ...WS_LOGGER_CATEGORY,
+        error: e,
+        event,
+        wsKey,
+      });
+    }
+
+    return results;
+  }
+
+  async sendWSAPIRequest(): Promise<unknown> {
+    return;
   }
 }

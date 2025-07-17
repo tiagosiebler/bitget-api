@@ -1,10 +1,12 @@
 import {
   BitgetInstType,
+  WebsocketClientOptions,
   WsKey,
   WsPrivateTopicV2,
   WsTopicSubscribeEventArgs,
   WsTopicSubscribePublicArgsV2,
 } from '../types';
+import { DefaultLogger } from './logger';
 import { signMessage } from './node-support';
 
 export const WS_LOGGER_CATEGORY = { category: 'bitget-ws' };
@@ -104,6 +106,47 @@ export const PRIVATE_TOPICS_V2: WsPrivateTopicV2[] = [
   'account-isolated',
   'orders-isolated',
 ];
+
+export async function getWsUrl(
+  wsKey: WsKey,
+  options: WebsocketClientOptions,
+  logger: DefaultLogger,
+): Promise<string> {
+  if (options.wsUrl) {
+    return options.wsUrl;
+  }
+
+  const isDemoTrading = options.demoTrading;
+  const networkKey: 'livenet' | 'demo' = isDemoTrading ? 'demo' : 'livenet';
+
+  switch (wsKey) {
+    case WS_KEY_MAP.spotv1:
+    case WS_KEY_MAP.mixv1: {
+      throw new Error(
+        'Use the WebsocketClient instead of WebsocketClientV2 for V1 websockets',
+      );
+    }
+    case WS_KEY_MAP.v2Private: {
+      return WS_BASE_URL_MAP.v2Private.all[networkKey];
+    }
+    case WS_KEY_MAP.v2Public: {
+      return WS_BASE_URL_MAP.v2Public.all[networkKey];
+    }
+    case WS_KEY_MAP.v3Private: {
+      return WS_BASE_URL_MAP.v3Private.all[networkKey];
+    }
+    case WS_KEY_MAP.v3Public: {
+      return WS_BASE_URL_MAP.v3Public.all[networkKey];
+    }
+    default: {
+      logger.error('getWsUrl(): Unhandled wsKey: ', {
+        ...WS_LOGGER_CATEGORY,
+        wsKey,
+      });
+      throw neverGuard(wsKey, 'getWsUrl(): Unhandled wsKey');
+    }
+  }
+}
 
 /**
  * Normalised internal format for a request (subscribe/unsubscribe/etc) on a topic, with optional parameters.
