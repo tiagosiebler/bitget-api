@@ -1242,7 +1242,7 @@ export class RestClientV2 extends BaseRestClient {
     symbol: string;
     productType: FuturesProductTypeV2;
     pageSize?: string;
-    pageNumber?: string;
+    pageNo?: string;
   }): Promise<APIResponse<FuturesHistoricalFundingRateV2>> {
     return this.get('/api/v2/mix/market/history-fund-rate', params);
   }
