@@ -3,6 +3,7 @@ import {
   WebsocketClientOptions,
   WsKey,
   WsPrivateTopicV2,
+  WsPrivateTopicV3,
   WsTopicSubscribeEventArgs,
   WsTopicSubscribePublicArgsV2,
 } from '../types';
@@ -107,6 +108,13 @@ export const PRIVATE_TOPICS_V2: WsPrivateTopicV2[] = [
   'orders-isolated',
 ];
 
+export const PRIVATE_TOPICS_V3: WsPrivateTopicV3[] = [
+  'account',
+  'position',
+  'fill',
+  'order',
+];
+
 export async function getWsUrl(
   wsKey: WsKey,
   options: WebsocketClientOptions,
@@ -176,7 +184,8 @@ export function isPrivateChannel<TChannel extends string>(
 ): boolean {
   return (
     PRIVATE_TOPICS.includes(channel) ||
-    PRIVATE_TOPICS_V2.includes(channel as any)
+    PRIVATE_TOPICS_V2.includes(channel as any) ||
+    PRIVATE_TOPICS_V3.includes(channel as any)
   );
 }
 

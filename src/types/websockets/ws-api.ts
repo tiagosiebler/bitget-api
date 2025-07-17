@@ -26,7 +26,7 @@ export interface WsOperationLoginParams {
 }
  */
 
-export interface WsRequestOperationBitgetV2<TWSRequestArg> {
+export interface WsRequestOperationBitget<TWSRequestArg> {
   op: WsOperation;
   args?: (TWSRequestArg | string | number)[];
 }

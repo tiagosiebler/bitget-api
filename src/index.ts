@@ -8,3 +8,4 @@ export * from './util';
 export * from './util/logger';
 export * from './websocket-client-legacy-v1';
 export * from './websocket-client-v2';
+export * from './websocket-client-v3';

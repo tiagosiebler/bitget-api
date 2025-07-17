@@ -2,7 +2,7 @@ import {
   RestClientV2,
   SpotOrderRequestV2,
   WebsocketClientV2,
-} from '../src/index';
+} from '../../src/index';
 
 // import { RestClientV2, WebsocketClient } from '../src/index';
 

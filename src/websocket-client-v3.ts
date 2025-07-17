@@ -1,39 +1,37 @@
 import WebSocket from 'isomorphic-ws';
 
 import {
-  BitgetInstTypeV2,
+  BitgetInstTypeV3,
   MessageEventLike,
   WsKey,
   WsOperation,
   WsOperationLoginParams,
   WsRequestOperationBitget,
-  WsTopicV2,
+  WsTopicV3,
 } from './types';
 import {
-  BaseWebsocketClient,
-  EmittableEvent,
   getMaxTopicsPerSubscribeEvent,
   getNormalisedTopicRequests,
   getWsUrl,
-  isPrivateChannel,
   isWsPong,
-  MidflightWsRequestEvent,
   WS_AUTH_ON_CONNECT_KEYS,
   WS_KEY_MAP,
+  WS_LOGGER_CATEGORY,
   WsTopicRequest,
 } from './util';
-import { signMessage } from './util/node-support';
-import { SignAlgorithm } from './util/webCryptoAPI';
+import {
+  BaseWebsocketClient,
+  EmittableEvent,
+  MidflightWsRequestEvent,
+} from './util/BaseWSClient';
+import { SignAlgorithm, signMessage } from './util/webCryptoAPI';
 
-const WS_LOGGER_CATEGORY = { category: 'bitget-ws' };
-
-const COIN_CHANNELS: WsTopicV2[] = [
-  'account',
-  'account-crossed',
-  'account-isolated',
-];
-
-export class WebsocketClientV2 extends BaseWebsocketClient<
+/**
+ * WebSocket client dedicated to the unified account (V3) WebSockets.
+ *
+ * Your Bitget account needs to be upgraded to unified account mode, to use the account-level WebSocket topics.
+ */
+export class WebsocketClientV3 extends BaseWebsocketClient<
   WsKey,
   WsRequestOperationBitget<object> // subscribe requests have an "args" parameter with an object within
 > {
@@ -42,85 +40,9 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
    */
   public connectAll(): Promise<WebSocket | undefined>[] {
     return [
-      this.connect(WS_KEY_MAP.v2Private),
-      this.connect(WS_KEY_MAP.v2Public),
+      this.connect(WS_KEY_MAP.v3Private),
+      this.connect(WS_KEY_MAP.v3Public),
     ];
-  }
-
-  /** Some private channels use `coin` instead of `instId`. This method handles building the sub/unsub request */
-  private getSubRequest(
-    instType: BitgetInstTypeV2,
-    topic: WsTopicV2,
-    coin: string = 'default',
-  ): WsTopicRequest<string> {
-    if (isPrivateChannel(topic)) {
-      if (COIN_CHANNELS.includes(topic)) {
-        const subscribeRequest: WsTopicRequest<string> = {
-          topic,
-          payload: {
-            instType,
-            coin,
-          },
-        };
-        return subscribeRequest;
-      }
-
-      const subscribeRequest: WsTopicRequest<string> = {
-        topic,
-        payload: {
-          instType,
-          instId: coin,
-        },
-      };
-
-      return subscribeRequest;
-    }
-
-    const subscribeRequest: WsTopicRequest<string> = {
-      topic,
-      payload: {
-        instType,
-        instId: coin,
-      },
-    };
-    return subscribeRequest;
-  }
-
-  /**
-   * Subscribe to a topic
-   * @param instType instrument type (refer to API docs).
-   * @param topic topic name (e.g. "ticker").
-   * @param instId instrument ID (e.g. "BTCUSDT"). Use "default" for private topics.
-   */
-  public subscribeTopic(
-    instType: BitgetInstTypeV2,
-    topic: WsTopicV2,
-    coin: string = 'default',
-  ) {
-    const subRequest = this.getSubRequest(instType, topic, coin);
-    const isPrivateTopic = isPrivateChannel(topic);
-    const wsKey = isPrivateTopic ? WS_KEY_MAP.v2Private : WS_KEY_MAP.v2Public;
-
-    return this.subscribe(subRequest, wsKey);
-  }
-
-  /**
-   * Unsubscribe from a topic
-   * @param instType instrument type (refer to API docs).
-   * @param topic topic name (e.g. "ticker").
-   * @param instId instrument ID (e.g. "BTCUSDT"). Use "default" for private topics to get all symbols.
-   */
-  public unsubscribeTopic(
-    instType: BitgetInstTypeV2,
-    topic: WsTopicV2,
-    coin: string = 'default',
-  ) {
-    const subRequest = this.getSubRequest(instType, topic, coin);
-
-    const isPrivateTopic = isPrivateChannel(topic);
-    const wsKey = isPrivateTopic ? WS_KEY_MAP.v2Private : WS_KEY_MAP.v2Public;
-
-    return this.unsubscribe(subRequest, wsKey);
   }
 
   /**
@@ -135,10 +57,10 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
    *
    * Call `unsubscribe(topics)` to remove topics
    */
-  public subscribe(
+  public subscribe<TWSPayload extends { instType?: BitgetInstTypeV3 }>(
     requests:
-      | (WsTopicRequest<WsTopicV2 | string> | WsTopicV2)
-      | (WsTopicRequest<WsTopicV2 | string> | WsTopicV2)[],
+      | (WsTopicRequest<WsTopicV3, TWSPayload> | WsTopicV3)
+      | (WsTopicRequest<WsTopicV3, TWSPayload> | WsTopicV3)[],
     wsKey: WsKey,
   ): Promise<unknown> {
     const topicRequests = Array.isArray(requests) ? requests : [requests];
@@ -152,10 +74,10 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
    * - Requests are automatically routed to the correct websocket connection.
    * - These topics will be removed from the topic cache, so they won't be subscribed to again.
    */
-  public unsubscribe(
+  public unsubscribe<TWSPayload extends { instType?: BitgetInstTypeV3 }>(
     requests:
-      | (WsTopicRequest<WsTopicV2 | string> | WsTopicV2)
-      | (WsTopicRequest<WsTopicV2 | string> | WsTopicV2)[],
+      | (WsTopicRequest<WsTopicV3, TWSPayload> | WsTopicV3)
+      | (WsTopicRequest<WsTopicV3, TWSPayload> | WsTopicV3)[],
     wsKey: WsKey,
   ) {
     const topicRequests = Array.isArray(requests) ? requests : [requests];
@@ -238,14 +160,14 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
         "op":"subscribe",
         "args":[
             {
-                "instType":"SPOT",
-                "channel":"ticker",
-                "instId":"BTCUSDT"
+                "instType":"spot",
+                "topic":"ticker",
+                "symbol":"BTCUSDT"
             },
             {
-                "instType":"SPOT",
-                "channel":"candle5m",
-                "instId":"BTCUSDT"
+                "instType":"spot",
+                "topic":"candle5m",
+                "symbol":"BTCUSDT"
             }
         ]
       }
@@ -255,16 +177,16 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
       args: requests.map((request) => {
         // const request = {
         //   topic: 'ticker',
-        //   payload: { instType: 'SPOT', instId: 'BTCUSDT' },
+        //   payload: { instType: 'spot', symbol: 'BTCUSDT' },
         // };
         // becomes:
         // const request = {
-        //   channel: 'ticker',
-        //   instType: 'SPOT',
-        //   instId: 'BTCUSDT',
+        //   topic: 'ticker',
+        //   instType: 'spot',
+        //   symbol: 'BTCUSDT',
         // };
         return {
-          channel: request.topic,
+          topic: request.topic,
           ...request.payload,
         };
       }),
@@ -470,9 +392,6 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
     return results;
   }
 
-  /**
-   * @deprecrated not supported by Bitget's V2 API offering
-   */
   async sendWSAPIRequest(): Promise<unknown> {
     return;
   }

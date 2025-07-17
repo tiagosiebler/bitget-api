@@ -1,4 +1,4 @@
-import { FuturesClient, WebsocketClient } from '../../src/index';
+import { FuturesClient } from '../../src/index';
 
 // or
 // import { SpotClient } from 'bitget-api';
@@ -23,7 +23,7 @@ const symbol = 'BTCUSDT_UMCBL';
       timestampNow.toString(),
       candlesToFetch.toString(),
     );
-    console.log('getCandles returned ' + response.length + ' candles');
+    console.log('getCandles returned ' + response.data.length + ' candles');
   } catch (e) {
     console.error('request failed: ', e);
   }

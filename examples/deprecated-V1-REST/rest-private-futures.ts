@@ -1,4 +1,4 @@
-import { FuturesClient, WebsocketClient } from '../../src/index';
+import { FuturesClient } from '../../src/index';
 
 // or
 // import { SpotClient } from 'bitget-api';

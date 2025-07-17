@@ -1,9 +1,19 @@
 import { RestClientOptions, WS_KEY_MAP } from '../../util';
 import { FuturesProductTypeV2 } from '../request';
 
-/** A "topic" is always a string */
 export type BitgetInstType = 'SP' | 'SPBL' | 'MC' | 'UMCBL' | 'DMCBL';
 export type BitgetInstTypeV2 = 'SPOT' | FuturesProductTypeV2;
+export type BitgetInstTypeV3 =
+  | 'spot'
+  | 'usdt-futures'
+  | 'coin-futures'
+  | 'usdc-futures';
+
+/**
+ *
+ * V1  list of topics for WebSocket consumers
+ *
+ */
 
 export type WsPublicSpotTopic =
   | 'ticker'
@@ -31,8 +41,15 @@ export type WsPrivateFuturesTopic =
   | 'ordersAlgo';
 
 export type WsPublicTopic = WsPublicSpotTopic | WsPublicFuturesTopic;
+
 export type WsPrivateTopic = WsPrivateSpotTopic | WsPrivateFuturesTopic;
 export type WsTopic = WsPublicTopic | WsPrivateTopic;
+
+/**
+ *
+ * V2 list of topics for WebSocket consumers
+ *
+ */
 
 export type WsPublicTopicV2 =
   | 'index-price' // margin only
@@ -61,17 +78,20 @@ export type WsPublicTopicV2 =
   | 'books5'
   | 'books15';
 
+// Also update PRIVATE_TOPICS_V2 if this is updated
 export type WSPrivateTopicFuturesV2 =
   | 'positions'
   | 'orders-algo'
   | 'positions-history';
 
+// Also update PRIVATE_TOPICS_V2 if this is updated
 export type WSPrivateTopicMarginV2 =
   | 'orders-crossed'
   | 'account-crossed'
   | 'account-isolated'
   | 'orders-isolated';
 
+// Also update PRIVATE_TOPICS_V2 if this is updated
 export type WsPrivateTopicV2 =
   | 'account'
   | 'orders'
@@ -79,6 +99,16 @@ export type WsPrivateTopicV2 =
   | WSPrivateTopicMarginV2;
 
 export type WsTopicV2 = WsPublicTopicV2 | WsPrivateTopicV2;
+
+/**
+ *
+ * V3 / UTA list of topics for WebSocket consumers
+ *
+ */
+export type WsPublicTopicV3 = 'ticker' | 'kline' | 'books' | 'publicTrade';
+// Also update PRIVATE_TOPICS_V3 if this is updated
+export type WsPrivateTopicV3 = 'account' | 'position' | 'fill' | 'order';
+export type WsTopicV3 = WsPublicTopicV3 | WsPrivateTopicV3;
 
 /** This is used to differentiate between each of the available websocket streams */
 export type WsKey = (typeof WS_KEY_MAP)[keyof typeof WS_KEY_MAP];
