@@ -99,7 +99,8 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
       return this.options.wsUrl;
     }
 
-    const networkKey: 'livenet' | 'demo' = 'livenet';
+    const isDemoTrading = this.options.demoTrading;
+    const networkKey: 'livenet' | 'demo' = isDemoTrading ? 'demo' : 'livenet';
 
     switch (wsKey) {
       case WS_KEY_MAP.spotv1:

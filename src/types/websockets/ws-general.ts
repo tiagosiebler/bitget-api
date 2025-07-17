@@ -143,6 +143,14 @@ export interface WSClientConfigurableOptions {
   /** The passphrase you set when creating the API Key (NOT your account password) */
   apiPass?: string;
 
+  /**
+   * Set to `true` to connect to Bitget's demo trading WebSockets:
+   *
+   * - V2: https://www.bitget.com/api-doc/common/demotrading/websocket
+   * - V3/UTA: https://www.bitget.com/api-doc/uta/guide#demo-trading
+   */
+  demoTrading?: boolean;
+
   /** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
   recvWindow?: number;
 

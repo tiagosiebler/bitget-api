@@ -169,6 +169,7 @@ export abstract class BaseWebsocketClient<
     this.wsStore = new WsStore(this.logger);
 
     this.options = {
+      demoTrading: false,
       pongTimeout: 1000,
       pingInterval: 10000,
       reconnectTimeout: 500,
