@@ -127,9 +127,9 @@ import { RestClientV3 } from 'bitget-api';
 
 // note the single quotes, preventing special characters such as $ from being incorrectly passed
 const client = new RestClientV3({
-  apiKey: process.env.API_KEY_COM || 'insert_api_key_here';,
-  apiSecret: process.env.API_SECRET_COM || 'insert_api_secret_here';,
-  apiPass: process.env.API_PASS_COM || 'insert_api_pass_here';,
+  apiKey: process.env.API_KEY_COM || 'insert_api_key_here',
+  apiSecret: process.env.API_SECRET_COM || 'insert_api_secret_here',
+  apiPass: process.env.API_PASS_COM || 'insert_api_pass_here',
 });
 
 (async () => {
