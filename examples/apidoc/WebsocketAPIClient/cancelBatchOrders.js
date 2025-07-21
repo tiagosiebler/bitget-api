@@ -6,7 +6,7 @@ import { WebsocketAPIClient } from 'bitget-api';
 // This Bitget API SDK is available on npm via "npm install bitget-api"
 // WS API ENDPOINT: batch-cancel
 // METHOD: WebSocket API
-// PUBLIC: YES
+// PUBLIC: NO
 
 // Create a WebSocket API client instance
 const client = new WebsocketAPIClient({
