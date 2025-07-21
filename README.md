@@ -394,7 +394,7 @@ For more examples, including how to use websockets with Bitget, check the [examp
 
 ### Customise logging
 
-Pass a custom logger which supports the log methods `silly`, `debug`, `notice`, `info`, `warning` and `error`, or override methods from the default logger as desired.
+Pass a custom logger which supports the log methods `trace`, `info` and `error`, or override methods from the default logger as desired.
 
 ```javascript
 import { WebsocketClientV2, DefaultLogger } from 'bitget-api';

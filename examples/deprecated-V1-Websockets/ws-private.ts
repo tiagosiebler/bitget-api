@@ -6,7 +6,7 @@ import { DefaultLogger, WebsocketClientLegacyV1 } from '../../src';
 (async () => {
   const logger = {
     ...DefaultLogger,
-    trace: (...params) => console.log('silly', ...params),
+    trace: (...params) => console.log('trace', ...params),
   };
 
   logger.info('Starting private V1 websocket');
