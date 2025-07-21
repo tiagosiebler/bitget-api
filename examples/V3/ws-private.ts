@@ -46,10 +46,6 @@ import { DefaultLogger, WebsocketClientV3, WS_KEY_MAP } from '../../src';
     console.log('WS error', data);
   });
 
-  /**
-   * Public events
-   */
-
   // You can subscribe to one topic at a time
   wsClient.subscribe(
     {

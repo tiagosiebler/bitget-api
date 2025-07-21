@@ -4,8 +4,8 @@ import {
   BitgetInstTypeV2,
   MessageEventLike,
   WsKey,
-  WsOperation,
-  WsOperationLoginParams,
+  WSOperation,
+  WSOperationLoginParams,
   WsRequestOperationBitget,
   WsTopicV2,
 } from './types';
@@ -218,7 +218,7 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
    * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
    */
   protected async getWsRequestEvents(
-    operation: WsOperation,
+    operation: WSOperation,
     requests: WsTopicRequest<string, object>[],
   ): Promise<MidflightWsRequestEvent<WsRequestOperationBitget<object>>[]> {
     const wsRequestBuildingErrors: unknown[] = [];
@@ -345,7 +345,7 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
 
   protected async getWsAuthRequestEvent(
     wsKey: WsKey,
-  ): Promise<WsRequestOperationBitget<WsOperationLoginParams>> {
+  ): Promise<WsRequestOperationBitget<WSOperationLoginParams>> {
     try {
       const { apiKey, apiSecret, apiPass } = this.options;
       const { signature, expiresAt } = await this.getWsAuthSignature(wsKey);
@@ -360,7 +360,7 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
         );
       }
 
-      const request: WsRequestOperationBitget<WsOperationLoginParams> = {
+      const request: WsRequestOperationBitget<WSOperationLoginParams> = {
         op: 'login',
         args: [
           {

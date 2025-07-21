@@ -1,6 +1,7 @@
 import {
   MarginType,
   WsAccountSnapshotUMCBL,
+  WSAPIResponse,
   WsBaseEvent,
   WSPositionSnapshotUMCBL,
   WsSnapshotAccountEvent,
@@ -80,5 +81,19 @@ export function assertMarginType(marginType: string): marginType is MarginType {
   if (marginType !== 'isolated' && marginType !== 'crossed') {
     throw new Error('MarginType should be one of: crossed | isolated');
   }
+  return true;
+}
+
+export function isWSAPIResponse(
+  msg: unknown,
+): msg is Omit<WSAPIResponse, 'wsKey'> {
+  if (typeof msg !== 'object' || !msg) {
+    return false;
+  }
+
+  if (typeof msg['event'] !== 'string' || typeof msg['id'] !== 'string') {
+    return false;
+  }
+
   return true;
 }

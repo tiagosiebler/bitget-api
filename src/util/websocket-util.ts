@@ -1,6 +1,7 @@
 import {
   BitgetInstType,
   WebsocketClientOptions,
+  WSAPIRequestBitgetV3,
   WsKey,
   WsPrivateTopicV2,
   WsPrivateTopicV3,
@@ -340,4 +341,16 @@ export function isWSPingFrameAvailable(): boolean {
  */
 export function isWSPongFrameAvailable(): boolean {
   return typeof WebSocket.prototype['pong'] === 'function';
+}
+
+/**
+ * WS API promises are stored using a primary key. This key is constructed using
+ * properties found in every request & reply.
+ */
+export function getPromiseRefForWSAPIRequest(
+  requestEvent: WSAPIRequestBitgetV3<unknown>,
+): string {
+  // Responses don't have any other info we can use to connect them to the request. Just the "id" field...
+  const promiseRef = [requestEvent.id].join('_');
+  return promiseRef;
 }

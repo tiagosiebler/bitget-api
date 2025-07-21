@@ -7,7 +7,7 @@ import {
   MessageEventLike,
   WebsocketClientOptions,
   WSClientConfigurableOptions,
-  WsOperation,
+  WSOperation,
 } from '../types';
 import { DefaultLogger } from './logger';
 import {
@@ -140,13 +140,12 @@ export abstract class BaseWebsocketClient<
   TWSKey extends string,
   TWSRequestEvent extends object,
 > extends EventEmitter {
-  // TODO: the stored structure changed! Check it!
   /**
    * State store to track a list of topics (topic requests) we are expected to be subscribed to if reconnected
    */
   private wsStore: WsStore<TWSKey, WsTopicRequest<string>>;
 
-  protected logger: DefaultLogger;
+  public logger: DefaultLogger;
 
   protected options: WebsocketClientOptions;
 
@@ -216,7 +215,7 @@ export abstract class BaseWebsocketClient<
    * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
    */
   protected abstract getWsRequestEvents(
-    operation: WsOperation,
+    operation: WSOperation,
     requests: WsTopicRequest<string>[],
     wsKey: TWSKey,
   ): Promise<MidflightWsRequestEvent<TWSRequestEvent>[]>;
@@ -231,8 +230,6 @@ export abstract class BaseWebsocketClient<
 
   /**
    * Request connection of all dependent (public & private) websockets, instead of waiting for automatic connection by library
-   *
-   * // TODO: breaking change, and check that any calls to this anticipate connected result (was WS)
    */
   protected abstract connectAll(): Promise<WSConnectedResult | undefined>[];
 
@@ -247,14 +244,9 @@ export abstract class BaseWebsocketClient<
 
   protected abstract sendWSAPIRequest(
     wsKey: TWSKey,
-    channel: string,
+    operation: string,
+    category: string,
     params?: any,
-  ): Promise<unknown>;
-
-  protected abstract sendWSAPIRequest(
-    wsKey: TWSKey,
-    channel: string,
-    params: any,
   ): Promise<unknown>;
 
   public getTimeOffsetMs() {
@@ -646,7 +638,7 @@ export abstract class BaseWebsocketClient<
   protected async getWsOperationEventsForTopics(
     topics: WsTopicRequest<string>[],
     wsKey: TWSKey,
-    operation: WsOperation,
+    operation: WSOperation,
   ): Promise<MidflightWsRequestEvent<TWSRequestEvent>[]> {
     if (!topics.length) {
       return [];
@@ -762,8 +754,8 @@ export abstract class BaseWebsocketClient<
       }
 
       // Cache the request for this call, so we can enrich the response with request info
-      this.midflightRequestCache[wsKey][midflightRequest.requestKey] =
-        midflightRequest.requestEvent;
+      // this.midflightRequestCache[wsKey][midflightRequest.requestKey] =
+      // midflightRequest.requestEvent;
 
       this.logger.trace(`Sending batch via message: "${wsMessage}"`);
       try {
@@ -794,7 +786,8 @@ export abstract class BaseWebsocketClient<
     return this.midflightRequestCache[wsKey][requestKey];
   }
 
-  // TODO: where is this used?
+  // Not in use for Bitget. If desired, call from resolveEmittableEvents() for WS API responses.
+  // See binance SDK for reference
   removeCachedMidFlightRequest(wsKey: TWSKey, requestKey: string) {
     if (this.getCachedMidFlightRequest(wsKey, requestKey)) {
       delete this.midflightRequestCache[wsKey][requestKey];
@@ -958,8 +951,7 @@ export abstract class BaseWebsocketClient<
   }
 
   /**
-   * The newer standard. Requires resolveEmittableEvents in the integration layer.
-   * Change needed to support V3? TODO: check me.
+   * Raw incoming event handler. Parsing happens in integration layer via resolveEmittableEvents().
    */
   private onWsMessage(event: unknown, wsKey: TWSKey, ws: WebSocket) {
     try {

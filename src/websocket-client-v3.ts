@@ -3,16 +3,23 @@ import WebSocket from 'isomorphic-ws';
 import {
   BitgetInstTypeV3,
   MessageEventLike,
+  WsAPIOperationResponseMap,
+  WSAPIRequestBitgetV3,
+  WSAPIRequestFlags,
+  WsAPITopicRequestParamMap,
+  WsAPIWsKeyTopicMap,
   WsKey,
-  WsOperation,
-  WsOperationLoginParams,
+  WSOperation,
+  WSOperationLoginParams,
   WsRequestOperationBitget,
   WsTopicV3,
 } from './types';
 import {
   getMaxTopicsPerSubscribeEvent,
   getNormalisedTopicRequests,
+  getPromiseRefForWSAPIRequest,
   getWsUrl,
+  isWSAPIResponse,
   isWsPong,
   WS_AUTH_ON_CONNECT_KEYS,
   WS_KEY_MAP,
@@ -43,6 +50,17 @@ export class WebsocketClientV3 extends BaseWebsocketClient<
       this.connect(WS_KEY_MAP.v3Private),
       this.connect(WS_KEY_MAP.v3Public),
     ];
+  }
+
+  /**
+   * Ensures the WS API connection is active and ready.
+   *
+   * You do not need to call this, but if you call this before making any WS API requests,
+   * it can accelerate the first request (by preparing the connection in advance).
+   */
+  public connectWSAPI(): Promise<unknown> {
+    /** This call automatically ensures the connection is active AND authenticated before resolving */
+    return this.assertIsAuthenticated(WS_KEY_MAP.v3Private);
   }
 
   /**
@@ -140,7 +158,7 @@ export class WebsocketClientV3 extends BaseWebsocketClient<
    * @returns one or more correctly structured request events for performing a operations over WS. This can vary per exchange spec.
    */
   protected async getWsRequestEvents(
-    operation: WsOperation,
+    operation: WSOperation,
     requests: WsTopicRequest<string, object>[],
   ): Promise<MidflightWsRequestEvent<WsRequestOperationBitget<object>>[]> {
     const wsRequestBuildingErrors: unknown[] = [];
@@ -267,7 +285,7 @@ export class WebsocketClientV3 extends BaseWebsocketClient<
 
   protected async getWsAuthRequestEvent(
     wsKey: WsKey,
-  ): Promise<WsRequestOperationBitget<WsOperationLoginParams>> {
+  ): Promise<WsRequestOperationBitget<WSOperationLoginParams>> {
     try {
       const { apiKey, apiSecret, apiPass } = this.options;
       const { signature, expiresAt } = await this.getWsAuthSignature(wsKey);
@@ -282,7 +300,7 @@ export class WebsocketClientV3 extends BaseWebsocketClient<
         );
       }
 
-      const request: WsRequestOperationBitget<WsOperationLoginParams> = {
+      const request: WsRequestOperationBitget<WSOperationLoginParams> = {
         op: 'login',
         args: [
           {
@@ -314,8 +332,86 @@ export class WebsocketClientV3 extends BaseWebsocketClient<
       const msg = JSON.parse(event.data);
       const emittableEvent = { ...msg, wsKey };
 
-      // TODO: are v3 events different from V2? if yes? migrate to resolveEmittableEvents
-      // v2 event processing
+      /**
+       * WS API response handling
+       */
+      if (isWSAPIResponse(emittableEvent)) {
+        // const eg1 = {
+        //   event: 'error',
+        //   id: '1',
+        //   code: '43012',
+        //   msg: 'Insufficient balance',
+        // };
+
+        const retCode = emittableEvent.code;
+        const reqId = emittableEvent.id;
+        const isError = retCode !== '0';
+
+        const promiseRef = [emittableEvent.id].join('_');
+
+        const loggableContext = {
+          wsKey,
+          promiseRef,
+          parsedEvent: emittableEvent,
+        };
+
+        if (!reqId) {
+          this.logger.error(
+            'WS API response is missing reqId - promisified workflow could get stuck. If this happens, please get in touch with steps to reproduce. Trace:',
+            loggableContext,
+          );
+        }
+
+        if (isError) {
+          try {
+            this.getWsStore().rejectDeferredPromise(
+              wsKey,
+              promiseRef,
+              emittableEvent,
+              true,
+            );
+          } catch (e) {
+            this.logger.error('Exception trying to reject WSAPI promise', {
+              ...loggableContext,
+              error: e,
+            });
+          }
+
+          results.push({
+            eventType: 'exception',
+            event: emittableEvent,
+            isWSAPIResponse: true,
+          });
+          return results;
+        }
+
+        // WS API Success
+        try {
+          this.getWsStore().resolveDeferredPromise(
+            wsKey,
+            promiseRef,
+            emittableEvent,
+            true,
+          );
+        } catch (e) {
+          this.logger.error('Exception trying to resolve WSAPI promise', {
+            ...loggableContext,
+            error: e,
+          });
+        }
+
+        results.push({
+          eventType: 'response',
+          event: emittableEvent,
+          isWSAPIResponse: true,
+        });
+
+        return results;
+      }
+
+      /**
+       * V3 event handling for consumers - behaves the same as V2
+       */
       if (typeof msg === 'object') {
         if (typeof msg['code'] === 'number') {
           // v2 authentication event
@@ -392,7 +488,96 @@ export class WebsocketClientV3 extends BaseWebsocketClient<
     return results;
   }
 
-  async sendWSAPIRequest(): Promise<unknown> {
-    return;
+  /**
+   * V3/UTA supports order placement via WebSockets. This is the WS API:
+   * https://www.bitget.com/api-doc/uta/websocket/private/Place-Order-Channel
+   *
+   * @returns a promise that resolves/rejects when a matching response arrives
+   */
+  async sendWSAPIRequest<
+    TWSKey extends keyof WsAPIWsKeyTopicMap,
+    TWSOperation extends WsAPIWsKeyTopicMap[TWSKey],
+    TWSParams extends WsAPITopicRequestParamMap[TWSOperation],
+    TWSAPIResponse extends
+      WsAPIOperationResponseMap[TWSOperation] = WsAPIOperationResponseMap[TWSOperation],
+  >(
+    wsKey: WsKey,
+    operation: TWSOperation,
+    category: BitgetInstTypeV3,
+    params: TWSParams & { signRequest?: boolean },
+    requestFlags?: WSAPIRequestFlags,
+  ): Promise<TWSAPIResponse> {
+    this.logger.trace(`sendWSAPIRequest(): assert "${wsKey}" is connected`);
+
+    await this.assertIsConnected(wsKey);
+    this.logger.trace('sendWSAPIRequest()->assertIsConnected() ok');
+
+    if (requestFlags?.authIsOptional !== true) {
+      // this.logger.trace('sendWSAPIRequest(): assertIsAuthenticated(${wsKey})...');
+      await this.assertIsAuthenticated(wsKey);
+      // this.logger.trace('sendWSAPIRequest(): assertIsAuthenticated(${wsKey}) ok');
+    }
+
+    const request: WSAPIRequestBitgetV3<TWSParams> = {
+      op: 'trade',
+      id: `${this.getNewRequestId()}`,
+      category: category,
+      topic: operation,
+      // Ensure "args" is always wrapped as array
+      args: Array.isArray(params) ? params : [params],
+    };
+
+    // Store deferred promise, resolved within the "resolveEmittableEvents" method while parsing incoming events
+    const promiseRef = getPromiseRefForWSAPIRequest(request);
+
+    const deferredPromise = this.getWsStore().createDeferredPromise<
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      TWSAPIResponse & { request: any }
+    >(wsKey, promiseRef, false);
+
+    // Enrich returned promise with request context for easier debugging
+    deferredPromise.promise
+      ?.then((res) => {
+        if (!Array.isArray(res)) {
+          res.request = {
+            wsKey,
+            ...request,
+          };
+        }
+
+        return res;
+      })
+      .catch((e) => {
+        if (typeof e === 'string') {
+          this.logger.error('Unexpected string thrown without Error object:', {
+            e,
+            wsKey,
+            request,
+          });
+          return e;
+        }
+        e.request = {
+          wsKey,
+          operation,
+          params: params,
+        };
+        // throw e;
+        return e;
+      });
+
+    this.logger.trace(
+      `sendWSAPIRequest(): sending raw request: ${JSON.stringify(request, null, 2)}`,
+    );
+
+    // Send event
+    const throwExceptions = false;
+    this.tryWsSend(wsKey, JSON.stringify(request), throwExceptions);
+
+    this.logger.trace(
+      `sendWSAPIRequest(): sent "${operation}" event with promiseRef(${promiseRef})`,
+    );
+
+    // Return deferred promise, so caller can await this call
+    return deferredPromise.promise!;
   }
 }

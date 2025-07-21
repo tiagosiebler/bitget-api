@@ -687,7 +687,7 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Place Order
    */
-  placeOrder(
+  submitNewOrder(
     params: PlaceOrderRequestV3,
   ): Promise<APIResponse<PlaceOrderResponseV3>> {
     return this.postPrivate('/api/v3/trade/place-order', params);
