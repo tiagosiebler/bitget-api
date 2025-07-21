@@ -1,4 +1,6 @@
-const { WebsocketAPIClient } = require('bitget-api');
+import { WebsocketAPIClient } from 'bitget-api';
+// or if you want to use the require syntax
+//const { WebsocketAPIClient } = require('bitget-api');
 
 // This example shows how to call this Bitget WebSocket API endpoint with either node.js, javascript (js) or typescript (ts) with the npm module "bitget-api" for Bitget exchange
 // This Bitget API SDK is available on npm via "npm install bitget-api"
