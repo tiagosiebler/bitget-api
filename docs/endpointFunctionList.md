@@ -21,6 +21,7 @@ All REST clients are in the [src](/src) folder. For usage examples, make sure to
 List of clients:
 - [rest-client-v2](#rest-client-v2ts)
 - [rest-client-v3](#rest-client-v3ts)
+- [websocket-api-client](#websocket-api-clientts)
 
 
 If anything is missing or wrong, please open an issue or let us know in our [Node.js Traders](https://t.me/nodetraders) telegram group!
@@ -390,3 +391,16 @@ This table includes all endpoints from the official Exchange API docs and corres
 | [cancelStrategyOrder()](https://github.com/tiagosiebler/bitget-api/blob/master/src/rest-client-v3.ts#L964) | :closed_lock_with_key:  | POST | `/api/v3/trade/cancel-strategy-order` |
 | [getUnfilledStrategyOrders()](https://github.com/tiagosiebler/bitget-api/blob/master/src/rest-client-v3.ts#L973) | :closed_lock_with_key:  | GET | `/api/v3/trade/unfilled-strategy-orders` |
 | [getHistoryStrategyOrders()](https://github.com/tiagosiebler/bitget-api/blob/master/src/rest-client-v3.ts#L982) | :closed_lock_with_key:  | GET | `/api/v3/trade/history-strategy-orders` |
+
+# websocket-api-client.ts
+
+This table includes all endpoints from the official Exchange API docs and corresponding SDK functions for each endpoint that are found in [websocket-api-client.ts](/src/websocket-api-client.ts). 
+
+This client provides WebSocket API endpoints which allow for faster interactions with the Bitget API via a WebSocket connection.
+
+| Function | AUTH | HTTP Method | Endpoint |
+| -------- | :------: | :------: | -------- |
+| [submitNewOrder()](https://github.com/tiagosiebler/bitget-api/blob/master/src/websocket-api-client.ts#L78) |  | WS | `place-order` |
+| [placeBatchOrders()](https://github.com/tiagosiebler/bitget-api/blob/master/src/websocket-api-client.ts#L97) |  | WS | `batch-place` |
+| [cancelOrder()](https://github.com/tiagosiebler/bitget-api/blob/master/src/websocket-api-client.ts#L121) |  | WS | `cancel-order` |
+| [cancelBatchOrders()](https://github.com/tiagosiebler/bitget-api/blob/master/src/websocket-api-client.ts#L140) |  | WS | `batch-cancel` |
