@@ -122,7 +122,30 @@ import { RestClientV3 } from 'bitget-api';
 // or if you prefer require:
 // const { RestClientV3 } = require('bitget-api');
 
-// TODO: REST V3 example here, similar to V2
+// note the single quotes, preventing special characters such as $ from being incorrectly passed
+const client = new RestClientV3({
+  apiKey: process.env.API_KEY_COM || 'insert_api_key_here';,
+  apiSecret: process.env.API_KEY_COM || 'insert_api_key_here';,
+  apiPass: process.env.API_KEY_COM || 'insert_api_key_here';,
+});
+
+(async () => {
+  try {
+    console.log(await client.getAccountAssets());
+
+    const newOrder = await client.submitNewOrder({
+      category: 'USDT-FUTURES',
+      orderType: 'market',
+      side: 'buy',
+      qty: '0.001',
+      symbol: 'BTCUSDT',
+    });
+
+    console.log('Order submitted: ', newOrder);
+  } catch (e) {
+    console.error('request failed: ', e);
+  }
+})();
 ```
 
 #### V2 REST APIs
@@ -140,13 +163,11 @@ const API_KEY = 'xxx';
 const API_SECRET = 'yyy';
 const API_PASS = 'zzz';
 
-const client = new RestClientV2(
-  {
-    apiKey: API_KEY,
-    apiSecret: API_SECRET,
-    apiPass: API_PASS,
-  },
-);
+const client = new RestClientV2({
+  apiKey: API_KEY,
+  apiSecret: API_SECRET,
+  apiPass: API_PASS,
+});
 
 // For public-only API calls, simply don't provide a key & secret or set them to undefined
 // const client = new RestClientV2();
@@ -179,6 +200,7 @@ client
 All WebSocket functionality is supported via the WebsocketClient. Since there are currently 3 generations of Bitget's API, there are 3 WebsocketClient classes in this Node.js, JavaScript & TypeScript SDK for Bitget.
 
 Use the following guidance to decide which one to use:
+
 - Unified Trading Account / V3 (latest generation):
   - For receiving data, use the [WebsocketClientV3](./src/websocket-client-v3.ts).
   - For sending orders via WebSockets, use the [WebsocketAPIClient](./src/websocket-api-client.ts).
@@ -203,21 +225,19 @@ This integration looks & feels like a REST API client, but uses WebSockets, via 
 A simple example is below, but for a more thorough example, check the example here: [./examples/V3/ws-api-client-trade.ts](./examples/V3/ws-api-client-trade.ts)
 
 ```typescript
-import { WebsocketAPIClient } from "bitget-api";
+import { WebsocketAPIClient } from 'bitget-api';
 // or if you prefer require:
 // const { WebsocketAPIClient } = require("bitget-api");
 
 // Make an instance of the WS API Client class with your API keys
-const wsClient = new WebsocketAPIClient(
-  {
-    apiKey: API_KEY,
-    apiSecret: API_SECRET,
-    apiPass: API_PASS,
+const wsClient = new WebsocketAPIClient({
+  apiKey: API_KEY,
+  apiSecret: API_SECRET,
+  apiPass: API_PASS,
 
-    // Whether to use the demo trading wss connection
-    // demoTrading: true,
-  }
-);
+  // Whether to use the demo trading wss connection
+  // demoTrading: true,
+});
 
 async function start() {
   // Start using it like a REST API. All actions are sent via a persisted WebSocket connection.
@@ -242,7 +262,7 @@ async function start() {
   }
 }
 
-start().catch(e => console.error("Exception in example: ". e));
+start().catch((e) => console.error('Exception in example: '.e));
 ```
 
 ###### Receiving realtime data
@@ -381,7 +401,6 @@ wsClient.subscribe(
   WS_KEY_MAP.v3Public,
 );
 ```
-
 
 For more examples, including how to use websockets with Bitget, check the [examples](./examples/) and [test](./test/) folders.
 

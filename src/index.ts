@@ -2,6 +2,7 @@ export * from './broker-client';
 export * from './constants/enum';
 export * from './futures-client';
 export * from './rest-client-v2';
+export * from './rest-client-v3';
 export * from './spot-client';
 export * from './types';
 export * from './util';
