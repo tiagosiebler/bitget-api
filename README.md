@@ -134,7 +134,7 @@ const client = new RestClientV3({
 
 (async () => {
   try {
-    console.log(await client.getAccountAssets());
+    console.log(await client.getBalances());
 
     const newOrder = await client.submitNewOrder({
       category: 'USDT-FUTURES',

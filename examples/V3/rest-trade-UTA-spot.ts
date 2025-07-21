@@ -79,7 +79,7 @@ function promiseSleep(milliseconds) {
     // wait briefly for ws to be ready (could also use the response or authenticated events, to make sure topics are subscribed to before starting)
     await promiseSleep(2.5 * 1000);
 
-    const balanceResult = await client.getAccountAssets();
+    const balanceResult = await client.getBalances();
     const allBalances = balanceResult.data;
 
     const balanceBTC = allBalances.assets?.find(

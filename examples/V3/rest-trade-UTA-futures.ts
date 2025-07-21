@@ -104,7 +104,7 @@ function promiseSleep(milliseconds) {
 
     const symbol = 'BTCUSDT';
 
-    const balanceResult = await client.getAccountAssets();
+    const balanceResult = await client.getBalances();
     const accountBalance = balanceResult.data;
 
     const usdtAsset = accountBalance.assets?.find(
