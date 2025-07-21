@@ -116,8 +116,6 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
       // Persist this topic to the expected topics list
       this.wsStore.addTopic(wsKey, topic);
 
-      // TODO: tidy up unsubscribe too, also in other connectors
-
       // if connected, send subscription request
       if (
         this.wsStore.isConnectionState(wsKey, WsConnectionStateEnum.CONNECTED)
@@ -164,7 +162,6 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
       this.wsStore.deleteTopic(getWsKeyForTopic(topic, isPrivateTopic), topic),
     );
 
-    // TODO: should this really happen on each wsKey?? seems weird
     this.wsStore.getKeys().forEach((wsKey: WsKey) => {
       // unsubscribe request only necessary if active connection exists
       if (
@@ -683,10 +680,12 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
         return WS_BASE_URL_MAP.mixv1.all[networkKey];
       }
       case WS_KEY_MAP.v2Private:
-      case WS_KEY_MAP.v2Public:
+      case WS_KEY_MAP.v2Public: {
+        throw new Error('Use the WebsocketClientV2 for V2 websockets');
+      }
       case WS_KEY_MAP.v3Private:
       case WS_KEY_MAP.v3Public: {
-        throw new Error('Use the WebsocketClientV2 for V2 websockets'); //TODO: update error msg
+        throw new Error('Use the WebsocketClientV3 for V3 websockets');
       }
       default: {
         this.logger.error('getWsUrl(): Unhandled wsKey: ', {
