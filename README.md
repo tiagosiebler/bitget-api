@@ -31,6 +31,9 @@ Updated & performant JavaScript & Node.js SDK for the Bitget V2 REST APIs and We
 - Robust WebSocket integration with configurable connection heartbeats & automatic reconnect then resubscribe workflows.
 - Officially listed Node.js SDK in [Bitget API docs](https://bitgetlimited.github.io/apidoc/en/spot/#sdk-code-example).
 - Browser support (via webpack bundle - see "Browser Usage" below).
+- Support all authentication methods supported by Bitget:
+  - [x] HMAC
+  - [x] RSA
 
 ## Installation
 
@@ -410,7 +413,7 @@ For more examples, including how to use websockets with Bitget, check the [examp
 
 ### Customise logging
 
-Pass a custom logger which supports the log methods `silly`, `debug`, `notice`, `info`, `warning` and `error`, or override methods from the default logger as desired.
+Pass a custom logger which supports the log methods `trace`, `info` and `error`, or override methods from the default logger as desired.
 
 ```javascript
 import { WebsocketClientV2, DefaultLogger } from 'bitget-api';

@@ -22,8 +22,11 @@ import {
   WS_KEY_MAP,
   WsTopicRequest,
 } from './util';
-import { signMessage } from './util/node-support';
-import { SignAlgorithm } from './util/webCryptoAPI';
+import {
+  SignAlgorithm,
+  SignEncodeMethod,
+  signMessage,
+} from './util/webCryptoAPI';
 
 const WS_LOGGER_CATEGORY = { category: 'bitget-ws' };
 
@@ -334,7 +337,7 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
   private async signMessage(
     paramsStr: string,
     secret: string,
-    method: 'hex' | 'base64',
+    method: SignEncodeMethod,
     algorithm: SignAlgorithm,
   ): Promise<string> {
     if (typeof this.options.customSignMessageFn === 'function') {

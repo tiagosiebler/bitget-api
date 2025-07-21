@@ -13,7 +13,6 @@ import {
 import {
   DefaultLogger,
   getMaxTopicsPerSubscribeEvent,
-  getWsAuthSignature,
   getWsKeyForTopic,
   isPrivateChannel,
   isWsPong,
@@ -23,6 +22,7 @@ import {
   WS_BASE_URL_MAP,
   WS_KEY_MAP,
 } from './util';
+import { signMessage } from './util/webCryptoAPI';
 import WsStore from './util/WsStore';
 import { WsConnectionStateEnum } from './util/WsStore.types';
 
@@ -116,8 +116,6 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
       // Persist this topic to the expected topics list
       this.wsStore.addTopic(wsKey, topic);
 
-      // TODO: tidy up unsubscribe too, also in other connectors
-
       // if connected, send subscription request
       if (
         this.wsStore.isConnectionState(wsKey, WsConnectionStateEnum.CONNECTED)
@@ -164,7 +162,6 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
       this.wsStore.deleteTopic(getWsKeyForTopic(topic, isPrivateTopic), topic),
     );
 
-    // TODO: should this really happen on each wsKey?? seems weird
     this.wsStore.getKeys().forEach((wsKey: WsKey) => {
       // unsubscribe request only necessary if active connection exists
       if (
@@ -275,12 +272,41 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
     this.emit('exception', { ...error, wsKey });
   }
 
+  private async getWsAuthSignature(
+    apiKey: string | undefined,
+    apiSecret: string | undefined,
+    apiPass: string | undefined,
+    recvWindow: number = 0,
+  ): Promise<{
+    expiresAt: number;
+    signature: string;
+  }> {
+    if (!apiKey || !apiSecret || !apiPass) {
+      throw new Error(
+        'Cannot auth - missing api key, secret or passcode in config',
+      );
+    }
+    const signatureExpiresAt = ((Date.now() + recvWindow) / 1000).toFixed(0);
+
+    const signature = await signMessage(
+      signatureExpiresAt + 'GET' + '/user/verify',
+      apiSecret,
+      'base64',
+      'SHA-256',
+    );
+
+    return {
+      expiresAt: Number(signatureExpiresAt),
+      signature,
+    };
+  }
+
   /** Get a signature, build the auth request and send it */
   private async sendAuthRequest(wsKey: WsKey): Promise<void> {
     try {
       const { apiKey, apiSecret, apiPass, recvWindow } = this.options;
 
-      const { signature, expiresAt } = await getWsAuthSignature(
+      const { signature, expiresAt } = await this.getWsAuthSignature(
         apiKey,
         apiSecret,
         apiPass,
@@ -654,10 +680,12 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
         return WS_BASE_URL_MAP.mixv1.all[networkKey];
       }
       case WS_KEY_MAP.v2Private:
-      case WS_KEY_MAP.v2Public:
+      case WS_KEY_MAP.v2Public: {
+        throw new Error('Use the WebsocketClientV2 for V2 websockets');
+      }
       case WS_KEY_MAP.v3Private:
       case WS_KEY_MAP.v3Public: {
-        throw new Error('Use the WebsocketClientV2 for V2 websockets'); //TODO: update error msg
+        throw new Error('Use the WebsocketClientV3 for V3 websockets');
       }
       default: {
         this.logger.error('getWsUrl(): Unhandled wsKey: ', {

@@ -2,12 +2,12 @@ import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import https from 'https';
 
 import { RestClientType } from '../types';
-import { signMessage } from './node-support';
 import {
   getRestBaseUrl,
   RestClientOptions,
   serializeParams,
 } from './requestUtils';
+import { SignAlgorithm, SignEncodeMethod, signMessage } from './webCryptoAPI';
 import { neverGuard } from './websocket-util';
 
 interface SignedRequest<T extends object | undefined = object> {
@@ -257,6 +257,18 @@ export default abstract class BaseRestClient {
     };
   }
 
+  private async signMessage(
+    paramsStr: string,
+    secret: string,
+    method: SignEncodeMethod,
+    algorithm: SignAlgorithm,
+  ): Promise<string> {
+    if (typeof this.options.customSignMessageFn === 'function') {
+      return this.options.customSignMessageFn(paramsStr, secret);
+    }
+    return await signMessage(paramsStr, secret, method, algorithm);
+  }
+
   /**
    * @private sign request and set recv window
    */
@@ -303,7 +315,7 @@ export default abstract class BaseRestClient {
 
       // console.log('sign params: ', paramsStr);
 
-      res.sign = await signMessage(
+      res.sign = await this.signMessage(
         paramsStr,
         this.apiSecret,
         'base64',
