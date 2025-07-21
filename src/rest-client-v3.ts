@@ -357,7 +357,7 @@ export class RestClientV3 extends BaseRestClient {
   /**
    * Get Account Assets
    */
-  getAccountAssets(): Promise<APIResponse<AccountAssetsV3>> {
+  getBalances(): Promise<APIResponse<AccountAssetsV3>> {
     return this.getPrivate('/api/v3/account/assets');
   }
 

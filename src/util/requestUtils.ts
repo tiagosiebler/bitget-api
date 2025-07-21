@@ -51,6 +51,13 @@ export interface RestClientOptions {
    * Default: 1000 (defaults comes from https agent)
    */
   keepAliveMsecs?: number;
+
+  /**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
 }
 
 export function serializeParams<T extends object | undefined = object>(

@@ -31,6 +31,9 @@ Updated & performant JavaScript & Node.js SDK for the Bitget V2 REST APIs and We
 - Robust WebSocket integration with configurable connection heartbeats & automatic reconnect then resubscribe workflows.
 - Officially listed Node.js SDK in [Bitget API docs](https://bitgetlimited.github.io/apidoc/en/spot/#sdk-code-example).
 - Browser support (via webpack bundle - see "Browser Usage" below).
+- Support all authentication methods supported by Bitget:
+  - [x] HMAC
+  - [x] RSA
 
 ## Installation
 

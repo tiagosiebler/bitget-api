@@ -9,7 +9,6 @@ import {
   WsTopicSubscribePublicArgsV2,
 } from '../types';
 import { DefaultLogger } from './logger';
-import { signMessage } from './node-support';
 
 export const WS_LOGGER_CATEGORY = { category: 'bitget-ws' };
 
@@ -248,35 +247,6 @@ export const WS_ERROR_ENUM = {
 
 export function neverGuard(x: never, msg: string): Error {
   return new Error(`Unhandled value exception "${x}", ${msg}`);
-}
-
-export async function getWsAuthSignature(
-  apiKey: string | undefined,
-  apiSecret: string | undefined,
-  apiPass: string | undefined,
-  recvWindow: number = 0,
-): Promise<{
-  expiresAt: number;
-  signature: string;
-}> {
-  if (!apiKey || !apiSecret || !apiPass) {
-    throw new Error(
-      'Cannot auth - missing api key, secret or passcode in config',
-    );
-  }
-  const signatureExpiresAt = ((Date.now() + recvWindow) / 1000).toFixed(0);
-
-  const signature = await signMessage(
-    signatureExpiresAt + 'GET' + '/user/verify',
-    apiSecret,
-    'base64',
-    'SHA-256',
-  );
-
-  return {
-    expiresAt: Number(signatureExpiresAt),
-    signature,
-  };
 }
 
 /**

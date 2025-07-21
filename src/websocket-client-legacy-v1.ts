@@ -13,7 +13,6 @@ import {
 import {
   DefaultLogger,
   getMaxTopicsPerSubscribeEvent,
-  getWsAuthSignature,
   getWsKeyForTopic,
   isPrivateChannel,
   isWsPong,
@@ -23,6 +22,7 @@ import {
   WS_BASE_URL_MAP,
   WS_KEY_MAP,
 } from './util';
+import { signMessage } from './util/webCryptoAPI';
 import WsStore from './util/WsStore';
 import { WsConnectionStateEnum } from './util/WsStore.types';
 
@@ -275,12 +275,41 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
     this.emit('exception', { ...error, wsKey });
   }
 
+  private async getWsAuthSignature(
+    apiKey: string | undefined,
+    apiSecret: string | undefined,
+    apiPass: string | undefined,
+    recvWindow: number = 0,
+  ): Promise<{
+    expiresAt: number;
+    signature: string;
+  }> {
+    if (!apiKey || !apiSecret || !apiPass) {
+      throw new Error(
+        'Cannot auth - missing api key, secret or passcode in config',
+      );
+    }
+    const signatureExpiresAt = ((Date.now() + recvWindow) / 1000).toFixed(0);
+
+    const signature = await signMessage(
+      signatureExpiresAt + 'GET' + '/user/verify',
+      apiSecret,
+      'base64',
+      'SHA-256',
+    );
+
+    return {
+      expiresAt: Number(signatureExpiresAt),
+      signature,
+    };
+  }
+
   /** Get a signature, build the auth request and send it */
   private async sendAuthRequest(wsKey: WsKey): Promise<void> {
     try {
       const { apiKey, apiSecret, apiPass, recvWindow } = this.options;
 
-      const { signature, expiresAt } = await getWsAuthSignature(
+      const { signature, expiresAt } = await this.getWsAuthSignature(
         apiKey,
         apiSecret,
         apiPass,
