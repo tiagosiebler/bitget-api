@@ -6,7 +6,7 @@ export interface WSAPIPlaceOrderRequestV3 {
   side: 'buy' | 'sell';
   posSide?: 'long' | 'short';
   timeInForce?: 'gtc' | 'ioc' | 'fok' | 'post_only';
-  reduceOnly?: 'YES' | 'NO'; // TODO: not supported by batch place? Sent question to Bitget 18th Jul
+  reduceOnly?: 'YES' | 'NO'; // Note: reduceOnly is not supported for batch place WS API. Might be supported starting late Q4 2025, but not supported yet.
   clientOid?: string;
   stpMode?: 'none' | 'cancel_taker' | 'cancel_maker' | 'cancel_both';
   tpTriggerBy?: 'market' | 'mark';
