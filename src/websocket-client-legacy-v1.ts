@@ -9,22 +9,22 @@ import {
   WsKey,
   WsTopic,
   WsTopicSubscribeEventArgs,
-} from './types';
+} from './types/websockets/ws-general.js';
+import { DefaultLogger } from './util/logger.js';
+import { isWsPong } from './util/requestUtils.js';
+import { signMessage } from './util/webCryptoAPI.js';
 import {
-  DefaultLogger,
   getMaxTopicsPerSubscribeEvent,
-  getWsKeyForTopic,
+  getWsKeyForTopicV1,
   isPrivateChannel,
-  isWsPong,
   neverGuard,
   safeTerminateWs,
   WS_AUTH_ON_CONNECT_KEYS,
   WS_BASE_URL_MAP,
   WS_KEY_MAP,
-} from './util';
-import { signMessage } from './util/webCryptoAPI';
-import WsStore from './util/WsStore';
-import { WsConnectionStateEnum } from './util/WsStore.types';
+} from './util/websocket-util.js';
+import WsStore from './util/WsStore.js';
+import { WsConnectionStateEnum } from './util/WsStore.types.js';
 
 const LOGGER_CATEGORY = { category: 'bitget-ws' };
 
@@ -111,7 +111,7 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
     const topics = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
 
     topics.forEach((topic) => {
-      const wsKey = getWsKeyForTopic(topic, isPrivateTopic);
+      const wsKey = getWsKeyForTopicV1(topic, isPrivateTopic);
 
       // Persist this topic to the expected topics list
       this.wsStore.addTopic(wsKey, topic);
@@ -159,7 +159,10 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
   ) {
     const topics = Array.isArray(wsTopics) ? wsTopics : [wsTopics];
     topics.forEach((topic) =>
-      this.wsStore.deleteTopic(getWsKeyForTopic(topic, isPrivateTopic), topic),
+      this.wsStore.deleteTopic(
+        getWsKeyForTopicV1(topic, isPrivateTopic),
+        topic,
+      ),
     );
 
     this.wsStore.getKeys().forEach((wsKey: WsKey) => {
@@ -518,7 +521,7 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
     return ws;
   }
 
-  private async onWsOpen(event, wsKey: WsKey) {
+  private async onWsOpen(event: WebSocket.Event, wsKey: WsKey) {
     if (
       this.wsStore.isConnectionState(wsKey, WsConnectionStateEnum.CONNECTING)
     ) {
@@ -580,7 +583,7 @@ export class WebsocketClientLegacyV1 extends EventEmitter {
         return;
       }
 
-      const msg = JSON.parse((event && event['data']) || event);
+      const msg = JSON.parse((event && (event as any)['data']) || event);
       const emittableEvent = { ...msg, wsKey };
 
       if (typeof msg === 'object') {

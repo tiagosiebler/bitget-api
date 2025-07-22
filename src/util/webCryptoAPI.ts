@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { neverGuard } from './websocket-util';
+
+import { neverGuard } from './websocket-util.js';
 
 function bufferToB64(buffer: ArrayBuffer): string {
   let binary = '';
@@ -94,7 +95,7 @@ async function importKey(
         c.charCodeAt(0),
       );
 
-      return crypto.subtle.importKey(
+      return globalThis.crypto.subtle.importKey(
         'pkcs8',
         binaryKey.buffer,
         { name: type, hash: { name: algorithm } },
@@ -127,7 +128,7 @@ export async function signMessage(
   secret: string,
   method: SignEncodeMethod,
   algorithm: SignAlgorithm,
-  pemEncodeMethod: SignEncodeMethod = method,
+  _pemEncodeMethod: SignEncodeMethod = method,
 ): Promise<string> {
   const encoder = new TextEncoder();
 

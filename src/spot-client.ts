@@ -1,11 +1,9 @@
+import { GetHistoricTradesParams, Pagination } from './types/request/shared.js';
 import {
-  APIResponse,
   BatchCancelSpotOrderV2,
   CancelSpotOrderV2,
   CancelSpotPlanOrderParams,
-  CoinBalance,
   GetHistoricPlanOrdersParams,
-  GetHistoricTradesParams,
   GetSpotPlanOrdersParams,
   ModifySpotPlanOrder,
   NewBatchSpotOrder,
@@ -14,17 +12,19 @@ import {
   NewSpotSubTransfer,
   NewSpotWithdraw,
   NewWalletTransfer,
-  Pagination,
   SpotCandleData,
   SpotKlineInterval,
+} from './types/request/v1/spotV1.js';
+import { APIResponse, VIPFeeRate } from './types/response/v1/shared.js';
+import {
+  CoinBalance,
   SpotMarketTrade,
   SpotOrderResult,
   SpotPlanOrder,
   SymbolRules,
-  VIPFeeRate,
-} from './types';
-import { REST_CLIENT_TYPE_ENUM } from './util';
-import BaseRestClient from './util/BaseRestClient';
+} from './types/response/v1/spot.js';
+import BaseRestClient from './util/BaseRestClient.js';
+import { REST_CLIENT_TYPE_ENUM } from './util/requestUtils.js';
 
 /**
  * REST API client for the V1 bitget Spot APIs. These are the previous generation of Bitget's APIs and should be considered deprecated.

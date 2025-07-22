@@ -1,14 +1,14 @@
+import { WSAPIRequestBitgetV3 } from '../types/websockets/ws-api.js';
 import {
   BitgetInstType,
   WebsocketClientOptions,
-  WSAPIRequestBitgetV3,
   WsKey,
   WsPrivateTopicV2,
   WsPrivateTopicV3,
   WsTopicSubscribeEventArgs,
   WsTopicSubscribePublicArgsV2,
-} from '../types';
-import { DefaultLogger } from './logger';
+} from '../types/websockets/ws-general.js';
+import { DefaultLogger } from './logger.js';
 
 export const WS_LOGGER_CATEGORY = { category: 'bitget-ws' };
 
@@ -189,10 +189,10 @@ export function isPrivateChannel<TChannel extends string>(
   );
 }
 
-export function getWsKeyForTopic(
+export function getWsKeyForTopicV1(
   subscribeEvent: WsTopicSubscribeEventArgs,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isPrivate?: boolean,
+  _isPrivate?: boolean,
 ): WsKey {
   const instType = subscribeEvent.instType.toUpperCase() as BitgetInstType;
   switch (instType) {
@@ -208,7 +208,7 @@ export function getWsKeyForTopic(
     default: {
       throw neverGuard(
         instType,
-        `getWsKeyForTopic(): Unhandled market ${'instrumentId'}`,
+        `getWsKeyForTopicV1(): Unhandled market ${'instrumentId'}`,
       );
     }
   }
@@ -302,7 +302,7 @@ export function getNormalisedTopicRequests(
  * disable heartbeats in browers, for exchanges that use native WebSocket ping/pong frames.
  */
 export function isWSPingFrameAvailable(): boolean {
-  return typeof WebSocket.prototype['ping'] === 'function';
+  return typeof (WebSocket.prototype as any)['ping'] === 'function';
 }
 
 /**
@@ -310,7 +310,7 @@ export function isWSPingFrameAvailable(): boolean {
  * disable heartbeats in browers, for exchanges that use native WebSocket ping/pong frames.
  */
 export function isWSPongFrameAvailable(): boolean {
-  return typeof WebSocket.prototype['pong'] === 'function';
+  return typeof (WebSocket.prototype as any)['pong'] === 'function';
 }
 
 /**

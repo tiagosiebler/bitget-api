@@ -1,20 +1,15 @@
 {
   "name": "bitget-api",
   "version": "3.0.0",
-  "description": "Node.js & JavaScript SDK for Bitget REST APIs & WebSockets, with TypeScript & end-to-end tests.",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "files": [
-    "lib/*",
-    "index.js"
-  ],
+  "description": "Complete Node.js & JavaScript SDK for Bitget V1-V3 REST APIs & WebSockets, with TypeScript & end-to-end tests.",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
     "test:public": "jest --testPathIgnorePatterns='.*private.*'",
     "test:private": "jest --testPathPattern='.*private.*'",
     "clean": "rm -rf lib dist",
-    "build": "tsc",
+    "build": "npm run clean && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && bash ./postBuild.sh",
+    "build:old": "tsc",
     "build:clean": "npm run clean && npm run build",
     "build:watch": "npm run clean && tsc --watch",
     "pack": "webpack --config webpack/webpack.config.js",
@@ -22,16 +17,31 @@
     "prepublish": "npm run build:clean",
     "betapublish": "npm publish --tag beta"
   },
+  "main": "dist/cjs/index.js",
+  "module": "dist/mjs/index.js",
+  "types": "dist/mjs/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/mjs/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/mjs/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/*"
+  ],
+  "type": "module",
   "author": "Tiago Siebler (https://github.com/tiagosiebler)",
   "contributors": [],
   "dependencies": {
-    "axios": "^1.6.1",
+    "axios": "^1.10.0",
     "isomorphic-ws": "^5.0.0",
     "ws": "^8.9.0"
   },
   "devDependencies": {
     "@types/jest": "^29.0.3",
     "@types/node": "^22.10.2",
+    "@types/ws": "^8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "eslint": "^8.24.0",
@@ -43,14 +53,21 @@
     "source-map-loader": "^4.0.0",
     "ts-jest": "^29.0.2",
     "ts-loader": "^9.4.1",
-    "typescript": "^5.7.3",
+    "typescript": "^5.7.3"
+  },
+  "optionalDependencies": {
     "webpack": "^5.74.0",
-    "webpack-bundle-analyzer": "^4.6.1",
     "webpack-cli": "^4.10.0"
   },
   "keywords": [
     "bitget",
     "bitget api",
+    "bitget nodejs",
+    "bitget javascript",
+    "bitget typescript",
+    "bitget sdk",
+    "bitget v3 api",
+    "bitget UTA api",
     "api",
     "websocket",
     "rest",

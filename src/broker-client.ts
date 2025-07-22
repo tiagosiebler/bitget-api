@@ -1,12 +1,12 @@
 import {
-  APIResponse,
   BrokerProductType,
   BrokerSubAPIKeyModifyRequest,
   BrokerSubListRequest,
   BrokerSubWithdrawalRequest,
-} from './types';
-import { REST_CLIENT_TYPE_ENUM } from './util';
-import BaseRestClient from './util/BaseRestClient';
+} from './types/request/v1/brokerV1.js';
+import { APIResponse } from './types/response/v1/shared.js';
+import BaseRestClient from './util/BaseRestClient.js';
+import { REST_CLIENT_TYPE_ENUM } from './util/requestUtils.js';
 
 /**
  * REST API client for the V1 bitget Broker APIs. These are the previous generation of Bitget's APIs and should be considered deprecated.

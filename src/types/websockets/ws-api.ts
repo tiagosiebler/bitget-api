@@ -1,9 +1,9 @@
-import { WS_KEY_MAP } from '../../util';
-import { CancelOrderRequestV3 } from '../request';
-import { CancelOrderResponseV3 } from '../response';
-import { WSAPIPlaceOrderRequestV3 } from './ws-api-request';
-import { WSAPIPlaceOrderResponseV3 } from './ws-api-response';
-import { BitgetInstTypeV3, WsKey } from './ws-general';
+import { WS_KEY_MAP } from '../../util/websocket-util.js';
+import { CancelOrderRequestV3 } from '../request/v3/trade.js';
+import { CancelOrderResponseV3 } from '../response/v3/trade.js';
+import { WSAPIPlaceOrderRequestV3 } from './ws-api-request.js';
+import { WSAPIPlaceOrderResponseV3 } from './ws-api-response.js';
+import { BitgetInstTypeV3, WsKey } from './ws-general.js';
 
 export type WSOperation = 'subscribe' | 'unsubscribe' | 'login';
 

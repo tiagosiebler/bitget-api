@@ -1,5 +1,6 @@
-import { RestClientOptions, WS_KEY_MAP } from '../../util';
-import { FuturesProductTypeV2 } from '../request';
+import { RestClientOptions } from '../../util/requestUtils.js';
+import { WS_KEY_MAP } from '../../util/websocket-util.js';
+import { FuturesProductTypeV2 } from '../request/shared.js';
 
 export type BitgetInstType = 'SP' | 'SPBL' | 'MC' | 'UMCBL' | 'DMCBL';
 export type BitgetInstTypeV2 = 'SPOT' | FuturesProductTypeV2;

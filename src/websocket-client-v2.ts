@@ -1,32 +1,35 @@
-import WebSocket from 'isomorphic-ws';
-
 import {
-  BitgetInstTypeV2,
-  MessageEventLike,
-  WsKey,
   WSOperation,
   WSOperationLoginParams,
   WsRequestOperationBitget,
+} from './types/websockets/ws-api.js';
+import { MessageEventLike } from './types/websockets/ws-events.js';
+import {
+  BitgetInstTypeV2,
+  WsKey,
   WsTopicV2,
-} from './types';
+} from './types/websockets/ws-general.js';
 import {
   BaseWebsocketClient,
   EmittableEvent,
-  getMaxTopicsPerSubscribeEvent,
-  getNormalisedTopicRequests,
-  getWsUrl,
-  isPrivateChannel,
-  isWsPong,
   MidflightWsRequestEvent,
-  WS_AUTH_ON_CONNECT_KEYS,
-  WS_KEY_MAP,
-  WsTopicRequest,
-} from './util';
+} from './util/BaseWSClient.js';
+import { isWsPong } from './util/requestUtils.js';
 import {
   SignAlgorithm,
   SignEncodeMethod,
   signMessage,
-} from './util/webCryptoAPI';
+} from './util/webCryptoAPI.js';
+import {
+  getMaxTopicsPerSubscribeEvent,
+  getNormalisedTopicRequests,
+  getWsUrl,
+  isPrivateChannel,
+  WS_AUTH_ON_CONNECT_KEYS,
+  WS_KEY_MAP,
+  WsTopicRequest,
+} from './util/websocket-util.js';
+import { WSConnectedResult } from './util/WsStore.types.js';
 
 const WS_LOGGER_CATEGORY = { category: 'bitget-ws' };
 
@@ -43,7 +46,7 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
   /**
    * Request connection of all dependent (public & private) websockets, instead of waiting for automatic connection by library
    */
-  public connectAll(): Promise<WebSocket | undefined>[] {
+  public connectAll(): Promise<WSConnectedResult | undefined>[] {
     return [
       this.connect(WS_KEY_MAP.v2Private),
       this.connect(WS_KEY_MAP.v2Public),
@@ -195,7 +198,7 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
   }
 
   protected isPrivateTopicRequest(
-    request: WsTopicRequest<string>,
+    _request: WsTopicRequest<string>,
     wsKey: WsKey,
   ): boolean {
     return WS_AUTH_ON_CONNECT_KEYS.includes(wsKey);
@@ -395,7 +398,6 @@ export class WebsocketClientV2 extends BaseWebsocketClient<
       const msg = JSON.parse(event.data);
       const emittableEvent = { ...msg, wsKey };
 
-      // TODO: are v3 events different from V2? if yes? migrate to resolveEmittableEvents
       // v2 event processing
       if (typeof msg === 'object') {
         if (typeof msg['code'] === 'number') {

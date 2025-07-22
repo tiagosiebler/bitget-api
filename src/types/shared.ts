@@ -1,4 +1,4 @@
-import { REST_CLIENT_TYPE_ENUM } from '../util';
+import { REST_CLIENT_TYPE_ENUM } from '../util/requestUtils.js';
 
 export type numberInString = string;
 
