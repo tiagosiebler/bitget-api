@@ -27,16 +27,17 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
+    'no-param-reassign': ['error'],
     '@typescript-eslint/ban-types': 'off',
-    '@typescript-eslint/no-empty-object-type': [
-      'error',
-      { allowObjectTypes: 'always' },
-    ],
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
     'array-bracket-spacing': ['error', 'never'],
     'linebreak-style': ['error', 'unix'],
     'lines-between-class-members': ['warn', 'always'],
+    '@typescript-eslint/no-empty-object-type': [
+      'error',
+      { allowObjectTypes: 'always' },
+    ],
     semi: ['error', 'always'],
     'new-cap': 'off',
     'no-console': 'off',
@@ -53,7 +54,5 @@ module.exports = {
     'computed-property-spacing': [2, 'never'],
     'keyword-spacing': 2,
     'space-unary-ops': 2,
-    // https://eslint.org/docs/latest/rules/no-param-reassign
-    'no-param-reassign': ['error'],
   },
 };
