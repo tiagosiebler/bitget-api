@@ -7,9 +7,9 @@ import {
 } from '../response.util';
 
 describe('Bitget Private REST API V3 Write Endpoints', () => {
-  const API_KEY = process.env.API_KEY_COM;
-  const API_SECRET = process.env.API_SECRET_COM;
-  const API_PASSPHRASE = process.env.API_PASS_COM;
+  const API_KEY = process.env.API_KEY_COM_V3;
+  const API_SECRET = process.env.API_SECRET_COM_V3;
+  const API_PASSPHRASE = process.env.API_PASS_COM_V3;
 
   const api = new RestClientV3({
     apiKey: API_KEY!,
