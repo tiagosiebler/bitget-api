@@ -41,3 +41,6 @@ jobs:
           API_KEY_COM: ${{ secrets.API_KEY_COM }}
           API_SECRET_COM: ${{ secrets.API_SECRET_COM }}
           API_PASS_COM: ${{ secrets.API_PASS_COM }}
+          API_KEY_COM_V3: ${{ secrets.API_KEY_COM_V3 }}
+          API_SECRET_COM_V3: ${{ secrets.API_SECRET_COM_V3 }}
+          API_PASS_COM_V3: ${{ secrets.API_PASS_COM_V3 }}
