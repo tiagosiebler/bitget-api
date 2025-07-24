@@ -1,5 +1,5 @@
-import { RestClientV2 } from '../../src/rest-client-v2';
-import { sucessEmptyResponseObject } from '../response.util';
+import { RestClientV2 } from '../../src/rest-client-v2.js';
+import { sucessEmptyResponseObject } from '../response.util.js';
 
 describe('Bitget Public REST API Endpoints', () => {
   const api = new RestClientV2();
