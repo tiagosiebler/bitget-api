@@ -675,7 +675,7 @@ export class RestClientV3 extends BaseRestClient {
   getWithdrawRecords(
     params: GetWithdrawRecordsRequestV3,
   ): Promise<APIResponse<WithdrawRecordV3[]>> {
-    return this.getPrivate('/api/v3/account/withdrawl-records', params);
+    return this.getPrivate('/api/v3/account/withdrawal-records', params);
   }
 
   /**
