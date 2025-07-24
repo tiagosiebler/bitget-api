@@ -1,6 +1,6 @@
 {
   "name": "bitget-api",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Complete Node.js & JavaScript SDK for Bitget V1-V3 REST APIs & WebSockets, with TypeScript & end-to-end tests.",
   "scripts": {
     "test": "jest",
@@ -27,7 +27,8 @@
     }
   },
   "files": [
-    "dist/*"
+    "dist/*",
+    "llms.txt"
   ],
   "type": "module",
   "author": "Tiago Siebler (https://github.com/tiagosiebler)",
