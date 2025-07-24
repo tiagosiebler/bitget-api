@@ -60,7 +60,9 @@ export interface RestClientOptions {
   customSignMessageFn?: (message: string, secret: string) => Promise<string>;
 }
 
-export function serializeParams<T extends object | undefined = object>(
+export function serializeParams<
+  T extends Record<string, any> | undefined = object,
+>(
   params: T,
   strict_validation = false,
   encodeValues: boolean = true,

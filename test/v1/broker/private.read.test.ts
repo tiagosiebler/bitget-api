@@ -1,5 +1,5 @@
-import { API_ERROR_CODE, BrokerClient } from '../../../src';
-import { sucessEmptyResponseObject } from '../../response.util';
+import { API_ERROR_CODE, BrokerClient } from '../../../src/index.js';
+import { sucessEmptyResponseObject } from '../../response.util.js';
 
 describe('Private Broker REST API GET Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM;
@@ -29,7 +29,7 @@ describe('Private Broker REST API GET Endpoints', () => {
       expect(await api.getBrokerInfo()).toMatchObject(
         sucessEmptyResponseObject(),
       );
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
       });
@@ -41,7 +41,7 @@ describe('Private Broker REST API GET Endpoints', () => {
       expect(await api.getSubAccounts()).toMatchObject(
         sucessEmptyResponseObject(),
       );
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
       });
@@ -53,7 +53,7 @@ describe('Private Broker REST API GET Endpoints', () => {
       expect(await api.getSubEmail(subUid)).toMatchObject(
         sucessEmptyResponseObject(),
       );
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
       });
@@ -65,7 +65,7 @@ describe('Private Broker REST API GET Endpoints', () => {
       expect(await api.getSubSpotAssets(subUid)).toMatchObject(
         sucessEmptyResponseObject(),
       );
-    } catch (e) {
+    } catch (e: any) {
       // expect(e.body).toBeNull();
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
@@ -78,7 +78,7 @@ describe('Private Broker REST API GET Endpoints', () => {
       expect(await api.getSubFutureAssets(subUid, 'usdt')).toMatchObject(
         sucessEmptyResponseObject(),
       );
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
       });
@@ -90,7 +90,7 @@ describe('Private Broker REST API GET Endpoints', () => {
       expect(await api.getSubDepositAddress(subUid, coin)).toMatchObject(
         sucessEmptyResponseObject(),
       );
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
       });
@@ -102,7 +102,7 @@ describe('Private Broker REST API GET Endpoints', () => {
       expect(await api.getSubAPIKeys(subUid)).toMatchObject(
         sucessEmptyResponseObject(),
       );
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_BROKER,
       });

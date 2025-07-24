@@ -1,21 +1,21 @@
+import { MarginType } from '../types/request/shared.js';
+import { WSAPIResponse } from '../types/websockets/ws-api.js';
 import {
-  MarginType,
   WsAccountSnapshotUMCBL,
-  WSAPIResponse,
   WsBaseEvent,
   WSPositionSnapshotUMCBL,
   WsSnapshotAccountEvent,
   WsSnapshotChannelEvent,
   WsSnapshotPositionsEvent,
-} from '../types';
+} from '../types/websockets/ws-events.js';
 
 /** TypeGuard: event has a string "action" property */
 function isWsEvent(event: unknown): event is WsBaseEvent {
   return (
     typeof event === 'object' &&
     event &&
-    typeof event['action'] === 'string' &&
-    event['data']
+    (typeof event as any)['action'] === 'string' &&
+    (typeof event as any)['data']
   );
 }
 
@@ -28,8 +28,8 @@ function isWsSnapshotEvent(event: unknown): event is WsBaseEvent<'snapshot'> {
 function isWsChannelEvent(event: WsBaseEvent): event is WsSnapshotChannelEvent {
   if (
     typeof event['arg'] === 'object' &&
-    event.arg &&
-    typeof event?.arg['channel'] === 'string'
+    event['arg'] &&
+    typeof (typeof event['arg'] as any)['channel'] === 'string'
   ) {
     return true;
   }
@@ -91,7 +91,10 @@ export function isWSAPIResponse(
     return false;
   }
 
-  if (typeof msg['event'] !== 'string' || typeof msg['id'] !== 'string') {
+  if (
+    typeof (msg as any)['event'] !== 'string' ||
+    typeof (msg as any)['id'] !== 'string'
+  ) {
     return false;
   }
 

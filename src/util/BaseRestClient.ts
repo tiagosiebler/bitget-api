@@ -1,14 +1,18 @@
 import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
 import https from 'https';
 
-import { RestClientType } from '../types';
+import { RestClientType } from '../types/shared.js';
 import {
   getRestBaseUrl,
   RestClientOptions,
   serializeParams,
-} from './requestUtils';
-import { SignAlgorithm, SignEncodeMethod, signMessage } from './webCryptoAPI';
-import { neverGuard } from './websocket-util';
+} from './requestUtils.js';
+import {
+  SignAlgorithm,
+  SignEncodeMethod,
+  signMessage,
+} from './webCryptoAPI.js';
+import { neverGuard } from './websocket-util.js';
 
 interface SignedRequest<T extends object | undefined = object> {
   originalParams: T;

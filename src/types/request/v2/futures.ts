@@ -1,5 +1,5 @@
-import { FuturesPlanTypeV2, FuturesProductTypeV2 } from '../shared';
-import { FuturesKlineInterval } from '../v1/futuresV1';
+import { FuturesPlanTypeV2, FuturesProductTypeV2 } from '../shared.js';
+import { FuturesKlineInterval } from '../v1/futuresV1.js';
 
 export type FuturesKlineTypeV2 = 'MARKET' | 'MARK' | 'INDEX';
 

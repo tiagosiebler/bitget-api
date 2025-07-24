@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { DefaultLogger, WebsocketClientLegacyV1 } from '../src';
+import { DefaultLogger, WebsocketClientLegacyV1 } from '../src/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function getSilentLogger(logHint?: string): DefaultLogger {
+export function getSilentLogger(_logHint?: string): DefaultLogger {
   return {
     trace: () => {},
     info: () => {},
@@ -47,19 +47,19 @@ export function waitForSocketEvent(
       wsClient.removeListener('error', (e) => rejector(e));
     }
 
-    function resolver(event) {
+    function resolver(event: unknown) {
       resolve(event);
       cleanup();
     }
 
-    function rejector(event) {
+    function rejector(event: any) {
       if (!resolvedOnce) {
         reject(event);
       }
       cleanup();
     }
 
-    wsClient.on(event, (e) => resolver(e));
+    wsClient.on(event, (e: any) => resolver(e));
     wsClient.on('exception', (e) => rejector(e));
 
     // if (event !== 'close') {
@@ -105,7 +105,7 @@ export function listenToSocketEvents(wsClient: WebsocketClientLegacyV1) {
 }
 
 export function logAllEvents(wsClient: WebsocketClientLegacyV1) {
-  wsClient.on('update', (data) => {
+  wsClient.on('update', (_data) => {
     // console.log('wsUpdate: ', JSON.stringify(data, null, 2));
   });
 
@@ -121,13 +121,13 @@ export function logAllEvents(wsClient: WebsocketClientLegacyV1) {
   wsClient.on('reconnected', (data) => {
     console.log('wsReconnected ', data?.wsKey);
   });
-  wsClient.on('close', (data) => {
+  wsClient.on('close', (_data) => {
     // console.log('wsClose: ', data);
   });
 }
 
 export function promiseSleep(ms: number) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _reject) => {
     setTimeout(resolve, ms);
   });
 }

@@ -1,5 +1,5 @@
-import { FuturesClient } from '../../../src';
-import { sucessEmptyResponseObject } from '../../response.util';
+import { FuturesClient } from '../../../src/index.js';
+import { sucessEmptyResponseObject } from '../../response.util.js';
 
 describe('Public Spot REST API Endpoints', () => {
   const api = new FuturesClient();

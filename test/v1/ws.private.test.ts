@@ -3,8 +3,12 @@ import {
   WS_ERROR_ENUM,
   WS_KEY_MAP,
   WSClientConfigurableOptions,
-} from '../../src';
-import { getSilentLogger, logAllEvents, waitForSocketEvent } from '../ws.util';
+} from '../../src/index.js';
+import {
+  getSilentLogger,
+  logAllEvents,
+  waitForSocketEvent,
+} from '../ws.util.js';
 
 describe.skip('Private Spot Websocket Client', () => {
   const API_KEY = process.env.API_KEY_COM;

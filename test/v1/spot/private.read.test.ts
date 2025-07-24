@@ -1,5 +1,5 @@
-import { SpotClient } from '../../../src';
-import { sucessEmptyResponseObject } from '../../response.util';
+import { SpotClient } from '../../../src/index.js';
+import { sucessEmptyResponseObject } from '../../response.util.js';
 
 describe('Private Spot REST API GET Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM;
@@ -28,7 +28,7 @@ describe('Private Spot REST API GET Endpoints', () => {
   it.skip('getDepositAddress()', async () => {
     try {
       expect(await api.getDepositAddress(coin)).toStrictEqual('');
-    } catch (e) {
+    } catch (e: any) {
       console.error('exception: ', e);
       expect(e).toBeNull();
     }
@@ -40,7 +40,7 @@ describe('Private Spot REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getWithdrawals: ', e);
       expect(e).toBeNull();
     }
@@ -52,7 +52,7 @@ describe('Private Spot REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getDeposits: ', e);
       expect(e).toBeNull();
     }
@@ -68,7 +68,7 @@ describe('Private Spot REST API GET Endpoints', () => {
           authorities: expect.any(Array),
         },
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getApiKeyInfo: ', e);
       expect(e).toBeNull();
     }
@@ -81,7 +81,7 @@ describe('Private Spot REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getBalance: ', e);
       expect(e).toBeNull();
     }
@@ -93,7 +93,7 @@ describe('Private Spot REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getTransactionHistory: ', e);
       expect(e).toBeNull();
     }
@@ -106,7 +106,7 @@ describe('Private Spot REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getTransferHistory: ', e);
       expect(e).toBeNull();
     }
@@ -118,7 +118,7 @@ describe('Private Spot REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getOrder: ', e);
       expect(e).toBeNull();
     }
@@ -130,7 +130,7 @@ describe('Private Spot REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getOpenOrders: ', e);
       expect(e).toBeNull();
     }
@@ -142,7 +142,7 @@ describe('Private Spot REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getOrderHistory: ', e);
       expect(e).toBeNull();
     }
@@ -154,7 +154,7 @@ describe('Private Spot REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getOrderFills: ', e);
       expect(e).toBeNull();
     }
@@ -171,7 +171,7 @@ describe('Private Spot REST API GET Endpoints', () => {
           orderList: expect.any(Array),
         },
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getCurrentPlanOrders: ', e);
       expect(e).toBeNull();
     }
@@ -194,7 +194,7 @@ describe('Private Spot REST API GET Endpoints', () => {
           orderList: expect.any(Array),
         },
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getHistoricPlanOrders: ', e);
       expect(e).toBeNull();
     }

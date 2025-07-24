@@ -1,12 +1,12 @@
 import WebSocket from 'isomorphic-ws';
 
-import { DefaultLogger } from './logger';
+import { DefaultLogger } from './logger.js';
 import {
   DeferredPromise,
   WSConnectedResult,
   WsConnectionStateEnum,
   WsStoredState,
-} from './WsStore.types';
+} from './WsStore.types.js';
 
 /**
  * Simple comparison of two objects. Checks every key for match. Recursive if child properties contain objects.
@@ -396,7 +396,7 @@ export default class WsStore<
   }
 
   getTopicsByKey(): Record<string, Set<TWSTopicSubscribeEventArgs>> {
-    const result = {};
+    const result: Record<string, Set<TWSTopicSubscribeEventArgs>> = {};
 
     for (const refKey in this.wsState) {
       result[refKey] = this.getTopics(refKey as WsKey);

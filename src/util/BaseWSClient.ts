@@ -2,23 +2,25 @@
 import EventEmitter from 'events';
 import WebSocket from 'isomorphic-ws';
 
+import { WSOperation } from '../types/websockets/ws-api.js';
 import {
   isMessageEvent,
   MessageEventLike,
+} from '../types/websockets/ws-events.js';
+import {
   WebsocketClientOptions,
   WSClientConfigurableOptions,
-  WSOperation,
-} from '../types';
-import { DefaultLogger } from './logger';
+} from '../types/websockets/ws-general.js';
+import { DefaultLogger } from './logger.js';
 import {
   getNormalisedTopicRequests,
   safeTerminateWs,
   WS_LOGGER_CATEGORY,
   WsTopicRequest,
   WsTopicRequestOrStringTopic,
-} from './websocket-util';
-import WsStore from './WsStore';
-import { WSConnectedResult, WsConnectionStateEnum } from './WsStore.types';
+} from './websocket-util.js';
+import WsStore from './WsStore.js';
+import { WSConnectedResult, WsConnectionStateEnum } from './WsStore.types.js';
 
 interface WSClientEventMap<WsKey extends string> {
   /** Connection opened. If this connection was previously opened and reconnected, expect the reconnected event instead */
@@ -437,7 +439,7 @@ export abstract class BaseWebsocketClient<
           'Refused to connect to ws with existing active connection',
           { ...WS_LOGGER_CATEGORY, wsKey },
         );
-        return { wsKey, ws: this.wsStore.getWs(wsKey) };
+        return { wsKey, ws: this.wsStore.getWs(wsKey)! };
       }
 
       if (
@@ -501,7 +503,7 @@ export abstract class BaseWebsocketClient<
     // ws.onping = (event) => this.onWsPing(event, wsKey, ws, 'function');
     // ws.onpong = (event) => this.onWsPong(event, wsKey, 'function');
 
-    ws.wsKey = wsKey;
+    (ws as any).wsKey = wsKey;
 
     return ws;
   }
@@ -830,7 +832,12 @@ export abstract class BaseWebsocketClient<
     }
   }
 
-  private async onWsOpen(event, wsKey: TWSKey, url: string, ws: WebSocket) {
+  private async onWsOpen(
+    event: WebSocket.Event,
+    wsKey: TWSKey,
+    url: string,
+    ws: WebSocket,
+  ) {
     const isFreshConnectionAttempt = this.wsStore.isConnectionState(
       wsKey,
       WsConnectionStateEnum.CONNECTING,
@@ -925,7 +932,7 @@ export abstract class BaseWebsocketClient<
         inProgressPromise.resolve({
           wsKey,
           event,
-          ws: wsState.ws,
+          ws: wsState.ws!,
         });
       }
     } catch (e) {

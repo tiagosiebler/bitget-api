@@ -1,37 +1,38 @@
-import WebSocket from 'isomorphic-ws';
-
 import {
-  BitgetInstTypeV3,
-  MessageEventLike,
   WsAPIOperationResponseMap,
   WSAPIRequestBitgetV3,
   WSAPIRequestFlags,
   WsAPITopicRequestParamMap,
   WsAPIWsKeyTopicMap,
-  WsKey,
   WSOperation,
   WSOperationLoginParams,
   WsRequestOperationBitget,
+} from './types/websockets/ws-api.js';
+import { MessageEventLike } from './types/websockets/ws-events.js';
+import {
+  BitgetInstTypeV3,
+  WsKey,
   WsTopicV3,
-} from './types';
+} from './types/websockets/ws-general.js';
+import {
+  BaseWebsocketClient,
+  EmittableEvent,
+  MidflightWsRequestEvent,
+} from './util/BaseWSClient.js';
+import { isWsPong } from './util/requestUtils.js';
+import { isWSAPIResponse } from './util/type-guards.js';
+import { SignAlgorithm, signMessage } from './util/webCryptoAPI.js';
 import {
   getMaxTopicsPerSubscribeEvent,
   getNormalisedTopicRequests,
   getPromiseRefForWSAPIRequest,
   getWsUrl,
-  isWSAPIResponse,
-  isWsPong,
   WS_AUTH_ON_CONNECT_KEYS,
   WS_KEY_MAP,
   WS_LOGGER_CATEGORY,
   WsTopicRequest,
-} from './util';
-import {
-  BaseWebsocketClient,
-  EmittableEvent,
-  MidflightWsRequestEvent,
-} from './util/BaseWSClient';
-import { SignAlgorithm, signMessage } from './util/webCryptoAPI';
+} from './util/websocket-util.js';
+import { WSConnectedResult } from './util/WsStore.types.js';
 
 /**
  * WebSocket client dedicated to the unified account (V3) WebSockets.
@@ -45,7 +46,7 @@ export class WebsocketClientV3 extends BaseWebsocketClient<
   /**
    * Request connection of all dependent (public & private) websockets, instead of waiting for automatic connection by library
    */
-  public connectAll(): Promise<WebSocket | undefined>[] {
+  public connectAll(): Promise<WSConnectedResult | undefined>[] {
     return [
       this.connect(WS_KEY_MAP.v3Private),
       this.connect(WS_KEY_MAP.v3Public),
@@ -132,7 +133,7 @@ export class WebsocketClientV3 extends BaseWebsocketClient<
   }
 
   protected isPrivateTopicRequest(
-    request: WsTopicRequest<string>,
+    _request: WsTopicRequest<string>,
     wsKey: WsKey,
   ): boolean {
     return WS_AUTH_ON_CONNECT_KEYS.includes(wsKey);
