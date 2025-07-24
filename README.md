@@ -127,9 +127,9 @@ import { RestClientV3 } from 'bitget-api';
 
 // note the single quotes, preventing special characters such as $ from being incorrectly passed
 const client = new RestClientV3({
-  apiKey: process.env.API_KEY_COM || 'insert_api_key_here',
-  apiSecret: process.env.API_SECRET_COM || 'insert_api_secret_here',
-  apiPass: process.env.API_PASS_COM || 'insert_api_pass_here',
+  apiKey: process.env.API_KEY_COM || 'insert_api_key_here',
+  apiSecret: process.env.API_SECRET_COM || 'insert_api_secret_here',
+  apiPass: process.env.API_PASS_COM || 'insert_api_pass_here',
 });
 
 (async () => {
@@ -479,6 +479,12 @@ Build a bundle using webpack:
 - `npm pack`
 
 The bundle can be found in `dist/`. Altough usage should be largely consistent, smaller differences will exist. Documentation is still TODO - contributions welcome.
+
+## Use with LLMs & AI
+
+This SDK includes a bundled `llms.txt` file in the root of the repository. If you're developing with LLMs, use the included `llms.txt` with your LLM - it will significantly improve the LLMs understanding of how to correctly use this SDK.
+
+This file contains AI optimised structure of all the functions in this package, and their parameters for easier use with any learning models or artificial intelligence.
 
 ---
 
