@@ -9,7 +9,6 @@
     "test:private": "jest --testPathPattern='.*private.*'",
     "clean": "rm -rf lib dist",
     "build": "npm run clean && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && bash ./postBuild.sh",
-    "build:old": "tsc",
     "build:clean": "npm run clean && npm run build",
     "build:watch": "npm run clean && tsc --watch",
     "pack": "webpack --config webpack/webpack.config.js",
