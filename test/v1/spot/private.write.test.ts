@@ -1,5 +1,5 @@
-import { API_ERROR_CODE, SpotClient } from '../../../src';
-import { sucessEmptyResponseObject } from '../../response.util';
+import { API_ERROR_CODE, SpotClient } from '../../../src/index.js';
+import { sucessEmptyResponseObject } from '../../response.util.js';
 
 describe('Private Spot REST API POST Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM;
@@ -32,7 +32,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             toType: 'mix_usdt',
           }),
         ).toStrictEqual('');
-      } catch (e) {
+      } catch (e: any) {
         // console.error('transfer: ', e);
         expect(e.body).toMatchObject({
           // not sure what this error means, probably no kyc. Seems to change?
@@ -51,7 +51,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             toType: 'mix_usdt',
           }),
         ).toStrictEqual('');
-      } catch (e) {
+      } catch (e: any) {
         // console.error('transferV2: ', e);
         expect(e.body).toMatchObject({
           // not sure what this error means, probably no kyc. Seems to change?
@@ -73,7 +73,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             toType: 'mix_usdt',
           }),
         ).toStrictEqual('');
-      } catch (e) {
+      } catch (e: any) {
         // console.error('transferV2: ', e);
         expect(e.body).toMatchObject({
           // not sure what this error means, probably no balance. Seems to change?
@@ -95,7 +95,7 @@ describe('Private Spot REST API POST Endpoints', () => {
           ...sucessEmptyResponseObject(),
           data: expect.any(Array),
         });
-      } catch (e) {
+      } catch (e: any) {
         expect(e.body).toMatchObject({
           code: API_ERROR_CODE.INCORRECT_PERMISSIONS,
         });
@@ -115,7 +115,7 @@ describe('Private Spot REST API POST Endpoints', () => {
           ...sucessEmptyResponseObject(),
           data: expect.any(Array),
         });
-      } catch (e) {
+      } catch (e: any) {
         console.log(
           `"${expect.getState().currentTestName}"`,
           JSON.stringify(e.body),
@@ -133,7 +133,7 @@ describe('Private Spot REST API POST Endpoints', () => {
           ...sucessEmptyResponseObject(),
           data: expect.any(Array),
         });
-      } catch (e) {
+      } catch (e: any) {
         expect(e.body).toMatchObject({
           code: API_ERROR_CODE.INCORRECT_PERMISSIONS,
         });
@@ -146,7 +146,7 @@ describe('Private Spot REST API POST Endpoints', () => {
           ...sucessEmptyResponseObject(),
           data: expect.any(Array),
         });
-      } catch (e) {
+      } catch (e: any) {
         console.log(
           `"${expect.getState().currentTestName}"`,
           JSON.stringify(e.body),
@@ -173,7 +173,7 @@ describe('Private Spot REST API POST Endpoints', () => {
           ...sucessEmptyResponseObject(),
           data: expect.any(Array),
         });
-      } catch (e) {
+      } catch (e: any) {
         console.error(e.body);
         expect(e.body).toMatchObject({
           code: API_ERROR_CODE.INSUFFICIENT_BALANCE,
@@ -199,7 +199,7 @@ describe('Private Spot REST API POST Endpoints', () => {
             failure: [{ errorCode: API_ERROR_CODE }],
           },
         });
-      } catch (e) {
+      } catch (e: any) {
         // console.log(`fn() exception: `, e.body);
 
         expect(e?.body).toMatchObject({
@@ -214,7 +214,7 @@ describe('Private Spot REST API POST Endpoints', () => {
           ...sucessEmptyResponseObject(),
           data: '123456', //expect.any(Array),
         });
-      } catch (e) {
+      } catch (e: any) {
         console.log('cancelorder err', e);
         expect(e.body).toMatchObject({
           code: API_ERROR_CODE.ORDER_NOT_FOUND,
@@ -228,7 +228,7 @@ describe('Private Spot REST API POST Endpoints', () => {
           ...sucessEmptyResponseObject(),
           data: expect.any(Array),
         });
-      } catch (e) {
+      } catch (e: any) {
         expect(e.body).toMatchObject({
           code: API_ERROR_CODE.ORDER_NOT_FOUND,
         });
@@ -254,7 +254,7 @@ describe('Private Spot REST API POST Endpoints', () => {
         expect(result).toMatchObject({
           code: API_ERROR_CODE.ACCOUNT_KYC_REQUIRED,
         });
-      } catch (e) {
+      } catch (e: any) {
         // console.error('submitPlanOrder(): ', e);
         expect(e?.body).toMatchObject({
           code: API_ERROR_CODE.ACCOUNT_KYC_REQUIRED,
@@ -274,7 +274,7 @@ describe('Private Spot REST API POST Endpoints', () => {
           ...sucessEmptyResponseObject(),
           data: expect.any(Array),
         });
-      } catch (e) {
+      } catch (e: any) {
         expect(e.body).toMatchObject({
           code: API_ERROR_CODE.PLAN_ORDER_NOT_FOUND,
         });
@@ -291,7 +291,7 @@ describe('Private Spot REST API POST Endpoints', () => {
           ...sucessEmptyResponseObject(),
           data: expect.any(String),
         });
-      } catch (e) {
+      } catch (e: any) {
         // console.error('cancelPlanOrder(): ', e);
         // expect(e).toBeNull();
         expect(e.body).toMatchObject({

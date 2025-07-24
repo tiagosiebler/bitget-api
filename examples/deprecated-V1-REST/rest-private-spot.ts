@@ -1,4 +1,4 @@
-import { SpotClient, WebsocketClient } from '../../src/index';
+import { SpotClient } from '../../src/index';
 
 // or
 // import { SpotClient } from 'bitget-api';

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   FuturesClient,
   isWsFuturesAccountSnapshotEvent,
   isWsFuturesPositionsSnapshotEvent,
   NewFuturesOrder,
-  WebsocketClient,
+  WebsocketClientLegacyV1,
 } from '../../src';
 
 // or
@@ -29,7 +30,7 @@ const client = new FuturesClient({
   // apiPass: 'apiPassHere',
 });
 
-const wsClient = new WebsocketClient({
+const wsClient = new WebsocketClientLegacyV1({
   apiKey: API_KEY,
   apiSecret: API_SECRET,
   apiPass: API_PASS,
@@ -132,6 +133,7 @@ async function handleWsUpdate(event) {
       side: 'open_long',
       size: bitcoinUSDFuturesRule.minTradeNum,
       symbol,
+      productType: '',
     } as const;
 
     console.log('placing order: ', order);
@@ -157,6 +159,7 @@ async function handleWsUpdate(event) {
         side: closingSide,
         size: position.available,
         symbol: position.symbol,
+        productType: '',
       };
 
       console.log('closing position with market order: ', closingOrder);

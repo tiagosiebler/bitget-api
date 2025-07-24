@@ -1,4 +1,4 @@
-import { WebsocketClient, DefaultLogger } from '../../src';
+import { DefaultLogger, WebsocketClientLegacyV1 } from '../../src';
 
 // or
 // import { DefaultLogger, WS_KEY_MAP, WebsocketClient } from 'bitget-api';
@@ -6,16 +6,16 @@ import { WebsocketClient, DefaultLogger } from '../../src';
 (async () => {
   const logger = {
     ...DefaultLogger,
-    silly: (...params) => console.log('silly', ...params),
+    trace: (...params) => console.log('trace', ...params),
   };
 
-  logger.info(`Starting private V1 websocket`);
+  logger.info('Starting private V1 websocket');
 
   const API_KEY = process.env.API_KEY_COM;
   const API_SECRET = process.env.API_SECRET_COM;
   const API_PASS = process.env.API_PASS_COM;
 
-  const wsClient = new WebsocketClient(
+  const wsClient = new WebsocketClientLegacyV1(
     {
       apiKey: API_KEY,
       apiSecret: API_SECRET,

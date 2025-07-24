@@ -1,13 +1,18 @@
 import axios, { AxiosRequestConfig, AxiosResponse, Method } from 'axios';
+import https from 'https';
 
-import { RestClientType } from '../types';
-import { signMessage } from './node-support';
+import { RestClientType } from '../types/shared.js';
 import {
   getRestBaseUrl,
   RestClientOptions,
   serializeParams,
-} from './requestUtils';
-import { neverGuard } from './websocket-util';
+} from './requestUtils.js';
+import {
+  SignAlgorithm,
+  SignEncodeMethod,
+  signMessage,
+} from './webCryptoAPI.js';
+import { neverGuard } from './websocket-util.js';
 
 interface SignedRequest<T extends object | undefined = object> {
   originalParams: T;
@@ -110,9 +115,33 @@ export default abstract class BaseRestClient {
         'X-CHANNEL-API-CODE': 'hbnni',
         'Content-Type': 'application/json',
         locale: 'en-US',
-        ...(restOptions.demoTrading ? { paptrading: '1' } : {}),
       },
     };
+
+    if (this.options.demoTrading) {
+      this.globalRequestOptions.headers = {
+        ...this.globalRequestOptions.headers,
+        // Header to enable paper trading with provided demo API keys
+        paptrading: '1',
+      };
+    }
+
+    // If enabled, configure a https agent with keepAlive enabled
+    if (this.options.keepAlive) {
+      // Extract existing https agent parameters, if provided, to prevent the keepAlive flag from overwriting an existing https agent completely
+      const existingHttpsAgent = this.globalRequestOptions.httpsAgent as
+        | https.Agent
+        | undefined;
+      const existingAgentOptions = existingHttpsAgent?.options || {};
+
+      // For more advanced configuration, raise an issue on GitHub or use the "networkOptions"
+      // parameter to define a custom httpsAgent with the desired properties
+      this.globalRequestOptions.httpsAgent = new https.Agent({
+        ...existingAgentOptions,
+        keepAlive: true,
+        keepAliveMsecs: this.options.keepAliveMsecs,
+      });
+    }
 
     this.baseUrl = getRestBaseUrl(false, restOptions);
     this.apiKey = this.options.apiKey;
@@ -232,6 +261,18 @@ export default abstract class BaseRestClient {
     };
   }
 
+  private async signMessage(
+    paramsStr: string,
+    secret: string,
+    method: SignEncodeMethod,
+    algorithm: SignAlgorithm,
+  ): Promise<string> {
+    if (typeof this.options.customSignMessageFn === 'function') {
+      return this.options.customSignMessageFn(paramsStr, secret);
+    }
+    return await signMessage(paramsStr, secret, method, algorithm);
+  }
+
   /**
    * @private sign request and set recv window
    */
@@ -278,7 +319,12 @@ export default abstract class BaseRestClient {
 
       // console.log('sign params: ', paramsStr);
 
-      res.sign = await signMessage(paramsStr, this.apiSecret, 'base64');
+      res.sign = await this.signMessage(
+        paramsStr,
+        this.apiSecret,
+        'base64',
+        'SHA-256',
+      );
       res.queryParamsWithSign = signRequestParams;
       return res;
     }

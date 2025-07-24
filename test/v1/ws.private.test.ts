@@ -1,10 +1,14 @@
 import {
-  WebsocketClient,
+  WebsocketClientLegacyV1,
   WS_ERROR_ENUM,
   WS_KEY_MAP,
   WSClientConfigurableOptions,
-} from '../../src';
-import { getSilentLogger, logAllEvents, waitForSocketEvent } from '../ws.util';
+} from '../../src/index.js';
+import {
+  getSilentLogger,
+  logAllEvents,
+  waitForSocketEvent,
+} from '../ws.util.js';
 
 describe.skip('Private Spot Websocket Client', () => {
   const API_KEY = process.env.API_KEY_COM;
@@ -19,7 +23,7 @@ describe.skip('Private Spot Websocket Client', () => {
 
   describe('with invalid credentials', () => {
     it('should reject private subscribe if keys/signature are incorrect', async () => {
-      const badClient = new WebsocketClient(
+      const badClient = new WebsocketClientLegacyV1(
         {
           ...wsClientOptions,
           apiKey: 'bad',
@@ -52,7 +56,7 @@ describe.skip('Private Spot Websocket Client', () => {
   });
 
   describe('with valid API credentails', () => {
-    let wsClient: WebsocketClient;
+    let wsClient: WebsocketClientLegacyV1;
 
     it('should have api credentials to test with', () => {
       expect(API_KEY).toStrictEqual(expect.any(String));
@@ -61,7 +65,7 @@ describe.skip('Private Spot Websocket Client', () => {
     });
 
     beforeAll(() => {
-      wsClient = new WebsocketClient(
+      wsClient = new WebsocketClientLegacyV1(
         wsClientOptions,
         getSilentLogger('expectSuccess'),
       );

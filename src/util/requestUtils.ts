@@ -39,9 +39,30 @@ export interface RestClientOptions {
 
   /** Default: true. whether to try and post-process request exceptions (and throw them). */
   parseExceptions?: boolean;
+
+  /**
+   * Enable keep alive for REST API requests (via axios).
+   */
+  keepAlive?: boolean;
+
+  /**
+   * When using HTTP KeepAlive, how often to send TCP KeepAlive packets over sockets being kept alive. Default = 1000.
+   * Only relevant if keepAlive is set to true.
+   * Default: 1000 (defaults comes from https agent)
+   */
+  keepAliveMsecs?: number;
+
+  /**
+   * Allows you to provide a custom "signMessage" function, e.g. to use node's much faster createHmac method
+   *
+   * Look in the examples folder for a demonstration on using node's createHmac instead.
+   */
+  customSignMessageFn?: (message: string, secret: string) => Promise<string>;
 }
 
-export function serializeParams<T extends object | undefined = object>(
+export function serializeParams<
+  T extends Record<string, any> | undefined = object,
+>(
   params: T,
   strict_validation = false,
   encodeValues: boolean = true,
@@ -106,4 +127,5 @@ export const REST_CLIENT_TYPE_ENUM = {
   futures: 'futures',
   broker: 'broker',
   v2: 'v2',
+  v3: 'v3',
 } as const;

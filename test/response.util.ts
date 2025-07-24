@@ -1,4 +1,4 @@
-import { API_ERROR_CODE } from '../src';
+import { API_ERROR_CODE } from '../src/index.js';
 
 const SUCCESS_MSG_REGEX = /success/gim;
 

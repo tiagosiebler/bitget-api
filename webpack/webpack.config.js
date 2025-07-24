@@ -17,13 +17,10 @@ function generateConfig(name) {
 
     resolve: {
       // Add '.ts' and '.tsx' as resolvable extensions.
-      extensions: ['.webpack.js', '.web.js', '.ts', '.tsx', '.js'],
+      extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
       alias: {
-        [path.resolve(__dirname, '../lib/util/node-support.js')]: path.resolve(
-          __dirname,
-          '../lib/util/browser-support.js',
-        ),
-      },
+        process: "process/browser",
+      }
     },
 
     module: {

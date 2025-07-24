@@ -1,4 +1,4 @@
-import { SpotClient, WebsocketClient } from '../../src/index';
+import { SpotClient, WebsocketClientLegacyV1 } from '../../src/index';
 
 // or
 // import { SpotClient } from 'bitget-api';
@@ -17,7 +17,7 @@ const client = new SpotClient({
   // apiPass: 'apiPassHere',
 });
 
-const wsClient = new WebsocketClient({
+const wsClient = new WebsocketClientLegacyV1({
   apiKey: API_KEY,
   apiSecret: API_SECRET,
   apiPass: API_PASS,

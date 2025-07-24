@@ -1,9 +1,9 @@
-import { API_ERROR_CODE } from '../../src';
-import { RestClientV2 } from '../../src/rest-client-v2';
+import { API_ERROR_CODE } from '../../src/index.js';
+import { RestClientV2 } from '../../src/rest-client-v2.js';
 import {
   errorResponseObjectV3,
   sucessEmptyResponseObject,
-} from '../response.util';
+} from '../response.util.js';
 
 describe('Bitget Private REST API Write Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM;

@@ -1,17 +1,21 @@
 import {
-  WebsocketClient,
+  WebsocketClientLegacyV1,
   WS_KEY_MAP,
   WSClientConfigurableOptions,
-} from '../../src';
-import { getSilentLogger, logAllEvents, waitForSocketEvent } from '../ws.util';
+} from '../../src/index.js';
+import {
+  getSilentLogger,
+  logAllEvents,
+  waitForSocketEvent,
+} from '../ws.util.js';
 
 describe('Public Spot Websocket Client', () => {
-  let wsClient: WebsocketClient;
+  let wsClient: WebsocketClientLegacyV1;
 
   const wsClientOptions: WSClientConfigurableOptions = {};
 
   beforeAll(() => {
-    wsClient = new WebsocketClient(
+    wsClient = new WebsocketClientLegacyV1(
       wsClientOptions,
       getSilentLogger('expectSuccess'),
     );

@@ -1,11 +1,16 @@
+import { WSAPIRequestBitgetV3 } from '../types/websockets/ws-api.js';
 import {
   BitgetInstType,
+  WebsocketClientOptions,
   WsKey,
   WsPrivateTopicV2,
+  WsPrivateTopicV3,
   WsTopicSubscribeEventArgs,
   WsTopicSubscribePublicArgsV2,
-} from '../types';
-import { signMessage } from './node-support';
+} from '../types/websockets/ws-general.js';
+import { DefaultLogger } from './logger.js';
+
+export const WS_LOGGER_CATEGORY = { category: 'bitget-ws' };
 
 /**
  * Some exchanges have two livenet environments, some have test environments, some dont. This allows easy flexibility for different exchanges.
@@ -24,26 +29,42 @@ type NetworkMap<
 
 export const WS_BASE_URL_MAP: Record<
   WsKey,
-  Record<'all', NetworkMap<'livenet'>>
+  Record<'all', NetworkMap<'livenet' | 'demo'>>
 > = {
   mixv1: {
     all: {
       livenet: 'wss://ws.bitget.com/mix/v1/stream',
+      demo: 'NotSupportedForV1',
     },
   },
   spotv1: {
     all: {
       livenet: 'wss://ws.bitget.com/spot/v1/stream',
+      demo: 'NotSupportedForV1',
     },
   },
   v2Public: {
     all: {
       livenet: 'wss://ws.bitget.com/v2/ws/public',
+      demo: 'wss://wspap.bitget.com/v2/ws/public',
     },
   },
   v2Private: {
     all: {
       livenet: 'wss://ws.bitget.com/v2/ws/private',
+      demo: 'wss://wspap.bitget.com/v2/ws/private',
+    },
+  },
+  v3Public: {
+    all: {
+      livenet: 'wss://ws.bitget.com/v3/ws/public',
+      demo: 'wss://wspap.bitget.com/v3/ws/public',
+    },
+  },
+  v3Private: {
+    all: {
+      livenet: 'wss://ws.bitget.com/v3/ws/private',
+      demo: 'wss://wspap.bitget.com/v3/ws/private',
     },
   },
 };
@@ -54,6 +75,8 @@ export const WS_KEY_MAP = {
   mixv1: 'mixv1',
   v2Public: 'v2Public',
   v2Private: 'v2Private',
+  v3Public: 'v3Public',
+  v3Private: 'v3Private',
 } as const;
 
 /** Any WS keys in this list will trigger auth on connect, if credentials are available */
@@ -61,6 +84,7 @@ export const WS_AUTH_ON_CONNECT_KEYS: WsKey[] = [
   WS_KEY_MAP.spotv1,
   WS_KEY_MAP.mixv1,
   WS_KEY_MAP.v2Private,
+  WS_KEY_MAP.v3Private,
 ];
 
 /** Any WS keys in this list will ALWAYS skip the authentication process, even if credentials are available */
@@ -84,19 +108,91 @@ export const PRIVATE_TOPICS_V2: WsPrivateTopicV2[] = [
   'orders-isolated',
 ];
 
+export const PRIVATE_TOPICS_V3: WsPrivateTopicV3[] = [
+  'account',
+  'position',
+  'fill',
+  'order',
+];
+
+export async function getWsUrl(
+  wsKey: WsKey,
+  options: WebsocketClientOptions,
+  logger: DefaultLogger,
+): Promise<string> {
+  if (options.wsUrl) {
+    return options.wsUrl;
+  }
+
+  const isDemoTrading = options.demoTrading;
+  const networkKey: 'livenet' | 'demo' = isDemoTrading ? 'demo' : 'livenet';
+
+  switch (wsKey) {
+    case WS_KEY_MAP.spotv1:
+    case WS_KEY_MAP.mixv1: {
+      throw new Error(
+        'Use the WebsocketClient instead of WebsocketClientV2 for V1 websockets',
+      );
+    }
+    case WS_KEY_MAP.v2Private: {
+      return WS_BASE_URL_MAP.v2Private.all[networkKey];
+    }
+    case WS_KEY_MAP.v2Public: {
+      return WS_BASE_URL_MAP.v2Public.all[networkKey];
+    }
+    case WS_KEY_MAP.v3Private: {
+      return WS_BASE_URL_MAP.v3Private.all[networkKey];
+    }
+    case WS_KEY_MAP.v3Public: {
+      return WS_BASE_URL_MAP.v3Public.all[networkKey];
+    }
+    default: {
+      logger.error('getWsUrl(): Unhandled wsKey: ', {
+        ...WS_LOGGER_CATEGORY,
+        wsKey,
+      });
+      throw neverGuard(wsKey, 'getWsUrl(): Unhandled wsKey');
+    }
+  }
+}
+
+/**
+ * Normalised internal format for a request (subscribe/unsubscribe/etc) on a topic, with optional parameters.
+ *
+ * - Topic: the topic this event is for
+ * - Payload: the parameters to include, optional. E.g. auth requires key + sign. Some topics allow configurable parameters.
+ * - Category: required for bybit, since different categories have different public endpoints
+ */
+export interface WsTopicRequest<
+  TWSTopic extends string = string,
+  TWSPayload = unknown,
+> {
+  topic: TWSTopic;
+  payload?: TWSPayload;
+}
+
+/**
+ * Conveniently allow users to request a topic either as string topics or objects (containing string topic + params)
+ */
+export type WsTopicRequestOrStringTopic<
+  TWSTopic extends string,
+  TWSPayload = unknown,
+> = WsTopicRequest<TWSTopic, TWSPayload> | string;
+
 export function isPrivateChannel<TChannel extends string>(
   channel: TChannel,
 ): boolean {
   return (
     PRIVATE_TOPICS.includes(channel) ||
-    PRIVATE_TOPICS_V2.includes(channel as any)
+    PRIVATE_TOPICS_V2.includes(channel as any) ||
+    PRIVATE_TOPICS_V3.includes(channel as any)
   );
 }
 
-export function getWsKeyForTopic(
+export function getWsKeyForTopicV1(
   subscribeEvent: WsTopicSubscribeEventArgs,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isPrivate?: boolean,
+  _isPrivate?: boolean,
 ): WsKey {
   const instType = subscribeEvent.instType.toUpperCase() as BitgetInstType;
   switch (instType) {
@@ -112,7 +208,7 @@ export function getWsKeyForTopic(
     default: {
       throw neverGuard(
         instType,
-        `getWsKeyForTopic(): Unhandled market ${'instrumentId'}`,
+        `getWsKeyForTopicV1(): Unhandled market ${'instrumentId'}`,
       );
     }
   }
@@ -133,7 +229,9 @@ export function getMaxTopicsPerSubscribeEvent(wsKey: WsKey): number | null {
     case 'mixv1':
     case 'spotv1':
     case 'v2Public':
-    case 'v2Private': {
+    case 'v2Private':
+    case 'v3Public':
+    case 'v3Private': {
       // Technically there doesn't seem to be a documented cap, but there is a size limit per request. Doesn't hurt to batch requests.
       return 15;
     }
@@ -149,34 +247,6 @@ export const WS_ERROR_ENUM = {
 
 export function neverGuard(x: never, msg: string): Error {
   return new Error(`Unhandled value exception "${x}", ${msg}`);
-}
-
-export async function getWsAuthSignature(
-  apiKey: string | undefined,
-  apiSecret: string | undefined,
-  apiPass: string | undefined,
-  recvWindow: number = 0,
-): Promise<{
-  expiresAt: number;
-  signature: string;
-}> {
-  if (!apiKey || !apiSecret || !apiPass) {
-    throw new Error(
-      'Cannot auth - missing api key, secret or passcode in config',
-    );
-  }
-  const signatureExpiresAt = ((Date.now() + recvWindow) / 1000).toFixed(0);
-
-  const signature = await signMessage(
-    signatureExpiresAt + 'GET' + '/user/verify',
-    apiSecret,
-    'base64',
-  );
-
-  return {
-    expiresAt: Number(signatureExpiresAt),
-    signature,
-  };
 }
 
 /**
@@ -199,4 +269,58 @@ export function safeTerminateWs(
   }
 
   return false;
+}
+/**
+ * Users can conveniently pass topics as strings or objects (object has topic name + optional params).
+ *
+ * This method normalises topics into objects (object has topic name + optional params).
+ */
+export function getNormalisedTopicRequests(
+  wsTopicRequests: WsTopicRequestOrStringTopic<string>[],
+): WsTopicRequest<string>[] {
+  const normalisedTopicRequests: WsTopicRequest<string>[] = [];
+
+  for (const wsTopicRequest of wsTopicRequests) {
+    // passed as string, convert to object
+    if (typeof wsTopicRequest === 'string') {
+      const topicRequest: WsTopicRequest<string> = {
+        topic: wsTopicRequest,
+        payload: undefined,
+      };
+      normalisedTopicRequests.push(topicRequest);
+      continue;
+    }
+
+    // already a normalised object, thanks to user
+    normalisedTopicRequests.push(wsTopicRequest);
+  }
+  return normalisedTopicRequests;
+}
+
+/**
+ * WebSocket.ping() is not available in browsers. This is a simple check used to
+ * disable heartbeats in browers, for exchanges that use native WebSocket ping/pong frames.
+ */
+export function isWSPingFrameAvailable(): boolean {
+  return typeof (WebSocket.prototype as any)['ping'] === 'function';
+}
+
+/**
+ * WebSocket.pong() is not available in browsers. This is a simple check used to
+ * disable heartbeats in browers, for exchanges that use native WebSocket ping/pong frames.
+ */
+export function isWSPongFrameAvailable(): boolean {
+  return typeof (WebSocket.prototype as any)['pong'] === 'function';
+}
+
+/**
+ * WS API promises are stored using a primary key. This key is constructed using
+ * properties found in every request & reply.
+ */
+export function getPromiseRefForWSAPIRequest(
+  requestEvent: WSAPIRequestBitgetV3<unknown>,
+): string {
+  // Responses don't have any other info we can use to connect them to the request. Just the "id" field...
+  const promiseRef = [requestEvent.id].join('_');
+  return promiseRef;
 }

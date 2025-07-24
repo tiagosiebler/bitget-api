@@ -1,5 +1,5 @@
-import { API_ERROR_CODE, FuturesClient } from '../../../src';
-import { sucessEmptyResponseObject } from '../../response.util';
+import { API_ERROR_CODE, FuturesClient } from '../../../src/index.js';
+import { sucessEmptyResponseObject } from '../../response.util.js';
 
 jest.setTimeout(10000);
 
@@ -32,7 +32,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('setLeverage: ', e);
       expect(e).toBeNull();
     }
@@ -44,7 +44,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       // expect(e).toBeNull();
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.PARAMETER_EXCEPTION,
@@ -60,7 +60,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('setMarginMode: ', e);
       expect(e).toBeNull();
     }
@@ -84,7 +84,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.body);
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_KYC_REQUIRED,
@@ -106,7 +106,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_KYC_REQUIRED,
       });
@@ -121,7 +121,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.FUTURES_ORDER_CANCEL_NOT_FOUND,
       });
@@ -136,7 +136,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('batchCancelOrder: ', e);
       expect(e).toBeNull();
     }
@@ -148,7 +148,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.NO_ORDER_TO_CANCEL,
       });
@@ -171,7 +171,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       // {"code": "40889", "data": null, "msg": "The plan order of this contract has reached the upper limit"
       // if the above error is seen, you need to cancel trigger orders on the test account (in futures)
       console.error('submitPlanOrder: ', e);
@@ -194,7 +194,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.PLAN_ORDER_NOT_FOUND,
       });
@@ -214,7 +214,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       // expect(e).toBeNull();
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.PLAN_ORDER_NOT_FOUND,
@@ -236,7 +236,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       // console.log(e.body);
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.FUTURES_INSUFFICIENT_POSITION_NO_TPSL,
@@ -259,7 +259,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.FUTURES_INSUFFICIENT_POSITION_NO_TPSL,
       });
@@ -279,7 +279,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       // expect(e).toBeNull();
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.FUTURES_ORDER_TPSL_NOT_FOUND,
@@ -300,7 +300,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.FUTURES_ORDER_TPSL_NOT_FOUND,
       });
@@ -315,7 +315,7 @@ describe('Private Futures REST API POST Endpoints', () => {
           data: {},
         },
       );
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });
@@ -332,7 +332,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });
@@ -345,7 +345,7 @@ describe('Private Futures REST API POST Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: {},
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });

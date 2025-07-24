@@ -1,4 +1,4 @@
-import { FuturesProductTypeV2, MarginType } from '../shared';
+import { FuturesProductTypeV2, MarginType } from '../shared.js';
 
 /**
  *

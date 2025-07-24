@@ -1,24 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { WebsocketClient } from '../src';
+import { DefaultLogger, WebsocketClientLegacyV1 } from '../src/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function getSilentLogger(logHint?: string) {
+export function getSilentLogger(_logHint?: string): DefaultLogger {
   return {
-    silly: () => {},
-    debug: () => {},
-    notice: () => {},
+    trace: () => {},
     info: () => {},
-    warning: () => {},
     error: () => {},
   };
 }
 
-export const fullLogger = {
-  silly: (...params) => console.log('silly', ...params),
-  debug: (...params) => console.log('debug', ...params),
-  notice: (...params) => console.log('notice', ...params),
+export const fullLogger: DefaultLogger = {
+  trace: (...params) => console.log('trace', ...params),
   info: (...params) => console.info('info', ...params),
-  warning: (...params) => console.warn('warning', ...params),
   error: (...params) => console.error('error', ...params),
 };
 
@@ -33,7 +27,7 @@ type WsClientEvent =
 
 /** Resolves a promise if an event is seen before a timeout (defaults to 4.5 seconds) */
 export function waitForSocketEvent(
-  wsClient: WebsocketClient,
+  wsClient: WebsocketClientLegacyV1,
   event: WsClientEvent,
   timeoutMs: number = 10 * 1000,
 ) {
@@ -53,19 +47,19 @@ export function waitForSocketEvent(
       wsClient.removeListener('error', (e) => rejector(e));
     }
 
-    function resolver(event) {
+    function resolver(event: unknown) {
       resolve(event);
       cleanup();
     }
 
-    function rejector(event) {
+    function rejector(event: any) {
       if (!resolvedOnce) {
         reject(event);
       }
       cleanup();
     }
 
-    wsClient.on(event, (e) => resolver(e));
+    wsClient.on(event, (e: any) => resolver(e));
     wsClient.on('exception', (e) => rejector(e));
 
     // if (event !== 'close') {
@@ -80,7 +74,7 @@ export function waitForSocketEvent(
   });
 }
 
-export function listenToSocketEvents(wsClient: WebsocketClient) {
+export function listenToSocketEvents(wsClient: WebsocketClientLegacyV1) {
   const retVal: Record<
     'update' | 'open' | 'response' | 'close' | 'error',
     typeof jest.fn
@@ -110,8 +104,8 @@ export function listenToSocketEvents(wsClient: WebsocketClient) {
   };
 }
 
-export function logAllEvents(wsClient: WebsocketClient) {
-  wsClient.on('update', (data) => {
+export function logAllEvents(wsClient: WebsocketClientLegacyV1) {
+  wsClient.on('update', (_data) => {
     // console.log('wsUpdate: ', JSON.stringify(data, null, 2));
   });
 
@@ -127,13 +121,13 @@ export function logAllEvents(wsClient: WebsocketClient) {
   wsClient.on('reconnected', (data) => {
     console.log('wsReconnected ', data?.wsKey);
   });
-  wsClient.on('close', (data) => {
+  wsClient.on('close', (_data) => {
     // console.log('wsClose: ', data);
   });
 }
 
 export function promiseSleep(ms: number) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _reject) => {
     setTimeout(resolve, ms);
   });
 }

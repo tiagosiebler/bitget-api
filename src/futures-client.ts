@@ -1,20 +1,15 @@
+import { GetHistoricTradesParams } from './types/request/shared.js';
 import {
-  APIResponse,
   CancelFuturesPlanTPSL,
-  FuturesAccount,
   FuturesAccountBillRequest,
   FuturesBusinessBillRequest,
   FuturesCandleData,
   FuturesHistoricPositions,
   FuturesKlineInterval,
   FuturesMarginMode,
-  FuturesMarketTrade,
   FuturesPagination,
   FuturesPlanType,
-  FuturesPosition,
   FuturesProductType,
-  FuturesSymbolRule,
-  GetHistoricTradesParams,
   HistoricPlanOrderTPSLRequest,
   ModifyFuturesOrder,
   ModifyFuturesPlanOrder,
@@ -26,10 +21,16 @@ import {
   NewFuturesPlanPositionTPSL,
   NewFuturesPlanStopOrder,
   NewFuturesPlanTrailingStopOrder,
-  VIPFeeRate,
-} from './types';
-import { REST_CLIENT_TYPE_ENUM } from './util';
-import BaseRestClient from './util/BaseRestClient';
+} from './types/request/v1/futuresV1.js';
+import {
+  FuturesAccount,
+  FuturesMarketTrade,
+  FuturesPosition,
+  FuturesSymbolRule,
+} from './types/response/v1/futures.js';
+import { APIResponse, VIPFeeRate } from './types/response/v1/shared.js';
+import BaseRestClient from './util/BaseRestClient.js';
+import { REST_CLIENT_TYPE_ENUM } from './util/requestUtils.js';
 
 /**
  * REST API client for the V1 bitget Futures APIs. These are the previous generation of Bitget's APIs and should be considered deprecated.
