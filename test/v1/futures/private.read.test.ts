@@ -36,7 +36,7 @@ describe('Private Futures REST API GET Endpoints', () => {
           marginMode: expect.any(String),
         },
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getAccount: ', e);
       expect(e).toBeNull();
     }
@@ -48,7 +48,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getAccounts: ', e);
       expect(e).toBeNull();
     }
@@ -64,7 +64,7 @@ describe('Private Futures REST API GET Endpoints', () => {
           openCount: expect.any(Number),
         },
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getOpenCount: ', e);
       expect(e).toBeNull();
     }
@@ -76,7 +76,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getPosition: ', e);
       expect(e).toBeNull();
     }
@@ -88,7 +88,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getPosition: ', e);
       expect(e).toBeNull();
     }
@@ -112,7 +112,7 @@ describe('Private Futures REST API GET Endpoints', () => {
           result: expect.any(Array),
         },
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getAccountBill: ', e);
       expect(e).toBeNull();
     }
@@ -135,7 +135,7 @@ describe('Private Futures REST API GET Endpoints', () => {
           result: expect.any(Array),
         },
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getBusinessBill: ', e);
       expect(e).toBeNull();
     }
@@ -147,7 +147,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getOpenSymbolOrders: ', e);
       expect(e).toBeNull();
     }
@@ -159,7 +159,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Array),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getOpenOrders: ', e);
       expect(e).toBeNull();
     }
@@ -171,7 +171,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getOrderHistory: ', e);
       expect(e).toBeNull();
     }
@@ -185,7 +185,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getProductTypeOrderHistory: ', e);
       expect(e).toBeNull();
     }
@@ -197,7 +197,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.FUTURES_ORDER_GET_NOT_FOUND,
       });
@@ -210,7 +210,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.FUTURES_ORDER_GET_NOT_FOUND,
       });
@@ -228,7 +228,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getProductTypeOrderFills: ', e);
       expect(e).toBeNull();
     }
@@ -240,7 +240,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getPlanOrderTPSLs: ', e);
       expect(e).toBeNull();
     }
@@ -258,7 +258,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       console.error('getHistoricPlanOrdersTPSL: ', e);
       expect(e).toBeNull();
     }
@@ -272,7 +272,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });
@@ -287,7 +287,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });
@@ -302,7 +302,7 @@ describe('Private Futures REST API GET Endpoints', () => {
           data: expect.any(Object),
         },
       );
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });
@@ -315,7 +315,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });
@@ -328,7 +328,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });
@@ -348,7 +348,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });
@@ -363,7 +363,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });
@@ -376,7 +376,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });
@@ -389,7 +389,7 @@ describe('Private Futures REST API GET Endpoints', () => {
         ...sucessEmptyResponseObject(),
         data: expect.any(Object),
       });
-    } catch (e) {
+    } catch (e: any) {
       expect(e.body).toMatchObject({
         code: API_ERROR_CODE.ACCOUNT_NOT_COPY_TRADER,
       });

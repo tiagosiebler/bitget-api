@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { DefaultLogger, WebsocketClientLegacyV1 } from '../src';
+import { DefaultLogger, WebsocketClientLegacyV1 } from '../src/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function getSilentLogger(logHint?: string): DefaultLogger {
@@ -47,19 +47,19 @@ export function waitForSocketEvent(
       wsClient.removeListener('error', (e) => rejector(e));
     }
 
-    function resolver(event) {
+    function resolver(event: unknown) {
       resolve(event);
       cleanup();
     }
 
-    function rejector(event) {
+    function rejector(event: any) {
       if (!resolvedOnce) {
         reject(event);
       }
       cleanup();
     }
 
-    wsClient.on(event, (e) => resolver(e));
+    wsClient.on(event, (e: any) => resolver(e));
     wsClient.on('exception', (e) => rejector(e));
 
     // if (event !== 'close') {
