@@ -4015,41 +4015,6 @@ export interface SpotDepositRecordV2 {
 }
 
 ================
-File: .gitignore
-================
-!.gitkeep
-.DS_STORE
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
-pids
-*.pid
-*.seed
-*.pid.lock
-node_modules/
-.npm
-.eslintcache
-.node_repl_history
-*.tgz
-.yarn-integrity
-.env
-.env.test
-.cache
-lib
-bundleReport.html
-.history/
-tiagoSpot.ts
-restClientRegex.ts
-localtest.sh
-privaterepotracker
-testfile.ts
-dist
-repomix.sh
-
-================
 File: .jshintrc
 ================
 {
@@ -6752,6 +6717,41 @@ new BundleAnalyzerPlugin({
 module.exports = generateConfig('bitgetapi');
 
 ================
+File: .gitignore
+================
+!.gitkeep
+.DS_STORE
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+pids
+*.pid
+*.seed
+*.pid.lock
+node_modules/
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+.env
+.env.test
+.cache
+lib
+bundleReport.html
+.history/
+tiagoSpot.ts
+restClientRegex.ts
+localtest.sh
+privaterepotracker
+testfile.ts
+dist
+repomix.sh
+
+================
 File: .nvmrc
 ================
 v22.17.1
@@ -8073,6 +8073,194 @@ export interface WSAPIPlaceOrderRequestV3 {
 }
 ⋮----
 reduceOnly?: 'YES' | 'NO'; // Note: reduceOnly is not supported for batch place WS API. Might be supported starting late Q4 2025, but not supported yet.
+
+================
+File: src/broker-client.ts
+================
+import {
+  BrokerProductType,
+  BrokerSubAPIKeyModifyRequest,
+  BrokerSubListRequest,
+  BrokerSubWithdrawalRequest,
+} from './types/request/v1/brokerV1.js';
+import { APIResponse } from './types/response/v1/shared.js';
+import BaseRestClient from './util/BaseRestClient.js';
+import { REST_CLIENT_TYPE_ENUM } from './util/requestUtils.js';
+⋮----
+/**
+ * REST API client for the V1 bitget Broker APIs. These are the previous generation of Bitget's APIs and should be considered deprecated.
+ * These will be removed in a future release, once Bitget formally deprecates them.
+ *
+ * @deprecated use RestClientV2 instead
+ */
+export class BrokerClient extends BaseRestClient
+⋮----
+getClientType()
+⋮----
+/**
+   *
+   * Sub Account Interface
+   *
+   */
+⋮----
+/** Get Broker Info */
+getBrokerInfo(): Promise<APIResponse<any>>
+⋮----
+/** Create Sub Account */
+createSubAccount(
+    subName: string,
+    remark?: string,
+): Promise<APIResponse<any>>
+⋮----
+/** Get Sub List */
+getSubAccounts(params?: BrokerSubListRequest): Promise<APIResponse<any>>
+⋮----
+/** Modify Sub Account */
+modifySubAccount(
+    subUid: string,
+    perm: string,
+    status: 'normal' | 'freeze' | 'del',
+): Promise<APIResponse<any>>
+⋮----
+/** Modify Sub Email */
+modifySubEmail(subUid: string, subEmail: string): Promise<APIResponse<any>>
+⋮----
+/** Get Sub Email */
+getSubEmail(subUid: string): Promise<APIResponse<any>>
+⋮----
+/** Get Sub Spot Assets */
+getSubSpotAssets(subUid: string): Promise<APIResponse<any>>
+⋮----
+/** Get Sub Future Assets */
+getSubFutureAssets(
+    subUid: string,
+    productType: BrokerProductType,
+): Promise<APIResponse<any>>
+⋮----
+/** Get Sub Deposit Address (Only Broker) */
+getSubDepositAddress(
+    subUid: string,
+    coin: string,
+    chain?: string,
+): Promise<APIResponse<any>>
+⋮----
+/** Sub Withdrawal (Only Broker) */
+subWithdrawal(params: BrokerSubWithdrawalRequest): Promise<APIResponse<any>>
+⋮----
+/** Sub Deposit Auto Transfer (Only Broker) */
+setSubDepositAutoTransfer(
+    subUid: string,
+    coin: string,
+    toAccountType: 'spot' | 'mix_usdt' | 'mix_usd' | 'mix_usdc',
+): Promise<APIResponse<any>>
+⋮----
+/**
+   *
+   * Sub API Interface
+   *
+   */
+⋮----
+/** Create Sub ApiKey (Only Broker) */
+createSubAPIKey(
+    subUid: string,
+    passphrase: string,
+    remark: string,
+    ip: string,
+    perm?: string,
+): Promise<APIResponse<any>>
+⋮----
+/** Get Sub ApiKey List */
+getSubAPIKeys(subUid: string): Promise<APIResponse<any>>
+⋮----
+/** Modify Sub ApiKey (Only Broker) */
+modifySubAPIKey(
+    params: BrokerSubAPIKeyModifyRequest,
+): Promise<APIResponse<any>>
+⋮----
+/**
+   * Undocumented endpoints
+   */
+⋮----
+getAgentCommissionDetail(params?: {
+    startTime?: string;
+    endTime?: string;
+    limit?: string;
+    idLessThan?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/** Get Agent Customer List */
+getAgentCustomerList(params?: {
+    startTime?: string;
+    endTime?: string;
+    pageNo?: string;
+    pageSize?: string;
+    uid?: string;
+    referralCode?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/**
+   * Get Agent Customer Deposit List
+   * Includes both on-chain deposits and internal transfers
+   * Note: Can only query data within the last 90 days
+   */
+getAgentCustomerDepositList(params?: {
+    startTime?: string;
+    endTime?: string;
+    pageNo?: string;
+    pageSize?: string;
+    uid?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/**
+   * Get Agent Customer Trade Volume List
+   * Includes trading volume for both spot and futures
+   * Note: Data updates every 10 minutes and can only query last 90 days
+   */
+getAgentCustomerTradeVolumeList(params?: {
+    startTime?: string;
+    endTime?: string;
+    pageNo?: string;
+    pageSize?: string;
+    uid?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/**
+   * Get Agent Customer Assets List
+   * Returns account balances for customer accounts
+   * Note: Data updates every 10 minutes
+   */
+getAgentCustomerAssetsList(params?: {
+    pageNo?: string;
+    pageSize?: string;
+    uid?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/**
+   * Get Agent Direct Commissions
+   * Returns commission data for direct customers
+   * Note: Data updates on T+1 (UTC+8) basis and can only query last 90 days
+   */
+getAgentCustomerCommissions(params?: {
+    startTime?: string;
+    endTime?: string;
+    idLessThan?: string;
+    limit?: string;
+    uid?: string;
+    coin?: string;
+    symbol?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/**
+   * Get Agent Customer KYC Result
+   * Returns KYC verification status for customers
+   */
+getAgentCustomerKycResult(params?: {
+    startTime?: string;
+    endTime?: string;
+    pageNo?: string;
+    pageSize?: string;
+    uid?: string;
+}): Promise<APIResponse<any>>
 
 ================
 File: src/rest-client-v2.ts
@@ -10864,194 +11052,6 @@ export interface PlaceOrderResponseV3 {
 }
 
 ================
-File: src/broker-client.ts
-================
-import {
-  BrokerProductType,
-  BrokerSubAPIKeyModifyRequest,
-  BrokerSubListRequest,
-  BrokerSubWithdrawalRequest,
-} from './types/request/v1/brokerV1.js';
-import { APIResponse } from './types/response/v1/shared.js';
-import BaseRestClient from './util/BaseRestClient.js';
-import { REST_CLIENT_TYPE_ENUM } from './util/requestUtils.js';
-⋮----
-/**
- * REST API client for the V1 bitget Broker APIs. These are the previous generation of Bitget's APIs and should be considered deprecated.
- * These will be removed in a future release, once Bitget formally deprecates them.
- *
- * @deprecated use RestClientV2 instead
- */
-export class BrokerClient extends BaseRestClient
-⋮----
-getClientType()
-⋮----
-/**
-   *
-   * Sub Account Interface
-   *
-   */
-⋮----
-/** Get Broker Info */
-getBrokerInfo(): Promise<APIResponse<any>>
-⋮----
-/** Create Sub Account */
-createSubAccount(
-    subName: string,
-    remark?: string,
-): Promise<APIResponse<any>>
-⋮----
-/** Get Sub List */
-getSubAccounts(params?: BrokerSubListRequest): Promise<APIResponse<any>>
-⋮----
-/** Modify Sub Account */
-modifySubAccount(
-    subUid: string,
-    perm: string,
-    status: 'normal' | 'freeze' | 'del',
-): Promise<APIResponse<any>>
-⋮----
-/** Modify Sub Email */
-modifySubEmail(subUid: string, subEmail: string): Promise<APIResponse<any>>
-⋮----
-/** Get Sub Email */
-getSubEmail(subUid: string): Promise<APIResponse<any>>
-⋮----
-/** Get Sub Spot Assets */
-getSubSpotAssets(subUid: string): Promise<APIResponse<any>>
-⋮----
-/** Get Sub Future Assets */
-getSubFutureAssets(
-    subUid: string,
-    productType: BrokerProductType,
-): Promise<APIResponse<any>>
-⋮----
-/** Get Sub Deposit Address (Only Broker) */
-getSubDepositAddress(
-    subUid: string,
-    coin: string,
-    chain?: string,
-): Promise<APIResponse<any>>
-⋮----
-/** Sub Withdrawal (Only Broker) */
-subWithdrawal(params: BrokerSubWithdrawalRequest): Promise<APIResponse<any>>
-⋮----
-/** Sub Deposit Auto Transfer (Only Broker) */
-setSubDepositAutoTransfer(
-    subUid: string,
-    coin: string,
-    toAccountType: 'spot' | 'mix_usdt' | 'mix_usd' | 'mix_usdc',
-): Promise<APIResponse<any>>
-⋮----
-/**
-   *
-   * Sub API Interface
-   *
-   */
-⋮----
-/** Create Sub ApiKey (Only Broker) */
-createSubAPIKey(
-    subUid: string,
-    passphrase: string,
-    remark: string,
-    ip: string,
-    perm?: string,
-): Promise<APIResponse<any>>
-⋮----
-/** Get Sub ApiKey List */
-getSubAPIKeys(subUid: string): Promise<APIResponse<any>>
-⋮----
-/** Modify Sub ApiKey (Only Broker) */
-modifySubAPIKey(
-    params: BrokerSubAPIKeyModifyRequest,
-): Promise<APIResponse<any>>
-⋮----
-/**
-   * Undocumented endpoints
-   */
-⋮----
-getAgentCommissionDetail(params?: {
-    startTime?: string;
-    endTime?: string;
-    limit?: string;
-    idLessThan?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/** Get Agent Customer List */
-getAgentCustomerList(params?: {
-    startTime?: string;
-    endTime?: string;
-    pageNo?: string;
-    pageSize?: string;
-    uid?: string;
-    referralCode?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/**
-   * Get Agent Customer Deposit List
-   * Includes both on-chain deposits and internal transfers
-   * Note: Can only query data within the last 90 days
-   */
-getAgentCustomerDepositList(params?: {
-    startTime?: string;
-    endTime?: string;
-    pageNo?: string;
-    pageSize?: string;
-    uid?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/**
-   * Get Agent Customer Trade Volume List
-   * Includes trading volume for both spot and futures
-   * Note: Data updates every 10 minutes and can only query last 90 days
-   */
-getAgentCustomerTradeVolumeList(params?: {
-    startTime?: string;
-    endTime?: string;
-    pageNo?: string;
-    pageSize?: string;
-    uid?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/**
-   * Get Agent Customer Assets List
-   * Returns account balances for customer accounts
-   * Note: Data updates every 10 minutes
-   */
-getAgentCustomerAssetsList(params?: {
-    pageNo?: string;
-    pageSize?: string;
-    uid?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/**
-   * Get Agent Direct Commissions
-   * Returns commission data for direct customers
-   * Note: Data updates on T+1 (UTC+8) basis and can only query last 90 days
-   */
-getAgentCustomerCommissions(params?: {
-    startTime?: string;
-    endTime?: string;
-    idLessThan?: string;
-    limit?: string;
-    uid?: string;
-    coin?: string;
-    symbol?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/**
-   * Get Agent Customer KYC Result
-   * Returns KYC verification status for customers
-   */
-getAgentCustomerKycResult(params?: {
-    startTime?: string;
-    endTime?: string;
-    pageNo?: string;
-    pageSize?: string;
-    uid?: string;
-}): Promise<APIResponse<any>>
-
-================
 File: src/websocket-client-v3.ts
 ================
 import {
@@ -12513,7 +12513,7 @@ File: package.json
 ================
 {
   "name": "bitget-api",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Complete Node.js & JavaScript SDK for Bitget V1-V3 REST APIs & WebSockets, with TypeScript & end-to-end tests.",
   "scripts": {
     "test": "jest",
@@ -12852,23 +12852,66 @@ File: README.md
 
 Updated & performant JavaScript & Node.js SDK for the Bitget V2 REST APIs and WebSockets:
 
+- Professional, robust & performant Bitget SDK with extensive production use in live trading environments.
 - Complete integration with all Bitget APIs.
-  - [x] Supports V1 REST APIs & WebSockets
+  - [x] Supports V1 REST APIs & WebSockets (legacy)
   - [x] Supports V2 REST APIs & WebSockets
-  - [x] Supports V3/UTA REST APIs & WebSockets
+  - [x] Supports V3/UTA REST APIs & WebSockets (latest)
   - [x] Supports order placement via V3 WebSocket API
-- TypeScript support (with type declarations for most API requests & responses).
+- Complete TypeScript support (with type declarations for all API requests & responses).
+  - Strongly typed requests and responses.
+  - Automated end-to-end tests on most API calls, ensuring no breaking changes are released to npm.
+- Actively maintained with a modern, promise-driven interface.
 - Over 100 integration tests making real API calls & WebSocket connections, validating any changes before they reach npm.
 - Robust WebSocket integration with configurable connection heartbeats & automatic reconnect then resubscribe workflows.
+  - Event driven messaging.
+  - Smart WebSocket persistence with automatic reconnection handling.
+  - Emit `reconnected` event when dropped connection is restored.
+  - Optional beautification of WebSocket events for improved readability.
 - Officially listed Node.js SDK in [Bitget API docs](https://bitgetlimited.github.io/apidoc/en/spot/#sdk-code-example).
 - Browser support (via webpack bundle - see "Browser Usage" below).
 - Support all authentication methods supported by Bitget:
   - [x] HMAC
   - [x] RSA
+- Heavy automated end-to-end testing with real API calls.
+  - End-to-end testing before any release.
+  - Real API calls in e2e tests.
+- Proxy support via axios integration.
+- Active community support & collaboration in telegram: [Node.js Algo Traders](https://t.me/nodetraders).
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Examples](#examples)
+- [Issues & Discussion](#issues--discussion)
+- [Related Projects](#related-projects)
+- [Documentation](#documentation)
+- [Structure](#structure)
+- [Usage](#usage)
+  - [REST API Clients](#rest-api-clients)
+    - [V3 REST APIs (Unified Trading Account)](#v3-rest-apis)
+    - [V2 REST APIs](#v2-rest-apis)
+  - [WebSockets](#websockets)
+    - [V3 Unified Trading Account](#v3-unified-trading-account)
+      - [Sending Orders via WebSockets](#sending-orders-via-websockets)
+      - [Receiving Realtime Data](#receiving-realtime-data)
+    - [V2 WebSockets](#v2-websockets)
+  - [Customise Logging](#logging)
+    - [Custom Logger](#customise-logging)
+    - [Debug HTTP Requests](#debug-http-requests)
+  - [Frontend Usage](#browser-usage)
+    - [Import](#import)
+    - [Webpack](#webpack)
+- [LLMs & AI](#use-with-llms--ai)
+- [Contributions & Thanks](#contributions--thanks)
 
 ## Installation
 
 `npm install --save bitget-api`
+
+## Examples
+
+Refer to the [examples](./examples) folder for implementation demos.
 
 ## Issues & Discussion
 
@@ -12900,11 +12943,14 @@ Check out my related JavaScript/TypeScript/Node.js projects:
 
 ## Documentation
 
-Most methods pass values as-is into HTTP requests. These can be populated using parameters specified by Bitget's API documentation, or check the type definition in each class within this repository (see table below for convenient links to each class).
+Most methods accept JS objects. These can be populated using parameters specified by Bitget's API documentation, or check the type definition in each class within this repository (see table below for convenient links to each class).
 
-- [Bitget API V2 Documentation](https://www.bitget.com/api-doc/common/intro).
-- [Bitget API V3/UTA Documentation](https://www.bitget.com/api-doc/uta/intro).
+- Bitget API Documentation
+  - [V3/UTA API Documentation](https://www.bitget.com/api-doc/uta/intro) (Latest - Unified Trading Account)
+  - [V2 API Documentation](https://www.bitget.com/api-doc/common/intro)
+  - [Legacy V1 API Documentation](https://bitgetlimited.github.io/apidoc/en/spot/#introduction) (deprecated)
 - [REST Endpoint Function List](./docs/endpointFunctionList.md)
+- [TSDoc Documentation (autogenerated using typedoc)](https://tsdocs.dev/docs/bitget-api)
 
 ## Structure
 
@@ -12918,6 +12964,13 @@ The version on npm is the output from the `build` command and can be used in pro
 - [examples](./examples) - some implementation examples & demonstrations. Contributions are welcome!
 
 ---
+
+# Usage
+
+Create API credentials at Bitget:
+
+- [Livenet API Management](https://www.bitget.com/en/support/articles/360011132814-How-to-create-API)
+- [Demo Trading Environment](https://www.bitget.com/en/demo-trading)
 
 ## REST API Clients
 
@@ -12941,11 +12994,17 @@ Examples for using each client can be found in:
 
 If you're missing an example, you're welcome to request one. Priority will be given to [github sponsors](https://github.com/sponsors/tiagosiebler).
 
-### Usage
-
-First, create API credentials on Bitget's website.
+### Getting Started
 
 All REST APIs are integrated in each dedicated Rest Client class. See the above table for which REST client to use. If you've upgraded to the Unified Trading Account, you should use the V3 REST APIs and WebSockets.
+
+There are several REST API modules as there are some differences in each API group:
+
+1. `RestClientV3` for the latest V3/UTA APIs (Unified Trading Account) - recommended for new projects.
+2. `RestClientV2` for V2 APIs - use if you haven't upgraded to UTA yet.
+3. Legacy V1 clients (`SpotClient`, `FuturesClient`, `BrokerClient`) - deprecated, migrate to V2 or V3.
+
+More Node.js & JavaScript examples for Bitget's REST APIs & WebSockets can be found in the [examples](./examples) folder on GitHub.
 
 #### V3 REST APIs
 
@@ -13029,20 +13088,29 @@ client
   });
 ```
 
-#### WebSockets
+## WebSockets
 
 All WebSocket functionality is supported via the WebsocketClient. Since there are currently 3 generations of Bitget's API, there are 3 WebsocketClient classes in this Node.js, JavaScript & TypeScript SDK for Bitget.
 
 Use the following guidance to decide which one to use:
 
-- Unified Trading Account / V3 (latest generation):
+- **Unified Trading Account / V3** (latest generation):
   - For receiving data, use the [WebsocketClientV3](./src/websocket-client-v3.ts).
   - For sending orders via WebSockets, use the [WebsocketAPIClient](./src/websocket-api-client.ts).
-- V2 (not upgraded to Unified Trading Account yet)
+- **V2** (not upgraded to Unified Trading Account yet)
   - Use the [WebsocketClientV2](./src/websocket-client-v2.ts).
-- V1 (deprecated)
+- **V1** (deprecated)
   - This is the oldest API group supported by Bitget. You should migrate to V3 or V2 as soon as possible.
   - If you're not ready to migrate, you can use the [WebsocketClientLegacyV1](./src/websocket-client-legacy-v1.ts) class in the meantime.
+
+All WebSocket clients support:
+
+- Event driven messaging
+- Smart WebSocket persistence with automatic reconnection
+- Heartbeat mechanisms to detect disconnections
+- Automatic resubscription after reconnection
+- Error handling and connection monitoring
+- Optional data beautification
 
 Higher level examples below, while more thorough examples can be found in the examples folder on GitHub.
 
@@ -13237,6 +13305,51 @@ wsClient.subscribe(
 ```
 
 For more examples, including how to use websockets with Bitget, check the [examples](./examples/) and [test](./test/) folders.
+
+### V2 WebSockets
+
+If you haven't upgraded to the Unified Trading Account, use the V2 WebSocket client:
+
+```javascript
+import { WebsocketClientV2 } from 'bitget-api';
+// or if you prefer require:
+// const { WebsocketClientV2 } = require('bitget-api');
+
+const API_KEY = 'xxx';
+const API_SECRET = 'yyy';
+const API_PASS = 'zzz';
+
+const wsClient = new WebsocketClientV2({
+  apiKey: API_KEY,
+  apiSecret: API_SECRET,
+  apiPass: API_PASS,
+  // Optional: connect to demo trading environment
+  // demoTrading: true,
+});
+
+// Handle incoming messages
+wsClient.on('update', (data) => {
+  console.log('WS update received: ', data);
+});
+
+wsClient.on('open', (data) => {
+  console.log('WS connection opened: ', data.wsKey);
+});
+
+wsClient.on('reconnected', (data) => {
+  console.log('WS reconnected: ', data?.wsKey);
+});
+
+wsClient.on('exception', (data) => {
+  console.log('WS error: ', data);
+});
+
+// Subscribe to public data streams
+wsClient.subscribeTopic('SPOT', 'ticker', symbol);
+
+// Subscribe to private data streams (requires authentication)
+wsClient.subscribeTopic('SPOT', 'account');
+```
 
 ---
 
