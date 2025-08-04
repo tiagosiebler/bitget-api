@@ -94,7 +94,6 @@ import {
   SubAccountV3,
   SubTransferRecordV3,
   SubUnifiedAssetV3,
-  SwitchStatusResponseV3,
   TransferResponseV3,
   UpdateSubAccountApiKeyResponseV3,
   WithdrawRecordV3,
@@ -537,7 +536,9 @@ export class RestClientV3 extends BaseRestClient {
    * Only supports parent accounts.
    */
   getUnifiedAccountSwitchStatus(): Promise<
-    APIResponse<SwitchStatusResponseV3>
+    APIResponse<{
+      status: 'processProcessing' | 'successSuccess' | 'failFailed';
+    }>
   > {
     return this.getPrivate('/api/v3/account/switch-status');
   }

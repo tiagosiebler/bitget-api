@@ -227,7 +227,3 @@ export interface WithdrawRecordV3 {
   createdTime: string;
   updatedTime: string;
 }
-
-export interface SwitchStatusResponseV3 {
-  status: 'processProcessing' | 'successSuccess' | 'failFailed';
-}
