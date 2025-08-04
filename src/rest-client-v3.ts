@@ -528,7 +528,7 @@ export class RestClientV3 extends BaseRestClient {
    * and does not mean that the account has been successfully switched to the classic account.
    * Please use the query switching status interface to confirm whether the account switching is successful.
    */
-  switchAccount(): Promise<APIResponse<null>> {
+  downgradeAccountToClassic(): Promise<APIResponse<null>> {
     return this.postPrivate('/api/v3/account/switch');
   }
 

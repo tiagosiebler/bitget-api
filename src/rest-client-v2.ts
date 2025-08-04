@@ -1150,7 +1150,9 @@ export class RestClientV2 extends BaseRestClient {
    * and does not mean that the account has been successfully upgraded to a unified account.
    * Please use the query upgrade status interface to confirm whether the account upgrade is successful.
    */
-  spotUpgradeAccount(params?: { subUid?: string }): Promise<APIResponse<null>> {
+  upgradeToUnifiedAccount(params?: {
+    subUid?: string;
+  }): Promise<APIResponse<null>> {
     return this.postPrivate('/api/v2/spot/account/upgrade', params);
   }
 
@@ -1158,7 +1160,7 @@ export class RestClientV2 extends BaseRestClient {
    * Get Upgrade Status - Get account upgrade status
    * No account type restrictions; both parent and sub-accounts are supported.
    */
-  getSpotUpgradeStatus(params?: { subUid?: string }): Promise<
+  getUnifiedAccountUpgradeStatus(params?: { subUid?: string }): Promise<
     APIResponse<{
       status: 'processProcessing' | 'successSuccess' | 'failFailed';
     }>

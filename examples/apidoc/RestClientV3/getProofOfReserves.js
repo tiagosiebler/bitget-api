@@ -5,9 +5,9 @@ import { RestClientV3 } from 'bitget-api';
 
 // This example shows how to call this Bitget API endpoint with either node.js, javascript (js) or typescript (ts) with the npm module "bitget-api" for Bitget exchange
 // This Bitget API SDK is available on npm via "npm install bitget-api"
-// ENDPOINT: /api/v3/account/withdrawal-records
+// ENDPOINT: /api/v3/market/proof-of-reserves
 // METHOD: GET
-// PUBLIC: NO
+// PUBLIC: YES
 
 const client = new RestClientV3({
   apiKey: 'insert_api_key_here',
@@ -15,7 +15,7 @@ const client = new RestClientV3({
   apiPass: 'insert_api_pass_here',
 });
 
-client.getWithdrawRecords(params)
+client.getProofOfReserves(params)
   .then((response) => {
     console.log(response);
   })
