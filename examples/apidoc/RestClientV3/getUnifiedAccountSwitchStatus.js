@@ -1,21 +1,21 @@
-import { RestClientV2 } from 'bitget-api';
+import { RestClientV3 } from 'bitget-api';
 // or if you want to use the require syntax
-// const { RestClientV2 } = require('bitget-api');
+// const { RestClientV3 } = require('bitget-api');
 
 
 // This example shows how to call this Bitget API endpoint with either node.js, javascript (js) or typescript (ts) with the npm module "bitget-api" for Bitget exchange
 // This Bitget API SDK is available on npm via "npm install bitget-api"
-// ENDPOINT: /api/v2/spot/account/upgrade-status
+// ENDPOINT: /api/v3/account/switch-status
 // METHOD: GET
 // PUBLIC: NO
 
-const client = new RestClientV2({
+const client = new RestClientV3({
   apiKey: 'insert_api_key_here',
   apiSecret: 'insert_api_secret_here',
   apiPass: 'insert_api_pass_here',
 });
 
-client.getUnifiedAccountUpgradeStatus(params)
+client.getUnifiedAccountSwitchStatus(params)
   .then((response) => {
     console.log(response);
   })

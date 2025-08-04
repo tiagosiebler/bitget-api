@@ -536,7 +536,9 @@ export class RestClientV3 extends BaseRestClient {
    * Get Switch Status - Get account switching status
    * Only supports parent accounts.
    */
-  getSwitchAccountStatus(): Promise<APIResponse<SwitchStatusResponseV3>> {
+  getUnifiedAccountSwitchStatus(): Promise<
+    APIResponse<SwitchStatusResponseV3>
+  > {
     return this.getPrivate('/api/v3/account/switch-status');
   }
 

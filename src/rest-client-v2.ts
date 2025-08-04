@@ -1160,7 +1160,7 @@ export class RestClientV2 extends BaseRestClient {
    * Get Upgrade Status - Get account upgrade status
    * No account type restrictions; both parent and sub-accounts are supported.
    */
-  getUnifiedAccountUpgradeStatus(params?: { subUid?: string }): Promise<
+  getUnifiedAccountSwitchStatus(params?: { subUid?: string }): Promise<
     APIResponse<{
       status: 'processProcessing' | 'successSuccess' | 'failFailed';
     }>
