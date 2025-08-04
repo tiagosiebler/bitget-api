@@ -72,7 +72,7 @@ export interface PositionTierV3 {
 }
 
 export interface RiskReserveRecordV3 {
-  type: 'in' | 'out';
+  balance: string;
   amount: string;
   ts: string;
 }
@@ -165,4 +165,15 @@ export interface TickerV3 {
   deliveryStartTime?: string;
   deliveryTime?: string;
   deliveryStatus?: string;
+}
+
+export interface ProofOfReservesV3 {
+  merkleRootHash: string;
+  totalReserveRatio: string;
+  list: {
+    coin: string;
+    userAssets: string;
+    platformAssets: string;
+    reserveRatio: string;
+  }[];
 }

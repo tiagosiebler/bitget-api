@@ -206,3 +206,10 @@ export interface PlaceOrderResponseV3 {
   orderId: string;
   clientOid: string;
 }
+
+export interface PositionAdlRankV3 {
+  symbol: string;
+  marginCoin: string;
+  adlRank: string;
+  holdSide: 'long' | 'short';
+}

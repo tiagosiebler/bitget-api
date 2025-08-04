@@ -18,6 +18,7 @@ import {
   GetTransferableCoinsRequestV3,
   GetWithdrawRecordsRequestV3,
   RepayRequestV3,
+  SetDepositAccountRequestV3,
   SetLeverageRequestV3,
   SubAccountTransferRequestV3,
   SwitchDeductRequestV3,
@@ -119,6 +120,7 @@ import {
   OpenInterestV3,
   OrderBookV3,
   PositionTierV3,
+  ProofOfReservesV3,
   PublicFillV3,
   RiskReserveV3,
   TickerV3,
@@ -142,6 +144,7 @@ import {
   OrderInfoV3,
   PlaceBatchOrdersResponseV3,
   PlaceOrderResponseV3,
+  PositionAdlRankV3,
   PositionHistoryV3,
   UnfilledOrderV3,
 } from './types/response/v3/trade.js';
@@ -276,6 +279,13 @@ export class RestClientV3 extends BaseRestClient {
     params: GetPublicFillsRequestV3,
   ): Promise<APIResponse<PublicFillV3[]>> {
     return this.get('/api/v3/market/fills', params);
+  }
+
+  /**
+   * Get Proof Of Reserves
+   */
+  getProofOfReserves(): Promise<APIResponse<ProofOfReservesV3>> {
+    return this.get('/api/v3/market/proof-of-reserves');
   }
 
   /**
@@ -467,6 +477,18 @@ export class RestClientV3 extends BaseRestClient {
   }
 
   /**
+   * Set up deposit account - Configure default recharge account for a certain symbol
+   * This configuration item remains valid for a long time. That is, once a user sets a default
+   * recharge account for a certain symbol, it will be retained permanently, and there is no need to reconfigure it.
+   * Permission: UTA mgt. (read & write)
+   */
+  setDepositAccount(
+    params: SetDepositAccountRequestV3,
+  ): Promise<APIResponse<string>> {
+    return this.postPrivate('/api/v3/account/deposit-account', params);
+  }
+
+  /**
    * Switch Deduct - Set BGB deduction
    */
   switchDeduct(params: SwitchDeductRequestV3): Promise<APIResponse<string>> {
@@ -494,6 +516,31 @@ export class RestClientV3 extends BaseRestClient {
     }>
   > {
     return this.getPrivate('/api/v3/account/fee-rate', params);
+  }
+
+  /**
+   * Switch Account - Switch to classic account mode
+   * Only supports parent accounts.
+   * This endpoint is only used for switching to classic account mode.
+   * Please note that since the account switching process takes approximately 1 minute,
+   * the successful response you receive only indicates that the request has been received,
+   * and does not mean that the account has been successfully switched to the classic account.
+   * Please use the query switching status interface to confirm whether the account switching is successful.
+   */
+  downgradeAccountToClassic(): Promise<APIResponse<null>> {
+    return this.postPrivate('/api/v3/account/switch');
+  }
+
+  /**
+   * Get Switch Status - Get account switching status
+   * Only supports parent accounts.
+   */
+  getUnifiedAccountSwitchStatus(): Promise<
+    APIResponse<{
+      status: 'processProcessing' | 'successSuccess' | 'failFailed';
+    }>
+  > {
+    return this.getPrivate('/api/v3/account/switch-status');
   }
 
   /**
@@ -849,6 +896,13 @@ export class RestClientV3 extends BaseRestClient {
     params: GetMaxOpenAvailableRequestV3,
   ): Promise<APIResponse<GetMaxOpenAvailableResponseV3>> {
     return this.postPrivate('/api/v3/account/max-open-available', params);
+  }
+
+  /**
+   * Get Position ADL Rank - Get position auto-deleveraging ranking
+   */
+  getPositionAdlRank(): Promise<APIResponse<PositionAdlRankV3[]>> {
+    return this.getPrivate('/api/v3/position/adlRank');
   }
 
   /**
