@@ -270,6 +270,7 @@ export function safeTerminateWs(
 
   return false;
 }
+
 /**
  * Users can conveniently pass topics as strings or objects (object has topic name + optional params).
  *

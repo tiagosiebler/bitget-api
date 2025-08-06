@@ -864,11 +864,13 @@ export abstract class BaseWebsocketClient<
 
     this.setWsState(wsKey, WsConnectionStateEnum.CONNECTED);
 
-    this.logger.trace('Enabled ping timer', { ...WS_LOGGER_CATEGORY, wsKey });
-    this.wsStore.get(wsKey, true)!.activePingTimer = setInterval(
-      () => this.ping(wsKey),
-      this.options.pingInterval,
-    );
+    if (!this.options.disableHeartbeat) {
+      this.logger.trace('Enabled ping timer', { ...WS_LOGGER_CATEGORY, wsKey });
+      this.wsStore.get(wsKey, true)!.activePingTimer = setInterval(
+        () => this.ping(wsKey),
+        this.options.pingInterval,
+      );
+    }
 
     // Resolve & cleanup deferred "connection attempt in progress" promise
     try {

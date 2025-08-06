@@ -186,7 +186,7 @@ export interface WSClientConfigurableOptions {
   /** Define a recv window when preparing a private websocket signature. This is in milliseconds, so 5000 == 5 seconds */
   recvWindow?: number;
 
-  // Disable ping/pong ws heartbeat mechanism (not recommended) // TODO:
+  // Disable ping/pong ws heartbeat mechanism (not recommended)
   disableHeartbeat?: boolean;
 
   /** How often to check if the connection is alive */
