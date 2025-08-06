@@ -8,6 +8,7 @@ import {
   serializeParams,
 } from './requestUtils.js';
 import {
+  checkWebCryptoAPISupported,
   SignAlgorithm,
   SignEncodeMethod,
   signMessage,
@@ -157,6 +158,18 @@ export default abstract class BaseRestClient {
       throw new Error(
         'API Key, Secret & Passphrase are ALL required to use the authenticated REST client',
       );
+    }
+
+    // Check Web Crypto API support when credentials are provided and no custom sign function is used
+    if (
+      this.apiKey &&
+      this.apiSecret &&
+      this.apiPass &&
+      !this.options.customSignMessageFn
+    ) {
+      // Provide a user friendly error message if the user is using an outdated Node.js version (where Web Crypto API is not available).
+      // A few users have been caught out by using the end-of-life Node.js v18 release.
+      checkWebCryptoAPISupported();
     }
   }
 
