@@ -250,3 +250,8 @@ export interface GetWithdrawRecordsRequestV3 {
   limit?: string;
   cursor?: string;
 }
+
+export interface SetDepositAccountRequestV3 {
+  coin: string;
+  accountType: 'funding' | 'unified' | 'otc';
+}

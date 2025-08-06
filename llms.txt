@@ -5932,6 +5932,194 @@ export type RestClientType =
   (typeof REST_CLIENT_TYPE_ENUM)[keyof typeof REST_CLIENT_TYPE_ENUM];
 
 ================
+File: src/broker-client.ts
+================
+import {
+  BrokerProductType,
+  BrokerSubAPIKeyModifyRequest,
+  BrokerSubListRequest,
+  BrokerSubWithdrawalRequest,
+} from './types/request/v1/brokerV1.js';
+import { APIResponse } from './types/response/v1/shared.js';
+import BaseRestClient from './util/BaseRestClient.js';
+import { REST_CLIENT_TYPE_ENUM } from './util/requestUtils.js';
+⋮----
+/**
+ * REST API client for the V1 bitget Broker APIs. These are the previous generation of Bitget's APIs and should be considered deprecated.
+ * These will be removed in a future release, once Bitget formally deprecates them.
+ *
+ * @deprecated use RestClientV2 instead
+ */
+export class BrokerClient extends BaseRestClient
+⋮----
+getClientType()
+⋮----
+/**
+   *
+   * Sub Account Interface
+   *
+   */
+⋮----
+/** Get Broker Info */
+getBrokerInfo(): Promise<APIResponse<any>>
+⋮----
+/** Create Sub Account */
+createSubAccount(
+    subName: string,
+    remark?: string,
+): Promise<APIResponse<any>>
+⋮----
+/** Get Sub List */
+getSubAccounts(params?: BrokerSubListRequest): Promise<APIResponse<any>>
+⋮----
+/** Modify Sub Account */
+modifySubAccount(
+    subUid: string,
+    perm: string,
+    status: 'normal' | 'freeze' | 'del',
+): Promise<APIResponse<any>>
+⋮----
+/** Modify Sub Email */
+modifySubEmail(subUid: string, subEmail: string): Promise<APIResponse<any>>
+⋮----
+/** Get Sub Email */
+getSubEmail(subUid: string): Promise<APIResponse<any>>
+⋮----
+/** Get Sub Spot Assets */
+getSubSpotAssets(subUid: string): Promise<APIResponse<any>>
+⋮----
+/** Get Sub Future Assets */
+getSubFutureAssets(
+    subUid: string,
+    productType: BrokerProductType,
+): Promise<APIResponse<any>>
+⋮----
+/** Get Sub Deposit Address (Only Broker) */
+getSubDepositAddress(
+    subUid: string,
+    coin: string,
+    chain?: string,
+): Promise<APIResponse<any>>
+⋮----
+/** Sub Withdrawal (Only Broker) */
+subWithdrawal(params: BrokerSubWithdrawalRequest): Promise<APIResponse<any>>
+⋮----
+/** Sub Deposit Auto Transfer (Only Broker) */
+setSubDepositAutoTransfer(
+    subUid: string,
+    coin: string,
+    toAccountType: 'spot' | 'mix_usdt' | 'mix_usd' | 'mix_usdc',
+): Promise<APIResponse<any>>
+⋮----
+/**
+   *
+   * Sub API Interface
+   *
+   */
+⋮----
+/** Create Sub ApiKey (Only Broker) */
+createSubAPIKey(
+    subUid: string,
+    passphrase: string,
+    remark: string,
+    ip: string,
+    perm?: string,
+): Promise<APIResponse<any>>
+⋮----
+/** Get Sub ApiKey List */
+getSubAPIKeys(subUid: string): Promise<APIResponse<any>>
+⋮----
+/** Modify Sub ApiKey (Only Broker) */
+modifySubAPIKey(
+    params: BrokerSubAPIKeyModifyRequest,
+): Promise<APIResponse<any>>
+⋮----
+/**
+   * Undocumented endpoints
+   */
+⋮----
+getAgentCommissionDetail(params?: {
+    startTime?: string;
+    endTime?: string;
+    limit?: string;
+    idLessThan?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/** Get Agent Customer List */
+getAgentCustomerList(params?: {
+    startTime?: string;
+    endTime?: string;
+    pageNo?: string;
+    pageSize?: string;
+    uid?: string;
+    referralCode?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/**
+   * Get Agent Customer Deposit List
+   * Includes both on-chain deposits and internal transfers
+   * Note: Can only query data within the last 90 days
+   */
+getAgentCustomerDepositList(params?: {
+    startTime?: string;
+    endTime?: string;
+    pageNo?: string;
+    pageSize?: string;
+    uid?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/**
+   * Get Agent Customer Trade Volume List
+   * Includes trading volume for both spot and futures
+   * Note: Data updates every 10 minutes and can only query last 90 days
+   */
+getAgentCustomerTradeVolumeList(params?: {
+    startTime?: string;
+    endTime?: string;
+    pageNo?: string;
+    pageSize?: string;
+    uid?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/**
+   * Get Agent Customer Assets List
+   * Returns account balances for customer accounts
+   * Note: Data updates every 10 minutes
+   */
+getAgentCustomerAssetsList(params?: {
+    pageNo?: string;
+    pageSize?: string;
+    uid?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/**
+   * Get Agent Direct Commissions
+   * Returns commission data for direct customers
+   * Note: Data updates on T+1 (UTC+8) basis and can only query last 90 days
+   */
+getAgentCustomerCommissions(params?: {
+    startTime?: string;
+    endTime?: string;
+    idLessThan?: string;
+    limit?: string;
+    uid?: string;
+    coin?: string;
+    symbol?: string;
+}): Promise<APIResponse<any>>
+⋮----
+/**
+   * Get Agent Customer KYC Result
+   * Returns KYC verification status for customers
+   */
+getAgentCustomerKycResult(params?: {
+    startTime?: string;
+    endTime?: string;
+    pageNo?: string;
+    pageSize?: string;
+    uid?: string;
+}): Promise<APIResponse<any>>
+
+================
 File: src/futures-client.ts
 ================
 import { GetHistoricTradesParams } from './types/request/shared.js';
@@ -7177,11 +7365,13 @@ File: examples/README.md
 # Examples
 
 These samples can be executed using `ts-node`:
+
 ```
 ts-node ./examples/rest-spot-public.ts
 ```
 
 Samples that require authentication can be edited directly but also support environmental variables. E.g. on mac/unix:
+
 ```
 API_KEY_COM='yourkeyhere' API_SECRET_COM='yoursecrethere' API_PASS_COM='yourapipasshere' ts-node examples/rest-trade-futures.ts
 ```
@@ -7195,7 +7385,7 @@ These newer examples are for Bitget's V3 APIs and WebSockets. They can be found 
 Refer to the V3 / UTA API documentation for more information on the V3 APIs:
 https://www.bitget.com/api-doc/uta/intro
 
-These APIs require your account to be permanently upgraded to the Unified Trading Account, if you plan on using the account-level REST APIs and WebSockets. Once upgraded, the V2 APIs are no longer available to you.
+These APIs require your account to be upgraded to the Unified Trading Account, if you plan on using the account-level REST APIs and WebSockets. Once upgraded, the V2 APIs are no longer available to you, unless you revert back to Classic Account mode.
 
 ### WebSocket API (WS API)
 
@@ -7210,21 +7400,19 @@ This integration looks & feels like a REST API client, but uses WebSockets, via 
 This is the recommended approach to easily start sending orders via an automatically persisted WebSocket connection. A simple example is below, but for a more thorough example, check the example here: [./V3/ws-api-client-trade.ts](./V3/ws-api-client-trade.ts)
 
 ```typescript
-import { WebsocketAPIClient } from "bitget-api";
+import { WebsocketAPIClient } from 'bitget-api';
 // or if you prefer require:
 // const { WebsocketAPIClient } = require("bitget-api");
 
 // Make an instance of the WS API Client class with your API keys
-const wsClient = new WebsocketAPIClient(
-  {
-    apiKey: API_KEY,
-    apiSecret: API_SECRET,
-    apiPass: API_PASS,
+const wsClient = new WebsocketAPIClient({
+  apiKey: API_KEY,
+  apiSecret: API_SECRET,
+  apiPass: API_PASS,
 
-    // Whether to use the demo trading wss connection
-    // demoTrading: true,
-  }
-);
+  // Whether to use the demo trading wss connection
+  // demoTrading: true,
+});
 
 async function start() {
   // Start using it like a REST API. All actions are sent via a persisted WebSocket connection.
@@ -7249,7 +7437,7 @@ async function start() {
   }
 }
 
-start().catch(e => console.error("Exception in example: ". e));
+start().catch((e) => console.error('Exception in example: '.e));
 ```
 
 #### ws.sendWSAPIRequest(wsKey, command, category, operation)
@@ -8075,192 +8263,149 @@ export interface WSAPIPlaceOrderRequestV3 {
 reduceOnly?: 'YES' | 'NO'; // Note: reduceOnly is not supported for batch place WS API. Might be supported starting late Q4 2025, but not supported yet.
 
 ================
-File: src/broker-client.ts
+File: src/websocket-api-client.ts
 ================
+import { CancelOrderRequestV3 } from './types/request/v3/trade.js';
+import { CancelOrderResponseV3 } from './types/response/v3/trade.js';
+import { WSAPIResponse } from './types/websockets/ws-api.js';
+import { WSAPIPlaceOrderRequestV3 } from './types/websockets/ws-api-request.js';
+import { WSAPIPlaceOrderResponseV3 } from './types/websockets/ws-api-response.js';
 import {
-  BrokerProductType,
-  BrokerSubAPIKeyModifyRequest,
-  BrokerSubListRequest,
-  BrokerSubWithdrawalRequest,
-} from './types/request/v1/brokerV1.js';
-import { APIResponse } from './types/response/v1/shared.js';
-import BaseRestClient from './util/BaseRestClient.js';
-import { REST_CLIENT_TYPE_ENUM } from './util/requestUtils.js';
+  BitgetInstTypeV3,
+  WSClientConfigurableOptions,
+} from './types/websockets/ws-general.js';
+import { DefaultLogger } from './util/logger.js';
+import { WS_KEY_MAP } from './util/websocket-util.js';
+import { WebsocketClientV3 } from './websocket-client-v3.js';
 ⋮----
 /**
- * REST API client for the V1 bitget Broker APIs. These are the previous generation of Bitget's APIs and should be considered deprecated.
- * These will be removed in a future release, once Bitget formally deprecates them.
- *
- * @deprecated use RestClientV2 instead
+ * Configurable options specific to only the REST-like WebsocketAPIClient
  */
-export class BrokerClient extends BaseRestClient
+export interface WSAPIClientConfigurableOptions {
+  /**
+   * Default: true
+   *
+   * Attach default event listeners, which will console log any high level
+   * events (opened/reconnecting/reconnected/etc).
+   *
+   * If you disable this, you should set your own event listeners
+   * on the embedded WS Client `wsApiClient.getWSClient().on(....)`.
+   */
+  attachEventListeners: boolean;
+}
 ⋮----
-getClientType()
+/**
+   * Default: true
+   *
+   * Attach default event listeners, which will console log any high level
+   * events (opened/reconnecting/reconnected/etc).
+   *
+   * If you disable this, you should set your own event listeners
+   * on the embedded WS Client `wsApiClient.getWSClient().on(....)`.
+   */
+⋮----
+/**
+ * This is a minimal Websocket API wrapper around the WebsocketClient.
+ *
+ * Note: You can also directly use the sendWSAPIRequest() method to make WS API calls, but some
+ * may find the below methods slightly more intuitive.
+ *
+ * Refer to the WS API promises example for a more detailed example on using sendWSAPIRequest() directly:
+ * https://github.com/tiagosiebler/bitget-api/blob/master/examples/V3/ws-api-trade-raw.ts
+ */
+export class WebsocketAPIClient
+⋮----
+constructor(
+    options?: WSClientConfigurableOptions &
+      Partial<WSAPIClientConfigurableOptions>,
+    logger?: DefaultLogger,
+)
+⋮----
+public getWSClient(): WebsocketClientV3
+⋮----
+public setTimeOffsetMs(newOffset: number): void
+⋮----
+/*
+   * Bitget WebSocket API Methods
+   * https://www.bitget.com/api-doc/uta/websocket/private/Place-Order-Channel
+   */
+⋮----
+/**
+   * Submit a new order
+   *
+   * https://www.bitget.com/api-doc/uta/websocket/private/Place-Order-Channel
+   *
+   * @returns
+   */
+submitNewOrder(
+    category: BitgetInstTypeV3,
+    params: WSAPIPlaceOrderRequestV3,
+): Promise<WSAPIResponse<[WSAPIPlaceOrderResponseV3], 'place-order'>>
+⋮----
+/**
+   * Submit a new order
+   *
+   * https://www.bitget.com/api-doc/uta/websocket/private/Batch-Place-Order-Channel
+   *
+   * @returns
+   */
+placeBatchOrders(
+    category: BitgetInstTypeV3,
+    params: WSAPIPlaceOrderRequestV3[],
+): Promise<WSAPIResponse<WSAPIPlaceOrderResponseV3[], 'batch-place'>>
+⋮----
+/*
+   * Bitget WebSocket API Methods
+   * https://www.bitget.com/api-doc/uta/websocket/private/Place-Order-Channel
+   */
+⋮----
+/**
+   * Cancel Order
+   *
+   * https://www.bitget.com/api-doc/uta/websocket/private/Cancel-Order-Channel
+   *
+   * @returns
+   */
+cancelOrder(
+    category: BitgetInstTypeV3,
+    params: CancelOrderRequestV3,
+): Promise<WSAPIResponse<[CancelOrderResponseV3], 'cancel-order'>>
+⋮----
+/**
+   * Batch Cancel Order
+   *
+   * https://www.bitget.com/api-doc/uta/websocket/private/Batch-Cancel-Order-Channel
+   *
+   * @returns
+   */
+cancelBatchOrders(
+    category: BitgetInstTypeV3,
+    params: CancelOrderRequestV3[],
+): Promise<WSAPIResponse<CancelOrderResponseV3[], 'batch-cancel'>>
 ⋮----
 /**
    *
-   * Sub Account Interface
+   *
+   *
+   *
+   *
+   *
+   *
+   * Private methods for handling some of the convenience/automation provided by the WS API Client
+   *
+   *
+   *
+   *
+   *
+   *
    *
    */
 ⋮----
-/** Get Broker Info */
-getBrokerInfo(): Promise<APIResponse<any>>
-⋮----
-/** Create Sub Account */
-createSubAccount(
-    subName: string,
-    remark?: string,
-): Promise<APIResponse<any>>
-⋮----
-/** Get Sub List */
-getSubAccounts(params?: BrokerSubListRequest): Promise<APIResponse<any>>
-⋮----
-/** Modify Sub Account */
-modifySubAccount(
-    subUid: string,
-    perm: string,
-    status: 'normal' | 'freeze' | 'del',
-): Promise<APIResponse<any>>
-⋮----
-/** Modify Sub Email */
-modifySubEmail(subUid: string, subEmail: string): Promise<APIResponse<any>>
-⋮----
-/** Get Sub Email */
-getSubEmail(subUid: string): Promise<APIResponse<any>>
-⋮----
-/** Get Sub Spot Assets */
-getSubSpotAssets(subUid: string): Promise<APIResponse<any>>
-⋮----
-/** Get Sub Future Assets */
-getSubFutureAssets(
-    subUid: string,
-    productType: BrokerProductType,
-): Promise<APIResponse<any>>
-⋮----
-/** Get Sub Deposit Address (Only Broker) */
-getSubDepositAddress(
-    subUid: string,
-    coin: string,
-    chain?: string,
-): Promise<APIResponse<any>>
-⋮----
-/** Sub Withdrawal (Only Broker) */
-subWithdrawal(params: BrokerSubWithdrawalRequest): Promise<APIResponse<any>>
-⋮----
-/** Sub Deposit Auto Transfer (Only Broker) */
-setSubDepositAutoTransfer(
-    subUid: string,
-    coin: string,
-    toAccountType: 'spot' | 'mix_usdt' | 'mix_usd' | 'mix_usdc',
-): Promise<APIResponse<any>>
+private setupDefaultEventListeners()
 ⋮----
 /**
-   *
-   * Sub API Interface
-   *
-   */
-⋮----
-/** Create Sub ApiKey (Only Broker) */
-createSubAPIKey(
-    subUid: string,
-    passphrase: string,
-    remark: string,
-    ip: string,
-    perm?: string,
-): Promise<APIResponse<any>>
-⋮----
-/** Get Sub ApiKey List */
-getSubAPIKeys(subUid: string): Promise<APIResponse<any>>
-⋮----
-/** Modify Sub ApiKey (Only Broker) */
-modifySubAPIKey(
-    params: BrokerSubAPIKeyModifyRequest,
-): Promise<APIResponse<any>>
-⋮----
-/**
-   * Undocumented endpoints
-   */
-⋮----
-getAgentCommissionDetail(params?: {
-    startTime?: string;
-    endTime?: string;
-    limit?: string;
-    idLessThan?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/** Get Agent Customer List */
-getAgentCustomerList(params?: {
-    startTime?: string;
-    endTime?: string;
-    pageNo?: string;
-    pageSize?: string;
-    uid?: string;
-    referralCode?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/**
-   * Get Agent Customer Deposit List
-   * Includes both on-chain deposits and internal transfers
-   * Note: Can only query data within the last 90 days
-   */
-getAgentCustomerDepositList(params?: {
-    startTime?: string;
-    endTime?: string;
-    pageNo?: string;
-    pageSize?: string;
-    uid?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/**
-   * Get Agent Customer Trade Volume List
-   * Includes trading volume for both spot and futures
-   * Note: Data updates every 10 minutes and can only query last 90 days
-   */
-getAgentCustomerTradeVolumeList(params?: {
-    startTime?: string;
-    endTime?: string;
-    pageNo?: string;
-    pageSize?: string;
-    uid?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/**
-   * Get Agent Customer Assets List
-   * Returns account balances for customer accounts
-   * Note: Data updates every 10 minutes
-   */
-getAgentCustomerAssetsList(params?: {
-    pageNo?: string;
-    pageSize?: string;
-    uid?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/**
-   * Get Agent Direct Commissions
-   * Returns commission data for direct customers
-   * Note: Data updates on T+1 (UTC+8) basis and can only query last 90 days
-   */
-getAgentCustomerCommissions(params?: {
-    startTime?: string;
-    endTime?: string;
-    idLessThan?: string;
-    limit?: string;
-    uid?: string;
-    coin?: string;
-    symbol?: string;
-}): Promise<APIResponse<any>>
-⋮----
-/**
-   * Get Agent Customer KYC Result
-   * Returns KYC verification status for customers
-   */
-getAgentCustomerKycResult(params?: {
-    startTime?: string;
-    endTime?: string;
-    pageNo?: string;
-    pageSize?: string;
-    uid?: string;
-}): Promise<APIResponse<any>>
+       * General event handlers for monitoring the WebsocketClient
+       */
 
 ================
 File: src/rest-client-v2.ts
@@ -9181,6 +9326,30 @@ getSpotWithdrawalHistory(
 getSpotDepositHistory(
     params: GetSpotDepositRecordRequestV2,
 ): Promise<APIResponse<SpotDepositRecordV2[]>>
+⋮----
+/**
+   * Upgrade Account - Upgrade to unified account mode
+   * No account type restrictions; both parent and sub-accounts are supported.
+   * This interface is only used for upgrading to the unified account mode.
+   * Please note that as the account upgrade process takes approximately 1 minute,
+   * the successful response you receive only indicates that the request has been received,
+   * and does not mean that the account has been successfully upgraded to a unified account.
+   * Please use the query upgrade status interface to confirm whether the account upgrade is successful.
+   */
+upgradeToUnifiedAccount(params?: {
+    subUid?: string;
+}): Promise<APIResponse<null>>
+⋮----
+/**
+   * Get Upgrade Status - Get account upgrade status
+   * No account type restrictions; both parent and sub-accounts are supported.
+   */
+getUnifiedAccountUpgradeStatus(params?: { subUid?: string }): Promise<
+    APIResponse<{
+      status: 'processProcessing' | 'successSuccess' | 'failFailed';
+    }>
+  > {
+    return this.getPrivate('/api/v2/spot/account/upgrade-status', params);
 ⋮----
 /**
    *
@@ -10506,552 +10675,6 @@ getLoanLiquidationRecords(
 ): Promise<APIResponse<EarnLoanLiquidationRecordsV2[]>>
 
 ================
-File: src/websocket-api-client.ts
-================
-import { CancelOrderRequestV3 } from './types/request/v3/trade.js';
-import { CancelOrderResponseV3 } from './types/response/v3/trade.js';
-import { WSAPIResponse } from './types/websockets/ws-api.js';
-import { WSAPIPlaceOrderRequestV3 } from './types/websockets/ws-api-request.js';
-import { WSAPIPlaceOrderResponseV3 } from './types/websockets/ws-api-response.js';
-import {
-  BitgetInstTypeV3,
-  WSClientConfigurableOptions,
-} from './types/websockets/ws-general.js';
-import { DefaultLogger } from './util/logger.js';
-import { WS_KEY_MAP } from './util/websocket-util.js';
-import { WebsocketClientV3 } from './websocket-client-v3.js';
-⋮----
-/**
- * Configurable options specific to only the REST-like WebsocketAPIClient
- */
-export interface WSAPIClientConfigurableOptions {
-  /**
-   * Default: true
-   *
-   * Attach default event listeners, which will console log any high level
-   * events (opened/reconnecting/reconnected/etc).
-   *
-   * If you disable this, you should set your own event listeners
-   * on the embedded WS Client `wsApiClient.getWSClient().on(....)`.
-   */
-  attachEventListeners: boolean;
-}
-⋮----
-/**
-   * Default: true
-   *
-   * Attach default event listeners, which will console log any high level
-   * events (opened/reconnecting/reconnected/etc).
-   *
-   * If you disable this, you should set your own event listeners
-   * on the embedded WS Client `wsApiClient.getWSClient().on(....)`.
-   */
-⋮----
-/**
- * This is a minimal Websocket API wrapper around the WebsocketClient.
- *
- * Note: You can also directly use the sendWSAPIRequest() method to make WS API calls, but some
- * may find the below methods slightly more intuitive.
- *
- * Refer to the WS API promises example for a more detailed example on using sendWSAPIRequest() directly:
- * https://github.com/tiagosiebler/bitget-api/blob/master/examples/V3/ws-api-trade-raw.ts
- */
-export class WebsocketAPIClient
-⋮----
-constructor(
-    options?: WSClientConfigurableOptions &
-      Partial<WSAPIClientConfigurableOptions>,
-    logger?: DefaultLogger,
-)
-⋮----
-public getWSClient(): WebsocketClientV3
-⋮----
-public setTimeOffsetMs(newOffset: number): void
-⋮----
-/*
-   * Bitget WebSocket API Methods
-   * https://www.bitget.com/api-doc/uta/websocket/private/Place-Order-Channel
-   */
-⋮----
-/**
-   * Submit a new order
-   *
-   * https://www.bitget.com/api-doc/uta/websocket/private/Place-Order-Channel
-   *
-   * @returns
-   */
-submitNewOrder(
-    category: BitgetInstTypeV3,
-    params: WSAPIPlaceOrderRequestV3,
-): Promise<WSAPIResponse<[WSAPIPlaceOrderResponseV3], 'place-order'>>
-⋮----
-/**
-   * Submit a new order
-   *
-   * https://www.bitget.com/api-doc/uta/websocket/private/Batch-Place-Order-Channel
-   *
-   * @returns
-   */
-placeBatchOrders(
-    category: BitgetInstTypeV3,
-    params: WSAPIPlaceOrderRequestV3[],
-): Promise<WSAPIResponse<WSAPIPlaceOrderResponseV3[], 'batch-place'>>
-⋮----
-/*
-   * Bitget WebSocket API Methods
-   * https://www.bitget.com/api-doc/uta/websocket/private/Place-Order-Channel
-   */
-⋮----
-/**
-   * Cancel Order
-   *
-   * https://www.bitget.com/api-doc/uta/websocket/private/Cancel-Order-Channel
-   *
-   * @returns
-   */
-cancelOrder(
-    category: BitgetInstTypeV3,
-    params: CancelOrderRequestV3,
-): Promise<WSAPIResponse<[CancelOrderResponseV3], 'cancel-order'>>
-⋮----
-/**
-   * Batch Cancel Order
-   *
-   * https://www.bitget.com/api-doc/uta/websocket/private/Batch-Cancel-Order-Channel
-   *
-   * @returns
-   */
-cancelBatchOrders(
-    category: BitgetInstTypeV3,
-    params: CancelOrderRequestV3[],
-): Promise<WSAPIResponse<CancelOrderResponseV3[], 'batch-cancel'>>
-⋮----
-/**
-   *
-   *
-   *
-   *
-   *
-   *
-   *
-   * Private methods for handling some of the convenience/automation provided by the WS API Client
-   *
-   *
-   *
-   *
-   *
-   *
-   *
-   */
-⋮----
-private setupDefaultEventListeners()
-⋮----
-/**
-       * General event handlers for monitoring the WebsocketClient
-       */
-
-================
-File: src/types/response/v3/public.ts
-================
-export interface PublicFillV3 {
-  execId: string;
-  price: string;
-  size: string;
-  side: 'sell' | 'buy';
-  ts: string;
-}
-⋮----
-export interface CandlestickV3 extends Array<string> {
-  0: string; // timestamp
-  1: string; // open price
-  2: string; // high price
-  3: string; // low price
-  4: string; // close price
-  5: string; // volume
-  6: string; // turnover
-}
-⋮----
-0: string; // timestamp
-1: string; // open price
-2: string; // high price
-3: string; // low price
-4: string; // close price
-5: string; // volume
-6: string; // turnover
-⋮----
-export interface ContractOiV3 {
-  symbol: string;
-  notionalValue: string;
-  totalNotionalValue: string;
-}
-⋮----
-export interface CurrentFundingRateV3 {
-  symbol: string;
-  fundingRate: string;
-  fundingRateInterval: string;
-  nextUpdate: string;
-  minFundingRate: string;
-  maxFundingRate: string;
-}
-⋮----
-export interface DiscountRateTierV3 {
-  tierStartValue: string;
-  discountRate: string;
-}
-⋮----
-export interface DiscountRateV3 {
-  coin: string;
-  list: DiscountRateTierV3[];
-}
-⋮----
-export interface HistoryFundingRateV3 {
-  symbol: string;
-  fundingRate: string;
-  fundingRateTimestamp: string;
-}
-⋮----
-export interface MarginLoanV3 {
-  dailyInterest: string;
-  annualInterest: string;
-  limit: string;
-}
-⋮----
-export interface OpenInterestItemV3 {
-  symbol: string;
-  openInterest: string;
-}
-⋮----
-export interface OpenInterestV3 {
-  list: OpenInterestItemV3[];
-  ts: string;
-}
-⋮----
-export interface PositionTierV3 {
-  tier: string;
-  minTierValue: string;
-  maxTierValue: string;
-  leverage: string;
-  mmr: string;
-}
-⋮----
-export interface RiskReserveRecordV3 {
-  type: 'in' | 'out';
-  amount: string;
-  ts: string;
-}
-⋮----
-export interface RiskReserveV3 {
-  coin: string;
-  riskReserveRecords: RiskReserveRecordV3[];
-}
-⋮----
-export interface InstrumentV3 {
-  symbol: string;
-  category:
-    | 'SPOT'
-    | 'MARGIN'
-    | 'USDT-FUTURES'
-    | 'COIN-FUTURES'
-    | 'USDC-FUTURES';
-  baseCoin: string;
-  quoteCoin: string;
-  buyLimitPriceRatio: string;
-  sellLimitPriceRatio: string;
-  feeRateUpRatio: string;
-  minOrderQty: string;
-  maxOrderQty: string;
-  maxMarketOrderQty: string;
-  pricePrecision: string;
-  quantityPrecision: string;
-  quotePrecision: string;
-  minOrderAmount: string;
-  maxSymbolOrderNum: string;
-  maxProductOrderNum: string;
-  status: 'listed' | 'online' | 'limit_open' | 'offline' | 'restrictedAPI';
-  offTime: string;
-  limitOpenTime: string;
-  maintainTime: string;
-  areaSymbol?: string;
-
-  // Futures specific fields
-  makerFeeRate?: string;
-  takerFeeRate?: string;
-  openCostUpRatio?: string;
-  priceMultiplier?: string;
-  quantityMultiplier?: string;
-  symbolType?: 'perpetual' | 'delivery';
-  maxPositionNum?: string;
-  deliveryTime?: string;
-  deliveryStartTime?: string;
-  deliveryPeriod?: string;
-  launchTime?: string;
-  fundInterval?: string;
-  minLeverage?: string;
-  maxLeverage?: string;
-
-  // Margin specific fields
-  isIsolatedBaseBorrowable?: 'YES' | 'NO';
-  isIsolatedQuotedBorrowable?: 'YES' | 'NO';
-  warningRiskRatio?: string;
-  liquidationRiskRatio?: string;
-  maxCrossedLeverage?: string;
-  maxIsolatedLeverage?: string;
-  userMinBorrow?: string;
-}
-⋮----
-// Futures specific fields
-⋮----
-// Margin specific fields
-⋮----
-export interface OrderBookV3 {
-  a: string[][]; // asks - [price, size]
-  b: string[][]; // bids - [price, size]
-  ts: string;
-}
-⋮----
-a: string[][]; // asks - [price, size]
-b: string[][]; // bids - [price, size]
-⋮----
-export interface TickerV3 {
-  category: 'SPOT' | 'USDT-FUTURES' | 'COIN-FUTURES' | 'USDC-FUTURES';
-  symbol: string;
-  lastPrice: string;
-  openPrice24h: string;
-  highPrice24h: string;
-  lowPrice24h: string;
-  ask1Price: string;
-  bid1Price: string;
-  bid1Size: string;
-  ask1Size: string;
-  price24hPcnt: string;
-  volume24h: string;
-  turnover24h: string;
-
-  // Futures specific fields
-  indexPrice?: string;
-  markPrice?: string;
-  fundingRate?: string;
-  openInterest?: string;
-  deliveryStartTime?: string;
-  deliveryTime?: string;
-  deliveryStatus?: string;
-}
-⋮----
-// Futures specific fields
-
-================
-File: src/types/response/v3/trade.ts
-================
-export interface BatchModifyOrderResponseV3 {
-  orderId: string;
-  clientOid: string;
-}
-⋮----
-export interface CancelAllOrdersResponseV3 {
-  list: {
-    orderId: string;
-    clientOid: string;
-    code: string;
-    msg: string;
-  }[];
-}
-⋮----
-export interface CancelBatchOrdersResponseV3 {
-  orderId: string;
-  clientOid: string;
-  code?: string;
-  msg?: string;
-}
-⋮----
-export interface CloseAllPositionsResponseV3 {
-  list: {
-    orderId: string;
-    clientOid: string;
-    code: string;
-    msg: string;
-  }[];
-}
-⋮----
-export interface CancelOrderResponseV3 {
-  orderId: string;
-  clientOid: string;
-}
-⋮----
-export interface GetMaxOpenAvailableResponseV3 {
-  available: string;
-  maxOpen: string;
-  buyOpenCost: string;
-  sellOpenCost: string;
-  maxBuyOpen: string;
-  maxSellOpen: string;
-}
-⋮----
-export interface FeeDetailV3 {
-  feeCoin: string;
-  fee: string;
-}
-⋮----
-export interface OrderInfoV3 {
-  orderId: string;
-  clientOid: string;
-  category: string;
-  symbol: string;
-  orderType: string;
-  side: string;
-  price: string;
-  qty: string;
-  amount: string;
-  cumExecQty: string;
-  cumExecValue: string;
-  avgPrice: string;
-  timeInForce: string;
-  orderStatus: string;
-  posSide: string;
-  holdMode: string;
-  reduceOnly: string;
-  feeDetail: FeeDetailV3[];
-  cancelReason: string;
-  execType: string;
-  stpMode?: string;
-  createdTime: string;
-  updatedTime: string;
-}
-⋮----
-export interface FillV3 {
-  execId: string;
-  orderId: string;
-  category: string;
-  symbol: string;
-  orderType: string;
-  side: string;
-  execPrice: string;
-  execQty: string;
-  execValue: string;
-  tradeScope: string;
-  feeDetail: FeeDetailV3[];
-  execPnl?: string;
-  tradeSide?: string;
-  createdTime: string;
-  updatedTime: string;
-}
-⋮----
-export interface UnfilledOrderV3 {
-  orderId: string;
-  clientOid: string;
-  category: string;
-  symbol: string;
-  orderType: string;
-  side: string;
-  price: string;
-  qty: string;
-  amount: string;
-  cumExecQty: string;
-  cumExecValue: string;
-  avgPrice: string;
-  timeInForce: string;
-  orderStatus: string;
-  posSide: string;
-  holdMode: string;
-  reduceOnly: string;
-  feeDetail: FeeDetailV3[];
-  stpMode?: string;
-  createdTime: string;
-  updatedTime: string;
-}
-⋮----
-export interface HistoryOrderV3 {
-  orderId: string;
-  clientOid: string;
-  category: string;
-  symbol: string;
-  orderType: string;
-  side: string;
-  price: string;
-  qty: string;
-  amount: string;
-  cumExecQty: string;
-  cumExecValue: string;
-  avgPrice: string;
-  timeInForce: string;
-  orderStatus: string;
-  posSide: string;
-  holdMode: string;
-  reduceOnly: string;
-  feeDetail: FeeDetailV3[];
-  cancelReason: string;
-  execType: string;
-  stpMode?: string;
-  createdTime: string;
-  updatedTime: string;
-}
-⋮----
-export interface PositionHistoryV3 {
-  positionId: string;
-  category: string;
-  symbol: string;
-  marginCoin: string;
-  holdMode: string;
-  posSide: string;
-  marginMode: string;
-  openPriceAvg: string;
-  closePriceAvg: string;
-  openTotalPos: string;
-  closeTotalPos: string;
-  cumRealisedPnl: string;
-  netProfit: string;
-  totalFunding: string;
-  openFeeTotal: string;
-  closeFeeTotal: string;
-  createdTime: string;
-  updatedTime: string;
-}
-⋮----
-export interface CurrentPositionV3 {
-  category: string;
-  symbol: string;
-  marginCoin: string;
-  holdMode: string;
-  posSide: string;
-  marginMode: string;
-  positionBalance: string;
-  available: string;
-  frozen: string;
-  total: string;
-  leverage: string;
-  curRealisedPnl: string;
-  avgPrice: string;
-  positionStatus: string;
-  unrealisedPnl: string;
-  liquidationPrice: string;
-  mmr: string;
-  profitRate: string;
-  markPrice: string;
-  breakEvenPrice: string;
-  totalFunding: string;
-  openFeeTotal: string;
-  closeFeeTotal: string;
-  createdTime: string;
-  updatedTime: string;
-}
-⋮----
-export interface ModifyOrderResponseV3 {
-  orderId: string;
-  clientOid: string;
-}
-⋮----
-export interface PlaceBatchOrdersResponseV3 {
-  orderId: string;
-  clientOid: string;
-  code?: string;
-  msg?: string;
-}
-⋮----
-export interface PlaceOrderResponseV3 {
-  orderId: string;
-  clientOid: string;
-}
-
-================
 File: src/websocket-client-v3.ts
 ================
 import {
@@ -11339,6 +10962,425 @@ File: tsconfig.json
 }
 
 ================
+File: src/types/response/v3/public.ts
+================
+export interface PublicFillV3 {
+  execId: string;
+  price: string;
+  size: string;
+  side: 'sell' | 'buy';
+  ts: string;
+}
+⋮----
+export interface CandlestickV3 extends Array<string> {
+  0: string; // timestamp
+  1: string; // open price
+  2: string; // high price
+  3: string; // low price
+  4: string; // close price
+  5: string; // volume
+  6: string; // turnover
+}
+⋮----
+0: string; // timestamp
+1: string; // open price
+2: string; // high price
+3: string; // low price
+4: string; // close price
+5: string; // volume
+6: string; // turnover
+⋮----
+export interface ContractOiV3 {
+  symbol: string;
+  notionalValue: string;
+  totalNotionalValue: string;
+}
+⋮----
+export interface CurrentFundingRateV3 {
+  symbol: string;
+  fundingRate: string;
+  fundingRateInterval: string;
+  nextUpdate: string;
+  minFundingRate: string;
+  maxFundingRate: string;
+}
+⋮----
+export interface DiscountRateTierV3 {
+  tierStartValue: string;
+  discountRate: string;
+}
+⋮----
+export interface DiscountRateV3 {
+  coin: string;
+  list: DiscountRateTierV3[];
+}
+⋮----
+export interface HistoryFundingRateV3 {
+  symbol: string;
+  fundingRate: string;
+  fundingRateTimestamp: string;
+}
+⋮----
+export interface MarginLoanV3 {
+  dailyInterest: string;
+  annualInterest: string;
+  limit: string;
+}
+⋮----
+export interface OpenInterestItemV3 {
+  symbol: string;
+  openInterest: string;
+}
+⋮----
+export interface OpenInterestV3 {
+  list: OpenInterestItemV3[];
+  ts: string;
+}
+⋮----
+export interface PositionTierV3 {
+  tier: string;
+  minTierValue: string;
+  maxTierValue: string;
+  leverage: string;
+  mmr: string;
+}
+⋮----
+export interface RiskReserveRecordV3 {
+  balance: string;
+  amount: string;
+  ts: string;
+}
+⋮----
+export interface RiskReserveV3 {
+  coin: string;
+  riskReserveRecords: RiskReserveRecordV3[];
+}
+⋮----
+export interface InstrumentV3 {
+  symbol: string;
+  category:
+    | 'SPOT'
+    | 'MARGIN'
+    | 'USDT-FUTURES'
+    | 'COIN-FUTURES'
+    | 'USDC-FUTURES';
+  baseCoin: string;
+  quoteCoin: string;
+  buyLimitPriceRatio: string;
+  sellLimitPriceRatio: string;
+  feeRateUpRatio: string;
+  minOrderQty: string;
+  maxOrderQty: string;
+  maxMarketOrderQty: string;
+  pricePrecision: string;
+  quantityPrecision: string;
+  quotePrecision: string;
+  minOrderAmount: string;
+  maxSymbolOrderNum: string;
+  maxProductOrderNum: string;
+  status: 'listed' | 'online' | 'limit_open' | 'offline' | 'restrictedAPI';
+  offTime: string;
+  limitOpenTime: string;
+  maintainTime: string;
+  areaSymbol?: string;
+
+  // Futures specific fields
+  makerFeeRate?: string;
+  takerFeeRate?: string;
+  openCostUpRatio?: string;
+  priceMultiplier?: string;
+  quantityMultiplier?: string;
+  symbolType?: 'perpetual' | 'delivery';
+  maxPositionNum?: string;
+  deliveryTime?: string;
+  deliveryStartTime?: string;
+  deliveryPeriod?: string;
+  launchTime?: string;
+  fundInterval?: string;
+  minLeverage?: string;
+  maxLeverage?: string;
+
+  // Margin specific fields
+  isIsolatedBaseBorrowable?: 'YES' | 'NO';
+  isIsolatedQuotedBorrowable?: 'YES' | 'NO';
+  warningRiskRatio?: string;
+  liquidationRiskRatio?: string;
+  maxCrossedLeverage?: string;
+  maxIsolatedLeverage?: string;
+  userMinBorrow?: string;
+}
+⋮----
+// Futures specific fields
+⋮----
+// Margin specific fields
+⋮----
+export interface OrderBookV3 {
+  a: string[][]; // asks - [price, size]
+  b: string[][]; // bids - [price, size]
+  ts: string;
+}
+⋮----
+a: string[][]; // asks - [price, size]
+b: string[][]; // bids - [price, size]
+⋮----
+export interface TickerV3 {
+  category: 'SPOT' | 'USDT-FUTURES' | 'COIN-FUTURES' | 'USDC-FUTURES';
+  symbol: string;
+  lastPrice: string;
+  openPrice24h: string;
+  highPrice24h: string;
+  lowPrice24h: string;
+  ask1Price: string;
+  bid1Price: string;
+  bid1Size: string;
+  ask1Size: string;
+  price24hPcnt: string;
+  volume24h: string;
+  turnover24h: string;
+
+  // Futures specific fields
+  indexPrice?: string;
+  markPrice?: string;
+  fundingRate?: string;
+  openInterest?: string;
+  deliveryStartTime?: string;
+  deliveryTime?: string;
+  deliveryStatus?: string;
+}
+⋮----
+// Futures specific fields
+⋮----
+export interface ProofOfReservesV3 {
+  merkleRootHash: string;
+  totalReserveRatio: string;
+  list: {
+    coin: string;
+    userAssets: string;
+    platformAssets: string;
+    reserveRatio: string;
+  }[];
+}
+
+================
+File: src/types/response/v3/trade.ts
+================
+export interface BatchModifyOrderResponseV3 {
+  orderId: string;
+  clientOid: string;
+}
+⋮----
+export interface CancelAllOrdersResponseV3 {
+  list: {
+    orderId: string;
+    clientOid: string;
+    code: string;
+    msg: string;
+  }[];
+}
+⋮----
+export interface CancelBatchOrdersResponseV3 {
+  orderId: string;
+  clientOid: string;
+  code?: string;
+  msg?: string;
+}
+⋮----
+export interface CloseAllPositionsResponseV3 {
+  list: {
+    orderId: string;
+    clientOid: string;
+    code: string;
+    msg: string;
+  }[];
+}
+⋮----
+export interface CancelOrderResponseV3 {
+  orderId: string;
+  clientOid: string;
+}
+⋮----
+export interface GetMaxOpenAvailableResponseV3 {
+  available: string;
+  maxOpen: string;
+  buyOpenCost: string;
+  sellOpenCost: string;
+  maxBuyOpen: string;
+  maxSellOpen: string;
+}
+⋮----
+export interface FeeDetailV3 {
+  feeCoin: string;
+  fee: string;
+}
+⋮----
+export interface OrderInfoV3 {
+  orderId: string;
+  clientOid: string;
+  category: string;
+  symbol: string;
+  orderType: string;
+  side: string;
+  price: string;
+  qty: string;
+  amount: string;
+  cumExecQty: string;
+  cumExecValue: string;
+  avgPrice: string;
+  timeInForce: string;
+  orderStatus: string;
+  posSide: string;
+  holdMode: string;
+  reduceOnly: string;
+  feeDetail: FeeDetailV3[];
+  cancelReason: string;
+  execType: string;
+  stpMode?: string;
+  createdTime: string;
+  updatedTime: string;
+}
+⋮----
+export interface FillV3 {
+  execId: string;
+  orderId: string;
+  category: string;
+  symbol: string;
+  orderType: string;
+  side: string;
+  execPrice: string;
+  execQty: string;
+  execValue: string;
+  tradeScope: string;
+  feeDetail: FeeDetailV3[];
+  execPnl?: string;
+  tradeSide?: string;
+  createdTime: string;
+  updatedTime: string;
+}
+⋮----
+export interface UnfilledOrderV3 {
+  orderId: string;
+  clientOid: string;
+  category: string;
+  symbol: string;
+  orderType: string;
+  side: string;
+  price: string;
+  qty: string;
+  amount: string;
+  cumExecQty: string;
+  cumExecValue: string;
+  avgPrice: string;
+  timeInForce: string;
+  orderStatus: string;
+  posSide: string;
+  holdMode: string;
+  reduceOnly: string;
+  feeDetail: FeeDetailV3[];
+  stpMode?: string;
+  createdTime: string;
+  updatedTime: string;
+}
+⋮----
+export interface HistoryOrderV3 {
+  orderId: string;
+  clientOid: string;
+  category: string;
+  symbol: string;
+  orderType: string;
+  side: string;
+  price: string;
+  qty: string;
+  amount: string;
+  cumExecQty: string;
+  cumExecValue: string;
+  avgPrice: string;
+  timeInForce: string;
+  orderStatus: string;
+  posSide: string;
+  holdMode: string;
+  reduceOnly: string;
+  feeDetail: FeeDetailV3[];
+  cancelReason: string;
+  execType: string;
+  stpMode?: string;
+  createdTime: string;
+  updatedTime: string;
+}
+⋮----
+export interface PositionHistoryV3 {
+  positionId: string;
+  category: string;
+  symbol: string;
+  marginCoin: string;
+  holdMode: string;
+  posSide: string;
+  marginMode: string;
+  openPriceAvg: string;
+  closePriceAvg: string;
+  openTotalPos: string;
+  closeTotalPos: string;
+  cumRealisedPnl: string;
+  netProfit: string;
+  totalFunding: string;
+  openFeeTotal: string;
+  closeFeeTotal: string;
+  createdTime: string;
+  updatedTime: string;
+}
+⋮----
+export interface CurrentPositionV3 {
+  category: string;
+  symbol: string;
+  marginCoin: string;
+  holdMode: string;
+  posSide: string;
+  marginMode: string;
+  positionBalance: string;
+  available: string;
+  frozen: string;
+  total: string;
+  leverage: string;
+  curRealisedPnl: string;
+  avgPrice: string;
+  positionStatus: string;
+  unrealisedPnl: string;
+  liquidationPrice: string;
+  mmr: string;
+  profitRate: string;
+  markPrice: string;
+  breakEvenPrice: string;
+  totalFunding: string;
+  openFeeTotal: string;
+  closeFeeTotal: string;
+  createdTime: string;
+  updatedTime: string;
+}
+⋮----
+export interface ModifyOrderResponseV3 {
+  orderId: string;
+  clientOid: string;
+}
+⋮----
+export interface PlaceBatchOrdersResponseV3 {
+  orderId: string;
+  clientOid: string;
+  code?: string;
+  msg?: string;
+}
+⋮----
+export interface PlaceOrderResponseV3 {
+  orderId: string;
+  clientOid: string;
+}
+⋮----
+export interface PositionAdlRankV3 {
+  symbol: string;
+  marginCoin: string;
+  adlRank: string;
+  holdSide: 'long' | 'short';
+}
+
+================
 File: src/types/request/v3/account.ts
 ================
 // Account Management Request Types
@@ -11593,6 +11635,11 @@ export interface GetWithdrawRecordsRequestV3 {
   limit?: string;
   cursor?: string;
 }
+⋮----
+export interface SetDepositAccountRequestV3 {
+  coin: string;
+  accountType: 'funding' | 'unified' | 'otc';
+}
 
 ================
 File: src/types/response/v3/account.ts
@@ -11825,6 +11872,10 @@ export interface WithdrawRecordV3 {
   tag: string;
   createdTime: string;
   updatedTime: string;
+}
+⋮----
+export interface SwitchStatusResponseV3 {
+  status: 'processProcessing' | 'successSuccess' | 'failFailed';
 }
 
 ================
@@ -12509,108 +12560,6 @@ public unsubscribeTopic(
 )
 
 ================
-File: package.json
-================
-{
-  "name": "bitget-api",
-  "version": "3.0.2",
-  "description": "Complete Node.js & JavaScript SDK for Bitget V1-V3 REST APIs & WebSockets, with TypeScript & end-to-end tests.",
-  "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:public": "jest --testPathIgnorePatterns='.*private.*'",
-    "test:private": "jest --testPathPattern='.*private.*'",
-    "clean": "rm -rf lib dist",
-    "build": "npm run clean && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && bash ./postBuild.sh",
-    "build:clean": "npm run clean && npm run build",
-    "build:watch": "npm run clean && tsc --watch",
-    "pack": "webpack --config webpack/webpack.config.js",
-    "lint": "eslint src",
-    "prepublish": "npm run build:clean",
-    "betapublish": "npm publish --tag beta"
-  },
-  "main": "dist/cjs/index.js",
-  "module": "dist/mjs/index.js",
-  "types": "dist/mjs/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/mjs/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/mjs/index.d.ts"
-    }
-  },
-  "files": [
-    "dist/*",
-    "llms.txt"
-  ],
-  "type": "module",
-  "author": "Tiago Siebler (https://github.com/tiagosiebler)",
-  "contributors": [],
-  "dependencies": {
-    "axios": "^1.10.0",
-    "isomorphic-ws": "^5.0.0",
-    "ws": "^8.9.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^29.0.3",
-    "@types/node": "^22.10.2",
-    "@types/ws": "^8.18.1",
-    "@typescript-eslint/eslint-plugin": "^8.18.0",
-    "@typescript-eslint/parser": "^8.18.0",
-    "eslint": "^8.24.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "eslint-plugin-require-extensions": "^0.1.3",
-    "eslint-plugin-simple-import-sort": "^12.1.1",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.4.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
-  },
-  "optionalDependencies": {
-    "source-map-loader": "^4.0.0",
-    "ts-loader": "^9.4.1",
-    "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0"
-  },
-  "keywords": [
-    "bitget",
-    "bitget api",
-    "bitget nodejs",
-    "bitget javascript",
-    "bitget typescript",
-    "bitget sdk",
-    "bitget v3 api",
-    "bitget UTA api",
-    "api",
-    "websocket",
-    "rest",
-    "rest api",
-    "usdt",
-    "trading bots",
-    "nodejs",
-    "node",
-    "trading",
-    "cryptocurrency",
-    "bitcoin",
-    "best"
-  ],
-  "funding": {
-    "type": "individual",
-    "url": "https://github.com/sponsors/tiagosiebler"
-  },
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tiagosiebler/bitget-api"
-  },
-  "bugs": {
-    "url": "https://github.com/tiagosiebler/bitget-api/issues"
-  },
-  "homepage": "https://github.com/tiagosiebler/bitget-api#readme"
-}
-
-================
 File: src/websocket-client-v2.ts
 ================
 import {
@@ -12825,6 +12774,108 @@ protected resolveEmittableEvents(
    * @deprecrated not supported by Bitget's V2 API offering
    */
 async sendWSAPIRequest(): Promise<unknown>
+
+================
+File: package.json
+================
+{
+  "name": "bitget-api",
+  "version": "3.0.3",
+  "description": "Complete Node.js & JavaScript SDK for Bitget V1-V3 REST APIs & WebSockets, with TypeScript & end-to-end tests.",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:public": "jest --testPathIgnorePatterns='.*private.*'",
+    "test:private": "jest --testPathPattern='.*private.*'",
+    "clean": "rm -rf lib dist",
+    "build": "npm run clean && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && bash ./postBuild.sh",
+    "build:clean": "npm run clean && npm run build",
+    "build:watch": "npm run clean && tsc --watch",
+    "pack": "webpack --config webpack/webpack.config.js",
+    "lint": "eslint src",
+    "prepublish": "npm run build:clean",
+    "betapublish": "npm publish --tag beta"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/mjs/index.js",
+  "types": "dist/mjs/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/mjs/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/mjs/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/*",
+    "llms.txt"
+  ],
+  "type": "module",
+  "author": "Tiago Siebler (https://github.com/tiagosiebler)",
+  "contributors": [],
+  "dependencies": {
+    "axios": "^1.10.0",
+    "isomorphic-ws": "^5.0.0",
+    "ws": "^8.9.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.0.3",
+    "@types/node": "^22.10.2",
+    "@types/ws": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "eslint": "^8.24.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-require-extensions": "^0.1.3",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "optionalDependencies": {
+    "source-map-loader": "^4.0.0",
+    "ts-loader": "^9.4.1",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  },
+  "keywords": [
+    "bitget",
+    "bitget api",
+    "bitget nodejs",
+    "bitget javascript",
+    "bitget typescript",
+    "bitget sdk",
+    "bitget v3 api",
+    "bitget UTA api",
+    "api",
+    "websocket",
+    "rest",
+    "rest api",
+    "usdt",
+    "trading bots",
+    "nodejs",
+    "node",
+    "trading",
+    "cryptocurrency",
+    "bitcoin",
+    "best"
+  ],
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/tiagosiebler"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tiagosiebler/bitget-api"
+  },
+  "bugs": {
+    "url": "https://github.com/tiagosiebler/bitget-api/issues"
+  },
+  "homepage": "https://github.com/tiagosiebler/bitget-api#readme"
+}
 
 ================
 File: README.md
@@ -13488,6 +13539,7 @@ import {
   GetTransferableCoinsRequestV3,
   GetWithdrawRecordsRequestV3,
   RepayRequestV3,
+  SetDepositAccountRequestV3,
   SetLeverageRequestV3,
   SubAccountTransferRequestV3,
   SwitchDeductRequestV3,
@@ -13563,6 +13615,7 @@ import {
   SubAccountV3,
   SubTransferRecordV3,
   SubUnifiedAssetV3,
+  SwitchStatusResponseV3,
   TransferResponseV3,
   UpdateSubAccountApiKeyResponseV3,
   WithdrawRecordV3,
@@ -13589,6 +13642,7 @@ import {
   OpenInterestV3,
   OrderBookV3,
   PositionTierV3,
+  ProofOfReservesV3,
   PublicFillV3,
   RiskReserveV3,
   TickerV3,
@@ -13612,6 +13666,7 @@ import {
   OrderInfoV3,
   PlaceBatchOrdersResponseV3,
   PlaceOrderResponseV3,
+  PositionAdlRankV3,
   PositionHistoryV3,
   UnfilledOrderV3,
 } from './types/response/v3/trade.js';
@@ -13690,6 +13745,11 @@ getOrderBook(
 getFills(
     params: GetPublicFillsRequestV3,
 ): Promise<APIResponse<PublicFillV3[]>>
+⋮----
+/**
+   * Get Proof Of Reserves
+   */
+getProofOfReserves(): Promise<APIResponse<ProofOfReservesV3>>
 ⋮----
 /**
    * Get Open Interest
@@ -13844,6 +13904,16 @@ getConvertRecords(params: GetConvertRecordsRequestV3): Promise<
     return this.getPrivate('/api/v3/account/convert-records', params);
 ⋮----
 /**
+   * Set up deposit account - Configure default recharge account for a certain symbol
+   * This configuration item remains valid for a long time. That is, once a user sets a default
+   * recharge account for a certain symbol, it will be retained permanently, and there is no need to reconfigure it.
+   * Permission: UTA mgt. (read & write)
+   */
+setDepositAccount(
+    params: SetDepositAccountRequestV3,
+): Promise<APIResponse<string>>
+⋮----
+/**
    * Switch Deduct - Set BGB deduction
    */
 switchDeduct(params: SwitchDeductRequestV3): Promise<APIResponse<string>>
@@ -13868,6 +13938,23 @@ getFeeRate(params: GetFeeRateRequestV3): Promise<
     }>
   > {
     return this.getPrivate('/api/v3/account/fee-rate', params);
+⋮----
+/**
+   * Switch Account - Switch to classic account mode
+   * Only supports parent accounts.
+   * This endpoint is only used for switching to classic account mode.
+   * Please note that since the account switching process takes approximately 1 minute,
+   * the successful response you receive only indicates that the request has been received,
+   * and does not mean that the account has been successfully switched to the classic account.
+   * Please use the query switching status interface to confirm whether the account switching is successful.
+   */
+downgradeAccountToClassic(): Promise<APIResponse<null>>
+⋮----
+/**
+   * Get Switch Status - Get account switching status
+   * Only supports parent accounts.
+   */
+getSwitchAccountStatus(): Promise<APIResponse<SwitchStatusResponseV3>>
 ⋮----
 /**
    *
@@ -14166,6 +14253,11 @@ getPositionHistory(params: GetPositionHistoryRequestV3): Promise<
 getMaxOpenAvailable(
     params: GetMaxOpenAvailableRequestV3,
 ): Promise<APIResponse<GetMaxOpenAvailableResponseV3>>
+⋮----
+/**
+   * Get Position ADL Rank - Get position auto-deleveraging ranking
+   */
+getPositionAdlRank(): Promise<APIResponse<PositionAdlRankV3[]>>
 ⋮----
 /**
    * CountDown Cancel All

@@ -1142,6 +1142,33 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   /**
+   * Upgrade Account - Upgrade to unified account mode
+   * No account type restrictions; both parent and sub-accounts are supported.
+   * This interface is only used for upgrading to the unified account mode.
+   * Please note that as the account upgrade process takes approximately 1 minute,
+   * the successful response you receive only indicates that the request has been received,
+   * and does not mean that the account has been successfully upgraded to a unified account.
+   * Please use the query upgrade status interface to confirm whether the account upgrade is successful.
+   */
+  upgradeToUnifiedAccount(params?: {
+    subUid?: string;
+  }): Promise<APIResponse<null>> {
+    return this.postPrivate('/api/v2/spot/account/upgrade', params);
+  }
+
+  /**
+   * Get Upgrade Status - Get account upgrade status
+   * No account type restrictions; both parent and sub-accounts are supported.
+   */
+  getUnifiedAccountSwitchStatus(params?: { subUid?: string }): Promise<
+    APIResponse<{
+      status: 'processProcessing' | 'successSuccess' | 'failFailed';
+    }>
+  > {
+    return this.getPrivate('/api/v2/spot/account/upgrade-status', params);
+  }
+
+  /**
    *
    *
    * Futures
