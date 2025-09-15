@@ -1,10 +1,10 @@
-import { API_ERROR_CODE } from '../../src';
-import { RestClientV3 } from '../../src/rest-client-v3';
+import { API_ERROR_CODE } from '../../src/index.js';
+import { RestClientV3 } from '../../src/rest-client-v3.js';
 // prettier-ignore
 import {
-    errorResponseObjectV3,
-    sucessEmptyResponseObject,
-} from '../response.util';
+  errorResponseObjectV3,
+  sucessEmptyResponseObject,
+} from '../response.util.js';
 
 describe('Bitget Private REST API V3 Write Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM_V3;
@@ -126,7 +126,7 @@ describe('Bitget Private REST API V3 Write Endpoints', () => {
         expect(res).toMatchObject(sucessEmptyResponseObject());
       } catch (e) {
         expect(e).toMatchObject(
-          errorResponseObjectV3(API_ERROR_CODE.INSUFFICIENT_BALANCE_V3),
+          errorResponseObjectV3(API_ERROR_CODE.INSUFFICIENT_MARGIN_V3),
         ); // not enough balance
       }
     });
