@@ -1768,19 +1768,29 @@ export class RestClientV2 extends BaseRestClient {
     );
   }
 
+  /**
+   * Sub Deposit Records
+   *
+   * - Only applicable for ND broker main-account to get ND sub-accounts deposit record
+   */
   subaccountDepositRecords(
     params: SubDepositRecordsRequestV2,
   ): Promise<APIResponse<SubaccountDepositV2>> {
-    return this.postPrivate('/api/v2/broker/subaccount-deposit', params);
+    return this.getPrivate('/api/v2/broker/subaccount-deposit', params);
   }
 
+  /**
+   * Sub Withdrawal Records
+   *
+   * - Only applicable for ND broker main-account
+   */
   subaccountWithdrawalRecords(params: SubWithdrawalRecordsRequestV2): Promise<
     APIResponse<{
       resultList: BrokerSubaccountWithdrawalV2[];
       endId: string;
     }>
   > {
-    return this.postPrivate('/api/v2/broker/subaccount-withdrawal', params);
+    return this.getPrivate('/api/v2/broker/subaccount-withdrawal', params);
   }
 
   /**
