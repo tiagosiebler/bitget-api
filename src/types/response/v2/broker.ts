@@ -146,3 +146,65 @@ export interface ModifySubaccountApiKeyResponseV2 {
   permType: string;
   permList: string[];
 }
+
+/**
+ *
+ * * Broker | All Sub-accounts Deposit and Withdrawal Records
+ *
+ */
+
+export interface AllSubDepositWithdrawalRecordV2 {
+  uid: string;
+  txId: string;
+  type: 'deposit' | 'withdrawal';
+  subType: 'onchain' | 'internal' | 'fast';
+  coin: string;
+  amount: string;
+  status: 'pending' | 'fail' | 'success';
+  ts: string;
+}
+
+/**
+ *
+ * * Broker | Subaccounts
+ *
+ */
+
+export interface BrokerSubaccountInfoV2 {
+  uid: string;
+  asset: string;
+  firstTimeDeposit: string;
+  firstTimeTrade: string;
+  registerTime: string;
+}
+
+/**
+ *
+ * * Broker | Commissions
+ *
+ */
+
+export interface BrokerCommissionV2 {
+  uid: string;
+  coin: string;
+  symbol: string;
+  dealtAmount: string;
+  totalFee: string;
+  deductedFee: string;
+  paidFee: string;
+  markUpFee: string;
+  totalCommission: string;
+}
+
+/**
+ *
+ * * Broker | Trade Volume
+ *
+ */
+
+export interface BrokerTradeVolumeV2 {
+  uid: string;
+  volume: string;
+  spotVolume: string;
+  futureVolume: string;
+}

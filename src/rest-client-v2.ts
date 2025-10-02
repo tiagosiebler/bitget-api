@@ -1,6 +1,10 @@
 import { FuturesProductTypeV2, MarginType } from './types/request/shared.js';
 import {
   CreateSubAccountApiKeyRequestV2,
+  GetAllSubDepositWithdrawalRequestV2,
+  GetBrokerCommissionsRequestV2,
+  GetBrokerSubaccountsRequestV2,
+  GetBrokerTradeVolumeRequestV2,
   GetSubAccountsRequestV2,
   ModifySubAccountApiKeyRequestV2,
   ModifySubRequestV2,
@@ -98,6 +102,8 @@ import {
   FuturesSetPositionMarginRequestV2,
   FuturesSingleAccountRequestV2,
   FuturesTPSLOrderRequestV2,
+  GetUnionTransferLimitsRequestV2,
+  UnionConvertRequestV2,
 } from './types/request/v2/futures.js';
 import {
   GetBorrowHistoryRequestV2,
@@ -142,10 +148,14 @@ import {
 } from './types/request/v2/spot.js';
 import { APIResponse } from './types/response/v1/shared.js';
 import {
+  AllSubDepositWithdrawalRecordV2,
+  BrokerCommissionV2,
   BrokerSubaccountFutureAssetV2,
+  BrokerSubaccountInfoV2,
   BrokerSubaccountSpotAssetV2,
   BrokerSubaccountV2,
   BrokerSubaccountWithdrawalV2,
+  BrokerTradeVolumeV2,
   CreateSubaccountApiKeyResponseV2,
   CreateSubaccountDepositAddressV2,
   CreateSubaccountResponseV2,
@@ -269,6 +279,10 @@ import {
   FuturesVipFeeRateV2,
   SetLeverageResponseV2,
   SetMarginModeResponseV2,
+  UnionConfigV2,
+  UnionConvertV2,
+  UnionSwitchUsdtV2,
+  UnionTransferLimitsV2,
 } from './types/response/v2/futures.js';
 import {
   CrossInterestRateAndLimitResponseV2,
@@ -1418,6 +1432,50 @@ export class RestClientV2 extends BaseRestClient {
   }
 
   /**
+   * Get Union Transfer Limits
+   *
+   * - Rate limit: 1 time/1s (uid)
+   * - Get union margin currency transfer limits
+   */
+  getUnionTransferLimits(
+    params: GetUnionTransferLimitsRequestV2,
+  ): Promise<APIResponse<UnionTransferLimitsV2>> {
+    return this.getPrivate('/api/v2/mix/account/transfer-limits', params);
+  }
+
+  /**
+   * Get Union Config
+   *
+   * - Rate limit: 1 time/1s (uid)
+   * - Get API for union margin configuration parameters (Liability Initial Margin Rate, Liability Maintenance Margin Rate, Personal Liability Limit, Personal Liability Limit Ratio)
+   */
+  getUnionConfig(): Promise<APIResponse<UnionConfigV2>> {
+    return this.getPrivate('/api/v2/mix/account/union-config');
+  }
+
+  /**
+   * Get Switch Union USDT
+   *
+   * - Rate limit: 1 time/1s (uid)
+   * - Get USDT quota for switching from union margin to single margin
+   */
+  getSwitchUnionUsdt(): Promise<APIResponse<UnionSwitchUsdtV2>> {
+    return this.getPrivate('/api/v2/mix/account/switch-union-usdt');
+  }
+
+  /**
+   * Union Convert
+   *
+   * - Rate limit: 1 time/1s (uid)
+   * - Union margin exchange
+   */
+  unionConvert(
+    params: UnionConvertRequestV2,
+  ): Promise<APIResponse<UnionConvertV2>> {
+    return this.postPrivate('/api/v2/mix/account/union-convert', params);
+  }
+
+  /**
    *
    * * Futures | Position
    *
@@ -1824,6 +1882,60 @@ export class RestClientV2 extends BaseRestClient {
       '/api/v2/broker/manage/modify-subaccount-apikey',
       params,
     );
+  }
+
+  /**
+   * Get All Sub-accounts Deposit and Withdrawal Records
+   *
+   * - Only applicable for ND broker main-account
+   * - Rate limit: 5 req/sec/UID
+   * - Able to get ND sub-accounts deposit and withdrawal records within 90 days
+   */
+  getAllSubDepositWithdrawalRecords(
+    params?: GetAllSubDepositWithdrawalRequestV2,
+  ): Promise<
+    APIResponse<{
+      list: AllSubDepositWithdrawalRecordV2[];
+      endId: string;
+    }>
+  > {
+    return this.getPrivate('/api/v2/broker/all-sub-deposit-withdrawal', params);
+  }
+
+  /**
+   * Get Broker Subaccounts
+   *
+   * - Rate limit: 5 req/sec/UID
+   * - Please contact your BD or RM to apply for access permissions
+   */
+  getBrokerSubaccounts(
+    params?: GetBrokerSubaccountsRequestV2,
+  ): Promise<APIResponse<BrokerSubaccountInfoV2[]>> {
+    return this.getPrivate('/api/v2/broker/subaccounts', params);
+  }
+
+  /**
+   * Get Broker Subaccounts Commissions
+   *
+   * - Rate limit: 5 req/sec/UID
+   * - Please contact your BD or RM to apply for access permissions
+   */
+  getBrokerCommissions(
+    params?: GetBrokerCommissionsRequestV2,
+  ): Promise<APIResponse<BrokerCommissionV2[]>> {
+    return this.getPrivate('/api/v2/broker/commissions', params);
+  }
+
+  /**
+   * Get Broker Trade Volume
+   *
+   * - Rate limit: 5 req/sec/UID
+   * - Please contact your BD or RM to apply for access permissions
+   */
+  getBrokerTradeVolume(
+    params?: GetBrokerTradeVolumeRequestV2,
+  ): Promise<APIResponse<BrokerTradeVolumeV2[]>> {
+    return this.getPrivate('/api/v2/broker/trade-volume', params);
   }
 
   /**
