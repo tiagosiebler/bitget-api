@@ -97,3 +97,63 @@ export interface ModifySubAccountApiKeyRequestV2 {
   permType?: string;
   permList: string[];
 }
+
+/**
+ *
+ * * Broker | All Sub-accounts Deposit and Withdrawal Records
+ *
+ */
+
+export interface GetAllSubDepositWithdrawalRequestV2 {
+  startTime?: string;
+  endTime?: string;
+  limit?: string;
+  idLessThan?: string;
+  type?: 'all' | 'deposit' | 'withdrawal';
+}
+
+/**
+ *
+ * * Broker | Subaccounts
+ *
+ */
+
+export interface GetBrokerSubaccountsRequestV2 {
+  startTime?: string;
+  endTime?: string;
+  pageSize?: string;
+  pageNo?: string;
+}
+
+/**
+ *
+ * * Broker | Commissions
+ *
+ */
+
+export interface GetBrokerCommissionsRequestV2 {
+  startTime?: string;
+  endTime?: string;
+  pageSize?: string;
+  pageNo?: string;
+  bizType?: 'spot' | 'futures';
+  subBizType?:
+    | 'spot_trade'
+    | 'spot_margin'
+    | 'usdt_futures'
+    | 'usdc_futures'
+    | 'coin_futures';
+}
+
+/**
+ *
+ * * Broker | Trade Volume
+ *
+ */
+
+export interface GetBrokerTradeVolumeRequestV2 {
+  startTime?: string;
+  endTime?: string;
+  pageSize?: string;
+  pageNo?: string;
+}

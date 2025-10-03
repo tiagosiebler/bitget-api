@@ -5,8 +5,8 @@ import { RestClientV2 } from 'bitget-api';
 
 // This example shows how to call this Bitget API endpoint with either node.js, javascript (js) or typescript (ts) with the npm module "bitget-api" for Bitget exchange
 // This Bitget API SDK is available on npm via "npm install bitget-api"
-// ENDPOINT: /api/v2/broker/subaccount-deposit
-// METHOD: GET
+// ENDPOINT: /api/v2/mix/account/union-convert
+// METHOD: POST
 // PUBLIC: NO
 
 const client = new RestClientV2({
@@ -15,7 +15,7 @@ const client = new RestClientV2({
   apiPass: 'insert_api_pass_here',
 });
 
-client.subaccountDepositRecords(params)
+client.unionConvert(params)
   .then((response) => {
     console.log(response);
   })

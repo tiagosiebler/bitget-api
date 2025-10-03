@@ -439,3 +439,18 @@ export interface FuturesGetHistoryPlanOrdersRequestV2 {
   endTime?: string;
   limit?: string;
 }
+
+/**
+ *
+ * * Futures | Union Margin
+ *
+ */
+
+export interface GetUnionTransferLimitsRequestV2 {
+  coin: string;
+}
+
+export interface UnionConvertRequestV2 {
+  coin: string;
+  amount: string;
+}

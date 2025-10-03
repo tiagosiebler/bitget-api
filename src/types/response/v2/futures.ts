@@ -583,3 +583,29 @@ export interface FuturesHistoryPlanOrderV2 {
   stopLossTriggerPrice: string;
   stopLossTriggerType: string;
 }
+
+/**
+ *
+ * * Futures | Union Margin
+ *
+ */
+
+export interface UnionTransferLimitsV2 {
+  coin: string;
+  maxTransferIn: string;
+}
+
+export interface UnionConfigV2 {
+  imr: string;
+  mmr: string;
+  individualLimit: string;
+  individualLimitRatio: string;
+}
+
+export interface UnionSwitchUsdtV2 {
+  usdtAmount: string;
+}
+
+export interface UnionConvertV2 {
+  usdtAmount: string;
+}
