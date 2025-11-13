@@ -1310,18 +1310,22 @@ export class RestClientV2 extends BaseRestClient {
     productType: FuturesProductTypeV2;
     pageSize?: string;
     pageNo?: string;
-  }): Promise<APIResponse<FuturesHistoricalFundingRateV2>> {
+  }): Promise<APIResponse<FuturesHistoricalFundingRateV2[]>> {
     return this.get('/api/v2/mix/market/history-fund-rate', params);
   }
 
   getFuturesCurrentFundingRate(params: {
-    symbol: string;
+    symbol?: string;
     productType: FuturesProductTypeV2;
   }): Promise<
     APIResponse<
       {
         symbol: string;
-        fundingRate: string;
+        fundingRate: string; // '0.0001';
+        fundingRateInterval: string; // hours, example: '1' | '2' | '4' | '8';
+        nextUpdate: string; // timestamp in milliseconds
+        minFundingRate: string;
+        maxFundingRate: string;
       }[]
     >
   > {
