@@ -1,8 +1,8 @@
 import { CancelOrderRequestV3 } from './types/request/v3/trade.js';
 import { CancelOrderResponseV3 } from './types/response/v3/trade.js';
+import { WSAPIResponse } from './types/websockets/ws-api.js';
 import { WSAPIPlaceOrderRequestV3 } from './types/websockets/ws-api-request.js';
 import { WSAPIPlaceOrderResponseV3 } from './types/websockets/ws-api-response.js';
-import { WSAPIResponse } from './types/websockets/ws-api.js';
 import {
   BitgetInstTypeV3,
   WSClientConfigurableOptions,
