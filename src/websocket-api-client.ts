@@ -1,8 +1,8 @@
 import { CancelOrderRequestV3 } from './types/request/v3/trade.js';
 import { CancelOrderResponseV3 } from './types/response/v3/trade.js';
-import { WSAPIResponse } from './types/websockets/ws-api.js';
 import { WSAPIPlaceOrderRequestV3 } from './types/websockets/ws-api-request.js';
 import { WSAPIPlaceOrderResponseV3 } from './types/websockets/ws-api-response.js';
+import { WSAPIResponse } from './types/websockets/ws-api.js';
 import {
   BitgetInstTypeV3,
   WSClientConfigurableOptions,
@@ -187,7 +187,17 @@ export class WebsocketAPIClient {
           console.info(new Date(), 'ws has authenticated ', data?.wsKey);
         })
         .on('exception', (data) => {
-          console.error(new Date(), 'ws exception: ', JSON.stringify(data));
+          try {
+            // Blind JSON.stringify can fail on circular references
+            console.error(
+              new Date(),
+              'ws exception: ',
+              JSON.stringify(data),
+              // JSON.stringify({ ...data, target: 'WebSocket' }),
+            );
+          } catch {
+            console.error(new Date(), 'ws exception: ', data);
+          }
         });
     }
   }
