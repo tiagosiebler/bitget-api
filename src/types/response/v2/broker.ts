@@ -208,3 +208,71 @@ export interface BrokerTradeVolumeV2 {
   spotVolume: string;
   futureVolume: string;
 }
+
+/**
+ *
+ * * Broker | Total Commission
+ *
+ */
+
+export interface BrokerTotalCommissionV2 {
+  date: string;
+  totalTradingVolume: string;
+  totalActiveTraders: string;
+  totalCommission: string;
+  spot: {
+    spotTradingVolume: string;
+    spotTradingFee: string;
+    spotPureTradingFee: string;
+    spotCommission: string;
+  };
+  futures: {
+    futuresTradingVolume: string;
+    futuresTradingFee: string;
+    futuresPureTradingFee: string;
+    futuresCommission: string;
+  };
+}
+
+/**
+ *
+ * * Broker | Order Commission
+ *
+ */
+
+export interface BrokerOrderCommissionItemV2 {
+  fillId: string;
+  orderId: string;
+  ts: string;
+  clientOid: string;
+  bizType: 'spot' | 'futures';
+  subBizType:
+    | 'spot_trade'
+    | 'spot_margin'
+    | 'usdt_futures'
+    | 'coin_futures'
+    | 'usdc_futures';
+  symbol: string;
+  volume: string;
+  fee: string;
+  pureFee: string;
+  rebateAmount: string;
+}
+
+export interface BrokerOrderCommissionV2 {
+  commissionlist: BrokerOrderCommissionItemV2[];
+  endId: string;
+}
+
+/**
+ *
+ * * Broker | Rebate Info
+ *
+ */
+
+export interface BrokerRebateInfoV2 {
+  affiliationType: 'affiliate' | 'official';
+  userLevel: string;
+  clientSpotRebateRatio: string;
+  clientFuturesRebateRatio: string;
+}

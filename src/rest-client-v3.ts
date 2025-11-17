@@ -9,6 +9,7 @@ import {
   GetFeeRateRequestV3,
   GetFinancialRecordsRequestV3,
   GetFundingAssetsRequestV3,
+  GetMaxTransferableRequestV3,
   GetSubAccountApiKeysRequestV3,
   GetSubAccountListRequestV3,
   GetSubDepositAddressRequestV3,
@@ -87,6 +88,7 @@ import {
   DepositRecordV3,
   FinancialRecordV3,
   FundingAssetV3,
+  MaxTransferableV3,
   PaymentCoinV3,
   RepayableCoinV3,
   RepayResponseV3,
@@ -516,6 +518,19 @@ export class RestClientV3 extends BaseRestClient {
     }>
   > {
     return this.getPrivate('/api/v3/account/fee-rate', params);
+  }
+
+  /**
+   * Get Max Transferable
+   *
+   * - Rate limit: 3 req/sec/UID
+   * - Permission: UTA mgt. (read)
+   * - Get the maximum transferable amount for the unified account.
+   */
+  getMaxTransferable(
+    params: GetMaxTransferableRequestV3,
+  ): Promise<APIResponse<MaxTransferableV3>> {
+    return this.getPrivate('/api/v3/account/max-transferable', params);
   }
 
   /**

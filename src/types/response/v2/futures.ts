@@ -609,3 +609,34 @@ export interface UnionSwitchUsdtV2 {
 export interface UnionConvertV2 {
   usdtAmount: string;
 }
+
+/**
+ *
+ * * Futures | Account | Max Openable Quantity
+ *
+ */
+
+export interface FuturesMaxOpenV2 {
+  maxOpen: string;
+}
+
+/**
+ *
+ * * Futures | Account | Liquidation Price
+ *
+ */
+
+export interface FuturesLiquidationPriceV2 {
+  liqPrice: string;
+}
+
+/**
+ *
+ * * Futures | Account | Isolated Symbols
+ *
+ */
+
+export interface FuturesIsolatedSymbolV2 {
+  symbol: string;
+  marginMode: 'isolated';
+}
