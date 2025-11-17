@@ -157,3 +157,39 @@ export interface GetBrokerTradeVolumeRequestV2 {
   pageSize?: string;
   pageNo?: string;
 }
+
+/**
+ *
+ * * Broker | Total Commission
+ *
+ */
+
+export interface GetBrokerTotalCommissionRequestV2 {
+  startTime?: string;
+  endTime?: string;
+}
+
+/**
+ *
+ * * Broker | Order Commission
+ *
+ */
+
+export interface GetBrokerOrderCommissionRequestV2 {
+  startTime?: string;
+  endTime?: string;
+  limit?: string;
+  uid?: string;
+  orderId?: string;
+  idLessThan?: string;
+}
+
+/**
+ *
+ * * Broker | Rebate Info
+ *
+ */
+
+export interface GetBrokerRebateInfoRequestV2 {
+  uid: string;
+}

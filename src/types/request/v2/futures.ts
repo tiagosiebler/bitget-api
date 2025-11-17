@@ -454,3 +454,44 @@ export interface UnionConvertRequestV2 {
   coin: string;
   amount: string;
 }
+
+/**
+ *
+ * * Futures | Account | Max Openable Quantity
+ *
+ */
+
+export interface FuturesMaxOpenRequestV2 {
+  symbol: string;
+  productType: FuturesProductTypeV2;
+  marginCoin: string;
+  posSide: 'long' | 'short';
+  orderType: 'limit' | 'market';
+  openPrice?: string;
+}
+
+/**
+ *
+ * * Futures | Account | Liquidation Price
+ *
+ */
+
+export interface FuturesLiquidationPriceRequestV2 {
+  symbol: string;
+  productType: FuturesProductTypeV2;
+  marginCoin: string;
+  posSide: 'long' | 'short';
+  orderType: 'limit' | 'market';
+  openAmount: string;
+  openPrice?: string;
+}
+
+/**
+ *
+ * * Futures | Account | Isolated Symbols
+ *
+ */
+
+export interface FuturesIsolatedSymbolsRequestV2 {
+  productType: FuturesProductTypeV2;
+}
