@@ -227,3 +227,9 @@ export interface WithdrawRecordV3 {
   createdTime: string;
   updatedTime: string;
 }
+
+export interface MaxTransferableV3 {
+  coin: string;
+  maxTransfer: string;
+  borrowMaxTransfer: string;
+}

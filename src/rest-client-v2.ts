@@ -3,7 +3,10 @@ import {
   CreateSubAccountApiKeyRequestV2,
   GetAllSubDepositWithdrawalRequestV2,
   GetBrokerCommissionsRequestV2,
+  GetBrokerOrderCommissionRequestV2,
+  GetBrokerRebateInfoRequestV2,
   GetBrokerSubaccountsRequestV2,
+  GetBrokerTotalCommissionRequestV2,
   GetBrokerTradeVolumeRequestV2,
   GetSubAccountsRequestV2,
   ModifySubAccountApiKeyRequestV2,
@@ -87,6 +90,9 @@ import {
   FuturesHistoricalPositionsRequestV2,
   FuturesHistoricTradesRequestV2,
   FuturesInterestHistoryRequestV2,
+  FuturesIsolatedSymbolsRequestV2,
+  FuturesLiquidationPriceRequestV2,
+  FuturesMaxOpenRequestV2,
   FuturesMergeDepthRequestV2,
   FuturesModifyOrderRequestV2,
   FuturesModifyPlanOrderRequestV2,
@@ -150,11 +156,14 @@ import { APIResponse } from './types/response/v1/shared.js';
 import {
   AllSubDepositWithdrawalRecordV2,
   BrokerCommissionV2,
+  BrokerOrderCommissionV2,
+  BrokerRebateInfoV2,
   BrokerSubaccountFutureAssetV2,
   BrokerSubaccountInfoV2,
   BrokerSubaccountSpotAssetV2,
   BrokerSubaccountV2,
   BrokerSubaccountWithdrawalV2,
+  BrokerTotalCommissionV2,
   BrokerTradeVolumeV2,
   CreateSubaccountApiKeyResponseV2,
   CreateSubaccountDepositAddressV2,
@@ -264,6 +273,9 @@ import {
   FuturesHistoryPositionV2,
   FuturesInterestExchangeRateV2,
   FuturesInterestHistoryV2,
+  FuturesIsolatedSymbolV2,
+  FuturesLiquidationPriceV2,
+  FuturesMaxOpenV2,
   FuturesMergeDepthV2,
   FuturesOpenInterestV2,
   FuturesOpenOrderV2,
@@ -1310,18 +1322,22 @@ export class RestClientV2 extends BaseRestClient {
     productType: FuturesProductTypeV2;
     pageSize?: string;
     pageNo?: string;
-  }): Promise<APIResponse<FuturesHistoricalFundingRateV2>> {
+  }): Promise<APIResponse<FuturesHistoricalFundingRateV2[]>> {
     return this.get('/api/v2/mix/market/history-fund-rate', params);
   }
 
   getFuturesCurrentFundingRate(params: {
-    symbol: string;
+    symbol?: string;
     productType: FuturesProductTypeV2;
   }): Promise<
     APIResponse<
       {
         symbol: string;
-        fundingRate: string;
+        fundingRate: string; // '0.0001';
+        fundingRateInterval: string; // hours, example: '1' | '2' | '4' | '8';
+        nextUpdate: string; // timestamp in milliseconds
+        minFundingRate: string;
+        maxFundingRate: string;
       }[]
     >
   > {
@@ -1473,6 +1489,42 @@ export class RestClientV2 extends BaseRestClient {
     params: UnionConvertRequestV2,
   ): Promise<APIResponse<UnionConvertV2>> {
     return this.postPrivate('/api/v2/mix/account/union-convert', params);
+  }
+
+  /**
+   * Get Max Openable Quantity
+   *
+   * - Rate limit: 20 req/sec/UID
+   * - Get Max Openable Quantity
+   */
+  getFuturesMaxOpenableQuantity(
+    params: FuturesMaxOpenRequestV2,
+  ): Promise<APIResponse<FuturesMaxOpenV2>> {
+    return this.getPrivate('/api/v2/mix/account/max-open', params);
+  }
+
+  /**
+   * Get Liquidation Price
+   *
+   * - Rate limit: 20 req/sec/UID
+   * - Get Liquidation Price
+   */
+  getFuturesLiquidationPrice(
+    params: FuturesLiquidationPriceRequestV2,
+  ): Promise<APIResponse<FuturesLiquidationPriceV2>> {
+    return this.getPrivate('/api/v2/mix/account/liq-price', params);
+  }
+
+  /**
+   * Get Isolated Symbols
+   *
+   * - Rate limits: 10 time/1s (uid)
+   * - Retrieve trading pairs with isolated margin mode under the account.
+   */
+  getFuturesIsolatedSymbols(
+    params: FuturesIsolatedSymbolsRequestV2,
+  ): Promise<APIResponse<FuturesIsolatedSymbolV2[]>> {
+    return this.getPrivate('/api/v2/mix/account/isolated-symbols', params);
   }
 
   /**
@@ -1936,6 +1988,61 @@ export class RestClientV2 extends BaseRestClient {
     params?: GetBrokerTradeVolumeRequestV2,
   ): Promise<APIResponse<BrokerTradeVolumeV2[]>> {
     return this.getPrivate('/api/v2/broker/trade-volume', params);
+  }
+
+  /**
+   * Get Total Commission
+   *
+   * - Rate limit: 20 req/sec/UID
+   * - Data retention: 365 days
+   * - Historical data available from: 2025/6/1
+   * - Data granularity: daily
+   * - Data update granularity: daily, previous day's data is updated on the current day
+   * - Time zone: UTC+8
+   * - startTime and endTime should either both be set or both left unset
+   * - This API supports retrieving data within the past 365 days (data is available starting from 2025/6/1 at the earliest)
+   * - If startTime and endTime are not set in the request, the default returned information will be for yesterday (00:00-23:59 UTC+8)
+   * - Data update frequency: T+1 (UTC+8)
+   */
+  getBrokerTotalCommission(
+    params?: GetBrokerTotalCommissionRequestV2,
+  ): Promise<APIResponse<BrokerTotalCommissionV2[]>> {
+    return this.getPrivate('/api/v2/broker/total-commission', params);
+  }
+
+  /**
+   * Get Order Commission
+   *
+   * - Rate limit: 20 req/sec/UID
+   * - Data storage: 30 days
+   * - Historical data backtracking: 2025/9/1
+   * - Data granularity: daily
+   * - Data update frequency: daily, previous day's data is updated on the current day
+   * - Time zone: UTC+8
+   * - startTime and endTime should either both be set or both not set
+   * - The maximum time span supported for startTime and endTime is 30 days
+   * - This API supports retrieving data within the past 30 days
+   * - If startTime and endTime are not set in the request, the default return will be information for yesterday (00:00-23:59 UTC+8)
+   * - This API data is updated on a T+1 basis
+   * - Transaction details only show those marked with broker channel id
+   */
+  getBrokerOrderCommission(
+    params?: GetBrokerOrderCommissionRequestV2,
+  ): Promise<APIResponse<BrokerOrderCommissionV2>> {
+    return this.getPrivate('/api/v2/broker/order-commission', params);
+  }
+
+  /**
+   * Get Rebate Info
+   *
+   * - Rate limit: 20 req/sec/UID
+   * - Data retention: 30 days
+   * - Real-time data
+   */
+  getBrokerRebateInfo(
+    params: GetBrokerRebateInfoRequestV2,
+  ): Promise<APIResponse<BrokerRebateInfoV2>> {
+    return this.getPrivate('/api/v2/broker/rebate-info', params);
   }
 
   /**

@@ -10981,7 +10981,7 @@ getFuturesHistoricFundingRates(params: {
     productType: FuturesProductTypeV2;
     pageSize?: string;
     pageNo?: string;
-}): Promise<APIResponse<FuturesHistoricalFundingRateV2>>
+}): Promise<APIResponse<FuturesHistoricalFundingRateV2[]>>
 ⋮----
 getFuturesCurrentFundingRate(params: {
     symbol: string;
@@ -10991,6 +10991,10 @@ getFuturesCurrentFundingRate(params: {
       {
         symbol: string;
         fundingRate: string;
+        fundingRateInterval: string;
+        nextUpdate: string;
+        minFundingRate: string;
+        maxFundingRate: string;
       }[]
     >
   > {

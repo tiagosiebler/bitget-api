@@ -255,3 +255,7 @@ export interface SetDepositAccountRequestV3 {
   coin: string;
   accountType: 'funding' | 'unified' | 'otc';
 }
+
+export interface GetMaxTransferableRequestV3 {
+  coin: string;
+}
