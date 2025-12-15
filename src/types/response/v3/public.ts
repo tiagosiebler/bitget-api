@@ -104,7 +104,13 @@ export interface InstrumentV3 {
   minOrderAmount: string;
   maxSymbolOrderNum: string;
   maxProductOrderNum: string;
-  status: 'listed' | 'online' | 'limit_open' | 'offline' | 'restrictedAPI';
+  status:
+    | 'listed'
+    | 'online'
+    | 'limit_open'
+    | 'limit_close'
+    | 'offline'
+    | 'restrictedAPI';
   offTime: string;
   limitOpenTime: string;
   maintainTime: string;

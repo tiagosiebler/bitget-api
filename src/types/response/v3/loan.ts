@@ -12,6 +12,7 @@ export interface LoanSymbolSettingV3 {
 export interface LoanSymbolsV3 {
   productId: string;
   spotSymbols: string[];
+  marginLeverage: string;
   usdtContractLeverage: string;
   coinContractLeverage: string;
   usdcContractLeverage: string;

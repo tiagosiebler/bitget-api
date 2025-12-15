@@ -233,3 +233,20 @@ export interface MaxTransferableV3 {
   maxTransfer: string;
   borrowMaxTransfer: string;
 }
+
+export interface OpenInterestLimitV3 {
+  symbol: string;
+  singleUserLimit: string;
+  masterSubLimit: string;
+  marketMakerLimit: string;
+}
+
+export interface TaxRecordV3 {
+  id: string;
+  coin: string;
+  type: string;
+  amount: string;
+  fee: string;
+  balance: string;
+  ts: string;
+}
