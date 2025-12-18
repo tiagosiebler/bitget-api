@@ -153,6 +153,7 @@ export interface FuturesContractConfigV2 {
   maxLever: string;
   posLimit: string;
   maintainTime: string;
+  isRwa: string;
 }
 
 /**
@@ -480,6 +481,7 @@ export interface FuturesHistoryOrderV2 {
   uTime: string;
   presetStopSurplusPrice: string;
   presetStopLossPrice: string;
+  liqPrice: string;
 }
 
 export interface FuturesCancelAllOrdersV2 {

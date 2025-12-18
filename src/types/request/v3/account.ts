@@ -259,3 +259,24 @@ export interface SetDepositAccountRequestV3 {
 export interface GetMaxTransferableRequestV3 {
   coin: string;
 }
+
+export interface GetOpenInterestLimitRequestV3 {
+  symbol: string;
+  category: 'USDT-FUTURES' | 'COIN-FUTURES' | 'USDC-FUTURES';
+}
+
+export interface GetTaxRecordsRequestV3 {
+  bizType:
+    | 'SPOT'
+    | 'MARGIN'
+    | 'USDT-FUTURES'
+    | 'COIN-FUTURES'
+    | 'USDC-FUTURES'
+    | 'OTHER';
+  marginType?: 'isolated' | 'crossed';
+  coin?: string;
+  startTime: string;
+  endTime: string;
+  limit?: string;
+  cursor?: string;
+}

@@ -10,12 +10,14 @@ import {
   GetFinancialRecordsRequestV3,
   GetFundingAssetsRequestV3,
   GetMaxTransferableRequestV3,
+  GetOpenInterestLimitRequestV3,
   GetSubAccountApiKeysRequestV3,
   GetSubAccountListRequestV3,
   GetSubDepositAddressRequestV3,
   GetSubDepositRecordsRequestV3,
   GetSubTransferRecordsRequestV3,
   GetSubUnifiedAssetsRequestV3,
+  GetTaxRecordsRequestV3,
   GetTransferableCoinsRequestV3,
   GetWithdrawRecordsRequestV3,
   RepayRequestV3,
@@ -89,6 +91,7 @@ import {
   FinancialRecordV3,
   FundingAssetV3,
   MaxTransferableV3,
+  OpenInterestLimitV3,
   PaymentCoinV3,
   RepayableCoinV3,
   RepayResponseV3,
@@ -96,6 +99,7 @@ import {
   SubAccountV3,
   SubTransferRecordV3,
   SubUnifiedAssetV3,
+  TaxRecordV3,
   TransferResponseV3,
   UpdateSubAccountApiKeyResponseV3,
   WithdrawRecordV3,
@@ -301,6 +305,7 @@ export class RestClientV3 extends BaseRestClient {
 
   /**
    * Get Kline/Candlestick
+   * Maximum number of returned entries: 1,000
    */
   getCandles(
     params: GetCandlesRequestV3,
@@ -534,6 +539,18 @@ export class RestClientV3 extends BaseRestClient {
   }
 
   /**
+   * Get Open Interest Limit
+   *
+   * - Rate limit: 5/sec/UID
+   * - Get open interest limit for a symbol
+   */
+  getOpenInterestLimit(
+    params: GetOpenInterestLimitRequestV3,
+  ): Promise<APIResponse<OpenInterestLimitV3>> {
+    return this.getPrivate('/api/v3/account/open-interest-limit', params);
+  }
+
+  /**
    * Switch Account - Switch to classic account mode
    * Only supports parent accounts.
    * This endpoint is only used for switching to classic account mode.
@@ -556,6 +573,20 @@ export class RestClientV3 extends BaseRestClient {
     }>
   > {
     return this.getPrivate('/api/v3/account/switch-status');
+  }
+
+  /**
+   * Get Tax Records
+   *
+   * - Rate limit: 1/sec/UID
+   * - Data query range: 366 days
+   * - Please use the tax API Key to request Creation Portal
+   * - Get Unified Account Tax Records
+   */
+  getTaxRecords(
+    params: GetTaxRecordsRequestV3,
+  ): Promise<APIResponse<TaxRecordV3[]>> {
+    return this.getPrivate('/api/v3/tax/records', params);
   }
 
   /**
