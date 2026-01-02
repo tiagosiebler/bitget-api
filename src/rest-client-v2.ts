@@ -152,7 +152,6 @@ import {
   SpotTransferRequestV2,
   SpotWithdrawalRequestV2,
 } from './types/request/v2/spot.js';
-import { APIResponse } from './types/response/v1/shared.js';
 import {
   AllSubDepositWithdrawalRecordV2,
   BrokerCommissionV2,
@@ -347,6 +346,7 @@ import {
   SpotWithdrawalRecordV2,
   SubmitSpotBatchOrdersResponseV2,
 } from './types/response/v2/spot.js';
+import { APIResponse } from './types/shared.js';
 import BaseRestClient from './util/BaseRestClient.js';
 import { REST_CLIENT_TYPE_ENUM } from './util/requestUtils.js';
 import { assertMarginType } from './util/type-guards.js';
