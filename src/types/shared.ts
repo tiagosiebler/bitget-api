@@ -28,3 +28,10 @@ export type KlineInterval =
 
 export type RestClientType =
   (typeof REST_CLIENT_TYPE_ENUM)[keyof typeof REST_CLIENT_TYPE_ENUM];
+
+export interface APIResponse<T> {
+  code: string;
+  requestTime: number;
+  msg: 'success' | string;
+  data: T;
+}

@@ -79,7 +79,6 @@ import {
   PlaceBatchOrdersRequestV3,
   PlaceOrderRequestV3,
 } from './types/request/v3/trade.js';
-import { APIResponse } from './types/response/v1/shared.js';
 import {
   AccountAssetsV3,
   AccountSettingsV3,
@@ -154,6 +153,7 @@ import {
   PositionHistoryV3,
   UnfilledOrderV3,
 } from './types/response/v3/trade.js';
+import { APIResponse } from './types/shared.js';
 import BaseRestClient from './util/BaseRestClient.js';
 import { REST_CLIENT_TYPE_ENUM } from './util/requestUtils.js';
 
