@@ -20,6 +20,12 @@ function generateConfig(name) {
       extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
       alias: {
         process: "process/browser",
+      },
+      fallback: {
+        // Node.js core modules not available in browsers
+        // The REST client's https.Agent (for keepAlive) is Node.js-only and won't work in browsers
+        "http": false,
+        "https": false,
       }
     },
 
