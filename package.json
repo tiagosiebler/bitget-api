@@ -11,7 +11,7 @@
     "build": "npm run clean && tsc -p tsconfig.esm.json && tsc -p tsconfig.cjs.json && bash ./postBuild.sh",
     "build:clean": "npm run clean && npm run build",
     "build:watch": "npm run clean && tsc --watch",
-    "pack": "webpack --config webpack/webpack.config.js",
+    "pack": "webpack --config webpack/webpack.config.cjs",
     "lint": "eslint src",
     "prepublish": "npm run build:clean",
     "betapublish": "npm publish --tag beta"
@@ -58,7 +58,8 @@
     "source-map-loader": "^4.0.0",
     "ts-loader": "^9.5.4",
     "webpack": "^5.74.0",
-    "webpack-cli": "^4.10.0"
+    "webpack-cli": "^4.10.0",
+    "webpack-bundle-analyzer": "^4.10.2"
   },
   "keywords": [
     "bitget",
