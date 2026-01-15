@@ -1,5 +1,26 @@
 import { FuturesPlanTypeV2, FuturesProductTypeV2 } from '../shared.js';
-import { FuturesKlineInterval } from '../v1/futuresV1.js';
+
+export type FuturesKlineInterval =
+  | '1m'
+  | '3m'
+  | '5m'
+  | '15m'
+  | '30m'
+  | '1H'
+  | '2H'
+  | '4H'
+  | '6H'
+  | '12H'
+  | '1D'
+  | '3D'
+  | '1W'
+  | '1M'
+  | '6Hutc'
+  | '12Hutc'
+  | '1Dutc'
+  | '3Dutc'
+  | '1Wutc'
+  | '1Mutc';
 
 export type FuturesKlineTypeV2 = 'MARKET' | 'MARK' | 'INDEX';
 
