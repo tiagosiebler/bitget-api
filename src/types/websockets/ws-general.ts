@@ -1,3 +1,6 @@
+import type { ClientRequestArgs } from 'http';
+import WebSocket from 'isomorphic-ws';
+
 import { RestClientOptions } from '../../util/requestUtils.js';
 import { WS_KEY_MAP } from '../../util/websocket-util.js';
 import { FuturesProductTypeV2 } from '../request/shared.js';
@@ -203,7 +206,7 @@ export interface WSClientConfigurableOptions {
   wsOptions?: {
     protocols?: string[];
     agent?: any;
-  };
+  } & Partial<WebSocket.ClientOptions | ClientRequestArgs>;
 
   wsUrl?: string;
 
