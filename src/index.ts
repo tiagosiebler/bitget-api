@@ -26,6 +26,7 @@ export * from './types/response/v3/loan.js';
 export * from './types/response/v3/public.js';
 export * from './types/response/v3/strategy.js';
 export * from './types/response/v3/trade.js';
+export * from './types/shared.js';
 export * from './types/websockets/ws-api.js';
 export * from './types/websockets/ws-api-request.js';
 export * from './types/websockets/ws-api-response.js';
