@@ -183,3 +183,15 @@ export interface ProofOfReservesV3 {
     reserveRatio: string;
   }[];
 }
+
+export interface IndexComponentV3 {
+  exchange: string;
+  spotPair: string;
+  equivalentPrice: string;
+  weight: string;
+}
+
+export interface IndexPriceComponentsV3 {
+  symbol: string;
+  componentList: IndexComponentV3[];
+}

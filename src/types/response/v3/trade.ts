@@ -108,6 +108,7 @@ export interface UnfilledOrderV3 {
   orderStatus: string;
   posSide: string;
   holdMode: string;
+  delegateType?: string;
   reduceOnly: string;
   feeDetail: FeeDetailV3[];
   stpMode?: string;
@@ -132,6 +133,7 @@ export interface HistoryOrderV3 {
   orderStatus: string;
   posSide: string;
   holdMode: string;
+  delegateType?: string;
   reduceOnly: string;
   feeDetail: FeeDetailV3[];
   cancelReason: string;
