@@ -1,6 +1,6 @@
 {
   "name": "bitget-api",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Complete Node.js & JavaScript SDK for Bitget V1-V3 REST APIs & WebSockets, with TypeScript & end-to-end tests.",
   "scripts": {
     "test": "jest",

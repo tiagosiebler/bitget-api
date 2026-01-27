@@ -30,6 +30,19 @@ import {
   WithdrawRequestV3,
 } from './types/request/v3/account.js';
 import {
+  BrokerSubWithdrawalRequestV3,
+  CreateBrokerSubAccountRequestV3,
+  CreateBrokerSubApiKeyRequestV3,
+  DeleteBrokerSubApiKeyRequestV3,
+  GetBrokerAllSubDepositWithdrawalRequestV3,
+  GetBrokerCommissionRequestV3,
+  GetBrokerSubAccountListRequestV3,
+  GetBrokerSubApiKeyRequestV3,
+  GetBrokerSubDepositAddressRequestV3,
+  ModifyBrokerSubAccountRequestV3,
+  ModifyBrokerSubApiKeyRequestV3,
+} from './types/request/v3/broker.js';
+import {
   BindUidRequestV3,
   GetEnsureCoinsRequestV3,
   GetLoanOrderRequestV3,
@@ -45,6 +58,7 @@ import {
   GetCurrentFundingRateRequestV3,
   GetHistoryCandlesRequestV3,
   GetHistoryFundingRateRequestV3,
+  GetIndexComponentsRequestV3,
   GetInstrumentsRequestV3,
   GetMarginLoansRequestV3,
   GetOpenInterestRequestV3,
@@ -105,6 +119,18 @@ import {
   WithdrawResponseV3,
 } from './types/response/v3/account.js';
 import {
+  BrokerCommissionRecordV3,
+  BrokerSubDepositAddressV3,
+  BrokerSubWithdrawalResponseV3,
+  CreateBrokerSubAccountResponseV3,
+  CreateBrokerSubApiKeyResponseV3,
+  GetBrokerAllSubDepositWithdrawalResponseV3,
+  GetBrokerSubAccountListResponseV3,
+  GetBrokerSubApiKeyResponseV3,
+  ModifyBrokerSubAccountResponseV3,
+  ModifyBrokerSubApiKeyResponseV3,
+} from './types/response/v3/broker.js';
+import {
   BindUidResponseV3,
   CoinInfoV3,
   LoanOrderV3,
@@ -120,6 +146,7 @@ import {
   CurrentFundingRateV3,
   DiscountRateV3,
   HistoryFundingRateV3,
+  IndexPriceComponentsV3,
   InstrumentV3,
   MarginLoanV3,
   OpenInterestV3,
@@ -381,6 +408,15 @@ export class RestClientV3 extends BaseRestClient {
     params: GetContractsOiRequestV3,
   ): Promise<APIResponse<ContractOiV3[]>> {
     return this.get('/api/v3/market/oi-limit', params);
+  }
+
+  /**
+   * Get Index Price Components
+   */
+  getIndexComponents(
+    params: GetIndexComponentsRequestV3,
+  ): Promise<APIResponse<IndexPriceComponentsV3>> {
+    return this.get('/api/v3/market/index-components', params);
   }
 
   /**
@@ -1104,5 +1140,150 @@ export class RestClientV3 extends BaseRestClient {
     }>
   > {
     return this.getPrivate('/api/v3/trade/history-strategy-orders', params);
+  }
+
+  /**
+   *
+   * =====Broker======= endpoints
+   *
+   */
+
+  /**
+   * Create Broker Sub-Account
+   *
+   * Rate limit: 20/sec/UID
+   * Only the master account with a user type of ND Broker can call this API endpoint.
+   */
+  createBrokerSubAccount(
+    params: CreateBrokerSubAccountRequestV3,
+  ): Promise<APIResponse<CreateBrokerSubAccountResponseV3>> {
+    return this.postPrivate('/api/v3/broker/create-sub', params);
+  }
+
+  /**
+   * Get Broker Sub-Account List
+   *
+   * Rate limit: 20/sec/UID
+   * Only the master account with a user type of ND Broker can call this API endpoint.
+   */
+  getBrokerSubAccountList(
+    params?: GetBrokerSubAccountListRequestV3,
+  ): Promise<APIResponse<GetBrokerSubAccountListResponseV3>> {
+    return this.getPrivate('/api/v3/broker/sub-list', params);
+  }
+
+  /**
+   * Modify Broker Sub-Account
+   *
+   * Rate limit: 20/sec/UID
+   * Only the master account with a user type of ND Broker can call this API endpoint.
+   */
+  modifyBrokerSubAccount(
+    params: ModifyBrokerSubAccountRequestV3,
+  ): Promise<APIResponse<ModifyBrokerSubAccountResponseV3>> {
+    return this.postPrivate('/api/v3/broker/modify-sub', params);
+  }
+
+  /**
+   * Broker Subaccount Withdrawal
+   *
+   * Broker sub-account withdrawal API has restrictions and currently supports only the following currencies:
+   * BTC, ETH, USDT, USDC, TRX, XRP, LTC, SOL, BNB, FTM, DOGE, ADA, SHIB, UNI, SEI, SUI, POL, FIL, LINK, TON, ARB, OP, DOT, AVAX
+   *
+   * Rate limit: 20/sec/UID
+   * Only the master account with a user type of ND Broker can call this API endpoint.
+   */
+  brokerSubWithdrawal(
+    params: BrokerSubWithdrawalRequestV3,
+  ): Promise<APIResponse<BrokerSubWithdrawalResponseV3>> {
+    return this.postPrivate('/api/v3/broker/sub-withdrawal', params);
+  }
+
+  /**
+   * Get Broker Subaccount Deposit Address
+   *
+   * Rate limit: 20/sec/UID
+   * Only the master account with a user type of ND Broker can call this API endpoint.
+   */
+  getBrokerSubDepositAddress(
+    params: GetBrokerSubDepositAddressRequestV3,
+  ): Promise<APIResponse<BrokerSubDepositAddressV3>> {
+    return this.postPrivate('/api/v3/broker/sub-deposit-address', params);
+  }
+
+  /**
+   * Get All Broker Subaccount Deposit Withdrawal
+   *
+   * Rate limit: 20/sec/UID
+   * Only the master account with a user type of ND Broker can call this API endpoint.
+   */
+  getBrokerAllSubDepositWithdrawal(
+    params?: GetBrokerAllSubDepositWithdrawalRequestV3,
+  ): Promise<APIResponse<GetBrokerAllSubDepositWithdrawalResponseV3>> {
+    return this.getPrivate('/api/v3/broker/all-sub-deposit-withdrawal', params);
+  }
+
+  /**
+   * Get Broker Commission
+   *
+   * Rate limit: 20/sec/UID
+   * Only the master account with a user type of ND Broker can call this API endpoint.
+   */
+  getBrokerCommission(
+    params?: GetBrokerCommissionRequestV3,
+  ): Promise<APIResponse<BrokerCommissionRecordV3[]>> {
+    return this.getPrivate('/api/v3/broker/commission', params);
+  }
+
+  /**
+   * Create Broker Sub-Account API Key
+   *
+   * Rate limit: 20/sec/UID
+   * Only the master account with a user type of ND Broker can call this API endpoint.
+   */
+  createBrokerSubApiKey(
+    params: CreateBrokerSubApiKeyRequestV3,
+  ): Promise<APIResponse<CreateBrokerSubApiKeyResponseV3>> {
+    return this.postPrivate('/api/v3/broker/create-sub-apikey', params);
+  }
+
+  /**
+   * Modify Broker Sub-Account API Key
+   *
+   * Rate limit: 20/sec/UID
+   * Only the master account with a user type of ND Broker can call this API endpoint.
+   */
+  modifyBrokerSubApiKey(
+    params: ModifyBrokerSubApiKeyRequestV3,
+  ): Promise<APIResponse<ModifyBrokerSubApiKeyResponseV3>> {
+    return this.postPrivate('/api/v3/broker/modify-sub-apikey', params);
+  }
+
+  /**
+   * Delete Broker Subaccount Apikey
+   *
+   * This endpoint has no response parameters.
+   * It returns the deletion result synchronously.
+   * Determine whether the deletion succeeded or failed (and the failure reason) based on the returned code and msg.
+   *
+   * Rate limit: 20/sec/UID
+   * Only the master account with a user type of ND Broker can call this API endpoint.
+   */
+  deleteBrokerSubApiKey(
+    params: DeleteBrokerSubApiKeyRequestV3,
+  ): Promise<APIResponse<null>> {
+    return this.postPrivate('/api/v3/broker/delete-sub-apikey', params);
+  }
+
+  /**
+   * Get Broker Sub-Account API Key
+   *
+   * Rate limit: 20/sec/UID
+   * Only the master account with a user type of ND Broker can call this API endpoint.
+   */
+  getBrokerSubApiKey(
+    params: GetBrokerSubApiKeyRequestV3,
+  ): Promise<APIResponse<GetBrokerSubApiKeyResponseV3>> {
+    return this.getPrivate('/api/v3/broker/query-sub-apikey', params);
   }
 }
