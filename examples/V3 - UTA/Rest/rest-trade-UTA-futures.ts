@@ -3,7 +3,7 @@ import {
   PlaceOrderRequestV3,
   RestClientV3,
   WebsocketClientV3,
-} from '../../src';
+} from '../../../src/index.js';
 
 // or
 // import { PlaceOrderRequestV3, RestClientV3, WebsocketClientV3 } from '../src';

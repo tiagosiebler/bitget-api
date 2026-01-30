@@ -1,4 +1,8 @@
-import { DefaultLogger, WebsocketClientV3, WS_KEY_MAP } from '../../src';
+import {
+  DefaultLogger,
+  WebsocketClientV3,
+  WS_KEY_MAP,
+} from '../../../src/index.js';
 
 // or
 // import { DefaultLogger, WS_KEY_MAP, WebsocketClientV2 } from 'bitget-api';

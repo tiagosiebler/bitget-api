@@ -2,7 +2,7 @@ import {
   FuturesPlaceOrderRequestV2,
   RestClientV2,
   WebsocketClientV2,
-} from '../../src';
+} from '../../../src/index.js';
 
 // or
 // import { FuturesPlaceOrderRequestV2, RestClientV2, WebsocketClientV2 } from '../src';
