@@ -1,4 +1,4 @@
-import { RestClientV2, RestClientV3 } from '../../src';
+import { RestClientV2, RestClientV3 } from '../../src/index.js';
 
 // Import frmo NPM:
 // import { RestClientV2, RestClientV3 } from 'bitget-api';
