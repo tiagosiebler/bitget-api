@@ -4,7 +4,7 @@ import {
   DefaultLogger,
   RestClientV3,
   WebsocketClientV3,
-} from '../../src//index.js';
+} from '../../src/index.js';
 
 // or
 // import { createHmac } from 'crypto';
