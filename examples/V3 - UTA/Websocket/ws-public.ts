@@ -10,7 +10,7 @@ import {
 (async () => {
   const logger = {
     ...DefaultLogger,
-    trace: (...params) => console.log('trace', ...params),
+    trace: (...params: any[]) => console.log('trace', ...params),
   };
 
   const wsClient = new WebsocketClientV3({}, logger);

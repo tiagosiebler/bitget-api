@@ -10,7 +10,7 @@ import {
 (async () => {
   const logger = {
     ...DefaultLogger,
-    trace: (...params) => console.log('trace', ...params),
+    trace: (...params: any[]) => console.log('trace', ...params),
   };
 
   const API_KEY = process.env.API_KEY_COM;
