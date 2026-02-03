@@ -31,12 +31,12 @@ const wsClient = new WebsocketClientV2({
   apiPass: API_PASS,
 });
 
-function logWSEvent(type, data) {
+function logWSEvent(type: string, data: any) {
   console.log(new Date(), `WS ${type} event: `, data);
 }
 
 // simple sleep function
-function promiseSleep(milliseconds) {
+function promiseSleep(milliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
