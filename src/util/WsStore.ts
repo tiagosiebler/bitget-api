@@ -20,13 +20,36 @@ export function isDeepObjectMatch(object1: unknown, object2: unknown): boolean {
     return false;
   }
 
+  if (object1 === null || object2 === null) {
+    return object1 === object2;
+  }
+
+  const keys1 = Object.keys(object1).sort();
+  const keys2 = Object.keys(object2).sort();
+
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  if (!keys1.every((val, i) => val === keys2[i])) {
+    return false;
+  }
+
   // both are objects, run deeper match
   for (const key in object1) {
     const value1 = (object1 as any)[key];
     const value2 = (object2 as any)[key];
 
-    const matches = isDeepObjectMatch(value1, value2);
-    if (!matches) {
+    if (
+      typeof value1 === 'object' &&
+      typeof value2 === 'object' &&
+      value1 !== null &&
+      value2 !== null
+    ) {
+      if (!isDeepObjectMatch(value1, value2)) {
+        return false;
+      }
+    } else if (value1 !== value2) {
       return false;
     }
   }
