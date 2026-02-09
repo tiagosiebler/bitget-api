@@ -1,5 +1,4 @@
-import { DefaultLogger } from '../../src';
-import { WebsocketAPIClient } from '../../src/websocket-api-client';
+import { DefaultLogger, WebsocketAPIClient } from '../../../src/index.js';
 
 // or
 // import { DefaultLogger, WS_KEY_MAP, WebsocketAPIClient } from 'bitget-api';
@@ -27,7 +26,7 @@ import { WebsocketAPIClient } from '../../src/websocket-api-client';
 (async () => {
   const logger = {
     ...DefaultLogger,
-    trace: (...params) => console.log('trace', ...params),
+    trace: (...params: any[]) => console.log('trace', ...params),
   };
 
   const API_KEY = process.env.API_KEY_COM;

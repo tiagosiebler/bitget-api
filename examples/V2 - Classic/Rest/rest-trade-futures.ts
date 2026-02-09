@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
-  PlaceOrderRequestV3,
-  RestClientV3,
-  WebsocketClientV3,
-} from '../../src';
+  FuturesPlaceOrderRequestV2,
+  RestClientV2,
+  WebsocketClientV2,
+} from '../../../src/index.js';
 
 // or
-// import { PlaceOrderRequestV3, RestClientV3, WebsocketClientV3 } from '../src';
+// import { FuturesPlaceOrderRequestV2, RestClientV2, WebsocketClientV2 } from '../src';
 
 // read from environmental variables
 const API_KEY = process.env.API_KEY_COM;
@@ -14,11 +13,11 @@ const API_SECRET = process.env.API_SECRET_COM;
 const API_PASS = process.env.API_PASS_COM;
 
 // If running from CLI in unix, you can pass env vars as such:
-// API_KEY_COM='lkm12n3-2ba3-1mxf-fn13-lkm12n3a' API_SECRET_COM='035B2B9637E1BDFFEE2646BFBDDB8CE4' API_PASSPHRASE_COM='ComplexPa$$!23$5^' ts-node examples/V3/rest-trade-futures.ts
+// API_KEY_COM='lkm12n3-2ba3-1mxf-fn13-lkm12n3a' API_SECRET_COM='035B2B9637E1BDFFEE2646BFBDDB8CE4' API_PASSPHRASE_COM='ComplexPa$$!23$5^' ts-node examples/rest-trade-futures.ts
 
 // note the single quotes, preventing special characters such as $ from being incorrectly passed
 
-const client = new RestClientV3({
+const client = new RestClientV2({
   apiKey: API_KEY,
   apiSecret: API_SECRET,
   apiPass: API_PASS,
@@ -27,18 +26,18 @@ const client = new RestClientV3({
   // apiPass: 'apiPassHere',
 });
 
-const wsClient = new WebsocketClientV3({
+const wsClient = new WebsocketClientV2({
   apiKey: API_KEY,
   apiSecret: API_SECRET,
   apiPass: API_PASS,
 });
 
-function logWSEvent(type, data) {
+function logWSEvent(type: string, data: any) {
   console.log(new Date(), `WS ${type} event: `, data);
 }
 
 // simple sleep function
-function promiseSleep(milliseconds) {
+function promiseSleep(milliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
@@ -47,7 +46,7 @@ function promiseSleep(milliseconds) {
  *
  * It is designed to:
  * - open a private websocket channel to log account events
- * - check for any available USDT balance in the account
+ * - check for any available USDT balance in the futures account
  * - immediately open a minimum sized long position on BTCUSDT
  * - check active positions
  * - immediately send closing orders for any active futures positions
@@ -66,51 +65,33 @@ function promiseSleep(milliseconds) {
     wsClient.on('authenticated', (data) => logWSEvent('authenticated', data));
     wsClient.on('exception', (data) => logWSEvent('exception', data));
 
-    // Subscribe to private topics for UTA account
-    wsClient.subscribe(
-      {
-        topic: 'account',
-        payload: {
-          instType: 'UTA',
-        },
-      },
-      'v3Private',
-    );
+    // futures private
+    // : account updates
+    wsClient.subscribeTopic('USDT-FUTURES', 'account');
 
-    // Subscribe to position updates
-    wsClient.subscribe(
-      {
-        topic: 'position',
-        payload: {
-          instType: 'UTA',
-        },
-      },
-      'v3Private',
-    );
+    // : position updates
+    wsClient.subscribeTopic('USDT-FUTURES', 'positions');
 
-    // Subscribe to order updates
-    wsClient.subscribe(
-      {
-        topic: 'order',
-        payload: {
-          instType: 'UTA',
-        },
-      },
-      'v3Private',
-    );
+    // : order updates
+    wsClient.subscribeTopic('USDT-FUTURES', 'orders');
 
     // wait briefly for ws to be ready (could also use the response or authenticated events, to make sure topics are subscribed to before starting)
     await promiseSleep(2.5 * 1000);
 
     const symbol = 'BTCUSDT';
+    const marginCoin = 'USDT';
 
-    const balanceResult = await client.getBalances();
+    const balanceResult = await client.getFuturesAccountAssets({
+      productType: 'USDT-FUTURES',
+    });
     const accountBalance = balanceResult.data;
-
-    const usdtAsset = accountBalance.assets?.find(
+    // const balances = allBalances.filter((bal) => Number(bal.available) != 0);
+    const assetList = accountBalance.find(
+      (bal) => bal.marginCoin === marginCoin,
+    )?.assetList;
+    const usdtAmount = assetList?.find(
       (asset) => asset.coin === 'USDT',
-    );
-    const usdtAmount = usdtAsset ? Number(usdtAsset.available) : 0;
+    )?.balance;
 
     console.log('USDT balance: ', usdtAmount);
 
@@ -119,9 +100,9 @@ function promiseSleep(milliseconds) {
       return;
     }
 
-    const symbolRulesResult = await client.getInstruments({
-      category: 'USDT-FUTURES',
-      symbol: symbol,
+    const symbolRulesResult = await client.getFuturesContractConfig({
+      symbol,
+      productType: 'USDT-FUTURES',
     });
     const bitcoinUSDFuturesRule = symbolRulesResult.data.find(
       (row) => row.symbol === symbol,
@@ -133,24 +114,26 @@ function promiseSleep(milliseconds) {
       return;
     }
 
-    const order: PlaceOrderRequestV3 = {
-      category: 'USDT-FUTURES',
+    const order: FuturesPlaceOrderRequestV2 = {
+      marginCoin: marginCoin,
+      marginMode: 'crossed',
+      productType: 'USDT-FUTURES',
       orderType: 'market',
       side: 'buy',
-      qty: bitcoinUSDFuturesRule.minOrderQty,
+      size: bitcoinUSDFuturesRule.minTradeNum,
       symbol: symbol,
     } as const;
 
     console.log('placing order: ', order);
 
-    const result = await client.submitNewOrder(order);
+    const result = await client.futuresSubmitOrder(order);
 
     console.log('order result: ', result);
 
-    const positionsResult = await client.getCurrentPosition({
-      category: 'USDT-FUTURES',
+    const positionsResult = await client.getFuturesPositions({
+      productType: 'USDT-FUTURES',
     });
-    const positionsToClose = positionsResult.data.list.filter(
+    const positionsToClose = positionsResult.data.filter(
       (pos) => pos.total !== '0',
     );
 
@@ -158,25 +141,27 @@ function promiseSleep(milliseconds) {
 
     // Loop through any active positions and send a closing market order on each position
     for (const position of positionsToClose) {
-      const closingSide = position.posSide === 'long' ? 'sell' : 'buy';
-      const closingOrder: PlaceOrderRequestV3 = {
-        category: 'USDT-FUTURES',
+      const closingSide = position.holdSide === 'long' ? 'sell' : 'buy';
+      const closingOrder: FuturesPlaceOrderRequestV2 = {
+        marginCoin: position.marginCoin,
+        marginMode: 'crossed',
+        productType: 'USDT-FUTURES',
         orderType: 'market',
         side: closingSide,
-        qty: position.total,
+        size: position.available,
         symbol: position.symbol,
       };
 
       console.log('closing position with market order: ', closingOrder);
 
-      const result = await client.submitNewOrder(closingOrder);
+      const result = await client.futuresSubmitOrder(closingOrder);
       console.log('position closing order result: ', result);
     }
 
     console.log(
       'positions after closing all: ',
-      await client.getCurrentPosition({
-        category: 'USDT-FUTURES',
+      await client.getFuturesPositions({
+        productType: 'USDT-FUTURES',
       }),
     );
   } catch (e) {

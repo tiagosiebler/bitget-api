@@ -65,5 +65,19 @@ describe('WsStore', () => {
 
       expect(isDeepObjectMatch(topic1, topic2)).toBeFalsy();
     });
+
+    it('should NOT match when object2 has extra keys', () => {
+      const topic1 = {
+        topic: 'account',
+        payload: { instType: 'USDT-FUTURES', coin: 'default' },
+      };
+      const topic2 = {
+        topic: 'account',
+        payload: { instType: 'USDT-FUTURES', coin: 'default' },
+        extraKey: 'shouldNotMatch',
+      };
+
+      expect(isDeepObjectMatch(topic1, topic2)).toBeFalsy();
+    });
   });
 });

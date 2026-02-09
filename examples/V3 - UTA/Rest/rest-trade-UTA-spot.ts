@@ -3,7 +3,7 @@ import {
   PlaceOrderRequestV3,
   RestClientV3,
   WebsocketClientV3,
-} from '../../src/index';
+} from '../../../src/index.js';
 
 // import { RestClientV3, WebsocketClientV3 } from '../src/index';
 
@@ -32,12 +32,12 @@ const wsClient = new WebsocketClientV3({
   apiPass: API_PASS,
 });
 
-function logWSEvent(type, data) {
+function logWSEvent(type: string, data: any) {
   console.log(new Date(), `WS ${type} event: `, data);
 }
 
 // simple sleep function
-function promiseSleep(milliseconds) {
+function promiseSleep(milliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }
 
@@ -86,7 +86,7 @@ function promiseSleep(milliseconds) {
       (bal) => bal.coin === 'BTC' || bal.coin === 'btc',
     );
     const btcAmount =
-      Number(allBalances.usdtEquity) > 0 ? Number(balanceBTC.available) : 0;
+      Number(allBalances.usdtEquity) > 0 ? Number(balanceBTC?.available) : 0;
     console.log('balance: ', JSON.stringify(allBalances, null, 2));
     console.log('BTC balance result: ', balanceBTC);
 

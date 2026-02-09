@@ -1,4 +1,4 @@
-import { RestClientV2 } from '../../src/index';
+import { RestClientV2 } from '../../../src/index.js';
 
 // or
 // import { RestClientV2 } from 'bitget-api';

@@ -105,3 +105,7 @@ export interface GetTickersRequestV3 {
   category: 'SPOT' | 'USDT-FUTURES' | 'COIN-FUTURES' | 'USDC-FUTURES';
   symbol?: string;
 }
+
+export interface GetIndexComponentsRequestV3 {
+  symbol: string;
+}
