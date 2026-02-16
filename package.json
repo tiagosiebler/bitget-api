@@ -34,7 +34,7 @@
   "author": "Tiago Siebler (https://siebly.io)",
   "contributors": [],
   "dependencies": {
-    "axios": "^1.13.2",
+    "axios": "^1.13.5",
     "isomorphic-ws": "^5.0.0",
     "ws": "^8.18.3"
   },
@@ -57,7 +57,7 @@
   "optionalDependencies": {
     "source-map-loader": "^4.0.0",
     "ts-loader": "^9.5.4",
-    "webpack": "^5.74.0",
+    "webpack": "^5.98.0",
     "webpack-bundle-analyzer": "^5.1.1",
     "webpack-cli": "^4.10.0"
   },
