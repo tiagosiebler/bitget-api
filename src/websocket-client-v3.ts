@@ -448,6 +448,15 @@ export class WebsocketClientV3 extends BaseWebsocketClient<
               eventType: 'exception',
               event: emittableEvent,
             });
+            // Service upgrade (30033): Bitget sends this ~60s before disconnect. Proactively close to trigger reconnect.
+            const code = msg['code'];
+            if (code === 30033 || code === '30033') {
+              this.logger.info(
+                'Service upgrade in progress - closing connection to reconnect',
+                { ...WS_LOGGER_CATEGORY, wsKey },
+              );
+              this.getWsStore().getWs(wsKey)?.close();
+            }
           }
 
           return results;

@@ -127,7 +127,8 @@ export interface InstrumentV3 {
   deliveryTime?: string;
   deliveryStartTime?: string;
   deliveryPeriod?: string;
-  launchTime?: string;
+  /** Launch time - Unix millisecond timestamp. Null for some margin pairs. */
+  launchTime?: string | null;
   fundInterval?: string;
   minLeverage?: string;
   maxLeverage?: string;
@@ -140,6 +141,33 @@ export interface InstrumentV3 {
   maxCrossedLeverage?: string;
   maxIsolatedLeverage?: string;
   userMinBorrow?: string;
+}
+
+export interface MarketFeeGroupLabelV3 {
+  weight: string;
+  label: string;
+  symbols: string[];
+}
+
+export interface MarketFeeGroupTierV3 {
+  level: string;
+  makerFeeRate: string;
+}
+
+export interface MarketFeeGroupV3 {
+  category: string;
+  group: string;
+  labelList: MarketFeeGroupLabelV3[];
+  tierList: MarketFeeGroupTierV3[];
+}
+
+export interface MarketScoreWeightV3 {
+  category: string;
+  label: string;
+  symbol: string;
+  requiredSpread: string;
+  minMakerVolume: string;
+  weight: string;
 }
 
 export interface OrderBookV3 {

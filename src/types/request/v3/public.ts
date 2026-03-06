@@ -95,6 +95,15 @@ export interface GetInstrumentsRequestV3 {
   symbol?: string;
 }
 
+export interface GetMarketFeeGroupRequestV3 {
+  category: 'SPOT' | 'FUTURES';
+  group?: 'GROUP_A' | 'GROUP_B' | 'GROUP_C';
+}
+
+export interface GetMarketScoreWeightsRequestV3 {
+  category?: 'SPOT' | 'FUTURES';
+}
+
 export interface GetOrderBookRequestV3 {
   category: 'SPOT' | 'USDT-FUTURES' | 'COIN-FUTURES' | 'USDC-FUTURES';
   symbol: string;
