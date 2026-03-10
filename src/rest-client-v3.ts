@@ -45,12 +45,22 @@ import {
 import {
   BindUidRequestV3,
   GetEnsureCoinsRequestV3,
+  GetLoanBorrowHistoryRequestV3,
+  GetLoanBorrowOngoingRequestV3,
+  GetLoanCoinsRequestV3,
+  GetLoanInterestRequestV3,
   GetLoanOrderRequestV3,
+  GetLoanPledgeRateHistoryRequestV3,
+  GetLoanReducesRequestV3,
+  GetLoanRepayHistoryRequestV3,
   GetLTVConvertRequestV3,
   GetProductInfosRequestV3,
   GetRepaidHistoryRequestV3,
   GetSymbolsRequestV3,
   GetTransferedRequestV3,
+  LoanBorrowRequestV3,
+  LoanRepayRequestV3,
+  LoanRevisePledgeRequestV3,
 } from './types/request/v3/loan.js';
 import {
   GetCandlesRequestV3,
@@ -61,6 +71,8 @@ import {
   GetIndexComponentsRequestV3,
   GetInstrumentsRequestV3,
   GetMarginLoansRequestV3,
+  GetMarketFeeGroupRequestV3,
+  GetMarketScoreWeightsRequestV3,
   GetOpenInterestRequestV3,
   GetOrderBookRequestV3,
   GetPositionTierRequestV3,
@@ -133,8 +145,19 @@ import {
 import {
   BindUidResponseV3,
   CoinInfoV3,
+  GetLoanCoinsResponseV3,
+  GetLoanDebtsResponseV3,
+  GetLoanInterestResponseV3,
+  LoanBorrowHistoryItemV3,
+  LoanBorrowOngoingItemV3,
+  LoanBorrowResponseV3,
   LoanOrderV3,
+  LoanPledgeRateHistoryItemV3,
   LoanProductInfoV3,
+  LoanReduceItemV3,
+  LoanRepayHistoryItemV3,
+  LoanRepayResponseV3,
+  LoanRevisePledgeResponseV3,
   LoanSymbolsV3,
   LoanTransfersV3,
   LTVConvertResponseV3,
@@ -149,6 +172,8 @@ import {
   IndexPriceComponentsV3,
   InstrumentV3,
   MarginLoanV3,
+  MarketFeeGroupV3,
+  MarketScoreWeightV3,
   OpenInterestV3,
   OrderBookV3,
   PositionTierV3,
@@ -287,6 +312,24 @@ export class RestClientV3 extends BaseRestClient {
     params: GetInstrumentsRequestV3,
   ): Promise<APIResponse<InstrumentV3[]>> {
     return this.get('/api/v3/market/instruments', params);
+  }
+
+  /**
+   * Get Market Maker Fee Group - Query fee rate tiers and grouping
+   */
+  getMarketFeeGroup(
+    params: GetMarketFeeGroupRequestV3,
+  ): Promise<APIResponse<MarketFeeGroupV3[]>> {
+    return this.get('/api/v3/market/fee-group', params);
+  }
+
+  /**
+   * Get Market Maker Score Weight - Query score weights per symbol
+   */
+  getMarketScoreWeights(
+    params?: GetMarketScoreWeightsRequestV3,
+  ): Promise<APIResponse<MarketScoreWeightV3[]>> {
+    return this.get('/api/v3/market/score-weights', params);
   }
 
   /**
@@ -1086,6 +1129,109 @@ export class RestClientV3 extends BaseRestClient {
     params: BindUidRequestV3,
   ): Promise<APIResponse<BindUidResponseV3>> {
     return this.postPrivate('/api/v3/ins-loan/bind-uid', params);
+  }
+
+  /**
+   *
+   * =====Unified Account Staking & Lending (Crypto Loans)===== /api/v3/loan/*
+   *
+   */
+
+  /**
+   * Get Loan Coins - Query supported collateral currencies and borrowable coins
+   */
+  getLoanCoins(
+    params?: GetLoanCoinsRequestV3,
+  ): Promise<APIResponse<GetLoanCoinsResponseV3>> {
+    return this.getPrivate('/api/v3/loan/coins', params);
+  }
+
+  /**
+   * Get Loan Interest - Query estimated interest and borrowable amount
+   */
+  getLoanInterest(
+    params: GetLoanInterestRequestV3,
+  ): Promise<APIResponse<GetLoanInterestResponseV3>> {
+    return this.getPrivate('/api/v3/loan/interest', params);
+  }
+
+  /**
+   * Borrow - Borrow coins
+   */
+  loanBorrow(
+    params: LoanBorrowRequestV3,
+  ): Promise<APIResponse<LoanBorrowResponseV3>> {
+    return this.postPrivate('/api/v3/loan/borrow', params);
+  }
+
+  /**
+   * Get Borrow Ongoing - Query current borrowings
+   */
+  getLoanBorrowOngoing(
+    params?: GetLoanBorrowOngoingRequestV3,
+  ): Promise<APIResponse<LoanBorrowOngoingItemV3[]>> {
+    return this.getPrivate('/api/v3/loan/borrow-ongoing', params);
+  }
+
+  /**
+   * Get Borrow History - Query borrowing history
+   */
+  getLoanBorrowHistory(
+    params: GetLoanBorrowHistoryRequestV3,
+  ): Promise<APIResponse<LoanBorrowHistoryItemV3[]>> {
+    return this.getPrivate('/api/v3/loan/borrow-history', params);
+  }
+
+  /**
+   * Repay - Repay coins
+   */
+  loanRepay(
+    params: LoanRepayRequestV3,
+  ): Promise<APIResponse<LoanRepayResponseV3>> {
+    return this.postPrivate('/api/v3/loan/repay', params);
+  }
+
+  /**
+   * Get Repay History - Query repayment history
+   */
+  getLoanRepayHistory(
+    params: GetLoanRepayHistoryRequestV3,
+  ): Promise<APIResponse<LoanRepayHistoryItemV3[]>> {
+    return this.getPrivate('/api/v3/loan/repay-history', params);
+  }
+
+  /**
+   * Revise Pledge - Adjust collateral ratio
+   */
+  loanRevisePledge(
+    params: LoanRevisePledgeRequestV3,
+  ): Promise<APIResponse<LoanRevisePledgeResponseV3>> {
+    return this.postPrivate('/api/v3/loan/revise-pledge', params);
+  }
+
+  /**
+   * Get Pledge Rate History - Query collateral ratio history
+   */
+  getLoanPledgeRateHistory(
+    params: GetLoanPledgeRateHistoryRequestV3,
+  ): Promise<APIResponse<LoanPledgeRateHistoryItemV3[]>> {
+    return this.getPrivate('/api/v3/loan/pledge-rate-history', params);
+  }
+
+  /**
+   * Get Loan Debts - Query assets and liabilities
+   */
+  getLoanDebts(): Promise<APIResponse<GetLoanDebtsResponseV3>> {
+    return this.getPrivate('/api/v3/loan/debts');
+  }
+
+  /**
+   * Get Loan Reduces - Query liquidation records
+   */
+  getLoanReduces(
+    params: GetLoanReducesRequestV3,
+  ): Promise<APIResponse<LoanReduceItemV3[]>> {
+    return this.getPrivate('/api/v3/loan/reduces', params);
   }
 
   /**

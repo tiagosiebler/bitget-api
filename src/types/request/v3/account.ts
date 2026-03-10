@@ -106,6 +106,8 @@ export interface TransferRequestV3 {
   amount: string;
   coin: string;
   symbol?: string;
+  /** Enable automatic margin borrowing when balance insufficient. yes | no */
+  allowBorrow?: 'yes' | 'no';
 }
 
 export interface GetTransferableCoinsRequestV3 {
@@ -162,6 +164,8 @@ export interface SubAccountTransferRequestV3 {
   fromUserId: string;
   toUserId: string;
   clientOid: string;
+  /** Enable automatic margin borrowing when balance insufficient. yes | no */
+  allowBorrow?: 'yes' | 'no';
 }
 
 export interface GetSubUnifiedAssetsRequestV3 {
