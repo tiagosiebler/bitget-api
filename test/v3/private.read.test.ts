@@ -1,9 +1,9 @@
-import { API_ERROR_CODE } from '../../src';
-import { RestClientV3 } from '../../src/rest-client-v3';
+import { API_ERROR_CODE } from '../../src/index.js';
+import { RestClientV3 } from '../../src/rest-client-v3.js';
 import {
   errorResponseObjectV3,
   sucessEmptyResponseObject,
-} from '../response.util';
+} from '../response.util.js';
 
 describe('Bitget Private REST API V3 Read Endpoints', () => {
   const API_KEY = process.env.API_KEY_COM_V3;
