@@ -1,6 +1,6 @@
 {
   "name": "bitget-api",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Complete Node.js & JavaScript SDK for Bitget V1-V3 REST APIs & WebSockets, with TypeScript & end-to-end tests.",
   "scripts": {
     "test": "jest",
@@ -36,14 +36,14 @@
   "author": "Tiago Siebler (https://siebly.io)",
   "contributors": [],
   "dependencies": {
+    "@types/ws": "^8.18.1",
     "axios": "^1.13.2",
     "isomorphic-ws": "^5.0.0",
-    "ws": "^8.18.3"
+    "ws": "8.21.1"
   },
   "devDependencies": {
     "@types/jest": "^29.0.3",
     "@types/node": "^22.10.2",
-    "@types/ws": "^8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.18.0",
     "@typescript-eslint/parser": "^8.18.0",
     "eslint": "^8.24.0",
@@ -58,7 +58,6 @@
     "source-map-loader": "^4.0.0",
     "ts-loader": "^9.5.4",
     "webpack": "^5.74.0",
-    "webpack-bundle-analyzer": "^5.1.1",
     "webpack-cli": "^4.10.0"
   },
   "keywords": [
