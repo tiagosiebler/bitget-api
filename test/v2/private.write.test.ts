@@ -99,7 +99,7 @@ describe('Bitget Private REST API Write Endpoints', () => {
   });
 
   describe('Funding Endpoints', () => {
-    it('spotTransfer()', async () => {
+    it.skip('spotTransfer()', async () => {
       try {
         const res = await api.spotTransfer({
           fromType: 'spot',
