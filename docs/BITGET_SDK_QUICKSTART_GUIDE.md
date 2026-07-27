@@ -15,7 +15,7 @@ siebly:
     codeStatus: public REST API
     startSectionId: start-building-first-rest-api-calls
   software:
-    description: Node.js and JavaScript SDK for Bitget V3/UTA REST API, public and private WebSockets, demo trading, WebSocket API command workflows, and V2/Classic fallback flows.
+    description: Node.js and JavaScript SDK for Bitget V3/UTA REST API, public and private WebSockets, demo trading, WebSocket API command workflows, proxy support, and V2/Classic fallback flows.
     topics:
       - Bitget V3 REST API
       - Bitget UTA workflows
@@ -24,6 +24,7 @@ siebly:
       - WebSocket API
       - Demo trading
       - V2 Classic REST API
+      - REST API and WebSocket proxies
   machineCatalog:
     label: Bitget API JavaScript Tutorial
     topics:
@@ -34,12 +35,13 @@ siebly:
       - private WebSockets
       - WebSocket API commands
       - V2 Classic API fallbacks
+      - HTTP and SOCKS proxies
       - production reconnect handling
   sdkPagePromo:
     descriptionBeforePackage: 'A practical JavaScript guide to using '
-    descriptionAfterPackage: ' across Bitget V3/UTA REST, public and private streams, demo trading, WebSocket API commands, and V2/Classic fallback flows.'
+    descriptionAfterPackage: ' across Bitget V3/UTA REST, public and private streams, demo trading, WebSocket API commands, proxies, and V2/Classic fallback flows.'
     highlights:
-      - V3/UTA REST API workflows
+      - V3/UTA REST API and proxy examples
       - Public and private WebSocket streams
       - Demo trading and WebSocket API commands
       - Clear V2/Classic boundaries
@@ -91,12 +93,12 @@ siebly:
         summary: WebSocket API command categories are lower-case and have their own order option casing.
   coverage:
     heading: What to get right in a Bitget integration
-    summary: Start with a working public request, then build through credentials, UTA product values, private streams, demo trading, WebSocket API commands, Classic boundaries, reconnect recovery, and production rollout checks.
+    summary: Start with a working public request, then build through credentials, UTA product values, private streams, demo trading, WebSocket API commands, proxy configuration, Classic boundaries, reconnect recovery, and production rollout checks.
     cards:
       - heading: V3/UTA REST API
-        summary: Install the package, create RestClientV3, make public reads, add private credentials, and test demo order flows.
+        summary: Install the package, create RestClientV3, make public reads, add private credentials, configure the REST API network path, and test demo order flows.
       - heading: Public and private streams
-        summary: Use WebsocketClientV3 with the right WS_KEY_MAP entry, then handle reconnect and resubscribe behavior.
+        summary: Use WebsocketClientV3 with the right WS_KEY_MAP entry and optional proxy agent, then handle reconnect and resubscribe behavior.
       - heading: WebSocket API commands
         summary: Use WebsocketAPIClient for promise-wrapped place, batch place, cancel, and batch cancel commands.
       - heading: V2/Classic boundaries
@@ -171,6 +173,7 @@ siebly:
       - Check Bitget code values, per-item batch codes, and final order status before treating a command as complete.
       - Keep the host clock synced for private signed requests and avoid widening recvWindow unless needed.
       - Use V2/Classic clients only in isolated workflows that still depend on Classic API semantics.
+      - Monitor proxy reachability, latency, and egress IP when a proxy is enabled.
   journeys:
     eyebrow: Choose your path
     heading: Jump to the Bitget workflow you are building
@@ -190,7 +193,7 @@ siebly:
         href: "#v2classic-apis"
   article:
     heading: Build around Bitget UTA flows first
-    summary: "This tutorial focuses on the Bitget API pieces developers usually need first: V3 REST API calls, UTA public and private streams, WebSocket API commands, demo trading, V2/Classic boundaries, reconnects, and rollout checks."
+    summary: "This tutorial focuses on the Bitget API pieces developers usually need first: V3 REST API calls, UTA public and private streams, WebSocket API commands, demo trading, proxies, V2/Classic boundaries, reconnects, and rollout checks."
   related:
     cards:
       - heading: Bitget SDK page
@@ -213,7 +216,7 @@ siebly:
 > This tutorial is available in a more readable format on our website: [Bitget JavaScript Tutorial](https://siebly.io/sdk/bitget/javascript/tutorial)
 <!-- siebly:website-omit:end -->
 
-This guide shows how to connect to Bitget with our [`bitget-api`](https://www.npmjs.com/package/bitget-api) package - the Bitget Node.js, JavaScript, and TypeScript SDK by Siebly.io. You'll cover REST, WebSocket streams, and the WebSocket API.
+This guide shows how to connect to Bitget with our [`bitget-api`](https://www.npmjs.com/package/bitget-api) package - the Bitget Node.js, JavaScript, and TypeScript SDK by Siebly.io. You'll cover REST, WebSocket streams, the WebSocket API, and HTTP, HTTPS, and SOCKS proxy configuration.
 
 The SDK handles signing, routing, reconnects, and resubscribes so you don't have to. Below: install, public and private REST, live streams, demo trading, WebSocket API orders, V2/Classic where you still need it, and a few production notes.
 
@@ -1096,6 +1099,249 @@ ws.subscribeTopic('SPOT', 'ticker', 'BTCUSDT');
 V2 WebSocket `instType` values are upper-case, such as `SPOT`, `USDT-FUTURES`, `USDC-FUTURES`, and `COIN-FUTURES`.
 
 See also: [V2 WebSocket examples](../examples/V2%20-%20Classic/Websocket)
+
+---
+
+<!-- siebly:section id="proxies" -->
+## Proxies for REST API and WebSocket
+
+Use a proxy when a deployment needs a fixed egress IP, must cross an approved corporate network, or has a controlled network failover path. A proxy does not select V3/UTA, V2/Classic, demo trading, a product category, or a WebSocket `instType`.
+
+The broader [Using proxy with Siebly SDKs](https://siebly.io/blog/using-proxy-with-siebly-sdks) article covers the shared constructor pattern. The examples below use the current `bitget-api` V3 clients, and the same networking positions apply to the V2 clients.
+
+Proxy agents are a Node.js networking feature. Browser applications cannot select a raw socket agent.
+
+### HTTP or HTTPS proxy
+
+Install the agent:
+
+```bash
+npm install bitget-api https-proxy-agent
+```
+
+Set `BITGET_PROXY_URL` to the full proxy URL, including URL-encoded credentials when required.
+
+This public check sends one V3 REST API call and one V3 ticker subscription through the same proxy:
+
+<!-- siebly:snippet id="http-proxy" -->
+
+```typescript
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { RestClientV3, WebsocketClientV3, WS_KEY_MAP } from 'bitget-api';
+
+const proxyUrl = process.env.BITGET_PROXY_URL;
+
+if (!proxyUrl) {
+  throw new Error('Set BITGET_PROXY_URL before running this example.');
+}
+
+const proxyAgent = new HttpsProxyAgent(proxyUrl);
+
+const rest = new RestClientV3(
+  {},
+  {
+    httpsAgent: proxyAgent,
+    proxy: false,
+  },
+);
+
+const ws = new WebsocketClientV3({
+  wsOptions: {
+    agent: proxyAgent,
+  },
+});
+
+ws.on('open', ({ wsKey }) => {
+  console.log('WebSocket connected through proxy:', wsKey);
+});
+ws.on('update', (event) => {
+  console.log('stream update', event);
+});
+ws.on('exception', console.error);
+
+async function main() {
+  const serverTime = await rest.getServerTime();
+  console.log('REST API connected through proxy:', serverTime);
+
+  ws.subscribe(
+    {
+      topic: 'ticker',
+      payload: {
+        instType: 'spot',
+        symbol: 'BTCUSDT',
+      },
+    },
+    WS_KEY_MAP.v3Public,
+  );
+}
+
+process.once('SIGINT', () => {
+  ws.closeAll();
+});
+
+main().catch(console.error);
+```
+
+REST API networking options belong in the second constructor argument for both `RestClientV3` and `RestClientV2`:
+
+- `httpsAgent` sends the HTTPS request through the agent.
+- `proxy: false` prevents Axios from applying another proxy configuration on top of that agent.
+
+WebSocket networking options belong in `wsOptions.agent` for `WebsocketClientV3`, `WebsocketClientV2`, and `WebsocketAPIClient`. Bitget authenticates private streams and WebSocket API commands over the socket. The WebSocket clients do not fetch a separate authentication token through REST API.
+
+### Private streams and WebSocket API through a proxy
+
+This example authenticates a V3 private stream and a V3 WebSocket API connection without placing an order:
+
+<!-- siebly:snippet id="private-proxy" -->
+
+```typescript
+import {
+  WebsocketAPIClient,
+  WebsocketClientV3,
+  WS_KEY_MAP,
+} from 'bitget-api';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+
+const proxyUrl = process.env.BITGET_PROXY_URL;
+
+if (!proxyUrl) {
+  throw new Error('Set BITGET_PROXY_URL before running this example.');
+}
+
+const apiKey = process.env.BITGET_API_KEY;
+const apiSecret = process.env.BITGET_API_SECRET;
+const apiPass = process.env.BITGET_API_PASS;
+
+if (!apiKey || !apiSecret || !apiPass) {
+  throw new Error(
+    'Set BITGET_API_KEY, BITGET_API_SECRET, and BITGET_API_PASS before running this example.',
+  );
+}
+
+const proxyAgent = new HttpsProxyAgent(proxyUrl);
+const credentials = { apiKey, apiSecret, apiPass };
+
+const streams = new WebsocketClientV3({
+  ...credentials,
+  wsOptions: {
+    agent: proxyAgent,
+  },
+});
+
+const wsApi = new WebsocketAPIClient({
+  ...credentials,
+  attachEventListeners: false,
+  wsOptions: {
+    agent: proxyAgent,
+  },
+});
+const wsApiConnection = wsApi.getWSClient();
+
+streams.on('authenticated', ({ wsKey }) => {
+  console.log('Private stream authenticated:', wsKey);
+});
+streams.on('exception', console.error);
+wsApiConnection.on('authenticated', ({ wsKey }) => {
+  console.log('WebSocket API authenticated:', wsKey);
+});
+wsApiConnection.on('exception', console.error);
+
+async function main() {
+  streams.subscribe(
+    [
+      { topic: 'account', payload: { instType: 'UTA' } },
+      { topic: 'order', payload: { instType: 'UTA' } },
+    ],
+    WS_KEY_MAP.v3Private,
+  );
+
+  await wsApiConnection.connectWSAPI();
+  console.log('Private connections are ready');
+}
+
+process.once('SIGINT', () => {
+  streams.closeAll();
+  wsApiConnection.closeAll();
+});
+
+main().catch(console.error);
+```
+
+Add `demoTrading: true` to both clients when testing with Bitget demo keys. The proxy setting does not choose demo trading or convert V2/Classic request shapes into V3/UTA request shapes.
+
+### SOCKS5 proxy
+
+Install the SOCKS agent:
+
+```bash
+npm install bitget-api socks-proxy-agent
+```
+
+Use `SocksProxyAgent` in the same REST API and WebSocket positions:
+
+<!-- siebly:snippet id="socks-proxy" -->
+
+```typescript
+import { RestClientV3, WebsocketClientV3, WS_KEY_MAP } from 'bitget-api';
+import { SocksProxyAgent } from 'socks-proxy-agent';
+
+const proxyUrl = process.env.BITGET_SOCKS_PROXY_URL;
+
+if (!proxyUrl) {
+  throw new Error('Set BITGET_SOCKS_PROXY_URL before running this example.');
+}
+
+const proxyAgent = new SocksProxyAgent(proxyUrl);
+
+const rest = new RestClientV3(
+  {},
+  {
+    httpsAgent: proxyAgent,
+    proxy: false,
+  },
+);
+
+const ws = new WebsocketClientV3({
+  wsOptions: {
+    agent: proxyAgent,
+  },
+});
+
+async function main() {
+  const serverTime = await rest.getServerTime();
+  console.log('REST API connected through SOCKS5:', serverTime);
+
+  ws.subscribe(
+    {
+      topic: 'ticker',
+      payload: {
+        instType: 'spot',
+        symbol: 'BTCUSDT',
+      },
+    },
+    WS_KEY_MAP.v3Public,
+  );
+}
+
+process.once('SIGINT', () => {
+  ws.closeAll();
+});
+
+main().catch(console.error);
+```
+
+### Proxy checks
+
+- Keep proxy URLs and credentials in environment variables or a secret manager.
+- URL-encode usernames and passwords when constructing a proxy URL from separate values.
+- Make sure the proxy egress IP matches the Bitget API key's IP whitelist.
+- Test a public REST API call and public WebSocket subscription before private authentication.
+- Keep V3/UTA, V2/Classic, demo trading, category, and `instType` decisions separate from proxy configuration.
+- Measure request, connection, and reconnect latency through the proxy.
+- Treat repeated HTTP 407 responses, TLS errors, and WebSocket reconnect loops as network failures.
+- Keep the host clock synchronized. Change `recvWindow` only after measuring timestamp failures and proxy latency.
+- The SDK does not rotate proxy endpoints. Handle endpoint selection outside the client when rotation is required.
 
 ---
 
