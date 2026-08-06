@@ -89,10 +89,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tiagosiebler/bitget-api"
+    "url": "git+https://github.com/sieblyio/bitget-api.git"
   },
   "bugs": {
-    "url": "https://github.com/tiagosiebler/bitget-api/issues"
+    "url": "https://github.com/sieblyio/bitget-api/issues"
   },
-  "homepage": "https://github.com/tiagosiebler/bitget-api#readme"
+  "homepage": "https://github.com/sieblyio/bitget-api#readme"
 }
